@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#E8D5C4"/><stop offset="1" stop-color="#D9BBA3"/>
-  </linearGradient></defs>
-  <rect width="400" height="300" fill="url(#g)"/>
-  <circle cx="200" cy="125" r="58" fill="#ffffff" opacity="0.30"/>
-  <text x="200" y="158" text-anchor="middle" font-size="76" fill="#ffffff" font-family="serif">懒</text>
-  <text x="200" y="268" text-anchor="middle" font-size="20" fill="#ffffff" opacity="0.85" font-family="sans-serif">示例占位 · 待上传</text>
-</svg>

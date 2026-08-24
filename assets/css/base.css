@@ -1,22 +1,22 @@
 :root {
-  /* 柔和低饱和护眼配色 */
-  --bg: #f5f3ee;
-  --bg-soft: #efece4;
-  --surface: #fbfaf7;
-  --surface-2: #f2efe8;
-  --ink: #3a3a3c;
+  /* 简洁大气·白底护眼配色 */
+  --bg: #ffffff;
+  --bg-soft: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f4f4f2;
+  --ink: #2b2b2d;
   --ink-soft: #6b6a66;
-  --ink-faint: #9a988f;
-  --line: #e4e0d6;
+  --ink-faint: #a3a19a;
+  --line: #ececea;
   --brand: #7c9a8e;        /* 柔和鼠尾草绿 */
-  --brand-soft: #e6ede9;
+  --brand-soft: #eef3f1;
   --brand-ink: #4f6b60;
   --accent: #c8a98a;       /* 暖陶土 */
-  --accent-soft: #f1e7dd;
+  --accent-soft: #f5efe9;
   --radius: 14px;
   --radius-sm: 10px;
-  --shadow: 0 6px 24px rgba(60, 58, 50, 0.07);
-  --shadow-hover: 0 10px 32px rgba(60, 58, 50, 0.12);
+  --shadow: 0 6px 24px rgba(40, 40, 36, 0.05);
+  --shadow-hover: 0 12px 30px rgba(40, 40, 36, 0.10);
   --maxw: 1120px;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
@@ -50,7 +50,7 @@ img, video { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(245, 243, 238, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: saturate(140%) blur(10px);
   border-bottom: 1px solid var(--line);
 }
@@ -204,7 +204,7 @@ img, video { max-width: 100%; display: block; }
 /* ---------- 页脚 ---------- */
 .footer {
   border-top: 1px solid var(--line);
-  background: var(--bg-soft);
+  background: #ffffff;
   padding: 36px 0;
   margin-top: 40px;
   color: var(--ink-soft);

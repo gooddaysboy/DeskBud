@@ -66,12 +66,12 @@
       "title": "懒猫打盹",
       "category": "cat",
       "author": "meowstudio",
-      "cover": "works/cat-nap/cover.svg",
-      "thumb": "works/cat-nap/thumb.svg",
+      "cover": "works/cat-nap/cover.gif",
+      "thumb": "works/cat-nap/cover.gif",
       "summary": "一只会伸懒腰、打盹、追光点的治愈系桌面猫。",
       "description": "Electron 实现的桌面猫咪，柔和配色与细腻帧动画。鼠标靠近会好奇张望，长时间不理它就去打盹。",
       "media": [
-        { "type": "image", "src": "works/cat-nap/cover.svg", "caption": "示例占位 · 待上传素材" }
+        { "type": "gif", "src": "works/cat-nap/cover.gif", "caption": "待机动画" }
       ],
       "download": {
         "label": "下载 (zip)",
@@ -86,12 +86,12 @@
       "title": "像素史莱姆",
       "category": "retro",
       "author": "8bitlab",
-      "cover": "works/pixel-slime/cover.svg",
-      "thumb": "works/pixel-slime/thumb.svg",
+      "cover": "works/pixel-slime/cover.gif",
+      "thumb": "works/pixel-slime/cover.gif",
       "summary": "复古 8-bit 风史莱姆，弹跳、分裂、融合的趣味小宠。",
       "description": "纯 Canvas 绘制的像素史莱姆，致敬早期游戏美学。低饱和配色护眼，支持多种弹跳音效。",
       "media": [
-        { "type": "image", "src": "works/pixel-slime/cover.svg", "caption": "示例占位 · 待上传素材" }
+        { "type": "gif", "src": "works/pixel-slime/cover.gif", "caption": "弹跳动画" }
       ],
       "download": {
         "label": "下载 (html)",
@@ -106,12 +106,12 @@
       "title": "星狐",
       "category": "fantasy",
       "author": "nebula",
-      "cover": "works/star-fox/cover.svg",
-      "thumb": "works/star-fox/thumb.svg",
+      "cover": "works/star-fox/cover.gif",
+      "thumb": "works/star-fox/cover.gif",
       "summary": "会随系统时间变色的小狐狸，夜空里陪你加班。",
       "description": "幻想生物主题桌宠，毛色随时间在晨昏夜之间渐变，头顶漂浮星点粒子。轻量、安静、不抢注意力。",
       "media": [
-        { "type": "image", "src": "works/star-fox/cover.svg", "caption": "示例占位 · 待上传素材" }
+        { "type": "gif", "src": "works/star-fox/cover.gif", "caption": "展示动画" }
       ],
       "download": {
         "label": "下载 (exe)",
@@ -126,12 +126,12 @@
       "title": "时钟小机器人",
       "category": "tool",
       "author": "utils",
-      "cover": "works/clock-bot/cover.svg",
-      "thumb": "works/clock-bot/thumb.svg",
+      "cover": "works/clock-bot/cover.gif",
+      "thumb": "works/clock-bot/cover.gif",
       "summary": "既是桌宠也是桌面时钟，整点会做体操提醒你休息。",
       "description": "实用工具型桌宠，在可爱外观下集成桌面时钟与久坐提醒。可隐藏为纯时钟模式。",
       "media": [
-        { "type": "image", "src": "works/clock-bot/cover.svg", "caption": "示例占位 · 待上传素材" }
+        { "type": "gif", "src": "works/clock-bot/cover.gif", "caption": "动态预览" }
       ],
       "download": {
         "label": "下载 (zip)",
