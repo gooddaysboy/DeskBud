@@ -24,8 +24,12 @@ const SITE = {
     if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
     return String(n);
   },
-  // 缩略图：优先图片，缺失时显示占位
+  // 缩略图：优先视频（自动播放），其次图片；缺失时显示占位
   thumbHTML(work) {
+    const vid = (work.media || []).find(m => m.type === 'video');
+    if (vid) {
+      return `<video src="${vid.src}" autoplay loop muted playsinline preload="metadata"></video>`;
+    }
     if (work.thumb) return `<img src="${work.thumb}" alt="${work.title}" loading="lazy">`;
     if (work.cover) return `<img src="${work.cover}" alt="${work.title}" loading="lazy">`;
     return '暂无预览';
@@ -33,14 +37,16 @@ const SITE = {
   cardHTML(work) {
     return `
     <a class="card" href="detail.html?id=${work.id}">
-      <div class="thumb">${SITE.thumbHTML(work)}</div>
-      <div class="body">
-        <span class="cat">${SITE.catName(work.category)}</span>
-        <h3>${work.title}</h3>
-        <div class="meta">
-          <span>${work.author}</span>
-          <span>⬇ <b class="stat" id="d-${work.id}">${SITE.fmt(work.downloads)}</b></span>
+      <div class="thumb">
+        ${SITE.thumbHTML(work)}
+        <div class="overlay">
+          <div class="cat">${SITE.catName(work.category)}</div>
+          <h3>${work.title}</h3>
         </div>
+      </div>
+      <div class="meta">
+        <span>${work.author}</span>
+        <span>⬇ <b class="stat" id="d-${work.id}">${SITE.fmt(work.downloads)}</b></span>
       </div>
     </a>`;
   }
