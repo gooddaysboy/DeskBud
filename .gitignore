@@ -1,0 +1,4 @@
+# 网站子项目忽略规则（独立仓库 gooddaysboy/deskbud）
+.DS_Store
+*.log
+Thumbs.db

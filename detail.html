@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品详情 · DeskBud</title>
+  <meta name="description" content="桌面宠物作品详情：图文/GIF/视频预览与下载。">
+  <link rel="stylesheet" href="assets/css/base.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <nav class="nav">
+        <a href="index.html">首页</a>
+        <a href="list.html">作品</a>
+        <a href="index.html#categories">分类</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section wrap detail-hero">
+    <p style="margin:0 0 8px"><a href="list.html" style="color:var(--ink-faint)">← 返回作品列表</a></p>
+    <div id="detail"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
+      <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+  <script>
+    (async () => {
+      const d = await SITE.load();
+      document.getElementById('yr').textContent = new Date().getFullYear();
+      const id = new URLSearchParams(location.search).get('id');
+      const w = d.works.find(x => x.id === id);
+
+      if (!w) {
+        document.getElementById('detail').innerHTML = '<div class="empty">未找到该作品</div>';
+        return;
+      }
+      document.title = w.title + ' · DeskBud';
+
+      const mediaHTML = (w.media || []).map(m => {
+        if (m.type === 'video')
+          return `<div class="media-block"><video src="${m.src}" controls preload="metadata"></video><div class="media-cap">${m.caption || ''}</div></div>`;
+        if (m.type === 'gif')
+          return `<div class="media-block"><img src="${m.src}" alt="${m.caption || ''}" loading="lazy"><div class="media-cap">${m.caption || ''}</div></div>`;
+        return `<div class="media-block"><img src="${m.src}" alt="${m.caption || ''}" loading="lazy"><div class="media-cap">${m.caption || ''}</div></div>`;
+      }).join('');
+
+      document.getElementById('detail').innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-main">
+            <h1 class="detail-title">${w.title}</h1>
+            <p class="detail-sub">${w.summary}</p>
+            <div class="detail-body"><p>${w.description}</p></div>
+            ${mediaHTML}
+          </div>
+          <aside class="sidebar">
+            <div class="row"><span>分类</span><span>${SITE.catName(w.category)}</span></div>
+            <div class="row"><span>作者</span><span>${w.author}</span></div>
+            <div class="row"><span>更新</span><span>${w.date}</span></div>
+            <div class="row"><span>页面访问</span><span class="stat"><span id="busuanzi_container_page_pv">🔥 <span id="busuanzi_value_page_pv">-</span></span></span></div>
+            <div class="row"><span>下载次数</span><span class="stat">${SITE.fmt(w.downloads)}</span></div>
+            <div class="download-box">
+              <a class="btn btn-primary" href="${w.download.url}" target="_blank" rel="noopener">⬇ ${w.download.label}</a>
+            </div>
+          </aside>
+        </div>`;
+
+      ensureBusuanzi();
+    })();
+  </script>
+</body>
+</html>

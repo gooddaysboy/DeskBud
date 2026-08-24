@@ -1,0 +1,146 @@
+{
+  "site": {
+    "title": "DeskBud",
+    "domain": "DeskBud.xyz",
+    "slogan": "陪伴你的桌面宠物伙伴",
+    "subSlogan": "面向桌面宠物爱好者 · 你的桌面屏幕上，常驻的宠物伙伴"
+  },
+  "categories": [
+    { "id": "all", "name": "全部" },
+    { "id": "panda", "name": "熊猫" },
+    { "id": "cat", "name": "猫咪" },
+    { "id": "dog", "name": "狗狗" },
+    { "id": "fantasy", "name": "幻想生物" },
+    { "id": "retro", "name": "复古像素" },
+    { "id": "tool", "name": "实用工具型" }
+  ],
+  "works": [
+    {
+      "id": "panda-orbit",
+      "title": "熊猫桌宠 · 绕圈版",
+      "category": "panda",
+      "author": "gooddaysboy",
+      "cover": "works/panda-orbit/cover.png",
+      "thumb": "works/panda-orbit/thumb.png",
+      "summary": "真·RGBA 透明窗口熊猫，降落伞式飘落、点击起跳、屏幕绕圈，桌面常驻不打扰。",
+      "description": "基于 PySide6 开发的桌面宠物，采用真透明无边框置顶窗口，5 种动画状态分帧渲染。支持降落伞式飘落、单击起跳、鼠标拖拽、悬停暂停、屏幕四周绕圈与自定义画圈。轻量单文件，无需安装运行环境。",
+      "media": [
+        { "type": "image", "src": "works/panda-orbit/1.png", "caption": "降落伞式飘落" },
+        { "type": "gif", "src": "works/panda-orbit/walk.gif", "caption": "走动动画" },
+        { "type": "video", "src": "works/panda-orbit/preview.mp4", "caption": "完整演示" }
+      ],
+      "download": {
+        "label": "下载 Windows 版 (exe)",
+        "url": "https://github.com/gooddaysboy/pet/releases/download/v1.0.2/DesktopPet-Win_1.0.2.exe"
+      },
+      "downloads": 1280,
+      "date": "2026-08-20",
+      "featured": true
+    },
+    {
+      "id": "panda-android",
+      "title": "熊猫悬浮桌宠 · 安卓版",
+      "category": "panda",
+      "author": "gooddaysboy",
+      "cover": "works/panda-android/cover.png",
+      "thumb": "works/panda-android/thumb.png",
+      "summary": "安卓悬浮窗熊猫，前台常驻、崩溃恢复，完整对齐桌面版交互。",
+      "description": "采用 Flutter + 悬浮窗方案，在安卓手机上实现常驻桌面的熊猫宠物。支持点按起跳、拖拽跟随、长按菜单、自定义绕圈，真机验证通过。",
+      "media": [
+        { "type": "image", "src": "works/panda-android/1.png", "caption": "悬浮窗效果" },
+        { "type": "gif", "src": "works/panda-android/walk.gif", "caption": "绕圈动画" }
+      ],
+      "download": {
+        "label": "下载 Android 版 (apk)",
+        "url": "https://github.com/gooddaysboy/pet/releases/download/v1.1.17/app-release.apk"
+      },
+      "downloads": 642,
+      "date": "2026-08-23",
+      "featured": true
+    },
+    {
+      "id": "cat-nap",
+      "title": "懒猫打盹",
+      "category": "cat",
+      "author": "meowstudio",
+      "cover": "works/cat-nap/cover.png",
+      "thumb": "works/cat-nap/thumb.png",
+      "summary": "一只会伸懒腰、打盹、追光点的治愈系桌面猫。",
+      "description": "Electron 实现的桌面猫咪，柔和配色与细腻帧动画。鼠标靠近会好奇张望，长时间不理它就去打盹。",
+      "media": [
+        { "type": "image", "src": "works/cat-nap/1.png", "caption": "伸懒腰" },
+        { "type": "gif", "src": "works/cat-nap/nap.gif", "caption": "打盹" }
+      ],
+      "download": {
+        "label": "下载 (zip)",
+        "url": "https://example.com/cat-nap.zip"
+      },
+      "downloads": 358,
+      "date": "2026-07-15",
+      "featured": false
+    },
+    {
+      "id": "pixel-slime",
+      "title": "像素史莱姆",
+      "category": "retro",
+      "author": "8bitlab",
+      "cover": "works/pixel-slime/cover.png",
+      "thumb": "works/pixel-slime/thumb.png",
+      "summary": "复古 8-bit 风史莱姆，弹跳、分裂、融合的趣味小宠。",
+      "description": "纯 Canvas 绘制的像素史莱姆，致敬早期游戏美学。低饱和配色护眼，支持多种弹跳音效。",
+      "media": [
+        { "type": "gif", "src": "works/pixel-slime/bounce.gif", "caption": "弹跳" },
+        { "type": "image", "src": "works/pixel-slime/2.png", "caption": "分裂" }
+      ],
+      "download": {
+        "label": "下载 (html)",
+        "url": "https://example.com/pixel-slime.html"
+      },
+      "downloads": 521,
+      "date": "2026-06-30",
+      "featured": false
+    },
+    {
+      "id": "star-fox",
+      "title": "星狐",
+      "category": "fantasy",
+      "author": "nebula",
+      "cover": "works/star-fox/cover.png",
+      "thumb": "works/star-fox/thumb.png",
+      "summary": "会随系统时间变色的小狐狸，夜空里陪你加班。",
+      "description": "幻想生物主题桌宠，毛色随时间在晨昏夜之间渐变，头顶漂浮星点粒子。轻量、安静、不抢注意力。",
+      "media": [
+        { "type": "image", "src": "works/star-fox/1.png", "caption": "日间形态" },
+        { "type": "video", "src": "works/star-fox/night.mp4", "caption": "夜间形态" }
+      ],
+      "download": {
+        "label": "下载 (exe)",
+        "url": "https://example.com/star-fox.exe"
+      },
+      "downloads": 204,
+      "date": "2026-08-01",
+      "featured": false
+    },
+    {
+      "id": "clock-bot",
+      "title": "时钟小机器人",
+      "category": "tool",
+      "author": "utils",
+      "cover": "works/clock-bot/cover.png",
+      "thumb": "works/clock-bot/thumb.png",
+      "summary": "既是桌宠也是桌面时钟，整点会做体操提醒你休息。",
+      "description": "实用工具型桌宠，在可爱外观下集成桌面时钟与久坐提醒。可隐藏为纯时钟模式。",
+      "media": [
+        { "type": "image", "src": "works/clock-bot/1.png", "caption": "时钟模式" },
+        { "type": "gif", "src": "works/clock-bot/stretch.gif", "caption": "整点体操" }
+      ],
+      "download": {
+        "label": "下载 (zip)",
+        "url": "https://example.com/clock-bot.zip"
+      },
+      "downloads": 877,
+      "date": "2026-08-10",
+      "featured": true
+    }
+  ]
+}

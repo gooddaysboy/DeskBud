@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeskBud · 陪伴你的桌面宠物伙伴</title>
+  <meta name="description" content="DeskBud.xyz —— 面向桌面宠物爱好者，汇集各类开源与自制桌面宠物伙伴作品，支持浏览、预览与下载。">
+  <link rel="stylesheet" href="assets/css/base.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <nav class="nav">
+        <a href="index.html">首页</a>
+        <a href="list.html">作品</a>
+        <a href="#categories">分类</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero wrap">
+    <h1>DeskBud</h1>
+    <p class="slogan">陪伴你的桌面宠物伙伴</p>
+    <p class="sub">面向桌面宠物爱好者 · 你的桌面屏幕上，常驻的宠物伙伴</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="list.html">浏览作品 →</a>
+      <a class="btn btn-ghost" href="#categories">按分类探索</a>
+    </div>
+  </section>
+
+  <section class="section wrap" id="hot">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">热门作品</h2>
+        <p class="section-sub">大家正在下载的桌面伙伴</p>
+      </div>
+      <a class="btn btn-ghost" href="list.html">查看全部</a>
+    </div>
+    <div class="grid" id="hotGrid"></div>
+  </section>
+
+  <section class="section wrap" id="categories">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">分类导航</h2>
+        <p class="section-sub">挑一个你喜欢的类型</p>
+      </div>
+    </div>
+    <div class="filters" id="catNav"></div>
+    <div class="grid" id="catGrid"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
+      <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+  <script>
+    (async () => {
+      const d = await SITE.load();
+      document.getElementById('yr').textContent = new Date().getFullYear();
+
+      // 热门：featured 优先 + 下载量
+      const hot = SITE.sortWorks(d.works, 'hot').slice(0, 4);
+      document.getElementById('hotGrid').innerHTML = hot.map(SITE.cardHTML).join('');
+
+      // 分类导航
+      const nav = document.getElementById('catNav');
+      nav.innerHTML = d.categories.map(c =>
+        `<a class="chip" href="list.html?cat=${c.id}">${c.name}</a>`).join('');
+      // 分类预览：每类取 1 个
+      const preview = [];
+      d.categories.filter(c => c.id !== 'all').forEach(c => {
+        const w = d.works.find(x => x.category === c.id);
+        if (w) preview.push(w);
+      });
+      document.getElementById('catGrid').innerHTML = preview.map(SITE.cardHTML).join('');
+
+      ensureBusuanzi();
+    })();
+  </script>
+</body>
+</html>

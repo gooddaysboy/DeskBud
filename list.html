@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品列表 · DeskBud</title>
+  <meta name="description" content="DeskBud 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
+  <link rel="stylesheet" href="assets/css/base.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <nav class="nav">
+        <a href="index.html">首页</a>
+        <a href="list.html">作品</a>
+        <a href="index.html#categories">分类</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">全部作品</h2>
+        <p class="section-sub" id="countTip"></p>
+      </div>
+      <div class="sortbar">
+        <label for="sort">排序</label>
+        <select id="sort">
+          <option value="latest">最新</option>
+          <option value="downloads">下载量</option>
+          <option value="hot">热门</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">该分类下暂无作品</div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
+      <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+  <script>
+    (async () => {
+      const d = await SITE.load();
+      document.getElementById('yr').textContent = new Date().getFullYear();
+
+      const params = new URLSearchParams(location.search);
+      let curCat = params.get('cat') || 'all';
+      let curSort = params.get('sort') || 'latest';
+
+      // 分类筛选条
+      const filters = document.getElementById('filters');
+      filters.innerHTML = d.categories.map(c =>
+        `<button class="chip${c.id === curCat ? ' active' : ''}" data-cat="${c.id}">${c.name}</button>`).join('');
+      filters.querySelectorAll('.chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          curCat = btn.dataset.cat;
+          filters.querySelectorAll('.chip').forEach(b => b.classList.toggle('active', b === btn));
+          render();
+        });
+      });
+
+      // 排序
+      const sortEl = document.getElementById('sort');
+      sortEl.value = curSort;
+      sortEl.addEventListener('change', () => { curSort = sortEl.value; render(); });
+
+      function render() {
+        let list = d.works.slice();
+        if (curCat !== 'all') list = list.filter(w => w.category === curCat);
+        list = SITE.sortWorks(list, curSort);
+        document.getElementById('countTip').textContent = `共 ${list.length} 个作品`;
+        const grid = document.getElementById('grid');
+        grid.innerHTML = list.map(SITE.cardHTML).join('');
+        document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+      }
+      render();
+      ensureBusuanzi();
+    })();
+  </script>
+</body>
+</html>
