@@ -37,9 +37,8 @@ const SITE = {
       <div class="body">
         <span class="cat">${SITE.catName(work.category)}</span>
         <h3>${work.title}</h3>
-        <p>${work.summary}</p>
         <div class="meta">
-          <span>👤 ${work.author}</span>
+          <span>${work.author}</span>
           <span>⬇ <b class="stat" id="d-${work.id}">${SITE.fmt(work.downloads)}</b></span>
         </div>
       </div>
