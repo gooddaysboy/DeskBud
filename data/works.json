@@ -25,9 +25,10 @@
       "summary": "真·RGBA 透明窗口熊猫，降落伞式飘落、点击起跳、屏幕绕圈，桌面常驻不打扰。",
       "description": "基于 PySide6 开发的桌面宠物，采用真透明无边框置顶窗口，5 种动画状态分帧渲染。支持降落伞式飘落、单击起跳、鼠标拖拽、悬停暂停、屏幕四周绕圈与自定义画圈。轻量单文件，无需安装运行环境。",
       "media": [
-        { "type": "image", "src": "works/panda-orbit/1.png", "caption": "降落伞式飘落" },
+        { "type": "image", "src": "works/panda-orbit/1.png", "caption": "桌面实拍 · 常驻效果" },
+        { "type": "image", "src": "works/panda-orbit/2.png", "caption": "不同姿态" },
         { "type": "gif", "src": "works/panda-orbit/walk.gif", "caption": "走动动画" },
-        { "type": "video", "src": "works/panda-orbit/preview.mp4", "caption": "完整演示" }
+        { "type": "video", "src": "works/panda-orbit/preview.mp4", "caption": "完整演示视频" }
       ],
       "download": {
         "label": "下载 Windows 版 (exe)",
@@ -47,8 +48,10 @@
       "summary": "安卓悬浮窗熊猫，前台常驻、崩溃恢复，完整对齐桌面版交互。",
       "description": "采用 Flutter + 悬浮窗方案，在安卓手机上实现常驻桌面的熊猫宠物。支持点按起跳、拖拽跟随、长按菜单、自定义绕圈，真机验证通过。",
       "media": [
-        { "type": "image", "src": "works/panda-android/1.png", "caption": "悬浮窗效果" },
-        { "type": "gif", "src": "works/panda-android/walk.gif", "caption": "绕圈动画" }
+        { "type": "image", "src": "works/panda-android/1.png", "caption": "手机悬浮窗效果" },
+        { "type": "image", "src": "works/panda-android/2.png", "caption": "贴边状态" },
+        { "type": "gif", "src": "works/panda-android/walk.gif", "caption": "站立动画" },
+        { "type": "video", "src": "works/panda-android/preview.mp4", "caption": "真机演示视频" }
       ],
       "download": {
         "label": "下载 Android 版 (apk)",
@@ -63,13 +66,12 @@
       "title": "懒猫打盹",
       "category": "cat",
       "author": "meowstudio",
-      "cover": "works/cat-nap/cover.png",
-      "thumb": "works/cat-nap/thumb.png",
+      "cover": "works/cat-nap/cover.svg",
+      "thumb": "works/cat-nap/thumb.svg",
       "summary": "一只会伸懒腰、打盹、追光点的治愈系桌面猫。",
       "description": "Electron 实现的桌面猫咪，柔和配色与细腻帧动画。鼠标靠近会好奇张望，长时间不理它就去打盹。",
       "media": [
-        { "type": "image", "src": "works/cat-nap/1.png", "caption": "伸懒腰" },
-        { "type": "gif", "src": "works/cat-nap/nap.gif", "caption": "打盹" }
+        { "type": "image", "src": "works/cat-nap/cover.svg", "caption": "示例占位 · 待上传素材" }
       ],
       "download": {
         "label": "下载 (zip)",
@@ -84,13 +86,12 @@
       "title": "像素史莱姆",
       "category": "retro",
       "author": "8bitlab",
-      "cover": "works/pixel-slime/cover.png",
-      "thumb": "works/pixel-slime/thumb.png",
+      "cover": "works/pixel-slime/cover.svg",
+      "thumb": "works/pixel-slime/thumb.svg",
       "summary": "复古 8-bit 风史莱姆，弹跳、分裂、融合的趣味小宠。",
       "description": "纯 Canvas 绘制的像素史莱姆，致敬早期游戏美学。低饱和配色护眼，支持多种弹跳音效。",
       "media": [
-        { "type": "gif", "src": "works/pixel-slime/bounce.gif", "caption": "弹跳" },
-        { "type": "image", "src": "works/pixel-slime/2.png", "caption": "分裂" }
+        { "type": "image", "src": "works/pixel-slime/cover.svg", "caption": "示例占位 · 待上传素材" }
       ],
       "download": {
         "label": "下载 (html)",
@@ -105,13 +106,12 @@
       "title": "星狐",
       "category": "fantasy",
       "author": "nebula",
-      "cover": "works/star-fox/cover.png",
-      "thumb": "works/star-fox/thumb.png",
+      "cover": "works/star-fox/cover.svg",
+      "thumb": "works/star-fox/thumb.svg",
       "summary": "会随系统时间变色的小狐狸，夜空里陪你加班。",
       "description": "幻想生物主题桌宠，毛色随时间在晨昏夜之间渐变，头顶漂浮星点粒子。轻量、安静、不抢注意力。",
       "media": [
-        { "type": "image", "src": "works/star-fox/1.png", "caption": "日间形态" },
-        { "type": "video", "src": "works/star-fox/night.mp4", "caption": "夜间形态" }
+        { "type": "image", "src": "works/star-fox/cover.svg", "caption": "示例占位 · 待上传素材" }
       ],
       "download": {
         "label": "下载 (exe)",
@@ -126,13 +126,12 @@
       "title": "时钟小机器人",
       "category": "tool",
       "author": "utils",
-      "cover": "works/clock-bot/cover.png",
-      "thumb": "works/clock-bot/thumb.png",
+      "cover": "works/clock-bot/cover.svg",
+      "thumb": "works/clock-bot/thumb.svg",
       "summary": "既是桌宠也是桌面时钟，整点会做体操提醒你休息。",
       "description": "实用工具型桌宠，在可爱外观下集成桌面时钟与久坐提醒。可隐藏为纯时钟模式。",
       "media": [
-        { "type": "image", "src": "works/clock-bot/1.png", "caption": "时钟模式" },
-        { "type": "gif", "src": "works/clock-bot/stretch.gif", "caption": "整点体操" }
+        { "type": "image", "src": "works/clock-bot/cover.svg", "caption": "示例占位 · 待上传素材" }
       ],
       "download": {
         "label": "下载 (zip)",
