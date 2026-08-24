@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DeskBud · 陪伴你的桌面宠物伙伴</title>
   <meta name="description" content="DeskBud.xyz —— 面向桌面宠物爱好者，汇集各类开源与自制桌面宠物伙伴作品，支持浏览、预览与下载。">
-  <link rel="stylesheet" href="assets/css/base.css?v=6">
+  <link rel="stylesheet" href="assets/css/base.css?v=7">
 </head>
 <body>
   <header class="topbar">
@@ -58,7 +58,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=6"></script>
+  <script src="assets/js/site.js?v=7"></script>
   <script>
     (async () => {
       const d = await SITE.load();
@@ -68,14 +68,14 @@
       const hot = SITE.sortWorks(d.works, 'hot').slice(0, 4);
       document.getElementById('hotGrid').innerHTML = hot.map(SITE.cardHTML).join('');
 
-      // 分类导航
+      // 分类导航（带 emoji 图标）
       const nav = document.getElementById('catNav');
       const navParts = d.categories.map(c => {
         if (c.children) {
-          const sub = c.children.map(ch => `<a class="chip sub" href="list.html?cat=${ch.id}">${ch.name}</a>`).join('');
-          return `<a class="chip" href="list.html?cat=${c.id}">${c.name}</a>${sub}`;
+          const sub = c.children.map(ch => `<a class="chip sub" href="list.html?cat=${ch.id}">${SITE.catIcon(ch.id)} ${ch.name}</a>`).join('');
+          return `<a class="chip" href="list.html?cat=${c.id}">${SITE.catIcon(c.id)} ${c.name}</a>${sub}`;
         }
-        return `<a class="chip" href="list.html?cat=${c.id}">${c.name}</a>`;
+        return `<a class="chip" href="list.html?cat=${c.id}">${SITE.catIcon(c.id)} ${c.name}</a>`;
       }).join('');
       nav.innerHTML = navParts;
       // 分类预览：每个一级取 1 个（优先叶子分类）

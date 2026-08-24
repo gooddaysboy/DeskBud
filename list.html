@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品列表 · DeskBud</title>
   <meta name="description" content="DeskBud 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
-  <link rel="stylesheet" href="assets/css/base.css?v=6">
+  <link rel="stylesheet" href="assets/css/base.css?v=7">
 </head>
 <body>
   <header class="topbar">
@@ -47,7 +47,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=6"></script>
+  <script src="assets/js/site.js?v=7"></script>
   <script>
     (async () => {
       const d = await SITE.load();
@@ -57,15 +57,15 @@
       let curCat = params.get('cat') || 'all';
       let curSort = params.get('sort') || 'latest';
 
-      // 分类筛选条：一级 + 动物下展开二级
+      // 分类筛选条：一级 + 动物下展开二级（带 emoji 图标）
       const filters = document.getElementById('filters');
       function renderFilters() {
-        const parts = ['<button class="chip" data-cat="all">全部</button>'];
+        const parts = [`<button class="chip" data-cat="all">${SITE.catIcon('all')} 全部</button>`];
         d.categories.filter(c => c.id !== 'all').forEach(c => {
-          parts.push(`<button class="chip${c.id === curCat ? ' active' : ''}" data-cat="${c.id}">${c.name}</button>`);
+          parts.push(`<button class="chip${c.id === curCat ? ' active' : ''}" data-cat="${c.id}">${SITE.catIcon(c.id)} ${c.name}</button>`);
           if (c.children && c.id === curCat) {
             c.children.forEach(ch => {
-              parts.push(`<button class="chip sub${ch.id === curCat ? ' active' : ''}" data-cat="${ch.id}">· ${ch.name}</button>`);
+              parts.push(`<button class="chip sub${ch.id === curCat ? ' active' : ''}" data-cat="${ch.id}">${SITE.catIcon(ch.id)} ${ch.name}</button>`);
             });
           }
         });

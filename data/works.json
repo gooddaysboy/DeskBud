@@ -6,15 +6,15 @@
     "subSlogan": "面向桌面宠物爱好者 · 你的桌面屏幕上，常驻的宠物伙伴"
   },
   "categories": [
-    { "id": "all", "name": "全部" },
-    { "id": "animal", "name": "动物", "children": [
-      { "id": "panda", "name": "熊猫" },
-      { "id": "cat", "name": "猫咪" },
-      { "id": "dog", "name": "狗狗" }
+    { "id": "all", "name": "全部", "icon": "✨" },
+    { "id": "animal", "name": "动物", "icon": "🐾", "children": [
+      { "id": "panda", "name": "熊猫", "icon": "🐼" },
+      { "id": "cat", "name": "猫咪", "icon": "🐱" },
+      { "id": "dog", "name": "狗狗", "icon": "🐶" }
     ]},
-    { "id": "plant", "name": "植物" },
-    { "id": "human", "name": "人类" },
-    { "id": "robot", "name": "机器人" }
+    { "id": "plant", "name": "植物", "icon": "🌱" },
+    { "id": "human", "name": "人类", "icon": "👶" },
+    { "id": "robot", "name": "机器人", "icon": "🤖" }
   ],
   "works": [
     {

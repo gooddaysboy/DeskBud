@@ -17,6 +17,16 @@ const SITE = {
     }
     return id;
   },
+  catIcon(id) {
+    for (const c of this.data.categories) {
+      if (c.id === id) return c.icon || '';
+      if (c.children) {
+        const ch = c.children.find(x => x.id === id);
+        if (ch) return ch.icon || '';
+      }
+    }
+    return '';
+  },
   // 把分类 id 展开为可匹配的作品 category 列表（一级分类会展开成它所有二级叶子）
   expandCatIds(id) {
     if (!id || id === 'all') return null;
@@ -54,7 +64,7 @@ const SITE = {
       <div class="thumb">
         ${SITE.thumbHTML(work)}
         <div class="overlay">
-          <div class="cat">${SITE.catName(work.category)}</div>
+          <div class="cat">${SITE.catIcon(work.category)} ${SITE.catName(work.category)}</div>
           <h3>${work.title}</h3>
         </div>
       </div>
