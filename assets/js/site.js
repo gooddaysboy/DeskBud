@@ -33,14 +33,14 @@ const SITE = {
   cardHTML(work) {
     return `
     <a class="card" href="detail.html?id=${work.id}">
-      <div class="thumb">${this.thumbHTML(work)}</div>
+      <div class="thumb">${SITE.thumbHTML(work)}</div>
       <div class="body">
-        <span class="cat">${this.catName(work.category)}</span>
+        <span class="cat">${SITE.catName(work.category)}</span>
         <h3>${work.title}</h3>
         <p>${work.summary}</p>
         <div class="meta">
           <span>👤 ${work.author}</span>
-          <span>⬇ <b class="stat" id="d-${work.id}">${this.fmt(work.downloads)}</b></span>
+          <span>⬇ <b class="stat" id="d-${work.id}">${SITE.fmt(work.downloads)}</b></span>
         </div>
       </div>
     </a>`;
