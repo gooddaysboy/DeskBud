@@ -204,6 +204,7 @@ img, video { max-width: 100%; display: block; }
 }
 .chip:hover { border-color: var(--brand); color: var(--brand-ink); }
 .chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+.chip.sub { padding-left: 12px; padding-right: 12px; font-size: 13px; color: var(--ink-faint); border-style: dashed; }
 
 .sortbar { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-soft); }
 .sortbar select {

@@ -7,12 +7,14 @@
   },
   "categories": [
     { "id": "all", "name": "全部" },
-    { "id": "panda", "name": "熊猫" },
-    { "id": "cat", "name": "猫咪" },
-    { "id": "dog", "name": "狗狗" },
-    { "id": "fantasy", "name": "幻想生物" },
-    { "id": "retro", "name": "复古像素" },
-    { "id": "tool", "name": "实用工具型" }
+    { "id": "animal", "name": "动物", "children": [
+      { "id": "panda", "name": "熊猫" },
+      { "id": "cat", "name": "猫咪" },
+      { "id": "dog", "name": "狗狗" }
+    ]},
+    { "id": "plant", "name": "植物" },
+    { "id": "human", "name": "人类" },
+    { "id": "robot", "name": "机器人" }
   ],
   "works": [
     {
@@ -51,7 +53,7 @@
         { "type": "image", "src": "works/panda-android/1.png", "caption": "手机悬浮窗效果" },
         { "type": "image", "src": "works/panda-android/2.png", "caption": "贴边状态" },
         { "type": "gif", "src": "works/panda-android/walk.gif", "caption": "站立动画" },
-        { "type": "video", "src": "works/panda-android/preview.mp4", "caption": "真机演示视频" }
+        { "type": "video", "src": "works/panda-android/preview.mp4", "caption": "熊猫桌宠 · 干饭动画" }
       ],
       "download": {
         "label": "下载 Android 版 (apk)",
@@ -84,7 +86,7 @@
     {
       "id": "pixel-slime",
       "title": "像素史莱姆",
-      "category": "retro",
+      "category": "animal",
       "author": "8bitlab",
       "cover": "works/pixel-slime/cover.gif",
       "thumb": "works/pixel-slime/cover.gif",
@@ -104,7 +106,7 @@
     {
       "id": "star-fox",
       "title": "星狐",
-      "category": "fantasy",
+      "category": "animal",
       "author": "nebula",
       "cover": "works/star-fox/cover.gif",
       "thumb": "works/star-fox/cover.gif",
@@ -124,7 +126,7 @@
     {
       "id": "clock-bot",
       "title": "时钟小机器人",
-      "category": "tool",
+      "category": "robot",
       "author": "utils",
       "cover": "works/clock-bot/cover.gif",
       "thumb": "works/clock-bot/cover.gif",

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DeskBud · 陪伴你的桌面宠物伙伴</title>
   <meta name="description" content="DeskBud.xyz —— 面向桌面宠物爱好者，汇集各类开源与自制桌面宠物伙伴作品，支持浏览、预览与下载。">
-  <link rel="stylesheet" href="assets/css/base.css?v=5">
+  <link rel="stylesheet" href="assets/css/base.css?v=6">
 </head>
 <body>
   <header class="topbar">
@@ -58,7 +58,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=5"></script>
+  <script src="assets/js/site.js?v=6"></script>
   <script>
     (async () => {
       const d = await SITE.load();
@@ -70,12 +70,19 @@
 
       // 分类导航
       const nav = document.getElementById('catNav');
-      nav.innerHTML = d.categories.map(c =>
-        `<a class="chip" href="list.html?cat=${c.id}">${c.name}</a>`).join('');
-      // 分类预览：每类取 1 个
+      const navParts = d.categories.map(c => {
+        if (c.children) {
+          const sub = c.children.map(ch => `<a class="chip sub" href="list.html?cat=${ch.id}">${ch.name}</a>`).join('');
+          return `<a class="chip" href="list.html?cat=${c.id}">${c.name}</a>${sub}`;
+        }
+        return `<a class="chip" href="list.html?cat=${c.id}">${c.name}</a>`;
+      }).join('');
+      nav.innerHTML = navParts;
+      // 分类预览：每个一级取 1 个（优先叶子分类）
       const preview = [];
       d.categories.filter(c => c.id !== 'all').forEach(c => {
-        const w = d.works.find(x => x.category === c.id);
+        const ids = SITE.expandCatIds(c.id);
+        const w = d.works.find(x => ids.includes(x.category));
         if (w) preview.push(w);
       });
       document.getElementById('catGrid').innerHTML = preview.map(SITE.cardHTML).join('');

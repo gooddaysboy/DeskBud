@@ -8,8 +8,22 @@ const SITE = {
     return this.data;
   },
   catName(id) {
-    const c = this.data.categories.find(c => c.id === id);
-    return c ? c.name : id;
+    for (const c of this.data.categories) {
+      if (c.id === id) return c.name;
+      if (c.children) {
+        const ch = c.children.find(x => x.id === id);
+        if (ch) return ch.name;
+      }
+    }
+    return id;
+  },
+  // 把分类 id 展开为可匹配的作品 category 列表（一级分类会展开成它所有二级叶子）
+  expandCatIds(id) {
+    if (!id || id === 'all') return null;
+    const c = this.data.categories.find(x => x.id === id);
+    if (!c) return [id];
+    if (c.children && c.children.length) return c.children.map(x => x.id);
+    return [id];
   },
   // 排序：latest 最新 / downloads 下载量 / hot 热门(下载量+近期加权，这里用 downloads 近似)
   sortWorks(list, mode) {
