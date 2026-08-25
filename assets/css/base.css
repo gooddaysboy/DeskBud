@@ -48,6 +48,46 @@ img, video { max-width: 100%; display: block; }
   padding: 0 24px;
 }
 
+/* ---------- 顶部公告栏 ---------- */
+/* 放在导航栏之下、hero 之上，全站通用，由 JS 注入（data/announcements.json 驱动） */
+.announce-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  color: var(--brand-ink);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.announce-bar .wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 38px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+.announce-tag {
+  flex: 0 0 auto;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+}
+.announce-bar.is-new .announce-tag { background: var(--accent); }
+.announce-text {
+  flex: 1 1 auto;
+  text-align: center;
+}
+.announce-text a {
+  color: var(--brand-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+.announce-text a:hover { opacity: 0.82; }
+
 /* ---------- 顶部导航 ---------- */
 .topbar {
   position: sticky;

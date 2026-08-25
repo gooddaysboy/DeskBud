@@ -1,6 +1,7 @@
 // DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计
 const SITE = {
   data: null,
+  _assetVer: 12, // 与 css/js ?v= 同步，图片缓存破除用
   async load() {
     if (this.data) return this.data;
     const res = await fetch('data/works.json', { cache: 'no-cache' });
@@ -87,4 +88,39 @@ function ensureBusuanzi() {
   s.async = true;
   s.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
   document.body.appendChild(s);
+}
+
+// 公告栏：全站注入到 .topbar 之下、hero 之上，由 data/announcements.json 驱动
+function initAnnounce() {
+  fetch('data/announcements.json', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.json() : []))
+    .then(list => {
+      const today = new Date().toISOString().slice(0, 10);
+      const item = (list || []).find(a =>
+        a.enabled !== false &&
+        (!a.start || today >= a.start) &&
+        (!a.end || today <= a.end)
+      );
+      if (!item) return;
+      const bar = document.createElement('div');
+      bar.className = 'announce-bar' + (item.level === 'new' ? ' is-new' : '');
+      const tag = item.level === 'new' ? '上新' : '公告';
+      const text = item.link
+        ? `${item.text} <a href="${item.link}">查看详情 →</a>`
+        : item.text;
+      bar.innerHTML = `
+        <div class="wrap">
+          <span class="announce-tag">${tag}</span>
+          <span class="announce-text">${text}</span>
+        </div>`;
+      const topbar = document.querySelector('.topbar');
+      if (topbar) topbar.after(bar); // 放在导航栏之下、hero 之上，不抢最顶
+    })
+    .catch(() => {});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAnnounce);
+} else {
+  initAnnounce();
 }

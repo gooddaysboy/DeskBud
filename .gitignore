@@ -2,3 +2,6 @@
 .DS_Store
 *.log
 Thumbs.db
+
+# 开发手册（内部笔记，不发布）
+开发手册.md

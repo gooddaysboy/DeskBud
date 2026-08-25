@@ -3,29 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>语录录入 · DeskBud</title>
-  <link rel="stylesheet" href="assets/css/base.css?v=20">
+  <title>内容管理 · DeskBud</title>
+  <link rel="stylesheet" href="assets/css/base.css?v=23">
   <style>
-    .editor-wrap { max-width: 880px; margin: 0 auto; padding: 32px 16px 60px; }
-    .editor-wrap h1 { font-size: 24px; margin: 0 0 6px; }
-    .editor-note { color: var(--ink-faint); font-size: 13px; margin: 0 0 22px; }
-    .pet-block { margin-bottom: 18px; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; background: var(--surface); }
-    .pet-block h3 { margin: 0 0 4px; font-size: 15px; }
-    .pet-block .hint { font-size: 12px; color: var(--ink-faint); margin: 0 0 10px; }
-    textarea {
-      width: 100%; min-height: 96px; resize: vertical;
-      font: 14px/1.6 ui-monospace, Menlo, Consolas, monospace;
-      padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);
-      background: #fff; color: var(--ink);
+    /* ===== 护眼绿主题（仅本地编辑页，发布站不改） ===== */
+    :root {
+      --ec-bg: #d4ebd6;        /* 柔和护眼绿底 */
+      --ec-panel: #e9f4ea;     /* 面板浅绿 */
+      --ec-input: #f1f8f1;     /* 输入框浅绿（非刺眼白） */
+      --ec-ink: #2c3a2f;
+      --ec-ink-soft: #547058;
+      --ec-line: #6fae7d;      /* 明显分界线（中绿） */
+      --ec-line-strong: #5d9e6c;
+      --ec-accent: #5e9c6e;    /* 主按钮绿 */
     }
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
-    .ver-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-size: 14px; color: var(--ink-soft); }
-    .ver-row input { width: 80px; padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); font: inherit; }
-    #status { font-size: 13px; color: var(--brand-ink); min-height: 20px; margin: 6px 0 14px; }
-    .preview-box { margin-top: 8px; }
-    .preview-box textarea { background: #fafbfa; min-height: 160px; }
+    body { background: var(--ec-bg); color: var(--ec-ink); }
+    .topbar { background: rgba(212, 235, 214, 0.95); border-bottom: 1px solid var(--ec-line); }
+    .brand { color: var(--ec-ink); }
+    .brand-sub { color: var(--ec-ink-soft); }
+
+    .editor-wrap { max-width: 880px; margin: 0 auto; padding: 28px 16px 60px; }
+    .editor-wrap h1 { font-size: 24px; margin: 0 0 6px; color: var(--ec-ink); }
+    .editor-note { color: var(--ec-ink-soft); font-size: 13px; margin: 0 0 18px; }
+
+    .tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--ec-line); margin-bottom: 22px; }
+    .tab {
+      border: 0; background: transparent; cursor: pointer;
+      padding: 10px 16px; font-size: 15px; color: var(--ec-ink-soft);
+      border-bottom: 2px solid transparent; margin-bottom: -2px;
+    }
+    .tab.active { color: var(--ec-ink); border-bottom-color: var(--ec-accent); font-weight: 600; }
     .hidden { display: none; }
-    .tip-save { font-size: 12px; color: var(--ink-faint); margin-top: 6px; }
+
+    /* 类别选择（分段） */
+    .cat-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .cat-tabs button {
+      border: 1px solid var(--ec-line); background: var(--ec-panel); color: var(--ec-ink-soft);
+      padding: 7px 14px; border-radius: 999px; cursor: pointer; font-size: 14px;
+    }
+    .cat-tabs button.active { background: var(--ec-accent); color: #fff; border-color: var(--ec-accent); font-weight: 600; }
+
+    /* 输入行 */
+    .editor-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .editor-row input[type="text"] {
+      flex: 1 1 auto; padding: 11px 13px; font-size: 15px;
+      border: 1.5px solid var(--ec-line); border-radius: 10px;
+      background: var(--ec-input); color: var(--ec-ink);
+    }
+    .editor-row input[type="text"]:focus { outline: none; border-color: var(--ec-accent); }
+    .btn-add {
+      border: 0; background: var(--ec-accent); color: #fff; cursor: pointer;
+      padding: 0 20px; border-radius: 10px; font-size: 15px; font-weight: 600;
+    }
+    .btn-add:hover { background: #528c62; }
+
+    .list-head { display: flex; align-items: baseline; gap: 12px; margin: 6px 2px 8px; font-size: 13px; color: var(--ec-ink-soft); }
+    .list-head b { color: var(--ec-ink); font-size: 14px; }
+
+    /* 已输入列表 */
+    .item-list { list-style: none; margin: 0 0 8px; padding: 0; border: 1.5px solid var(--ec-line); border-radius: 10px; overflow: hidden; background: var(--ec-panel); }
+    .item-list li {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-bottom: 1px solid var(--ec-line);
+      font-size: 15px;
+    }
+    .item-list li:last-child { border-bottom: 0; }
+    .item-list li .txt { flex: 1 1 auto; word-break: break-all; }
+    .item-list li .del {
+      flex: 0 0 auto; border: 1px solid var(--ec-line); background: var(--ec-bg); color: #c0492f;
+      border-radius: 8px; padding: 3px 10px; cursor: pointer; font-size: 13px;
+    }
+    .item-list li .del:hover { background: #f3d9d2; }
+    .empty-tip { padding: 14px; color: var(--ec-ink-soft); font-size: 14px; text-align: center; }
+
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
+    .actions .btn { font-size: 14px; padding: 9px 16px; border-radius: 10px; cursor: pointer; border: 1px solid var(--ec-line); }
+    .actions .btn-primary { background: var(--ec-accent); color: #fff; border-color: var(--ec-accent); }
+    .actions .btn-primary:hover { background: #528c62; }
+    .actions .btn-ghost { background: var(--ec-panel); color: var(--ec-ink); }
+    .actions .btn-ghost:hover { background: #dcefdd; }
+    #status, #statusA { font-size: 13px; color: #3f7a4f; min-height: 20px; margin: 6px 0 12px; }
+
+    .preview-box { margin-top: 8px; }
+    .preview-box h3 { font-size: 14px; color: var(--ec-ink-soft); margin: 10px 0 4px; }
+    .preview-box textarea {
+      width: 100%; min-height: 150px; resize: vertical; background: var(--ec-input);
+      color: var(--ec-ink); border: 1.5px solid var(--ec-line); border-radius: 10px;
+      font: 13px/1.6 ui-monospace, Menlo, Consolas, monospace; padding: 10px 12px;
+    }
+    .tip-save { font-size: 12px; color: var(--ec-ink-soft); margin-top: 6px; }
+
+    /* 公告卡片（同样护眼） */
+    .ann-item { border: 1.5px solid var(--ec-line); border-radius: 10px; padding: 14px 16px; background: var(--ec-panel); margin-bottom: 14px; }
+    .ann-row { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; border-bottom: 1px solid var(--ec-line); padding-bottom: 10px; }
+    .ann-row label { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ec-ink-soft); }
+    .ann-row select, .ann-row input[type="date"] {
+      border: 1.5px solid var(--ec-line); border-radius: 8px; background: var(--ec-input); color: var(--ec-ink); padding: 6px 9px; font: inherit;
+    }
+    .ann-row .a-del { margin-left: auto; border: 1px solid var(--ec-line); background: var(--ec-bg); color: #c0492f; border-radius: 8px; padding: 5px 12px; cursor: pointer; }
+    .ann-fields label { display: block; font-size: 13px; color: var(--ec-ink-soft); margin: 10px 0 4px; }
+    .ann-fields input[type="text"] {
+      width: 100%; padding: 9px 11px; border: 1.5px solid var(--ec-line); border-radius: 8px;
+      background: var(--ec-input); color: var(--ec-ink); font: inherit;
+    }
+    .ann-fields input[type="text"]:focus { outline: none; border-color: var(--ec-accent); }
+    .ann-dates { display: flex; gap: 14px; }
+    .ann-dates > label { flex: 1; }
+    .ann-empty { color: var(--ec-ink-soft); font-size: 14px; padding: 8px 0 4px; }
   </style>
 </head>
 <body>
@@ -37,166 +121,317 @@
   </header>
 
   <div class="editor-wrap">
-    <h1>桌宠语录录入</h1>
-    <p class="editor-note">分类输入语录，每行一条。保存前自动校验 JSON 格式，写错不会存盘。这是桌宠脑袋里随机冒出来的念头 💭</p>
+    <h1>内容管理（本地）</h1>
+    <p class="editor-note">本地录入桌宠语录与站点公告，保存后随站点一起发布。仅本地使用，不挂发布站导航。护眼绿主题，输错不会存盘。</p>
 
-    <div class="ver-row">
-      <label for="ver">版本号 version</label>
-      <input id="ver" type="number" value="4" min="0">
-      <span>（保存时自动 +1）</span>
+    <div class="tabs">
+      <button class="tab active" data-tab="bubble">💭 气泡语录</button>
+      <button class="tab" data-tab="ann">📢 站点公告</button>
     </div>
 
-    <div class="pet-block">
-      <h3>🌐 公共语录 public</h3>
-      <p class="hint">所有宠物共享</p>
-      <textarea id="public" placeholder="每行一条，例如：&#10;今天天气怎么样呢&#10;主人吃饭了没有"></textarea>
-    </div>
+    <!-- ============ 气泡语录 ============ -->
+    <section id="tab-bubble">
+      <div class="cat-tabs" id="bubbleCats">
+        <button data-cat="public" class="active">🌐 公共</button>
+        <button data-cat="panda">🐼 熊猫</button>
+        <button data-cat="cat">🐱 猫咪</button>
+        <button data-cat="dog">🐶 狗狗</button>
+        <button data-cat="plant">🌱 植物</button>
+        <button data-cat="rabbit">🐰 兔子</button>
+      </div>
 
-    <div class="pet-block">
-      <h3>🐼 熊猫 panda</h3>
-      <p class="hint">专属语录（会与公共语录合并展示）</p>
-      <textarea id="pet-panda" placeholder="每行一条"></textarea>
-    </div>
+      <div class="editor-row">
+        <input type="text" id="bubbleInput" placeholder="输入一条语录，回车添加；下方实时列出相同内容避免重复">
+        <button class="btn-add" id="bubbleAdd">添加</button>
+      </div>
+      <div class="list-head"><span>共 <b id="bubbleCount">0</b> 条</span><span id="bubbleMatch"></span></div>
+      <ul class="item-list" id="bubbleList"></ul>
 
-    <div class="pet-block">
-      <h3>🐱 猫咪 cat</h3>
-      <p class="hint">专属语录</p>
-      <textarea id="pet-cat" placeholder="每行一条"></textarea>
-    </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="saveBtn">保存 bubble.json</button>
+        <button class="btn btn-ghost" id="copyBtn">复制 JSON</button>
+        <button class="btn btn-ghost" id="downloadBtn">下载 bubble.json</button>
+      </div>
+      <div id="status"></div>
+      <p class="tip-save">提示：用 Chrome / Edge 打开本页并「保存」，可直接写回 data/bubble.json（需授权目录）。其他浏览器走「复制 / 下载」手动替换。</p>
 
-    <div class="pet-block">
-      <h3>🐶 狗狗 dog</h3>
-      <p class="hint">专属语录</p>
-      <textarea id="pet-dog" placeholder="每行一条"></textarea>
-    </div>
+      <div class="preview-box">
+        <h3>实时 JSON 预览</h3>
+        <textarea id="preview" readonly></textarea>
+      </div>
+    </section>
 
-    <div class="pet-block">
-      <h3>🌱 植物 plant</h3>
-      <p class="hint">专属语录</p>
-      <textarea id="pet-plant" placeholder="每行一条"></textarea>
-    </div>
+    <!-- ============ 站点公告 ============ -->
+    <section id="tab-ann" class="hidden">
+      <div class="cat-tabs" id="annCats">
+        <button data-level="all" class="active">全部</button>
+        <button data-level="new">上新</button>
+        <button data-level="info">公告</button>
+      </div>
 
-    <div class="pet-block">
-      <h3>🐰 兔子 rabbit（豁牙小兔）</h3>
-      <p class="hint">专属语录</p>
-      <textarea id="pet-rabbit" placeholder="每行一条"></textarea>
-    </div>
+      <div class="editor-row">
+        <input type="text" id="annSearch" placeholder="搜索公告文案，下方列出相同内容避免重复">
+        <button class="btn-add" id="addAnnBtn">+ 新增</button>
+      </div>
+      <div class="list-head"><span>共 <b id="annCount">0</b> 条</span><span id="annMatch"></span></div>
+      <div id="annList"></div>
 
-    <div class="actions">
-      <button class="btn btn-primary" id="saveBtn">保存 bubble.json</button>
-      <button class="btn btn-ghost" id="copyBtn">复制 JSON</button>
-      <button class="btn btn-ghost" id="downloadBtn">下载 bubble.json</button>
-    </div>
-    <div id="status"></div>
-    <p class="tip-save" id="saveTip">提示：用 Chrome / Edge 打开本页并「保存」，可直接写回 data/bubble.json（需授权目录）。其他浏览器走「复制 / 下载」手动替换。</p>
+      <div class="actions">
+        <button class="btn btn-primary" id="saveAnnBtn">保存 announcements.json</button>
+        <button class="btn btn-ghost" id="copyAnnBtn">复制 JSON</button>
+        <button class="btn btn-ghost" id="downloadAnnBtn">下载 announcements.json</button>
+      </div>
+      <div id="statusA"></div>
+      <p class="tip-save">提示：用 Chrome / Edge「保存」可直接写回 data/announcements.json；其他浏览器走「下载」手动替换。</p>
 
-    <div class="preview-box">
-      <h3 style="font-size:14px;color:var(--ink-soft)">实时 JSON 预览</h3>
-      <textarea id="preview" readonly></textarea>
-    </div>
+      <div class="preview-box">
+        <h3>实时 JSON 预览</h3>
+        <textarea id="previewA" readonly></textarea>
+      </div>
+    </section>
   </div>
 
   <script>
-    const PETS = ['panda', 'cat', 'dog', 'plant', 'rabbit'];
+    // ---------- 分页签 ----------
+    document.querySelectorAll('.tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById('tab-bubble').classList.toggle('hidden', t.dataset.tab !== 'bubble');
+        document.getElementById('tab-ann').classList.toggle('hidden', t.dataset.tab !== 'ann');
+      });
+    });
+
     const $ = (id) => document.getElementById(id);
 
-    // 加载现有 bubble.json 填充表单
+    // ================= 气泡语录 =================
+    const PETS = ['panda', 'cat', 'dog', 'plant', 'rabbit'];
+    const bubbleData = { public: [], panda: [], cat: [], dog: [], plant: [], rabbit: [] };
+    let bubbleCat = 'public';
+    let bubbleVer = 0;
+    const setStatus = (m) => { $('status').textContent = m; };
+
     (async () => {
       try {
         const res = await fetch('data/bubble.json', { cache: 'no-cache' });
         const j = await res.json();
-        $('ver').value = j.version || 0;
-        $('public').value = (j.public || []).join('\n');
-        PETS.forEach(k => {
-          const el = $('pet-' + k);
-          if (el && j.pets && Array.isArray(j.pets[k])) el.value = j.pets[k].join('\n');
-        });
-        setStatus('已加载现有 bubble.json（v' + (j.version || 0) + '）');
-      } catch (e) {
-        setStatus('未找到现有 bubble.json，可从空开始录入');
-      }
-      refreshPreview();
+        bubbleVer = j.version || 0;
+        bubbleData.public = (j.public || []).slice();
+        PETS.forEach(k => { if (j.pets && Array.isArray(j.pets[k])) bubbleData[k] = j.pets[k].slice(); });
+        setStatus('已加载现有 bubble.json（v' + bubbleVer + '）');
+      } catch (e) { setStatus('未找到现有 bubble.json，可从空开始录入'); }
+      renderBubble();
     })();
 
-    function linesOf(id) {
-      return $(id).value.split('\n').map(s => s.trim()).filter(Boolean);
+    function renderBubble() {
+      const kw = $('bubbleInput').value.trim().toLowerCase();
+      const list = $('bubbleList');
+      list.innerHTML = '';
+      const all = bubbleData[bubbleCat];
+      let match = 0;
+      all.forEach((t, idx) => {
+        if (kw && !t.toLowerCase().includes(kw)) return;
+        match++;
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="txt"></span><button class="del" type="button">删除</button>`;
+        li.querySelector('.txt').textContent = t;
+        li.querySelector('.del').addEventListener('click', () => {
+          bubbleData[bubbleCat].splice(idx, 1);
+          renderBubble(); refreshPreview();
+        });
+        list.appendChild(li);
+      });
+      if (!all.length) list.innerHTML = '<li class="empty-tip">该类别还没有语录，在上面输入并回车添加</li>';
+      else if (match === 0) list.innerHTML = '<li class="empty-tip">没有匹配「' + $('bubbleInput').value.trim() + '」的内容</li>';
+      $('bubbleCount').textContent = all.length;
+      $('bubbleMatch').textContent = kw ? ('，匹配 ' + match) : '';
     }
-    function buildObj() {
+    function addBubble() {
+      const v = $('bubbleInput').value.trim();
+      if (!v) return;
+      if (bubbleData[bubbleCat].includes(v)) { setStatus('⚠️ 该类别已存在相同语录，未重复添加'); return; }
+      bubbleData[bubbleCat].push(v);
+      $('bubbleInput').value = '';
+      renderBubble(); refreshPreview();
+      setStatus('✅ 已添加到「' + bubbleCat + '」');
+    }
+    $('bubbleInput').addEventListener('input', renderBubble);
+    $('bubbleInput').addEventListener('keydown', e => { if (e.key === 'Enter') addBubble(); });
+    $('bubbleAdd').addEventListener('click', addBubble);
+    document.querySelectorAll('#bubbleCats button').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('#bubbleCats button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        bubbleCat = b.dataset.cat;
+        renderBubble();
+      });
+    });
+    function buildBubble() {
       const pets = {};
-      PETS.forEach(k => { pets[k] = linesOf('pet-' + k); });
-      let ver = parseInt($('ver').value, 10);
-      if (isNaN(ver)) ver = 0;
-      return { version: ver + 1, public: linesOf('public'), pets };
+      PETS.forEach(k => { pets[k] = bubbleData[k].slice(); });
+      return { version: bubbleVer + 1, public: bubbleData.public.slice(), pets };
     }
     function refreshPreview() {
       try {
-        const txt = JSON.stringify(buildObj(), null, 2);
-        JSON.parse(txt); // 校验
-        $('preview').value = txt;
-        $('preview').style.borderColor = 'var(--line)';
-      } catch (e) {
-        $('preview').value = 'JSON 校验失败：' + e.message;
-        $('preview').style.borderColor = '#d98';
-      }
+        const txt = JSON.stringify(buildBubble(), null, 2);
+        JSON.parse(txt);
+        $('preview').value = txt; $('preview').style.borderColor = 'var(--ec-line)';
+      } catch (e) { $('preview').value = 'JSON 校验失败：' + e.message; $('preview').style.borderColor = '#d98'; }
     }
-    function setStatus(msg) { $('status').textContent = msg; }
 
-    ['public', ...PETS.map(k => 'pet-' + k)].forEach(id => {
-      $(id).addEventListener('input', refreshPreview);
+    // ================= 站点公告 =================
+    const setStatusA = (m) => { $('statusA').textContent = m; };
+    let annData = [];
+    let annLevel = 'all';
+    let annIdSeq = 0;
+
+    (async () => {
+      try {
+        const res = await fetch('data/announcements.json', { cache: 'no-cache' });
+        annData = await res.json();
+      } catch (e) { annData = []; }
+      renderAnn();
+    })();
+
+    function renderAnn() {
+      const kw = $('annSearch').value.trim().toLowerCase();
+      const box = $('annList');
+      const view = annData.filter(a =>
+        (annLevel === 'all' || (a.level || 'info') === annLevel) &&
+        (!kw || (a.text || '').toLowerCase().includes(kw))
+      );
+      box.innerHTML = '';
+      if (!view.length) { box.innerHTML = '<p class="ann-empty">没有匹配的公告</p>'; }
+      view.forEach(a => {
+        const idx = annData.indexOf(a);
+        const el = document.createElement('div');
+        el.className = 'ann-item';
+        const lvl = a.level === 'new' ? 'new' : (a.level || 'info');
+        el.innerHTML = `
+          <div class="ann-row">
+            <label><input type="checkbox" class="a-enabled" ${a.enabled === false ? '' : 'checked'}> 启用</label>
+            <label>标签
+              <select class="a-level">
+                <option value="new" ${lvl === 'new' ? 'selected' : ''}>上新</option>
+                <option value="info" ${lvl !== 'new' ? 'selected' : ''}>公告</option>
+              </select>
+            </label>
+            <button class="a-del" type="button">删除</button>
+          </div>
+          <div class="ann-fields">
+            <label>文案</label>
+            <input type="text" class="a-text" value="${(a.text || '').replace(/"/g, '&quot;')}">
+            <label>链接（可选）</label>
+            <input type="text" class="a-link" value="${(a.link || '').replace(/"/g, '&quot;')}">
+            <div class="ann-dates">
+              <label>开始 <input type="date" class="a-start" value="${a.start || ''}"></label>
+              <label>结束 <input type="date" class="a-end" value="${a.end || ''}"></label>
+            </div>
+          </div>`;
+        const sync = () => {
+          annData[idx].enabled = el.querySelector('.a-enabled').checked;
+          annData[idx].level = el.querySelector('.a-level').value;
+          annData[idx].text = el.querySelector('.a-text').value.trim();
+          annData[idx].link = el.querySelector('.a-link').value.trim();
+          annData[idx].start = el.querySelector('.a-start').value;
+          annData[idx].end = el.querySelector('.a-end').value;
+          refreshPreviewA();
+        };
+        el.querySelector('.a-enabled').addEventListener('change', sync);
+        el.querySelector('.a-level').addEventListener('change', sync);
+        el.querySelector('.a-text').addEventListener('input', sync);
+        el.querySelector('.a-link').addEventListener('input', sync);
+        el.querySelector('.a-start').addEventListener('input', sync);
+        el.querySelector('.a-end').addEventListener('input', sync);
+        el.querySelector('.a-del').addEventListener('click', () => {
+          annData.splice(idx, 1); renderAnn();
+        });
+        box.appendChild(el);
+      });
+      $('annCount').textContent = annData.length;
+      $('annMatch').textContent = (kw || annLevel !== 'all') ? ('，显示 ' + view.length) : '';
+    }
+    $('annSearch').addEventListener('input', renderAnn);
+    document.querySelectorAll('#annCats button').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('#annCats button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        annLevel = b.dataset.level;
+        renderAnn();
+      });
     });
-    $('ver').addEventListener('input', refreshPreview);
+    $('addAnnBtn').addEventListener('click', () => {
+      annData.push({ id: 'ann-' + Date.now() + (annIdSeq++), level: 'new', text: '', link: '', start: '', end: '' });
+      renderAnn();
+      const first = $('annList').querySelector('.a-text');
+      if (first) first.focus();
+    });
+    function buildAnn() {
+      return annData
+        .filter(a => a.text && a.text.trim())
+        .map(a => {
+          const o = { id: a.id || ('ann-' + Date.now()) };
+          if (a.enabled === false) o.enabled = false;
+          o.level = a.level || 'info';
+          o.text = (a.text || '').trim();
+          o.link = (a.link || '').trim();
+          if (a.start) o.start = a.start;
+          if (a.end) o.end = a.end;
+          return o;
+        });
+    }
+    function refreshPreviewA() {
+      try {
+        const txt = JSON.stringify(buildAnn(), null, 2);
+        JSON.parse(txt);
+        $('previewA').value = txt; $('previewA').style.borderColor = 'var(--ec-line)';
+      } catch (e) { $('previewA').value = 'JSON 校验失败：' + e.message; $('previewA').style.borderColor = '#d98'; }
+    }
 
-    async function save() {
+    // ================= 通用保存 / 下载 / 复制 =================
+    async function saveFile(filename, obj) {
       let txt;
-      try { txt = JSON.stringify(buildObj(), null, 2); JSON.parse(txt); }
-      catch (e) { setStatus('❌ 保存失败：JSON 校验不过 — ' + e.message); return; }
-
-      // 优先：File System Access 直写（Chrome / Edge）
+      try { txt = JSON.stringify(obj, null, 2); JSON.parse(txt); }
+      catch (e) { return '❌ JSON 校验不过 — ' + e.message; }
       if (window.showSaveFilePicker) {
         try {
           const handle = await window.showSaveFilePicker({
-            suggestedName: 'bubble.json',
+            suggestedName: filename,
             types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
           });
           const w = await handle.createWritable();
-          await w.write(txt);
-          await w.close();
-          setStatus('✅ 已直写 data/bubble.json（v' + (buildObj().version) + '）');
-          refreshPreview();
-          return;
+          await w.write(txt); await w.close();
+          return '✅ 已直写 data/' + filename;
         } catch (e) {
-          if (e.name === 'AbortError') { setStatus('已取消保存'); return; }
-          setStatus('直写失败，已切换到下载方式：' + e.message);
+          if (e.name === 'AbortError') return '已取消保存';
+          download(filename, txt);
+          return '⚠️ 直写失败，已下载 ' + filename + '，请手动替换';
         }
       }
-      // 降级：触发下载
-      download(txt);
-      setStatus('⚠️ 当前浏览器不支持直写，已下载 bubble.json，请手动替换 data/bubble.json');
+      download(filename, txt);
+      return '⚠️ 当前浏览器不支持直写，已下载 ' + filename + '，请手动替换';
     }
-    function download(txt) {
+    function download(filename, txt) {
       const blob = new Blob([txt], { type: 'application/json' });
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'bubble.json';
-      a.click();
+      a.href = URL.createObjectURL(blob); a.download = filename; a.click();
       URL.revokeObjectURL(a.href);
     }
-    function copy() {
-      try {
-        const txt = JSON.stringify(buildObj(), null, 2); JSON.parse(txt);
+    function copy(filename, obj) {
+      try { const txt = JSON.stringify(obj, null, 2); JSON.parse(txt);
         navigator.clipboard.writeText(txt).then(
-          () => setStatus('✅ 已复制 JSON 到剪贴板'),
-          () => setStatus('复制失败，请手动从下方预览框复制')
+          () => setStatus('✅ 已复制 ' + filename + ' 到剪贴板'),
+          () => setStatus('复制失败，请手动从预览框复制')
         );
       } catch (e) { setStatus('❌ 复制失败：JSON 校验不过 — ' + e.message); }
     }
 
-    $('saveBtn').addEventListener('click', save);
-    $('copyBtn').addEventListener('click', copy);
-    $('downloadBtn').addEventListener('click', () => {
-      try { download(JSON.stringify(buildObj(), null, 2)); }
-      catch (e) { setStatus('❌ 下载失败：' + e.message); }
-    });
+    $('saveBtn').addEventListener('click', async () => { setStatus(await saveFile('bubble.json', buildBubble())); });
+    $('copyBtn').addEventListener('click', () => copy('bubble.json', buildBubble()));
+    $('downloadBtn').addEventListener('click', () => download('bubble.json', JSON.stringify(buildBubble(), null, 2)));
+    $('saveAnnBtn').addEventListener('click', async () => { setStatusA(await saveFile('announcements.json', buildAnn())); });
+    $('copyAnnBtn').addEventListener('click', () => copy('announcements.json', buildAnn()));
+    $('downloadAnnBtn').addEventListener('click', () => download('announcements.json', JSON.stringify(buildAnn(), null, 2)));
   </script>
 </body>
 </html>

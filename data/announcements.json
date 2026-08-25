@@ -1,0 +1,17 @@
+[
+  {
+    "id": "panda-huahua-online",
+    "level": "new",
+    "text": "🐼 熊猫「花花」桌宠正式上线啦，快来带它回桌面陪你办公～",
+    "link": "detail.html?id=panda-orbit",
+    "start": "2026-08-25",
+    "end": "2026-10-01"
+  },
+  {
+    "id": "welcome-tip",
+    "level": "info",
+    "text": "欢迎来到 DeskBud.xyz —— 把常驻桌面的宠物伙伴，领回家。",
+    "link": "",
+    "start": "2026-08-25"
+  }
+]
