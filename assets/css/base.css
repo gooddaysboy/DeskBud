@@ -318,6 +318,18 @@ img, video { max-width: 100%; display: block; }
   animation-timing-function: ease-in;
   animation-fill-mode: forwards;
 }
+/* 气泡小尾巴（对话气泡模样） */
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  bottom: -7px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid rgba(255, 255, 255, 0.84);
+}
 /* 卡片空间小，气泡用单行省略 */
 .card-bubbles .bubble { white-space: nowrap; max-width: 90%; overflow: hidden; text-overflow: ellipsis; }
 @keyframes bubbleUp {

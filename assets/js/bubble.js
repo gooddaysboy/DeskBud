@@ -58,37 +58,50 @@ const BUBBLE = {
     }
     return a;
   },
-  // 在容器内渲染向上飘的半透明气泡。count=同时存在的泡泡数（首页少、详情页多）
-  // 返回清理函数（切换作品时调用，避免计时器叠加）
-  render(container, category, count) {
-    if (!container) return () => {};
-    if (container._bubbleTimer) {
-      clearInterval(container._bubbleTimer);
-      container._bubbleTimer = null;
-    }
-    container.innerHTML = '';
-    container.classList.add('bubble-zone');
+  // 在单个容器里飘出 1 条气泡（不负责节奏，由 render / startGlobal 调度）
+  spawnBubble(container, category) {
     const lines = this.linesFor(category);
-    if (!lines.length) return () => {};
-    let idx = 0;
-    const spawn = () => {
-      const b = document.createElement('div');
-      b.className = 'bubble';
-      b.textContent = lines[idx % lines.length];
-      idx++;
-      const left = 4 + Math.random() * 72;      // 随机水平位置 %
-      const dur = 7 + Math.random() * 5;        // 随机时长 7~12s
-      b.style.left = left + '%';
-      b.style.animationDuration = dur + 's';
-      b.style.animationDelay = (Math.random() * 1.5) + 's';
-      container.appendChild(b);
-      b.addEventListener('animationend', () => b.remove());
+    if (!lines.length) return;
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    b.textContent = lines[Math.floor(Math.random() * lines.length)];
+    const left = 6 + Math.random() * 68;          // 随机水平位置 %
+    const dur = 9 + Math.random() * 4;            // 动画时长 9~13s（< 间隔，保证屏上同时最多 1 条）
+    b.style.left = left + '%';
+    b.style.animationDuration = dur + 's';
+    container.appendChild(b);
+    b.addEventListener('animationend', () => b.remove());
+  },
+  // 单个容器模式：每 interval 毫秒飘 1 条（该容器同时最多 1 条）。用于详情页等单区域
+  // 返回清理函数
+  render(container, category, interval) {
+    if (!container) return () => {};
+    if (container._bubbleTimer) { clearTimeout(container._bubbleTimer); container._bubbleTimer = null; }
+    container.classList.add('bubble-zone');
+    const gap = Math.max(12000, interval || 20000); // 默认约 20 秒一条
+    const tick = () => {
+      this.spawnBubble(container, category);
+      container._bubbleTimer = setTimeout(tick, gap);
     };
-    const gap = Math.max(2200, 4200 - count * 250); // 同时越多，生成越密
-    for (let i = 0; i < count; i++) setTimeout(spawn, i * (gap / count));
-    container._bubbleTimer = setInterval(spawn, gap);
+    container._bubbleTimer = setTimeout(tick, 800); // 打开后稍等片刻飘第一条
     return () => {
-      if (container._bubbleTimer) { clearInterval(container._bubbleTimer); container._bubbleTimer = null; }
+      if (container._bubbleTimer) { clearTimeout(container._bubbleTimer); container._bubbleTimer = null; }
     };
+  },
+  // 全局模式：整页（selector 选中的所有容器）同一时刻只飘 1 条，随机轮流，约 interval 毫秒一条。
+  // 用于泡泡墙 / 列表多卡片，避免刷屏。返回清理函数
+  startGlobal(selector, interval) {
+    const els = Array.from(document.querySelectorAll(selector));
+    if (!els.length) return () => {};
+    const gap = Math.max(12000, interval || 20000);
+    let timer = null;
+    const tick = () => {
+      const el = els[Math.floor(Math.random() * els.length)];
+      const cat = el.dataset.cat || el.dataset.pet;
+      this.spawnBubble(el, cat);
+      timer = setTimeout(tick, gap);
+    };
+    timer = setTimeout(tick, 800);
+    return () => { if (timer) { clearTimeout(timer); timer = null; } };
   }
 };

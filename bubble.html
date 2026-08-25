@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>桌宠脑洞泡泡墙 · DeskBud</title>
   <meta name="description" content="DeskBud 桌宠脑洞泡泡墙：每个桌面宠物脑袋里随机冒出来的念头，与桌宠程序共用同一份语录数据源。">
-  <link rel="stylesheet" href="assets/css/base.css?v=10">
+  <link rel="stylesheet" href="assets/css/base.css?v=11">
 </head>
 <body>
   <header class="topbar">
@@ -42,7 +42,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/bubble.js?v=9"></script>
+  <script src="assets/js/bubble.js?v=10"></script>
   <script>
     // 每个面板：宠物 id + 展示名 + emoji
     const PANELS = [
@@ -66,9 +66,8 @@
           <div class="bubble-zone tall" data-cat="${p.cat}"></div>
         </div>`).join('');
 
-      wall.querySelectorAll('.bubble-zone').forEach(z => {
-        cleanups.push(BUBBLE.render(z, z.dataset.cat, 7));
-      });
+      // 全局模式：整页同一时刻只飘 1 条，随机轮流（避免刷屏）
+      cleanups.push(BUBBLE.startGlobal('.bubble-zone', 20000));
     })();
   </script>
 </body>
