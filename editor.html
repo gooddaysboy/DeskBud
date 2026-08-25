@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>语录录入 · DeskBud</title>
+  <link rel="stylesheet" href="assets/css/base.css?v=9">
+  <style>
+    .editor-wrap { max-width: 880px; margin: 0 auto; padding: 32px 16px 60px; }
+    .editor-wrap h1 { font-size: 24px; margin: 0 0 6px; }
+    .editor-note { color: var(--ink-faint); font-size: 13px; margin: 0 0 22px; }
+    .pet-block { margin-bottom: 18px; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; background: var(--surface); }
+    .pet-block h3 { margin: 0 0 4px; font-size: 15px; }
+    .pet-block .hint { font-size: 12px; color: var(--ink-faint); margin: 0 0 10px; }
+    textarea {
+      width: 100%; min-height: 96px; resize: vertical;
+      font: 14px/1.6 ui-monospace, Menlo, Consolas, monospace;
+      padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);
+      background: #fff; color: var(--ink);
+    }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
+    .ver-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-size: 14px; color: var(--ink-soft); }
+    .ver-row input { width: 80px; padding: 6px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); font: inherit; }
+    #status { font-size: 13px; color: var(--brand-ink); min-height: 20px; margin: 6px 0 14px; }
+    .preview-box { margin-top: 8px; }
+    .preview-box textarea { background: #fafbfa; min-height: 160px; }
+    .hidden { display: none; }
+    .tip-save { font-size: 12px; color: var(--ink-faint); margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <nav class="nav"><a href="index.html">返回首页</a></nav>
+    </div>
+  </header>
+
+  <div class="editor-wrap">
+    <h1>桌宠语录录入</h1>
+    <p class="editor-note">分类输入语录，每行一条。保存前自动校验 JSON 格式，写错不会存盘。这是桌宠脑袋里随机冒出来的念头 💭</p>
+
+    <div class="ver-row">
+      <label for="ver">版本号 version</label>
+      <input id="ver" type="number" value="4" min="0">
+      <span>（保存时自动 +1）</span>
+    </div>
+
+    <div class="pet-block">
+      <h3>🌐 公共语录 public</h3>
+      <p class="hint">所有宠物共享</p>
+      <textarea id="public" placeholder="每行一条，例如：&#10;今天天气怎么样呢&#10;主人吃饭了没有"></textarea>
+    </div>
+
+    <div class="pet-block">
+      <h3>🐼 熊猫 panda</h3>
+      <p class="hint">专属语录（会与公共语录合并展示）</p>
+      <textarea id="pet-panda" placeholder="每行一条"></textarea>
+    </div>
+
+    <div class="pet-block">
+      <h3>🐱 猫咪 cat</h3>
+      <p class="hint">专属语录</p>
+      <textarea id="pet-cat" placeholder="每行一条"></textarea>
+    </div>
+
+    <div class="pet-block">
+      <h3>🐶 狗狗 dog</h3>
+      <p class="hint">专属语录</p>
+      <textarea id="pet-dog" placeholder="每行一条"></textarea>
+    </div>
+
+    <div class="pet-block">
+      <h3>🌱 植物 plant</h3>
+      <p class="hint">专属语录</p>
+      <textarea id="pet-plant" placeholder="每行一条"></textarea>
+    </div>
+
+    <div class="pet-block">
+      <h3>🐰 兔子 rabbit（豁牙小兔）</h3>
+      <p class="hint">专属语录</p>
+      <textarea id="pet-rabbit" placeholder="每行一条"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="saveBtn">保存 bubble.json</button>
+      <button class="btn btn-ghost" id="copyBtn">复制 JSON</button>
+      <button class="btn btn-ghost" id="downloadBtn">下载 bubble.json</button>
+    </div>
+    <div id="status"></div>
+    <p class="tip-save" id="saveTip">提示：用 Chrome / Edge 打开本页并「保存」，可直接写回 data/bubble.json（需授权目录）。其他浏览器走「复制 / 下载」手动替换。</p>
+
+    <div class="preview-box">
+      <h3 style="font-size:14px;color:var(--ink-soft)">实时 JSON 预览</h3>
+      <textarea id="preview" readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    const PETS = ['panda', 'cat', 'dog', 'plant', 'rabbit'];
+    const $ = (id) => document.getElementById(id);
+
+    // 加载现有 bubble.json 填充表单
+    (async () => {
+      try {
+        const res = await fetch('data/bubble.json', { cache: 'no-cache' });
+        const j = await res.json();
+        $('ver').value = j.version || 0;
+        $('public').value = (j.public || []).join('\n');
+        PETS.forEach(k => {
+          const el = $('pet-' + k);
+          if (el && j.pets && Array.isArray(j.pets[k])) el.value = j.pets[k].join('\n');
+        });
+        setStatus('已加载现有 bubble.json（v' + (j.version || 0) + '）');
+      } catch (e) {
+        setStatus('未找到现有 bubble.json，可从空开始录入');
+      }
+      refreshPreview();
+    })();
+
+    function linesOf(id) {
+      return $(id).value.split('\n').map(s => s.trim()).filter(Boolean);
+    }
+    function buildObj() {
+      const pets = {};
+      PETS.forEach(k => { pets[k] = linesOf('pet-' + k); });
+      let ver = parseInt($('ver').value, 10);
+      if (isNaN(ver)) ver = 0;
+      return { version: ver + 1, public: linesOf('public'), pets };
+    }
+    function refreshPreview() {
+      try {
+        const txt = JSON.stringify(buildObj(), null, 2);
+        JSON.parse(txt); // 校验
+        $('preview').value = txt;
+        $('preview').style.borderColor = 'var(--line)';
+      } catch (e) {
+        $('preview').value = 'JSON 校验失败：' + e.message;
+        $('preview').style.borderColor = '#d98';
+      }
+    }
+    function setStatus(msg) { $('status').textContent = msg; }
+
+    ['public', ...PETS.map(k => 'pet-' + k)].forEach(id => {
+      $(id).addEventListener('input', refreshPreview);
+    });
+    $('ver').addEventListener('input', refreshPreview);
+
+    async function save() {
+      let txt;
+      try { txt = JSON.stringify(buildObj(), null, 2); JSON.parse(txt); }
+      catch (e) { setStatus('❌ 保存失败：JSON 校验不过 — ' + e.message); return; }
+
+      // 优先：File System Access 直写（Chrome / Edge）
+      if (window.showSaveFilePicker) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: 'bubble.json',
+            types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+          });
+          const w = await handle.createWritable();
+          await w.write(txt);
+          await w.close();
+          setStatus('✅ 已直写 data/bubble.json（v' + (buildObj().version) + '）');
+          refreshPreview();
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') { setStatus('已取消保存'); return; }
+          setStatus('直写失败，已切换到下载方式：' + e.message);
+        }
+      }
+      // 降级：触发下载
+      download(txt);
+      setStatus('⚠️ 当前浏览器不支持直写，已下载 bubble.json，请手动替换 data/bubble.json');
+    }
+    function download(txt) {
+      const blob = new Blob([txt], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'bubble.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    function copy() {
+      try {
+        const txt = JSON.stringify(buildObj(), null, 2); JSON.parse(txt);
+        navigator.clipboard.writeText(txt).then(
+          () => setStatus('✅ 已复制 JSON 到剪贴板'),
+          () => setStatus('复制失败，请手动从下方预览框复制')
+        );
+      } catch (e) { setStatus('❌ 复制失败：JSON 校验不过 — ' + e.message); }
+    }
+
+    $('saveBtn').addEventListener('click', save);
+    $('copyBtn').addEventListener('click', copy);
+    $('downloadBtn').addEventListener('click', () => {
+      try { download(JSON.stringify(buildObj(), null, 2)); }
+      catch (e) { setStatus('❌ 下载失败：' + e.message); }
+    });
+  </script>
+</body>
+</html>

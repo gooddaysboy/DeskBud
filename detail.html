@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品详情 · DeskBud</title>
   <meta name="description" content="桌面宠物作品详情：图文/GIF/视频预览与下载。">
-  <link rel="stylesheet" href="assets/css/base.css?v=8">
+  <link rel="stylesheet" href="assets/css/base.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -31,10 +31,12 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=8"></script>
+  <script src="assets/js/site.js?v=9"></script>
+  <script src="assets/js/bubble.js?v=9"></script>
   <script>
     (async () => {
       const d = await SITE.load();
+      await BUBBLE.load(); // 拉一次语录
       document.getElementById('yr').textContent = new Date().getFullYear();
       const id = new URLSearchParams(location.search).get('id');
       const w = d.works.find(x => x.id === id);
@@ -60,6 +62,10 @@
             <p class="detail-sub">${w.summary}</p>
             <div class="detail-body"><p>${w.description}</p></div>
             ${mediaHTML}
+            <div class="bubble-panel">
+              <div class="bubble-panel-tip">这是桌宠脑袋里随机冒出来的念头</div>
+              <div class="bubble-zone" id="bubbleZone"></div>
+            </div>
           </div>
           <aside class="sidebar">
             <div class="row"><span>分类</span><span>${SITE.catName(w.category)}</span></div>
@@ -72,6 +78,9 @@
             </div>
           </aside>
         </div>`;
+
+      // 详情页飘该宠物专属+公共泡泡（数量多，错落）
+      BUBBLE.render(document.getElementById('bubbleZone'), w.category, 6);
 
       ensureBusuanzi();
     })();

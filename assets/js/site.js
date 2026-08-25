@@ -66,6 +66,7 @@ const SITE = {
     <a class="card" href="detail.html?id=${work.id}">
       <div class="thumb">
         ${SITE.thumbHTML(work)}
+        <div class="card-bubbles" data-pet="${work.category}"></div>
         <div class="overlay">
           <div class="cat">${SITE.catIcon(work.category)} ${SITE.catName(work.category)}</div>
           <h3>${work.title}</h3>

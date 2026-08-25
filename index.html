@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DeskBud · 陪伴你的桌面宠物伙伴</title>
   <meta name="description" content="DeskBud.xyz —— 面向桌面宠物爱好者，汇集各类开源与自制桌面宠物伙伴作品，支持浏览、预览与下载。">
-  <link rel="stylesheet" href="assets/css/base.css?v=8">
+  <link rel="stylesheet" href="assets/css/base.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -58,10 +58,12 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=8"></script>
+  <script src="assets/js/site.js?v=9"></script>
+  <script src="assets/js/bubble.js?v=9"></script>
   <script>
     (async () => {
       const d = await SITE.load();
+      await BUBBLE.load(); // 拉一次语录，页面生命周期内不再请求
       document.getElementById('yr').textContent = new Date().getFullYear();
 
       // 热门：featured 优先 + 下载量
@@ -86,6 +88,11 @@
         if (w) preview.push(w);
       });
       document.getElementById('catGrid').innerHTML = preview.map(SITE.cardHTML).join('');
+
+      // 首页卡片边飘泡泡（每个宠物自己专属+公共，数量少）
+      document.querySelectorAll('.card-bubbles').forEach(el => {
+        BUBBLE.render(el, el.dataset.pet, 2);
+      });
 
       ensureBusuanzi();
     })();

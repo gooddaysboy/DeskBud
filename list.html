@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品列表 · DeskBud</title>
   <meta name="description" content="DeskBud 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
-  <link rel="stylesheet" href="assets/css/base.css?v=8">
+  <link rel="stylesheet" href="assets/css/base.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -47,15 +47,18 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=8"></script>
+  <script src="assets/js/site.js?v=9"></script>
+  <script src="assets/js/bubble.js?v=9"></script>
   <script>
     (async () => {
       const d = await SITE.load();
+      await BUBBLE.load(); // 拉一次语录
       document.getElementById('yr').textContent = new Date().getFullYear();
 
       const params = new URLSearchParams(location.search);
       let curCat = params.get('cat') || 'all';
       let curSort = params.get('sort') || 'latest';
+      let bubbleCleanups = [];
 
       // 分类筛选条：一级 + 动物下展开二级（带 emoji 图标）
       const filters = document.getElementById('filters');
@@ -85,6 +88,9 @@
       sortEl.addEventListener('change', () => { curSort = sortEl.value; render(); });
 
       function render() {
+        // 清理上一批泡泡计时器，避免筛选切换后泄漏
+        bubbleCleanups.forEach(fn => fn());
+        bubbleCleanups = [];
         let list = d.works.slice();
         const ids = SITE.expandCatIds(curCat);
         if (ids) list = list.filter(w => ids.includes(w.category));
@@ -93,6 +99,10 @@
         const grid = document.getElementById('grid');
         grid.innerHTML = list.map(SITE.cardHTML).join('');
         document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+        // 列表卡片边飘泡泡（少量）
+        grid.querySelectorAll('.card-bubbles').forEach(el => {
+          bubbleCleanups.push(BUBBLE.render(el, el.dataset.pet, 2));
+        });
       }
       renderFilters();
       render();
