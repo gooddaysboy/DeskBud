@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>桌宠脑洞泡泡墙 · DeskBud</title>
+  <meta name="description" content="DeskBud 桌宠脑洞泡泡墙：每个桌面宠物脑袋里随机冒出来的念头，与桌宠程序共用同一份语录数据源。">
+  <link rel="stylesheet" href="assets/css/base.css?v=10">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <nav class="nav">
+        <a href="index.html">首页</a>
+        <a href="list.html">作品</a>
+        <a href="bubble.html">泡泡墙</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero wrap">
+    <h1>桌宠脑洞泡泡墙</h1>
+    <p class="slogan">这是桌宠脑袋里随机冒出来的念头</p>
+    <p class="sub">每个伙伴各不相同 · 与桌宠程序共用同一份语录 · 打开网页飘起来就不停</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">谁在想啥</h2>
+        <p class="section-sub">向下飘起的半透明气泡，都是宠物脑子里蹦出的碎碎念</p>
+      </div>
+    </div>
+    <div class="bubble-wall" id="wall"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>© <span id="yr"></span> DeskBud · 陪伴你的桌面宠物伙伴</div>
+      <div><a href="editor.html">语录录入</a> · <a href="list.html">浏览作品</a></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/bubble.js?v=9"></script>
+  <script>
+    // 每个面板：宠物 id + 展示名 + emoji
+    const PANELS = [
+      { cat: 'panda',  name: '熊猫',   emoji: '🐼' },
+      { cat: 'cat',    name: '猫咪',   emoji: '🐱' },
+      { cat: 'dog',    name: '狗狗',   emoji: '🐶' },
+      { cat: 'plant',  name: '植物',   emoji: '🌱' },
+      { cat: 'rabbit', name: '豁牙小兔', emoji: '🐰' },
+      { cat: 'public', name: '全站公共', emoji: '💭' }
+    ];
+
+    (async () => {
+      const d = await BUBBLE.load();
+      document.getElementById('yr').textContent = new Date().getFullYear();
+
+      const wall = document.getElementById('wall');
+      const cleanups = [];
+      wall.innerHTML = PANELS.map(p => `
+        <div class="bubble-card">
+          <div class="bc-head"><span class="emoji">${p.emoji}</span>${p.name}</div>
+          <div class="bubble-zone tall" data-cat="${p.cat}"></div>
+        </div>`).join('');
+
+      wall.querySelectorAll('.bubble-zone').forEach(z => {
+        cleanups.push(BUBBLE.render(z, z.dataset.cat, 7));
+      });
+    })();
+  </script>
+</body>
+</html>

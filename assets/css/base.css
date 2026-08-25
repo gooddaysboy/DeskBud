@@ -342,3 +342,29 @@ img, video { max-width: 100%; display: block; }
   gap: 6px;
 }
 .bubble-panel-tip::before { content: "💭"; }
+
+/* ---------- 泡泡墙整页（bubble.html） ---------- */
+.bubble-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+.bubble-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 16px 6px;
+  background: linear-gradient(180deg, #fbfdfc, #f6faf8);
+  display: flex;
+  flex-direction: column;
+}
+.bubble-card .bc-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.bubble-card .bc-head .emoji { font-size: 22px; line-height: 1; }
+.bubble-zone.tall { height: 340px; }
