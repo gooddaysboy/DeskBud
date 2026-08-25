@@ -5,12 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>隐私说明 · DeskBud.xyz</title>
   <meta name="description" content="DeskBud 桌面宠物的隐私与数据收集说明">
-  <link rel="stylesheet" href="assets/css/base.css?v=23">
+  <link rel="stylesheet" href="assets/css/base.css?v=27">
 </head>
 <body>
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="index.html"><span class="dot"></span>DeskBud.xyz<span class="brand-sub"> · 让桌面不再孤单</span></a>
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud.xyz</a>
+    <span class="brand-sub"> · 让桌面不再孤单</span>
+    <form class="site-search" id="siteSearch" role="search">
+      <input type="search" id="siteSearchInput" placeholder="搜索作品名称、描述…" aria-label="搜索作品">
+      <button type="submit" class="site-search-btn">搜索</button>
+      <div class="site-search-results" id="siteSearchResults" hidden></div>
+    </form>
       <nav class="nav">
         <a href="index.html">首页</a>
         <a href="list.html">作品</a>
@@ -48,7 +54,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=12"></script>
+  <script src="assets/js/site.js?v=13"></script>
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
   </script>

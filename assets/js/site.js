@@ -1,7 +1,7 @@
 // DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计
 const SITE = {
   data: null,
-  _assetVer: 12, // 与 css/js ?v= 同步，图片缓存破除用
+  _assetVer: 13, // 与 css/js ?v= 同步，图片缓存破除用
   async load() {
     if (this.data) return this.data;
     const res = await fetch('data/works.json', { cache: 'no-cache' });
@@ -119,8 +119,57 @@ function initAnnounce() {
     .catch(() => {});
 }
 
+// 全站搜索：顶部搜索框，匹配作品名称/描述/作者/分类，结果下拉点击跳详情页
+function initSearch() {
+  const form = document.getElementById('siteSearch');
+  if (!form) return;
+  const input = document.getElementById('siteSearchInput');
+  const box = document.getElementById('siteSearchResults');
+  let works = [];
+  let catMap = {};
+  fetch('data/works.json', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.json() : null))
+    .then(d => {
+      works = (d && d.works) || [];
+      (d && d.categories || []).forEach(c => {
+        catMap[c.id] = c.name;
+        (c.children || []).forEach(ch => { catMap[ch.id] = ch.name; });
+      });
+    })
+    .catch(() => { works = []; });
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const catName = id => catMap[id] || id;
+  function doSearch(q) {
+    q = (q || '').trim().toLowerCase();
+    if (!q) { box.hidden = true; box.innerHTML = ''; return; }
+    const hits = works.filter(w => {
+      const blob = [w.title, w.summary, w.description, w.author, catName(w.category)]
+        .filter(Boolean).join(' ').toLowerCase();
+      return blob.includes(q);
+    }).slice(0, 8);
+    if (!hits.length) {
+      box.innerHTML = '<div class="ssr-empty">没有找到相关作品</div>';
+    } else {
+      box.innerHTML = hits.map(w => `
+        <a class="ssr-item" href="detail.html?id=${encodeURIComponent(w.id)}">
+          <span class="ssr-title">${esc(w.title)}</span>
+          <span class="ssr-cat">${esc(catName(w.category))}</span>
+          <span class="ssr-desc">${esc((w.summary || w.description || '').slice(0, 46))}</span>
+        </a>`).join('');
+    }
+    box.hidden = false;
+  }
+  let t;
+  input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => doSearch(input.value), 150); });
+  form.addEventListener('submit', e => { e.preventDefault(); doSearch(input.value); box.hidden = false; });
+  input.addEventListener('focus', () => { if (input.value.trim()) doSearch(input.value); });
+  document.addEventListener('click', e => { if (!form.contains(e.target)) box.hidden = true; });
+  window.addEventListener('scroll', () => { if (!box.hidden) box.hidden = true; }, true);
+}
+
+function boot() { initAnnounce(); initSearch(); }
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAnnounce);
+  document.addEventListener('DOMContentLoaded', boot);
 } else {
-  initAnnounce();
+  boot();
 }
