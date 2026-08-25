@@ -1,7 +1,7 @@
 // DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计
 const SITE = {
   data: null,
-  _assetVer: 13, // 与 css/js ?v= 同步，图片缓存破除用
+  _assetVer: 14, // 与 css/js ?v= 同步，图片缓存破除用
   async load() {
     if (this.data) return this.data;
     const res = await fetch('data/works.json', { cache: 'no-cache' });
@@ -10,10 +10,10 @@ const SITE = {
   },
   catName(id) {
     for (const c of this.data.categories) {
-      if (c.id === id) return c.name;
+      if (c.id === id) return window.pick(c.name);
       if (c.children) {
         const ch = c.children.find(x => x.id === id);
-        if (ch) return ch.name;
+        if (ch) return window.pick(ch.name);
       }
     }
     return id;
@@ -58,8 +58,8 @@ const SITE = {
     if (vid) {
       return `<video src="${v(vid.src)}" autoplay loop muted playsinline preload="metadata"></video>`;
     }
-    if (work.thumb) return `<img src="${v(work.thumb)}" alt="${work.title}" loading="lazy">`;
-    if (work.cover) return `<img src="${v(work.cover)}" alt="${work.title}" loading="lazy">`;
+    if (work.thumb) return `<img src="${v(work.thumb)}" alt="${window.pick(work.title)}" loading="lazy">`;
+    if (work.cover) return `<img src="${v(work.cover)}" alt="${window.pick(work.title)}" loading="lazy">`;
     return '暂无预览';
   },
   cardHTML(work) {
@@ -70,11 +70,11 @@ const SITE = {
         <div class="card-bubbles" data-pet="${work.category}"></div>
         <div class="overlay">
           <div class="cat">${SITE.catIcon(work.category)} ${SITE.catName(work.category)}</div>
-          <h3>${work.title}</h3>
+          <h3>${window.pick(work.title)}</h3>
         </div>
       </div>
       <div class="meta">
-        <span>${work.author}</span>
+        <span>${window.pick(work.author)}</span>
         <span>⬇ <b class="stat" id="d-${work.id}">${SITE.fmt(work.downloads)}</b></span>
       </div>
     </a>`;
@@ -104,10 +104,11 @@ function initAnnounce() {
       if (!item) return;
       const bar = document.createElement('div');
       bar.className = 'announce-bar' + (item.level === 'new' ? ' is-new' : '');
-      const tag = item.level === 'new' ? '上新' : '公告';
+      const tag = item.level === 'new' ? window.pick({ zh: '上新', en: 'New' }) : window.pick({ zh: '公告', en: 'Notice' });
+      const more = window.pick({ zh: '查看详情 →', en: 'View details →' });
       const text = item.link
-        ? `${item.text} <a href="${item.link}">查看详情 →</a>`
-        : item.text;
+        ? `${window.pick(item.text)} <a href="${item.link}">${more}</a>`
+        : window.pick(item.text);
       bar.innerHTML = `
         <div class="wrap">
           <span class="announce-tag">${tag}</span>
@@ -138,23 +139,23 @@ function initSearch() {
     })
     .catch(() => { works = []; });
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const catName = id => catMap[id] || id;
+  const catName = id => window.pick(catMap[id]) || id;
   function doSearch(q) {
     q = (q || '').trim().toLowerCase();
     if (!q) { box.hidden = true; box.innerHTML = ''; return; }
     const hits = works.filter(w => {
-      const blob = [w.title, w.summary, w.description, w.author, catName(w.category)]
+      const blob = [window.pick(w.title), window.pick(w.summary), window.pick(w.description), window.pick(w.author), catName(w.category)]
         .filter(Boolean).join(' ').toLowerCase();
       return blob.includes(q);
     }).slice(0, 8);
     if (!hits.length) {
-      box.innerHTML = '<div class="ssr-empty">没有找到相关作品</div>';
+      box.innerHTML = '<div class="ssr-empty">' + window.pick({ zh: '没有找到相关作品', en: 'No matching works found' }) + '</div>';
     } else {
       box.innerHTML = hits.map(w => `
         <a class="ssr-item" href="detail.html?id=${encodeURIComponent(w.id)}">
-          <span class="ssr-title">${esc(w.title)}</span>
+          <span class="ssr-title">${esc(window.pick(w.title))}</span>
           <span class="ssr-cat">${esc(catName(w.category))}</span>
-          <span class="ssr-desc">${esc((w.summary || w.description || '').slice(0, 46))}</span>
+          <span class="ssr-desc">${esc((window.pick(w.summary) || window.pick(w.description) || '').slice(0, 46))}</span>
         </a>`).join('');
     }
     box.hidden = false;
@@ -168,6 +169,14 @@ function initSearch() {
 }
 
 function boot() { initAnnounce(); initSearch(); }
+
+// 语言切换时：公告重渲染 + 动态内容（卡片/列表/详情）由页面注册的 __rerender 重渲染
+window.addEventListener('lang:change', () => {
+  document.querySelectorAll('.announce-bar').forEach(b => b.remove());
+  initAnnounce();
+  if (typeof window.__rerender === 'function') window.__rerender();
+});
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {

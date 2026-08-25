@@ -33,7 +33,7 @@ const BUBBLE = {
       if (!json || typeof json !== 'object') throw new Error('JSON 不是对象');
       this.data = {
         version: typeof json.version === 'number' ? json.version : 0,
-        public: Array.isArray(json.public) ? json.public.filter(s => typeof s === 'string') : [],
+        public: Array.isArray(json.public) ? json.public : [],
         pets: (json.pets && typeof json.pets === 'object') ? json.pets : {}
       };
       // 若 public 为空，至少用兜底 public，保证有内容可飘
@@ -68,7 +68,7 @@ const BUBBLE = {
   spawnBubble(container, category, dur, animDelay, dir) {
     const lines = this.linesFor(category);
     if (!lines.length) return;
-    const text = lines[Math.floor(Math.random() * lines.length)];
+    const text = window.pick(lines[Math.floor(Math.random() * lines.length)]);
     if (dur == null) dur = 14000 + Math.random() * 8000;   // 默认 14~22s（缓慢）
     const DIRS = ['rise', 'fall', 'lr', 'rl', 'd1', 'd2'];
     if (!dir || DIRS.indexOf(dir) < 0) dir = DIRS[Math.floor(Math.random() * DIRS.length)];

@@ -204,6 +204,20 @@ img, video { max-width: 100%; display: block; }
   margin-left: auto;
 }
 .nav a:hover { color: var(--brand-ink); }
+.lang-switch {
+  flex: 0 0 auto;
+  margin-left: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.lang-switch:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
 
 /* ---------- 通用区块 ---------- */
 .section { padding: 56px 0; }

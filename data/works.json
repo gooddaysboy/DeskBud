@@ -1,39 +1,148 @@
 {
   "site": {
-    "title": "DeskBud",
+    "title": {
+      "zh": "DeskBud",
+      "en": "DeskBud"
+    },
     "domain": "DeskBud.xyz",
-    "slogan": "陪伴你的桌面宠物伙伴",
-    "subSlogan": "面向桌面宠物爱好者 · 你的桌面屏幕上，常驻的宠物伙伴"
+    "slogan": {
+      "zh": "陪伴你的桌面宠物伙伴",
+      "en": "Your desktop pet companion"
+    },
+    "subSlogan": {
+      "zh": "面向桌面宠物爱好者 · 你的桌面屏幕上，常驻的宠物伙伴",
+      "en": "For desktop pet lovers · a constant companion on your screen"
+    }
   },
   "categories": [
-    { "id": "all", "name": "全部", "icon": "✨" },
-    { "id": "animal", "name": "动物", "icon": "🐾", "children": [
-      { "id": "panda", "name": "熊猫", "icon": "🐼" },
-      { "id": "cat", "name": "猫咪", "icon": "🐱" },
-      { "id": "dog", "name": "狗狗", "icon": "🐶" }
-    ]},
-    { "id": "plant", "name": "植物", "icon": "🌱" },
-    { "id": "human", "name": "人类", "icon": "👶" },
-    { "id": "robot", "name": "机器人", "icon": "🤖" }
+    {
+      "id": "all",
+      "name": {
+        "zh": "全部",
+        "en": "All"
+      },
+      "icon": "✨"
+    },
+    {
+      "id": "animal",
+      "name": {
+        "zh": "动物",
+        "en": "Animals"
+      },
+      "icon": "🐾",
+      "children": [
+        {
+          "id": "panda",
+          "name": {
+            "zh": "熊猫",
+            "en": "Panda"
+          },
+          "icon": "🐼"
+        },
+        {
+          "id": "cat",
+          "name": {
+            "zh": "猫咪",
+            "en": "Cat"
+          },
+          "icon": "🐱"
+        },
+        {
+          "id": "dog",
+          "name": {
+            "zh": "狗狗",
+            "en": "Dog"
+          },
+          "icon": "🐶"
+        }
+      ]
+    },
+    {
+      "id": "plant",
+      "name": {
+        "zh": "植物",
+        "en": "Plant"
+      },
+      "icon": "🌱"
+    },
+    {
+      "id": "human",
+      "name": {
+        "zh": "人类",
+        "en": "Human"
+      },
+      "icon": "👶"
+    },
+    {
+      "id": "robot",
+      "name": {
+        "zh": "机器人",
+        "en": "Robot"
+      },
+      "icon": "🤖"
+    }
   ],
   "works": [
     {
       "id": "panda-orbit",
-      "title": "熊猫桌宠 · 绕圈版",
+      "title": {
+        "zh": "熊猫桌宠 · 绕圈版",
+        "en": "Panda Pet · Orbit Edition"
+      },
       "category": "panda",
-      "author": "gooddaysboy",
+      "author": {
+        "zh": "gooddaysboy",
+        "en": "gooddaysboy"
+      },
       "cover": "works/panda-orbit/cover.png",
       "thumb": "works/panda-orbit/thumb.png",
-      "summary": "真·RGBA 透明窗口熊猫，降落伞式飘落、点击起跳、屏幕绕圈，桌面常驻不打扰。",
-      "description": "基于 PySide6 开发的桌面宠物，采用真透明无边框置顶窗口，5 种动画状态分帧渲染。支持降落伞式飘落、单击起跳、鼠标拖拽、悬停暂停、屏幕四周绕圈与自定义画圈。轻量单文件，无需安装运行环境。",
+      "summary": {
+        "zh": "真·RGBA 透明窗口熊猫，降落伞式飘落、点击起跳、屏幕绕圈，桌面常驻不打扰。",
+        "en": "A truly RGBA-transparent window panda that floats down like a parachute, jumps on click, and orbits your screen — always on desktop, never in the way."
+      },
+      "description": {
+        "zh": "基于 PySide6 开发的桌面宠物，采用真透明无边框置顶窗口，5 种动画状态分帧渲染。支持降落伞式飘落、单击起跳、鼠标拖拽、悬停暂停、屏幕四周绕圈与自定义画圈。轻量单文件，无需安装运行环境。",
+        "en": "A desktop pet built with PySide6, using a real transparent borderless always-on-top window with 5 animation states rendered frame by frame. Supports parachute-style descent, click-to-jump, mouse drag, hover-to-pause, screen-edge orbiting and custom circling. Lightweight single file, no runtime install required."
+      },
       "media": [
-        { "type": "image", "src": "works/panda-orbit/1.png", "caption": "桌面实拍 · 常驻效果" },
-        { "type": "image", "src": "works/panda-orbit/2.png", "caption": "不同姿态" },
-        { "type": "gif", "src": "works/panda-orbit/walk.gif", "caption": "走动动画" },
-        { "type": "video", "src": "works/panda-orbit/preview.mp4", "caption": "完整演示视频" }
+        {
+          "type": "image",
+          "src": "works/panda-orbit/1.png",
+          "caption": {
+            "zh": "桌面实拍 · 常驻效果",
+            "en": "Desktop live · always-on effect"
+          }
+        },
+        {
+          "type": "image",
+          "src": "works/panda-orbit/2.png",
+          "caption": {
+            "zh": "不同姿态",
+            "en": "Different poses"
+          }
+        },
+        {
+          "type": "gif",
+          "src": "works/panda-orbit/walk.gif",
+          "caption": {
+            "zh": "走动动画",
+            "en": "Walking animation"
+          }
+        },
+        {
+          "type": "video",
+          "src": "works/panda-orbit/preview.mp4",
+          "caption": {
+            "zh": "完整演示视频",
+            "en": "Full demo video"
+          }
+        }
       ],
       "download": {
-        "label": "下载 Windows 版 (exe)",
+        "label": {
+          "zh": "下载 Windows 版 (exe)",
+          "en": "Download Windows (exe)"
+        },
         "url": "https://github.com/gooddaysboy/pet/releases/download/v1.0.2/DesktopPet-Win_1.0.2.exe"
       },
       "downloads": 1280,
@@ -42,21 +151,64 @@
     },
     {
       "id": "panda-android",
-      "title": "熊猫悬浮桌宠 · 安卓版",
+      "title": {
+        "zh": "熊猫悬浮桌宠 · 安卓版",
+        "en": "Floating Panda Pet · Android"
+      },
       "category": "panda",
-      "author": "gooddaysboy",
+      "author": {
+        "zh": "gooddaysboy",
+        "en": "gooddaysboy"
+      },
       "cover": "works/panda-android/cover.png",
       "thumb": "works/panda-android/thumb.png",
-      "summary": "安卓悬浮窗熊猫，前台常驻、崩溃恢复，完整对齐桌面版交互。",
-      "description": "采用 Flutter + 悬浮窗方案，在安卓手机上实现常驻桌面的熊猫宠物。支持点按起跳、拖拽跟随、长按菜单、自定义绕圈，真机验证通过。",
+      "summary": {
+        "zh": "安卓悬浮窗熊猫，前台常驻、崩溃恢复，完整对齐桌面版交互。",
+        "en": "An Android floating-window panda that stays foreground with crash recovery, fully aligned with the desktop interactions."
+      },
+      "description": {
+        "zh": "采用 Flutter + 悬浮窗方案，在安卓手机上实现常驻桌面的熊猫宠物。支持点按起跳、拖拽跟随、长按菜单、自定义绕圈，真机验证通过。",
+        "en": "Built with Flutter + floating window, bringing a panda pet that stays on your Android home screen. Supports tap-to-jump, drag-to-follow, long-press menu and custom orbiting. Verified on real devices."
+      },
       "media": [
-        { "type": "image", "src": "works/panda-android/1.png", "caption": "手机悬浮窗效果" },
-        { "type": "image", "src": "works/panda-android/2.png", "caption": "贴边状态" },
-        { "type": "gif", "src": "works/panda-android/walk.gif", "caption": "站立动画" },
-        { "type": "video", "src": "works/panda-android/preview.mp4", "caption": "熊猫桌宠 · 干饭动画" }
+        {
+          "type": "image",
+          "src": "works/panda-android/1.png",
+          "caption": {
+            "zh": "手机悬浮窗效果",
+            "en": "Phone floating-window effect"
+          }
+        },
+        {
+          "type": "image",
+          "src": "works/panda-android/2.png",
+          "caption": {
+            "zh": "贴边状态",
+            "en": "Edge-docked state"
+          }
+        },
+        {
+          "type": "gif",
+          "src": "works/panda-android/walk.gif",
+          "caption": {
+            "zh": "站立动画",
+            "en": "Standing animation"
+          }
+        },
+        {
+          "type": "video",
+          "src": "works/panda-android/preview.mp4",
+          "caption": {
+            "zh": "熊猫桌宠 · 干饭动画",
+            "en": "Panda pet · eating animation"
+          }
+        }
       ],
       "download": {
-        "label": "下载 Android 版 (apk)",
+        "label": {
+          "zh": "下载 Android 版 (apk)",
+          "en": "Download Android (apk)"
+        },
         "url": "https://github.com/gooddaysboy/pet/releases/download/v1.1.17/app-release.apk"
       },
       "downloads": 642,
@@ -65,18 +217,40 @@
     },
     {
       "id": "cat-nap",
-      "title": "懒猫打盹",
+      "title": {
+        "zh": "懒猫打盹",
+        "en": "Sleepy Cat Nap"
+      },
       "category": "cat",
-      "author": "meowstudio",
+      "author": {
+        "zh": "meowstudio",
+        "en": "meowstudio"
+      },
       "cover": "works/cat-nap/cover.gif",
       "thumb": "works/cat-nap/cover.gif",
-      "summary": "一只会伸懒腰、打盹、追光点的治愈系桌面猫。",
-      "description": "Electron 实现的桌面猫咪，柔和配色与细腻帧动画。鼠标靠近会好奇张望，长时间不理它就去打盹。",
+      "summary": {
+        "zh": "一只会伸懒腰、打盹、追光点的治愈系桌面猫。",
+        "en": "A healing desktop cat that stretches, naps and chases light spots."
+      },
+      "description": {
+        "zh": "Electron 实现的桌面猫咪，柔和配色与细腻帧动画。鼠标靠近会好奇张望，长时间不理它就去打盹。",
+        "en": "A desktop cat built with Electron, soft colors and delicate frame animation. Curious when you approach, naps when left alone for a while."
+      },
       "media": [
-        { "type": "gif", "src": "works/cat-nap/cover.gif", "caption": "待机动画" }
+        {
+          "type": "gif",
+          "src": "works/cat-nap/cover.gif",
+          "caption": {
+            "zh": "待机动画",
+            "en": "Idle animation"
+          }
+        }
       ],
       "download": {
-        "label": "下载 (zip)",
+        "label": {
+          "zh": "下载 (zip)",
+          "en": "Download (zip)"
+        },
         "url": "https://example.com/cat-nap.zip"
       },
       "downloads": 358,
@@ -85,18 +259,40 @@
     },
     {
       "id": "pixel-slime",
-      "title": "像素史莱姆",
+      "title": {
+        "zh": "像素史莱姆",
+        "en": "Pixel Slime"
+      },
       "category": "animal",
-      "author": "8bitlab",
+      "author": {
+        "zh": "8bitlab",
+        "en": "8bitlab"
+      },
       "cover": "works/pixel-slime/cover.gif",
       "thumb": "works/pixel-slime/cover.gif",
-      "summary": "复古 8-bit 风史莱姆，弹跳、分裂、融合的趣味小宠。",
-      "description": "纯 Canvas 绘制的像素史莱姆，致敬早期游戏美学。低饱和配色护眼，支持多种弹跳音效。",
+      "summary": {
+        "zh": "复古 8-bit 风史莱姆，弹跳、分裂、融合的趣味小宠。",
+        "en": "A retro 8-bit slime that bounces, splits and merges — a fun little pet."
+      },
+      "description": {
+        "zh": "纯 Canvas 绘制的像素史莱姆，致敬早期游戏美学。低饱和配色护眼，支持多种弹跳音效。",
+        "en": "A pure-Canvas pixel slime paying homage to early-game aesthetics. Low-saturation eye-friendly colors, with multiple bounce sound effects."
+      },
       "media": [
-        { "type": "gif", "src": "works/pixel-slime/cover.gif", "caption": "弹跳动画" }
+        {
+          "type": "gif",
+          "src": "works/pixel-slime/cover.gif",
+          "caption": {
+            "zh": "弹跳动画",
+            "en": "Bounce animation"
+          }
+        }
       ],
       "download": {
-        "label": "下载 (html)",
+        "label": {
+          "zh": "下载 (html)",
+          "en": "Download (html)"
+        },
         "url": "https://example.com/pixel-slime.html"
       },
       "downloads": 521,
@@ -105,18 +301,40 @@
     },
     {
       "id": "star-fox",
-      "title": "星狐",
+      "title": {
+        "zh": "星狐",
+        "en": "Star Fox"
+      },
       "category": "animal",
-      "author": "nebula",
+      "author": {
+        "zh": "nebula",
+        "en": "nebula"
+      },
       "cover": "works/star-fox/cover.gif",
       "thumb": "works/star-fox/cover.gif",
-      "summary": "会随系统时间变色的小狐狸，夜空里陪你加班。",
-      "description": "幻想生物主题桌宠，毛色随时间在晨昏夜之间渐变，头顶漂浮星点粒子。轻量、安静、不抢注意力。",
+      "summary": {
+        "zh": "会随系统时间变色的小狐狸，夜空里陪你加班。",
+        "en": "A little fox that changes color with system time, keeping you company through late-night work."
+      },
+      "description": {
+        "zh": "幻想生物主题桌宠，毛色随时间在晨昏夜之间渐变，头顶漂浮星点粒子。轻量、安静、不抢注意力。",
+        "en": "A fantasy-creature themed pet whose fur gradients between dawn, dusk and night, with star particles floating above its head. Lightweight, quiet, never steals attention."
+      },
       "media": [
-        { "type": "gif", "src": "works/star-fox/cover.gif", "caption": "展示动画" }
+        {
+          "type": "gif",
+          "src": "works/star-fox/cover.gif",
+          "caption": {
+            "zh": "展示动画",
+            "en": "Showcase animation"
+          }
+        }
       ],
       "download": {
-        "label": "下载 (exe)",
+        "label": {
+          "zh": "下载 (exe)",
+          "en": "Download (exe)"
+        },
         "url": "https://example.com/star-fox.exe"
       },
       "downloads": 204,
@@ -125,18 +343,40 @@
     },
     {
       "id": "clock-bot",
-      "title": "时钟小机器人",
+      "title": {
+        "zh": "时钟小机器人",
+        "en": "Clock Bot"
+      },
       "category": "robot",
-      "author": "utils",
+      "author": {
+        "zh": "utils",
+        "en": "utils"
+      },
       "cover": "works/clock-bot/cover.gif",
       "thumb": "works/clock-bot/cover.gif",
-      "summary": "既是桌宠也是桌面时钟，整点会做体操提醒你休息。",
-      "description": "实用工具型桌宠，在可爱外观下集成桌面时钟与久坐提醒。可隐藏为纯时钟模式。",
+      "summary": {
+        "zh": "既是桌宠也是桌面时钟，整点会做体操提醒你休息。",
+        "en": "Both a desktop pet and a desktop clock — does stretching exercises on the hour to remind you to rest."
+      },
+      "description": {
+        "zh": "实用工具型桌宠，在可爱外观下集成桌面时钟与久坐提醒。可隐藏为纯时钟模式。",
+        "en": "A utility-type pet integrating a desktop clock and sit-long reminders under a cute appearance. Can be hidden into a pure-clock mode."
+      },
       "media": [
-        { "type": "gif", "src": "works/clock-bot/cover.gif", "caption": "动态预览" }
+        {
+          "type": "gif",
+          "src": "works/clock-bot/cover.gif",
+          "caption": {
+            "zh": "动态预览",
+            "en": "Live preview"
+          }
+        }
       ],
       "download": {
-        "label": "下载 (zip)",
+        "label": {
+          "zh": "下载 (zip)",
+          "en": "Download (zip)"
+        },
         "url": "https://example.com/clock-bot.zip"
       },
       "downloads": 877,

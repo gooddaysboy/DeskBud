@@ -1,82 +1,277 @@
 {
   "version": 4,
   "public": [
-    "今天天气怎么样呢",
-    "主人吃饭了没有",
-    "摸鱼才是头等大事",
-    "发呆也是正经事哦",
-    "累了就稍微歇一会吧",
-    "快乐才是最高准则",
-    "今天也要开开心心",
-    "悄悄偷看主人在干嘛",
-    "要不要放松一小下",
-    "生活嘛开心最重要",
-    "此刻适合放空大脑",
-    "烦恼暂时丢一边咯",
-    "世间万物皆可可爱爱",
-    "打工人也要善待自己",
-    "不知道接下来会发生啥"
+    {
+      "zh": "今天天气怎么样呢",
+      "en": "Wonder what the weather's like today"
+    },
+    {
+      "zh": "主人吃饭了没有",
+      "en": "Has my human eaten yet?"
+    },
+    {
+      "zh": "摸鱼才是头等大事",
+      "en": "Slacking off is the top priority"
+    },
+    {
+      "zh": "发呆也是正经事哦",
+      "en": "Zoning out is a serious business too"
+    },
+    {
+      "zh": "累了就稍微歇一会吧",
+      "en": "If you're tired, take a little break"
+    },
+    {
+      "zh": "快乐才是最高准则",
+      "en": "Happiness is the highest rule"
+    },
+    {
+      "zh": "今天也要开开心心",
+      "en": "Stay happy today too"
+    },
+    {
+      "zh": "悄悄偷看主人在干嘛",
+      "en": "Secretly peeking at what my human's doing"
+    },
+    {
+      "zh": "要不要放松一小下",
+      "en": "How about a little relaxation?"
+    },
+    {
+      "zh": "生活嘛开心最重要",
+      "en": "Life is all about happiness"
+    },
+    {
+      "zh": "此刻适合放空大脑",
+      "en": "Now's a good time to empty the mind"
+    },
+    {
+      "zh": "烦恼暂时丢一边咯",
+      "en": "Toss worries aside for now"
+    },
+    {
+      "zh": "世间万物皆可可爱爱",
+      "en": "Everything in the world can be adorable"
+    },
+    {
+      "zh": "打工人也要善待自己",
+      "en": "Workers deserve to be kind to themselves"
+    },
+    {
+      "zh": "不知道接下来会发生啥",
+      "en": "No idea what's coming next"
+    }
   ],
   "pets": {
     "panda": [
-      "竹子什么时候上新货",
-      "吃饱之后再睡一觉",
-      "国宝主打一个躺平",
-      "黑白配色永不落伍",
-      "啃竹子是人生乐趣",
-      "不要打扰我午睡呀",
-      "能吃能睡便是福气",
-      "烦恼都被竹子吃掉了",
-      "本熊猫拒绝内卷",
-      "圆滚滚才是本体"
+      {
+        "zh": "竹子什么时候上新货",
+        "en": "When's the new bamboo restock?"
+      },
+      {
+        "zh": "吃饱之后再睡一觉",
+        "en": "Eat well, then take a nap"
+      },
+      {
+        "zh": "国宝主打一个躺平",
+        "en": "A national treasure whose motto is lying flat"
+      },
+      {
+        "zh": "黑白配色永不落伍",
+        "en": "Black-and-white never goes out of style"
+      },
+      {
+        "zh": "啃竹子是人生乐趣",
+        "en": "Chewing bamboo is life's joy"
+      },
+      {
+        "zh": "不要打扰我午睡呀",
+        "en": "Don't disturb my afternoon nap"
+      },
+      {
+        "zh": "能吃能睡便是福气",
+        "en": "To eat and sleep well is a blessing"
+      },
+      {
+        "zh": "烦恼都被竹子吃掉了",
+        "en": "Bamboo ate all my worries away"
+      },
+      {
+        "zh": "本熊猫拒绝内卷",
+        "en": "This panda refuses to overcompete"
+      },
+      {
+        "zh": "圆滚滚才是本体",
+        "en": "Round and chubby is my true form"
+      }
     ],
     "cat": [
-      "小鱼干什么时候安排",
-      "人类又在敲键盘啦",
-      "快过来摸摸我的脑袋",
-      "猫的事情你少管哦",
-      "阳光晒着好舒服",
-      "尾巴有自己的想法",
-      "高冷只是伪装外表",
-      "哪里来的小毛毛",
-      "半夜准备开演唱会",
-      "纸箱才是终极乐园"
+      {
+        "zh": "小鱼干什么时候安排",
+        "en": "When are the dried fish snacks coming?"
+      },
+      {
+        "zh": "人类又在敲键盘啦",
+        "en": "Human's typing on the keyboard again"
+      },
+      {
+        "zh": "快过来摸摸我的脑袋",
+        "en": "Come pet my head right now"
+      },
+      {
+        "zh": "猫的事情你少管哦",
+        "en": "Mind your own business, human"
+      },
+      {
+        "zh": "阳光晒着好舒服",
+        "en": "Sunbathing feels so good"
+      },
+      {
+        "zh": "尾巴有自己的想法",
+        "en": "My tail has a mind of its own"
+      },
+      {
+        "zh": "高冷只是伪装外表",
+        "en": "Aloofness is just a disguise"
+      },
+      {
+        "zh": "哪里来的小毛毛",
+        "en": "Where did this little fuzz come from?"
+      },
+      {
+        "zh": "半夜准备开演唱会",
+        "en": "Getting ready for a midnight concert"
+      },
+      {
+        "zh": "纸箱才是终极乐园",
+        "en": "A cardboard box is the ultimate paradise"
+      }
     ],
     "dog": [
-      "什么时候出门遛弯呀",
-      "摇摇尾巴向你报到",
-      "有好吃的记得分我",
-      "我的眼里只有主人",
-      "闻到零食的味道了！",
-      "快乐就是跑来跑去",
-      "汪汪！快来陪我玩耍",
-      "一根骨头可以乐半天",
-      "探头观察四周动静",
-      "全世界最忠实的搭子"
+      {
+        "zh": "什么时候出门遛弯呀",
+        "en": "When are we going for a walk?"
+      },
+      {
+        "zh": "摇摇尾巴向你报到",
+        "en": "Wagging my tail to say hello"
+      },
+      {
+        "zh": "有好吃的记得分我",
+        "en": "Save me some tasty treats"
+      },
+      {
+        "zh": "我的眼里只有主人",
+        "en": "My eyes are only on my human"
+      },
+      {
+        "zh": "闻到零食的味道了！",
+        "en": "I smell snacks!"
+      },
+      {
+        "zh": "快乐就是跑来跑去",
+        "en": "Happiness is running around"
+      },
+      {
+        "zh": "汪汪！快来陪我玩耍",
+        "en": "Woof! Come play with me"
+      },
+      {
+        "zh": "一根骨头可以乐半天",
+        "en": "A bone keeps me happy for hours"
+      },
+      {
+        "zh": "探头观察四周动静",
+        "en": "Poking my head out to watch around"
+      },
+      {
+        "zh": "全世界最忠实的搭子",
+        "en": "The world's most loyal buddy"
+      }
     ],
     "plant": [
-      "多给我浇一点点水吧",
-      "晒晒太阳努力生长",
-      "安静发呆也是成长",
-      "风来了我轻轻摇晃",
-      "慢慢长大不要着急",
-      "吸收阳光积攒能量",
-      "静静陪伴就很好呀",
-      "愿日子慢慢枝繁叶茂",
-      "努力冒出新的小嫩芽",
-      "安安静静不吵不闹"
+      {
+        "zh": "多给我浇一点点水吧",
+        "en": "Water me just a little more"
+      },
+      {
+        "zh": "晒晒太阳努力生长",
+        "en": "Soak up the sun and grow strong"
+      },
+      {
+        "zh": "安静发呆也是成长",
+        "en": "Quietly zoning out is growth too"
+      },
+      {
+        "zh": "风来了我轻轻摇晃",
+        "en": "I sway gently when the wind comes"
+      },
+      {
+        "zh": "慢慢长大不要着急",
+        "en": "Grow slowly, no rush"
+      },
+      {
+        "zh": "吸收阳光积攒能量",
+        "en": "Absorb sunlight, store energy"
+      },
+      {
+        "zh": "静静陪伴就很好呀",
+        "en": "Just staying by your side is nice"
+      },
+      {
+        "zh": "愿日子慢慢枝繁叶茂",
+        "en": "May days slowly grow lush"
+      },
+      {
+        "zh": "努力冒出新的小嫩芽",
+        "en": "Striving to sprout new buds"
+      },
+      {
+        "zh": "安安静静不吵不闹",
+        "en": "Calm and quiet, never noisy"
+      }
     ],
     "rabbit": [
-      "长耳耷拉脸蛋圆，门牙两颗露一点",
-      "不求貌美惹人怜，主打快乐傻憨憨",
-      "小兔门牙往外翘，人间烦恼全忘掉",
-      "嘴巴关不住牙齿，快乐藏不住的挂件小兔",
-      "耳长脸圆粉腮红，两颗门牙往外冲。人间多少烦心事，看它一眼就放空",
-      "兔界显眼包，门牙是专属",
-      "牙齿过载，嘴巴装不下的快乐小兔",
-      "拒绝颜值内卷，靠两颗门牙出圈的挂件",
-      "耳朵软乎乎，门牙藏不住。挂包随风舞，憨态解千苦",
-      "兔界显眼包，门牙是专属。颜值不在乎，快乐打不住"
+      {
+        "zh": "长耳耷拉脸蛋圆，门牙两颗露一点",
+        "en": "Long ears, round face, two front teeth peeking out"
+      },
+      {
+        "zh": "不求貌美惹人怜，主打快乐傻憨憨",
+        "en": "Not chasing looks, just happy and silly"
+      },
+      {
+        "zh": "小兔门牙往外翘，人间烦恼全忘掉",
+        "en": "Bunny's teeth stick out, world's worries forgotten"
+      },
+      {
+        "zh": "嘴巴关不住牙齿，快乐藏不住的挂件小兔",
+        "en": "Mouth can't hide the teeth — a little bunny charm of uncontainable joy"
+      },
+      {
+        "zh": "耳长脸圆粉腮红，两颗门牙往外冲。人间多少烦心事，看它一眼就放空",
+        "en": "Long ears, round face, pink cheeks, two teeth out front. However many worries you have, one look and they're gone"
+      },
+      {
+        "zh": "兔界显眼包，门牙是专属",
+        "en": "The bunny world's show-off, with signature teeth"
+      },
+      {
+        "zh": "牙齿过载，嘴巴装不下的快乐小兔",
+        "en": "Teeth overload, a happy bunny the mouth can't contain"
+      },
+      {
+        "zh": "拒绝颜值内卷，靠两颗门牙出圈的挂件",
+        "en": "Rejecting looks-competition, famous for two teeth"
+      },
+      {
+        "zh": "耳朵软乎乎，门牙藏不住。挂包随风舞，憨态解千苦",
+        "en": "Soft ears, teeth can't hide. Swaying on a bag in the wind, silliness soothes all woes"
+      },
+      {
+        "zh": "兔界显眼包，门牙是专属。颜值不在乎，快乐打不住",
+        "en": "Bunny show-off with signature teeth. Cares not for looks, joy won't stop"
+      }
     ]
   }
 }

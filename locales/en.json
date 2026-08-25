@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "Home",
+    "works": "Works",
+    "usage": "How to Use",
+    "privacy": "Privacy",
+    "contact": "Contact"
+  },
+  "brand": { "sub": "· Never let your desktop feel lonely" },
+  "hero": {
+    "title": "DeskBud",
+    "slogan": "Your desktop pet companion",
+    "sub": "Always-on desktop pets, each with its own personality and soul"
+  },
+  "home": {
+    "hot": "Popular Pets",
+    "hotSub": "Pick a favorite pet and bring it to your desktop",
+    "all": "View All"
+  },
+  "search": {
+    "ph": "Search by name or description…",
+    "label": "Search works",
+    "btn": "Search",
+    "empty": "No matching works found"
+  },
+  "announce": {
+    "new": "New",
+    "info": "Notice",
+    "more": "View details →"
+  },
+  "footer": {
+    "tagline": "Fun desktop pet companions · always on your screen",
+    "contact": "Contact (Email)",
+    "rights": "© 2026 DeskBud.xyz · All rights reserved",
+    "made": "Made with ❤",
+    "site": "Desktop pet sharing site"
+  },
+  "detail": {
+    "sub": "Desktop pet preview & download",
+    "category": "Category",
+    "author": "Author",
+    "updated": "Updated",
+    "pageViews": "Page views",
+    "downloads": "Downloads",
+    "download": "Download",
+    "back": "Back to works"
+  },
+  "list": {
+    "title": "Works",
+    "sub": "A collection of fun desktop pet companions",
+    "all": "All",
+    "sortLatest": "Latest",
+    "sortDownloads": "Downloads",
+    "sortHot": "Popular",
+    "viewAll": "View All",
+    "empty": "No works yet"
+  },
+  "usage": {
+    "title": "How to Use",
+    "sub": "Desktop pet manual · Android / Windows / Mac",
+    "pageTitle": "How to Use · DeskBud.xyz",
+    "desc": "DeskBud desktop pet guide: Android phone / Windows / Mac",
+    "androidTitle": "For Android phone users",
+    "winmacTitle": "For Windows / Mac users",
+    "thOp": "Action",
+    "thDesc": "Description",
+    "a1op": "Pause motion", "a1desc": "Tap the pet",
+    "a2op": "Jump & land", "a2desc": "Drop to ground / tap after dragging",
+    "a3op": "Move", "a3desc": "Long-press and drag the pet",
+    "a4op": "Continuous move", "a4desc": "Menu: Left / Right / Orbit",
+    "a5op": "Zoom", "a5desc": "Shrink · Reset · Enlarge",
+    "a6op": "Pet menu", "a6desc": "Long-press the pet",
+    "w1op": "Click the pet", "w1desc": "Jumps then gently floats down",
+    "w2op": "Drag the pet", "w2desc": "Move position; snaps when released",
+    "w3op": "Pet still", "w3desc": "Hover the mouse over the pet",
+    "w4op": "Custom orbit", "w4desc": "Hover to turn the cursor into a cross, drag to draw a rectangle, and the pet starts orbiting",
+    "w5op": "Zoom", "w5desc": "Shrink / Reset / Enlarge",
+    "w6op": "Right-click", "w6desc": "Menu"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "sub": "This desktop pet is a personal hobby project.",
+    "pageTitle": "Privacy Policy · DeskBud.xyz",
+    "desc": "DeskBud desktop pet privacy and data collection notes",
+    "p1h": "1. Data collection", "p1": "This app does not collect or upload any personal information, and does not scan or read your local documents or window contents.",
+    "p2h": "2. Network activity", "p2": "The app only proactively downloads the public bubble-quote config file bubble.json; it never submits any local information outward.",
+    "p3h": "3. Local storage", "p3": "All settings and pet states are stored on your local device; there is no cloud storage.",
+    "p4h": "4. Works offline", "p4": "When the network is down, the app uses built-in default data and all core features work normally.",
+    "p5h": "5. Third parties", "p5": "This app integrates no data-collection, analytics, or advertising SDKs."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "sub": "Bug reports, feature ideas, or just to chat about pets — reach out anytime.",
+    "pageTitle": "Contact Us · DeskBud.xyz",
+    "desc": "DeskBud feedback & contact: email",
+    "emailTitle": "Email",
+    "emailDesc": "Collaboration / Media / Serious bugs / Long-term contact",
+    "copy": "Copy",
+    "copied": "Copied ✓"
+  }
+}
