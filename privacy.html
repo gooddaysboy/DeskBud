@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>隐私说明 · DeskBud.xyz</title>
+  <meta name="description" content="DeskBud 桌面宠物的隐私与数据收集说明">
+  <link rel="stylesheet" href="assets/css/base.css?v=19">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud.xyz<span class="brand-sub"> · 让桌面不再孤单</span></a>
+      <nav class="nav">
+        <a href="index.html">首页</a>
+        <a href="list.html">作品</a>
+        <a href="usage.html">使用说明</a>
+        <a href="privacy.html">隐私说明</a>
+        <a href="contact.html">联系我们</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-header wrap">
+    <h1>隐私说明</h1>
+    <p class="ph-sub">本桌面宠物是个人开发的桌面趣味软件。</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="detail-body privacy-block">
+      <p><strong>1. 数据收集</strong>：本程序不收集、不上传任何用户个人信息，不会扫描、读取用户电脑本地文档、窗口内容。</p>
+      <p><strong>2. 网络行为</strong>：程序仅会主动下载公开的泡泡语录配置文件 <code>bubble.json</code>；不会把本机任何信息向外提交。</p>
+      <p><strong>3. 本地存储</strong>：全部设置、宠物状态均保存在用户本机设备，无云端存储。</p>
+      <p><strong>4. 离线可用</strong>：网络断开时，软件使用内置默认数据，全部核心功能正常工作。</p>
+      <p><strong>5. 第三方</strong>：本程序不集成数据采集、统计、广告 SDK。</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
+        <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+      </div>
+      <div class="footer-bottom">
+        <a href="contact.html">联系我们（QQ 群 / 微信群 / 邮箱）</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

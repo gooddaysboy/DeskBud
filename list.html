@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>作品列表 · DeskBud</title>
-  <meta name="description" content="DeskBud 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
-  <link rel="stylesheet" href="assets/css/base.css?v=11">
+  <title>作品列表 · DeskBud.xyz</title>
+  <meta name="description" content="DeskBud.xyz 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
+  <link rel="stylesheet" href="assets/css/base.css?v=19">
 </head>
 <body>
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud.xyz<span class="brand-sub"> · 让桌面不再孤单</span></a>
       <nav class="nav">
         <a href="index.html">首页</a>
         <a href="list.html">作品</a>
-        <a href="bubble.html">泡泡墙</a>
-        <a href="index.html#categories">分类</a>
+        <a href="usage.html">使用说明</a>
+        <a href="privacy.html">隐私说明</a>
+        <a href="contact.html">联系我们</a>
       </nav>
     </div>
   </header>
+
+  <section class="page-header wrap">
+    <h1>作品</h1>
+    <p class="ph-sub">浏览全部桌面宠物伙伴，按分类筛选你喜欢的那个。</p>
+  </section>
 
   <section class="section wrap">
     <div class="section-head">
@@ -43,13 +49,18 @@
 
   <footer class="footer">
     <div class="wrap">
-      <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
-      <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+      <div class="footer-top">
+        <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
+        <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+      </div>
+      <div class="footer-bottom">
+        <a href="contact.html">联系我们（QQ 群 / 微信群 / 邮箱）</a>
+      </div>
     </div>
   </footer>
 
   <script src="assets/js/site.js?v=9"></script>
-  <script src="assets/js/bubble.js?v=10"></script>
+  <script src="assets/js/bubble.js?v=17"></script>
   <script>
     (async () => {
       const d = await SITE.load();
@@ -61,13 +72,13 @@
       let curSort = params.get('sort') || 'latest';
       let bubbleCleanups = [];
 
-      // 分类筛选条：一级 + 动物下展开二级（带 emoji 图标）
+      // 分类筛选条：全部 + 一级 + 其下的二级，全部平铺展示（带 emoji 图标）
       const filters = document.getElementById('filters');
       function renderFilters() {
         const parts = [`<button class="chip" data-cat="all">${SITE.catIcon('all')} 全部</button>`];
         d.categories.filter(c => c.id !== 'all').forEach(c => {
           parts.push(`<button class="chip${c.id === curCat ? ' active' : ''}" data-cat="${c.id}">${SITE.catIcon(c.id)} ${c.name}</button>`);
-          if (c.children && c.id === curCat) {
+          if (c.children) {
             c.children.forEach(ch => {
               parts.push(`<button class="chip sub${ch.id === curCat ? ' active' : ''}" data-cat="${ch.id}">${SITE.catIcon(ch.id)} ${ch.name}</button>`);
             });
@@ -100,8 +111,10 @@
         const grid = document.getElementById('grid');
         grid.innerHTML = list.map(SITE.cardHTML).join('');
         document.getElementById('empty').style.display = list.length ? 'none' : 'block';
-        // 全局模式：整页同一时刻只飘 1 条，随机轮流（避免刷屏）
-        bubbleCleanups.push(BUBBLE.startGlobal('.card-bubbles', 20000));
+        // 每个卡片独立持续飘：该卡片窗口始终有 1 条，下一条提前衔接，不空屏
+        document.querySelectorAll('.card-bubbles').forEach(el => {
+          bubbleCleanups.push(BUBBLE.renderKeep(el, el.dataset.pet, { minDur: 16000, maxDur: 24000 }));
+        });
       }
       renderFilters();
       render();

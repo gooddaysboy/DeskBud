@@ -1,6 +1,10 @@
 // 桌宠泡泡语录引擎：加载 data/bubble.json（与桌宠程序共用同一份数据源）
 // 网页端策略：打开拉一次 -> 内存循环滚动 -> 页面生命周期内不再请求网络
 // 容错：拿不到 json 或 json 损坏 -> 用内置备用文案，页面不报错不白屏
+// 视觉：可爱对话气泡，带宠物头像 + 柔和随机配色 + 缓慢上升 + 轻微摇摆
+const PET_EMOJI = { panda: '🐼', cat: '🐱', dog: '🐶', plant: '🌱', rabbit: '🐰', public: '💭' };
+const CUTE = ['#ffd9e8', '#d8f3e6', '#fff1ca', '#d8ecff', '#e9ddff', '#ffe2d1'];
+
 const BUBBLE = {
   data: null,
   ready: false,
@@ -58,26 +62,60 @@ const BUBBLE = {
     }
     return a;
   },
-  // 在单个容器里飘出 1 条气泡（不负责节奏，由 render / startGlobal 调度）
-  spawnBubble(container, category) {
+  // 在单个容器里飘出 1 条气泡（不负责节奏，由 render / startGlobal / renderKeep 调度）
+  // animDelay：可选负数（秒），让气泡“已经飘到一半”，用于各列表起始位置错开、像一直在跑
+  // dir：运动方向 rise/fall/lr/rl/d1/d2；不传则随机，像随机冒出来的念头
+  spawnBubble(container, category, dur, animDelay, dir) {
     const lines = this.linesFor(category);
     if (!lines.length) return;
-    const b = document.createElement('div');
-    b.className = 'bubble';
-    b.textContent = lines[Math.floor(Math.random() * lines.length)];
-    const left = 6 + Math.random() * 68;          // 随机水平位置 %
-    const dur = 9 + Math.random() * 4;            // 动画时长 9~13s（< 间隔，保证屏上同时最多 1 条）
-    b.style.left = left + '%';
-    b.style.animationDuration = dur + 's';
-    container.appendChild(b);
-    b.addEventListener('animationend', () => b.remove());
+    const text = lines[Math.floor(Math.random() * lines.length)];
+    if (dur == null) dur = 14000 + Math.random() * 8000;   // 默认 14~22s（缓慢）
+    const DIRS = ['rise', 'fall', 'lr', 'rl', 'd1', 'd2'];
+    if (!dir || DIRS.indexOf(dir) < 0) dir = DIRS[Math.floor(Math.random() * DIRS.length)];
+    const wrap = document.createElement('div');
+    wrap.className = 'bubble dir-' + dir;
+    // 中部区域随机起点（避开卡片四角的文字/分类/角标），用 left/top 定位
+    const W = container.clientWidth || 300;
+    const H = container.clientHeight || 280;
+    // 水平/垂直位移量：朝对应方向飘到容器外
+    const rise = H + 24;
+    const dx = W * (0.45 + Math.random() * 0.35);
+    const dy = H * (0.45 + Math.random() * 0.30);
+    // 各方向对应起点与终点（左/上坐标 + 偏离方向）
+    const place = {
+      rise: { l: 30 + Math.random() * 40, t: 38 + Math.random() * 22, tx: 0, ty: -rise },
+      fall: { l: 30 + Math.random() * 40, t: 38 + Math.random() * 22, tx: 0, ty: rise },
+      lr:   { l: 22 + Math.random() * 18, t: 38 + Math.random() * 22, tx: dx,  ty: 0 },
+      rl:   { l: 60 + Math.random() * 18, t: 38 + Math.random() * 22, tx: -dx, ty: 0 },
+      d1:   { l: 22 + Math.random() * 18, t: 38 + Math.random() * 22, tx: dx,  ty: dy },
+      d2:   { l: 60 + Math.random() * 18, t: 38 + Math.random() * 22, tx: -dx, ty: dy }
+    }[dir] || { l: 40, t: 50, tx: 0, ty: -rise };
+    wrap.style.left = place.l + '%';
+    wrap.style.top = place.t + '%';
+    wrap.style.setProperty('--rise', rise + 'px');
+    wrap.style.setProperty('--dx', dx + 'px');
+    wrap.style.setProperty('--dy', dy + 'px');
+    wrap.style.setProperty('--tx', place.tx + 'px');
+    wrap.style.setProperty('--ty', place.ty + 'px');
+    wrap.style.setProperty('--dur', (dur / 1000) + 's');
+    if (animDelay != null) wrap.style.animationDelay = (animDelay / 1000) + 's';
+    const inner = document.createElement('div');
+    inner.className = 'bbl';
+    const tx = document.createElement('span');
+    tx.className = 'bbl-text';
+    tx.textContent = text;                 // textContent 防注入
+    inner.appendChild(tx);
+    wrap.appendChild(inner);
+    container.appendChild(wrap);
+    const life = (animDelay != null) ? dur + animDelay : dur;
+    setTimeout(() => wrap.remove(), life + 400);
   },
   // 单个容器模式：每 interval 毫秒飘 1 条（该容器同时最多 1 条）。用于详情页等单区域
   // 返回清理函数
   render(container, category, interval) {
     if (!container) return () => {};
     if (container._bubbleTimer) { clearTimeout(container._bubbleTimer); container._bubbleTimer = null; }
-    container.classList.add('bubble-zone');
+    if (!container.classList.contains('card-bubbles')) container.classList.add('bubble-zone');
     const gap = Math.max(12000, interval || 20000); // 默认约 20 秒一条
     const tick = () => {
       this.spawnBubble(container, category);
@@ -89,7 +127,7 @@ const BUBBLE = {
     };
   },
   // 全局模式：整页（selector 选中的所有容器）同一时刻只飘 1 条，随机轮流，约 interval 毫秒一条。
-  // 用于泡泡墙 / 列表多卡片，避免刷屏。返回清理函数
+  // 用于列表多卡片，避免刷屏。返回清理函数
   startGlobal(selector, interval) {
     const els = Array.from(document.querySelectorAll(selector));
     if (!els.length) return () => {};
@@ -102,6 +140,30 @@ const BUBBLE = {
       timer = setTimeout(tick, gap);
     };
     timer = setTimeout(tick, 800);
+    return () => { if (timer) { clearTimeout(timer); timer = null; } };
+  },
+  // 持续模式：每个容器始终有 1 条在飘（旧气泡将消失时下一条已升起，不空屏），
+  // 各容器起始时间随机错开 -> 时间不统一、随机出现。用于泡泡墙每面板
+  renderKeep(container, category, opts) {
+    if (!container) return () => {};
+    if (container._bubbleTimer) { clearTimeout(container._bubbleTimer); container._bubbleTimer = null; }
+    if (!container.classList.contains('card-bubbles')) container.classList.add('bubble-zone');
+    const minDur = (opts && opts.minDur) || 18000;
+    const maxDur = (opts && opts.maxDur) || 26000;
+    const dur = minDur + Math.random() * (maxDur - minDur);
+    const dir = ['rise', 'fall', 'lr', 'rl', 'd1', 'd2'][Math.floor(Math.random() * 6)]; // 每张卡片一个固定方向
+    const startDelay = Math.random() * 1500;     // 首条很快出现（≤1.5s）
+    let timer = null;
+    let first = true;
+    const tick = () => {
+      // 首条用随机负延迟 -> 该列表首条已在不同高度/位置，像一直在跑；后续按固定方向衔接
+      const off = first ? -(Math.random() * dur * 0.78) : 0;
+      first = false;
+      const life = dur + off;                    // 首条因负延迟实际更短
+      this.spawnBubble(container, category, dur, off, dir);
+      timer = setTimeout(tick, life * 0.8);      // 下一条在本条快结束（80%）时升起，重叠衔接不空屏
+    };
+    timer = setTimeout(tick, startDelay);
     return () => { if (timer) { clearTimeout(timer); timer = null; } };
   }
 };

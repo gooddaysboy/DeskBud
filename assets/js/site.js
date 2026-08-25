@@ -51,7 +51,7 @@ const SITE = {
   // 缩略图：优先视频（自动播放），其次图片；缺失时显示占位。
   // src 加 ?v= 版本号防缓存（与 css/js 同步，本次 v8）
   thumbHTML(work) {
-    const ver = (this && this._assetVer) || (SITE && SITE._assetVer) || 8;
+    const ver = (this && this._assetVer) || (SITE && SITE._assetVer) || 9;
     const v = (s) => s + (s.includes('?') ? '&' : '?') + 'v=' + ver;
     const vid = (work.media || []).find(m => m.type === 'video');
     if (vid) {

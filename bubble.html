@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>桌宠脑洞泡泡墙 · DeskBud</title>
   <meta name="description" content="DeskBud 桌宠脑洞泡泡墙：每个桌面宠物脑袋里随机冒出来的念头，与桌宠程序共用同一份语录数据源。">
-  <link rel="stylesheet" href="assets/css/base.css?v=11">
+  <link rel="stylesheet" href="assets/css/base.css?v=19">
 </head>
 <body>
   <header class="topbar">
@@ -22,14 +22,14 @@
   <section class="hero wrap">
     <h1>桌宠脑洞泡泡墙</h1>
     <p class="slogan">这是桌宠脑袋里随机冒出来的念头</p>
-    <p class="sub">每个伙伴各不相同 · 与桌宠程序共用同一份语录 · 打开网页飘起来就不停</p>
+    <p class="sub">每个伙伴各不相同 · 与桌宠程序共用同一份语录 · 慢悠悠飘起来就不停</p>
   </section>
 
   <section class="section wrap">
     <div class="section-head">
       <div>
         <h2 class="section-title">谁在想啥</h2>
-        <p class="section-sub">向下飘起的半透明气泡，都是宠物脑子里蹦出的碎碎念</p>
+        <p class="section-sub">缓缓升起的半透明小气泡，都是宠物脑子里蹦出的碎碎念</p>
       </div>
     </div>
     <div class="bubble-wall" id="wall"></div>
@@ -42,7 +42,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/bubble.js?v=10"></script>
+  <script src="assets/js/bubble.js?v=17"></script>
   <script>
     // 每个面板：宠物 id + 展示名 + emoji
     const PANELS = [
@@ -66,8 +66,10 @@
           <div class="bubble-zone tall" data-cat="${p.cat}"></div>
         </div>`).join('');
 
-      // 全局模式：整页同一时刻只飘 1 条，随机轮流（避免刷屏）
-      cleanups.push(BUBBLE.startGlobal('.bubble-zone', 20000));
+      // 每面板独立持续模式：始终有 1 条在飘（不空屏），各面板起始时间随机错峰
+      wall.querySelectorAll('.bubble-zone').forEach(z => {
+        cleanups.push(BUBBLE.renderKeep(z, z.dataset.cat, { minDur: 18000, maxDur: 26000 }));
+      });
     })();
   </script>
 </body>

@@ -1,29 +1,73 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
-cd /d "%~dp0"
+set "LOG=%~dp0start-editor.log"
+echo [%date% %time%] begin > "%LOG%"
 
-REM 找 python 解释器（兼容 python / python3）
 set PY=
-where python >nul 2>nul && set PY=python
+where py >nul 2>nul && set PY=py
+if not defined PY ( where python >nul 2>nul && set PY=python )
 if not defined PY ( where python3 >nul 2>nul && set PY=python3 )
 if not defined PY (
-  echo 未找到 python，请先安装 Python 并勾选“Add to PATH”。
+  for %%P in (
+    "%LOCALAPPDATA%\Programs\Python\Python*\python.exe"
+    "%ProgramFiles%\Python\Python*\python.exe"
+    "%ProgramFiles(x86)%\Python\Python*\python.exe"
+    "%USERPROFILE%\AppData\Local\Programs\Python\Python*\python.exe"
+    "%LOCALAPPDATA%\Microsoft\WindowsApps\python.exe"
+    "%USERPROFILE%\AppData\Local\Microsoft\WindowsApps\python.exe"
+  ) do ( if not defined PY if exist %%~P set PY=%%~P )
+)
+echo [%date% %time%] PY=%PY% >> "%LOG%"
+if not defined PY (
+  echo Python not found. >> "%LOG%"
+  echo Python not found. Please install Python and add to PATH.
+  pause
+  exit /b 1
+)
+"%PY%" --version >nul 2>nul
+if errorlevel 1 (
+  echo Python cannot run: %PY% >> "%LOG%"
+  echo Python cannot run: %PY%
   pause
   exit /b 1
 )
 
-echo 正在启动本地服务 http://localhost:8080 ...
-start "" %PY% -m http.server 8080
+set PORT=8080
+echo [%date% %time%] starting server port %PORT% >> "%LOG%"
+echo Starting local server http://localhost:%PORT% ...
+start /min "" "%PY%" -m http.server %PORT%
+echo [%date% %time%] server launched >> "%LOG%"
 
-REM 等 1 秒让服务起来，再打开浏览器到语录录入页
+set READY=0
+for /L %%i in (1,1,25) do (
+  if not defined READY (
+    curl -s -o nul http://localhost:%PORT%/ 2>nul
+    if not errorlevel 1 (
+      echo [%date% %time%] ready via curl try %%i >> "%LOG%"
+      set READY=1
+    )
+  )
+  if not defined READY (
+    powershell -Command "try{(Invoke-WebRequest http://localhost:%PORT%/ -UseBasicParsing -TimeoutSec 1).StatusCode}catch{exit 1}" >nul 2>nul
+    if not errorlevel 1 (
+      echo [%date% %time%] ready via powershell try %%i >> "%LOG%"
+      set READY=1
+    )
+  )
+  if defined READY goto :open
+  echo [%date% %time%] waiting try %%i >> "%LOG%"
+  timeout /t 1 >nul
+)
+:open
+echo [%date% %time%] opening browser >> "%LOG%"
+
+start "" http://localhost:%PORT%/editor.html
 timeout /t 1 >nul
-start "" http://localhost:8080/editor.html
-
+start "" http://localhost:%PORT%/bubble.html
+timeout /t 1 >nul
+start "" http://localhost:%PORT%/index.html
+echo [%date% %time%] done >> "%LOG%"
 echo.
-echo 编辑器已打开：http://localhost:8080/editor.html
-echo 同目录下其它页面也可访问：bubble.html（泡泡墙） / index.html / list.html / detail.html
-echo.
-echo 提示：关闭本窗口不会停止服务；停止服务请在任务管理器结束 python 进程，
-echo       或再开一个命令行执行：taskkill /f /im python.exe
-echo.
-pause
+echo Opened: editor.html / bubble.html / index.html
+echo Server window is minimized. To stop: taskkill /f /im python.exe
+echo If browser still does not open, send me %LOG%.

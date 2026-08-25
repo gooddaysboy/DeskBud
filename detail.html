@@ -3,22 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>作品详情 · DeskBud</title>
+  <title>作品详情 · DeskBud.xyz</title>
   <meta name="description" content="桌面宠物作品详情：图文/GIF/视频预览与下载。">
-  <link rel="stylesheet" href="assets/css/base.css?v=11">
+  <link rel="stylesheet" href="assets/css/base.css?v=19">
 </head>
 <body>
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud.xyz<span class="brand-sub"> · 让桌面不再孤单</span></a>
       <nav class="nav">
         <a href="index.html">首页</a>
         <a href="list.html">作品</a>
-        <a href="bubble.html">泡泡墙</a>
         <a href="index.html#categories">分类</a>
+        <a href="usage.html">使用说明</a>
+        <a href="privacy.html">隐私说明</a>
+        <a href="contact.html">联系我们</a>
       </nav>
     </div>
   </header>
+
+  <section class="page-header wrap">
+    <h1 id="dtTitle">作品详情</h1>
+    <p class="ph-sub">桌面宠物作品预览与下载</p>
+  </section>
 
   <section class="section wrap detail-hero">
     <p style="margin:0 0 8px"><a href="list.html" style="color:var(--ink-faint)">← 返回作品列表</a></p>
@@ -27,17 +34,20 @@
 
   <footer class="footer">
     <div class="wrap">
-      <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
-      <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+      <div class="footer-top">
+        <div>© <span id="yr"></span> DeskBud.xyz · 桌面宠物作品分享站</div>
+        <div>汇集开源 / 自制桌面宠物伙伴 · 常驻你的屏幕</div>
+      </div>
+      <div class="footer-bottom">
+        <a href="contact.html">联系我们（QQ 群 / 微信群 / 邮箱）</a>
+      </div>
     </div>
   </footer>
 
   <script src="assets/js/site.js?v=9"></script>
-  <script src="assets/js/bubble.js?v=10"></script>
   <script>
     (async () => {
       const d = await SITE.load();
-      await BUBBLE.load(); // 拉一次语录
       document.getElementById('yr').textContent = new Date().getFullYear();
       const id = new URLSearchParams(location.search).get('id');
       const w = d.works.find(x => x.id === id);
@@ -46,15 +56,26 @@
         document.getElementById('detail').innerHTML = '<div class="empty">未找到该作品</div>';
         return;
       }
-      document.title = w.title + ' · DeskBud';
+      document.title = w.title + ' · DeskBud.xyz';
+      const dt = document.getElementById('dtTitle');
+      if (dt) dt.textContent = w.title;
 
       const mediaHTML = (w.media || []).map(m => {
         if (m.type === 'video')
-          return `<div class="media-block"><video src="${m.src}" controls preload="metadata"></video><div class="media-cap">${m.caption || ''}</div></div>`;
-        if (m.type === 'gif')
-          return `<div class="media-block"><img src="${m.src}" alt="${m.caption || ''}" loading="lazy"><div class="media-cap">${m.caption || ''}</div></div>`;
-        return `<div class="media-block"><img src="${m.src}" alt="${m.caption || ''}" loading="lazy"><div class="media-cap">${m.caption || ''}</div></div>`;
+          return `<figure class="m-item"><video src="${m.src}" controls preload="metadata"></video><figcaption>${m.caption || ''}</figcaption></figure>`;
+        return `<figure class="m-item"><img src="${m.src}" alt="${m.caption || ''}" loading="lazy"><figcaption>${m.caption || ''}</figcaption></figure>`;
       }).join('');
+
+      // 额外占位预览：复用 cover/thumb，把空出来的窗口填满
+      const extras = [];
+      if (w.cover && !(w.media || []).some(m => m.src === w.cover)) extras.push({ src: w.cover, cap: '封面' });
+      if (w.thumb && w.thumb !== w.cover && !(w.media || []).some(m => m.src === w.thumb)) extras.push({ src: w.thumb, cap: '缩略图' });
+      const walkGif = (w.media || []).find(m => m.type === 'gif' && /walk|run|fly|move/i.test(m.src));
+      if (!walkGif) {
+        // 找不到 walk 类动图，就再放一张 cover 当占位，保证有内容
+        extras.push({ src: w.cover || w.thumb, cap: '动态预览（占位）' });
+      }
+      const extraHTML = extras.map(x => `<figure class="m-item"><img src="${x.src}" alt="${x.cap}" loading="lazy"><figcaption>${x.cap}</figcaption></figure>`).join('');
 
       document.getElementById('detail').innerHTML = `
         <div class="detail-grid">
@@ -62,10 +83,9 @@
             <h1 class="detail-title">${w.title}</h1>
             <p class="detail-sub">${w.summary}</p>
             <div class="detail-body"><p>${w.description}</p></div>
-            ${mediaHTML}
-            <div class="bubble-panel">
-              <div class="bubble-panel-tip">这是桌宠脑袋里随机冒出来的念头</div>
-              <div class="bubble-zone" id="bubbleZone"></div>
+            <div class="media-gallery">
+              ${mediaHTML}
+              ${extraHTML}
             </div>
           </div>
           <aside class="sidebar">
@@ -79,9 +99,6 @@
             </div>
           </aside>
         </div>`;
-
-      // 详情页飘该宠物专属+公共泡泡（数量多，错落）
-      BUBBLE.render(document.getElementById('bubbleZone'), w.category);
 
       ensureBusuanzi();
     })();
