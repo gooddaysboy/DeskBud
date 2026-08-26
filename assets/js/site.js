@@ -1,7 +1,7 @@
 // DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计
 const SITE = {
   data: null,
-  _assetVer: 14, // 与 css/js ?v= 同步，图片缓存破除用
+  _assetVer: 17, // 与 css/js ?v= 同步，图片缓存破除用
   async load() {
     if (this.data) return this.data;
     const res = await fetch('data/works.json', { cache: 'no-cache' });
@@ -91,6 +91,7 @@ function ensureBusuanzi() {
 }
 
 // 公告栏：全站注入到 .topbar 之下、hero 之上，由 data/announcements.json 驱动
+// 修复：lang:change 与 DOMContentLoaded 都会触发，故先清再插（幂等），避免重复两条
 function initAnnounce() {
   fetch('data/announcements.json', { cache: 'no-cache' })
     .then(r => (r.ok ? r.json() : []))
@@ -101,10 +102,14 @@ function initAnnounce() {
         (!a.start || today >= a.start) &&
         (!a.end || today <= a.end)
       );
+      // 幂等：移除旧 bar 再插入
+      document.querySelectorAll('.announce-bar').forEach(b => b.remove());
       if (!item) return;
       const bar = document.createElement('div');
       bar.className = 'announce-bar' + (item.level === 'new' ? ' is-new' : '');
-      const tag = item.level === 'new' ? window.pick({ zh: '上新', en: 'New' }) : window.pick({ zh: '公告', en: 'Notice' });
+      const tag = item.level === 'new'
+        ? window.pick({ zh: '上新', en: 'New' })
+        : window.pick({ zh: '公告', en: 'Notice' });
       const more = window.pick({ zh: '查看详情 →', en: 'View details →' });
       const text = item.link
         ? `${window.pick(item.text)} <a href="${item.link}">${more}</a>`
@@ -115,7 +120,7 @@ function initAnnounce() {
           <span class="announce-text">${text}</span>
         </div>`;
       const topbar = document.querySelector('.topbar');
-      if (topbar) topbar.after(bar); // 放在导航栏之下、hero 之上，不抢最顶
+      if (topbar) topbar.after(bar); // 导航栏之下、hero 之上，不抢最顶
     })
     .catch(() => {});
 }
@@ -172,7 +177,6 @@ function boot() { initAnnounce(); initSearch(); }
 
 // 语言切换时：公告重渲染 + 动态内容（卡片/列表/详情）由页面注册的 __rerender 重渲染
 window.addEventListener('lang:change', () => {
-  document.querySelectorAll('.announce-bar').forEach(b => b.remove());
   initAnnounce();
   if (typeof window.__rerender === 'function') window.__rerender();
 });
