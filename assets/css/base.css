@@ -60,6 +60,7 @@ img, video { max-width: 100%; display: block; }
 .announce-bar .wrap {
   display: flex;
   align-items: center;
+  justify-content: center; /* 整体 [上新+内容] 居中，标签从红圈位置起 */
   gap: 14px;
   min-height: 38px;
   padding-top: 7px;
@@ -77,8 +78,9 @@ img, video { max-width: 100%; display: block; }
 }
 .announce-bar.is-new .announce-tag { background: var(--accent); }
 .announce-text {
-  flex: 1 1 auto;
-  text-align: center;
+  flex: 0 1 auto;
+  text-align: left;
+  min-width: 0;
 }
 .announce-text a {
   color: var(--brand-ink);
@@ -640,7 +642,7 @@ img, video { max-width: 100%; display: block; }
 .contact-tip { font-size: 12px; color: var(--ink-faint); }
 
 /* ---------- 隐私说明页（privacy.html） ---------- */
-.privacy-block { max-width: 760px; }
+.privacy-block { max-width: 1080px; }
 .privacy-block p { line-height: 1.85; color: var(--ink-soft); margin: 0 0 14px; }
 .privacy-block strong { color: var(--ink); margin-right: 6px; }
 .privacy-block code { background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; font-size: 13px; }

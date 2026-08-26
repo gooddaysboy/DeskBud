@@ -82,11 +82,11 @@
     "sub": "This desktop pet is a personal hobby project.",
     "pageTitle": "Privacy Policy · DeskBud.xyz",
     "desc": "DeskBud desktop pet privacy and data collection notes",
-    "p1h": "1. Data collection", "p1": "This app does not collect or upload any personal information, and does not scan or read your local documents or window contents.",
-    "p2h": "2. Network activity", "p2": "The app only proactively downloads the public bubble-quote config file bubble.json; it never submits any local information outward.",
-    "p3h": "3. Local storage", "p3": "All settings and pet states are stored on your local device; there is no cloud storage.",
-    "p4h": "4. Works offline", "p4": "When the network is down, the app uses built-in default data and all core features work normally.",
-    "p5h": "5. Third parties", "p5": "This app integrates no data-collection, analytics, or advertising SDKs."
+    "intro": "DeskBud never collects or uploads your personal information, documents, photos, or window contents.",
+    "p1h": "1. Local runtime", "p1": "The app runs entirely on your local device. By default it requires no network and never uploads any data from your machine.",
+    "p2h": "2. Network activity", "p2": "If network features are enabled, it only fetches public bubble-quote assets. This is an access-only operation and never sends any local information outward.",
+    "p3h": "3. Private files", "p3": "The app does not read, scan, or peek at private files, photos, or documents on your device.",
+    "p4h": "4. No background reporting", "p4": "The app contains no background reporting, behavioral statistics, or user tracking modules."
   },
   "contact": {
     "title": "Contact Us",
