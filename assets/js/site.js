@@ -299,13 +299,15 @@ SITE.pages = {
     }
     function renderFilters() {
       const parts = [`<button class="chip" data-cat="all">${SITE.catIcon('all')} ${window.pick({ zh: '全部', en: 'All' })}</button>`];
-      const na = window.pick({ zh: '（暂无）', en: ' (soon)' });
+      // 分类栏只显示「有在线作品」的分类；无作品的（植物/人类/机器人、空的猫/狗）一律不渲染
       d.categories.filter(c => c.id !== 'all').forEach(c => {
         const topN = onlineCountFor(c.id);
-        parts.push(`<button class="chip${c.id === curCat ? ' active' : ''}${topN === 0 ? ' muted' : ''}" data-cat="${c.id}">${SITE.catIcon(c.id)} ${SITE.catName(c.id)}${topN === 0 ? na : ''}</button>`);
+        if (topN === 0) return;
+        parts.push(`<button class="chip${c.id === curCat ? ' active' : ''}" data-cat="${c.id}">${SITE.catIcon(c.id)} ${SITE.catName(c.id)}</button>`);
         if (c.children) c.children.forEach(ch => {
           const n = onlineCountFor(ch.id);
-          parts.push(`<button class="chip sub${ch.id === curCat ? ' active' : ''}${n === 0 ? na : ''}" data-cat="${ch.id}">${SITE.catIcon(ch.id)} ${SITE.catName(ch.id)}${n === 0 ? na : ''}</button>`);
+          if (n === 0) return;
+          parts.push(`<button class="chip sub${ch.id === curCat ? ' active' : ''}" data-cat="${ch.id}">${SITE.catIcon(ch.id)} ${SITE.catName(ch.id)}</button>`);
         });
       });
       filters.innerHTML = parts.join('');

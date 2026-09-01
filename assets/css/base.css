@@ -36,6 +36,7 @@ body {
   background: var(--bg);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* 兜底：100vw 走马灯 break-out 不产生横向滚动条 */
 }
 
 a { color: inherit; text-decoration: none; }
@@ -751,7 +752,11 @@ img, video { max-width: 100%; display: block; }
 /* 走马灯：动作姿态无缝横滚（不显示名字 + 防下载）
    用 margin-right 而非 gap，保证 -50% 平移严格无缝 */
 .pose-marquee {
-  position: relative; overflow: hidden; margin: 0 0 6px;
+  position: relative; overflow: hidden;
+  /* break-out：突破 .wrap 居中栏，铺满视口全宽（仿 redfox.hk 全屏走马灯）；
+     仅详情页生效（首页/列表页无此元素）。margin 百分比相对包含块(.wrap)宽，公式成立 */
+  width: 100vw;
+  margin: 0 0 6px calc(50% - 50vw);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }

@@ -40,6 +40,14 @@
           "icon": "🐼"
         },
         {
+          "id": "rabbit",
+          "name": {
+            "zh": "兔子",
+            "en": "Rabbit"
+          },
+          "icon": "🐰"
+        },
+        {
           "id": "cat",
           "name": {
             "zh": "猫咪",
@@ -244,6 +252,169 @@
         }
       ],
       "date": "2026-08-20",
+      "featured": true
+    },
+    {
+      "id": "rabbit",
+      "status": "online",
+      "title": {
+        "zh": "织兔子",
+        "en": "Knitted Rabbit"
+      },
+      "category": "rabbit",
+      "author": {
+        "zh": "gooddaysboy",
+        "en": "gooddaysboy"
+      },
+      "cover": "works/rabbit/idle.webp",
+      "thumb": "works/rabbit/idle.webp",
+      "summary": {
+        "zh": "软乎乎的透明桌宠兔子，会蹦跳、打盹、挠痒、挥手卖萌，常驻桌面不占地。",
+        "en": "A soft transparent desktop rabbit that hops, naps, scratches and waves at you — always on your screen, never in the way."
+      },
+      "description": {
+        "zh": "织兔子是一只住在你屏幕上的小毛球。它自己蹦蹦跳跳，无聊了眨眨眼、打打哈欠、伸个懒腰；你点一下它就开心地蹦起来，拖一拖它就跟着你跑。它不抢注意力，只是安静地陪着你——工作累了抬头看一眼，就被治愈了。",
+        "en": "Knitted Rabbit is a little furball living on your screen. It hops on its own, blinks and yawns when bored, stretches now and then; tap it and it jumps happily, drag it and it follows you. It never steals your attention — just keeps you company quietly, a small comfort whenever you look up from work."
+      },
+      "states": [
+        {
+          "src": "works/rabbit/idle.webp",
+          "caption": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/rabbit/blink.webp",
+          "caption": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/rabbit/yawn.webp",
+          "caption": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/rabbit/stretch.webp",
+          "caption": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/rabbit/scratch.webp",
+          "caption": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/rabbit/eat.webp",
+          "caption": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/rabbit/wave.webp",
+          "caption": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/rabbit/jumphappy.webp",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/rabbit/run.webp",
+          "caption": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/rabbit/sleep.webp",
+          "caption": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/rabbit/fall.webp",
+          "caption": {
+            "zh": "降落",
+            "en": "Parachute"
+          }
+        }
+      ],
+      "versions": [
+        {
+          "platform": "win",
+          "platformLabel": {
+            "zh": "Windows",
+            "en": "Windows"
+          },
+          "video": "",
+          "download": {
+            "label": {
+              "zh": "下载 Windows 版",
+              "en": "Download for Windows"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "下载 exe 后双击即可运行，无需安装环境；若系统提示风险，选择「仍要运行」即可。",
+            "en": "Double-click the exe to run — no setup needed. If warned by the system, choose “Run anyway”."
+          }
+        },
+        {
+          "platform": "mac",
+          "platformLabel": {
+            "zh": "macOS",
+            "en": "macOS"
+          },
+          "video": "",
+          "download": {
+            "label": {
+              "zh": "下载 macOS 版",
+              "en": "Download for macOS"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "即将上线",
+            "en": "Coming soon"
+          }
+        },
+        {
+          "platform": "android",
+          "platformLabel": {
+            "zh": "Android",
+            "en": "Android"
+          },
+          "video": "",
+          "download": {
+            "label": {
+              "zh": "下载 Android 版",
+              "en": "Download for Android"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "下载 apk 后，在「设置 - 安全」中允许本次安装，按提示完成即可。",
+            "en": "After downloading the apk, allow this install in Settings › Security, then follow the prompts."
+          }
+        }
+      ],
+      "date": "2026-09-02",
       "featured": true
     },
     {
