@@ -38,11 +38,21 @@
   <footer class="footer">
     <div class="wrap">
       <div>© <span id="yr"></span> DeskBud · 陪伴你的桌面宠物伙伴</div>
-      <div><a href="editor.html">语录录入</a> · <a href="list.html">浏览作品</a></div>
-    </div>
+    <div><a href="editor.html">语录录入</a> · <a href="list.html">浏览作品</a></div>
+    <div class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></div>
+  </div>
   </footer>
 
   <script src="assets/js/bubble.js?v=17"></script>
+  <script>
+  // bubble 页独立计数（不引 site.js，避免依赖冲突）；仅自增+显示全站 PV
+  (function(){
+    var K='https://kounter.deskbud.xyz';
+    fetch(K+'/api/counter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'batch_inc',requests:[{target:'site-pv'}]}),cache:'no-store'}).catch(function(){});
+    var el=document.getElementById('busuanzi_value_site_pv');
+    if(el){fetch(K+'/api/counter?target=site-pv&_='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(j){if(j&&j.code===0)el.textContent=j.data.time;}).catch(function(){});}
+  })();
+  </script>
   <script>
     // 每个面板：宠物 id + 展示名 + emoji
     const PANELS = [

@@ -6,7 +6,9 @@
     "privacy": "Privacy",
     "contact": "Contact"
   },
-  "brand": { "sub": "· Never let your desktop feel lonely" },
+  "brand": {
+    "sub": "· Never let your desktop feel lonely"
+  },
   "hero": {
     "title": "DeskBud",
     "slogan": "Your desktop pet companion",
@@ -33,7 +35,8 @@
     "contact": "Contact (Email)",
     "rights": "© 2026 DeskBud.xyz · All rights reserved",
     "made": "Made with ❤",
-    "site": "Desktop pet sharing site"
+    "site": "Desktop pet sharing site",
+    "visits": "Total visits"
   },
   "detail": {
     "sub": "Desktop pet preview & download",
@@ -64,18 +67,30 @@
     "winmacTitle": "For Windows / Mac users",
     "thOp": "Action",
     "thDesc": "Description",
-    "a1op": "Pause motion", "a1desc": "Tap the pet",
-    "a2op": "Jump & land", "a2desc": "Drop to ground / tap after dragging",
-    "a3op": "Move", "a3desc": "Long-press and drag the pet",
-    "a4op": "Continuous move", "a4desc": "Menu: Left / Right / Orbit",
-    "a5op": "Zoom", "a5desc": "Shrink · Reset · Enlarge",
-    "a6op": "Pet menu", "a6desc": "Long-press the pet",
-    "w1op": "Click the pet", "w1desc": "Jumps then gently floats down",
-    "w2op": "Drag the pet", "w2desc": "Move position; snaps when released",
-    "w3op": "Pet still", "w3desc": "Hover the mouse over the pet",
-    "w4op": "Custom orbit", "w4desc": "Hover to turn the cursor into a cross, drag to draw a rectangle, and the pet starts orbiting",
-    "w5op": "Zoom", "w5desc": "Shrink / Reset / Enlarge",
-    "w6op": "Right-click", "w6desc": "Menu"
+    "a1op": "Pause motion",
+    "a1desc": "Tap the pet",
+    "a2op": "Jump & land",
+    "a2desc": "Drop to ground / tap after dragging",
+    "a3op": "Move",
+    "a3desc": "Long-press and drag the pet",
+    "a4op": "Continuous move",
+    "a4desc": "Menu: Left / Right / Orbit",
+    "a5op": "Zoom",
+    "a5desc": "Shrink · Reset · Enlarge",
+    "a6op": "Pet menu",
+    "a6desc": "Long-press the pet",
+    "w1op": "Click the pet",
+    "w1desc": "Jumps then gently floats down",
+    "w2op": "Drag the pet",
+    "w2desc": "Move position; snaps when released",
+    "w3op": "Pet still",
+    "w3desc": "Hover the mouse over the pet",
+    "w4op": "Custom orbit",
+    "w4desc": "Hover to turn the cursor into a cross, drag to draw a rectangle, and the pet starts orbiting",
+    "w5op": "Zoom",
+    "w5desc": "Shrink / Reset / Enlarge",
+    "w6op": "Right-click",
+    "w6desc": "Menu"
   },
   "privacy": {
     "title": "Privacy Policy",
@@ -83,10 +98,14 @@
     "pageTitle": "Privacy Policy · DeskBud.xyz",
     "desc": "DeskBud desktop pet privacy and data collection notes",
     "intro": "DeskBud never collects or uploads your personal information, documents, photos, or window contents.",
-    "p1h": "1. Local runtime", "p1": "The app runs entirely on your local device. By default it requires no network and never uploads any data from your machine.",
-    "p2h": "2. Network activity", "p2": "If network features are enabled, it only fetches public bubble-quote assets. This is an access-only operation and never sends any local information outward.",
-    "p3h": "3. Private files", "p3": "The app does not read, scan, or peek at private files, photos, or documents on your device.",
-    "p4h": "4. No background reporting", "p4": "The app contains no background reporting, behavioral statistics, or user tracking modules."
+    "p1h": "1. Local runtime",
+    "p1": "The app runs entirely on your local device. By default it requires no network and never uploads any data from your machine.",
+    "p2h": "2. Network activity",
+    "p2": "If network features are enabled, it only fetches public bubble-quote assets. This is an access-only operation and never sends any local information outward.",
+    "p3h": "3. Private files",
+    "p3": "The app does not read, scan, or peek at private files, photos, or documents on your device.",
+    "p4h": "4. No background reporting",
+    "p4": "The app contains no background reporting, behavioral statistics, or user tracking modules."
   },
   "contact": {
     "title": "Contact Us",

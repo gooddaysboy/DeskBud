@@ -81,13 +81,39 @@ const SITE = {
   }
 };
 
-// 不蒜子统计：全站 + 单页访问量。放在 body 末尾或动态注入。
-function ensureBusuanzi() {
-  if (document.getElementById('busuanzi_container_site_pv')) return;
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
-  document.body.appendChild(s);
+// Open-Kounter 统计（替代不蒜子）：自增 PV + 读取填充 busuanzi 兼容 span
+// 后端：https://kounter.deskbud.xyz （gooddaysboy/open-kounter，EdgeOne Pages + Blob）
+// 读：GET /api/counter?target=X -> {code:0,data:{time:N}}
+// 自增：POST /api/counter {"action":"batch_inc","requests":[{"target":"site-pv"},{"target":<当前页>}]}
+// 域名白名单已配：仅放行 deskbud.xyz（其他域 inc 被拒）；GET 读不受白名单限制。
+const OK_BASE = 'https://kounter.deskbud.xyz';
+function initOpenKounter() {
+  const pageTarget = 'page:' + location.pathname + location.search;
+  // 1) 自增（受域名白名单限制，仅 deskbud.xyz 允许）
+  fetch(OK_BASE + '/api/counter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'batch_inc', requests: [ { target: 'site-pv' }, { target: pageTarget } ] }),
+    cache: 'no-store'
+  }).catch(() => {});
+  // 2) 读取并填充（GET 不受白名单限制；span 可能异步渲染，故重试；绕过边缘缓存）
+  const fill = (target, elId) => {
+    let tries = 0;
+    const attempt = () => {
+      const el = document.getElementById(elId);
+      if (el) {
+        fetch(OK_BASE + '/api/counter?target=' + encodeURIComponent(target) + '&_=' + Date.now(), { cache: 'no-store' })
+          .then(r => (r.ok ? r.json() : null))
+          .then(j => { if (j && j.code === 0) el.textContent = j.data.time; })
+          .catch(() => {});
+        return;
+      }
+      if (tries++ < 12) setTimeout(attempt, 200); // 等卡片渲染，最多 ~2.4s
+    };
+    attempt();
+  };
+  fill('site-pv', 'busuanzi_value_site_pv');   // 全站 PV（页面无此 span 时静默跳过，后台仍可见）
+  fill(pageTarget, 'busuanzi_value_page_pv');  // 当前页 / 作品 PV
 }
 
 // 公告栏：全站注入到 .topbar 之下、hero 之上，由 data/announcements.json 驱动
