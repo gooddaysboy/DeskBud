@@ -61,11 +61,10 @@ for /L %%i in (1,1,25) do (
 :open
 echo [%date% %time%] opening browser >> "%LOG%"
 
-start "" http://localhost:%PORT%/editor.html
 timeout /t 1 >nul
 start "" http://localhost:%PORT%/index.html
 echo [%date% %time%] done >> "%LOG%"
 echo.
-echo Opened: editor.html / index.html
+echo Opened: http://localhost:%PORT%/index.html
 echo Server window is minimized. To stop: taskkill /f /im python.exe
 echo If browser still does not open, send me %LOG%.
