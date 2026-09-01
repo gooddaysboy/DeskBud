@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品列表 · DeskBud.xyz</title>
   <meta name="description" content="DeskBud.xyz 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
-  <link rel="stylesheet" href="assets/css/base.css?v=34">
+  <link rel="stylesheet" href="assets/css/base.css?v=44">
 </head>
 <body>
   <header class="topbar">
@@ -17,6 +17,7 @@
         <div class="site-search-results" id="siteSearchResults" hidden></div>
       </form>
       <nav class="nav">
+        <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-note">♪</span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
         <a href="list.html" data-i18n="nav.works">作品</a>
         <a href="usage.html" data-i18n="nav.usage">使用说明</a>
@@ -27,6 +28,7 @@
     </div>
   </header>
 
+  <main id="view">
   <section class="page-header wrap">
     <h1 data-i18n="list.title">作品</h1>
     <p class="ph-sub" data-i18n="list.sub">浏览全部桌面宠物伙伴，按分类筛选你喜欢的那个。</p>
@@ -42,7 +44,6 @@
         <label for="sort">排序</label>
         <select id="sort">
           <option value="latest" data-i18n="list.sortLatest">最新</option>
-          <option value="downloads" data-i18n="list.sortDownloads">下载量</option>
           <option value="hot" data-i18n="list.sortHot">热门</option>
         </select>
       </div>
@@ -52,6 +53,7 @@
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" data-i18n="list.empty" style="display:none">该分类下暂无作品</div>
   </section>
+  </main>
 
   <footer class="footer">
     <div class="wrap">
@@ -66,72 +68,9 @@
   </footer>
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=1"></script>
-  <script src="assets/js/site.js?v=18"></script>
+  <script src="assets/js/i18n.js?v=2"></script>
+  <script src="assets/js/site.js?v=26"></script>
   <script src="assets/js/bubble.js?v=18"></script>
-  <script>
-    (async () => {
-      const d = await SITE.load();
-      await BUBBLE.load(); // 拉一次语录
-      document.getElementById('yr').textContent = new Date().getFullYear();
-
-      const params = new URLSearchParams(location.search);
-      let curCat = params.get('cat') || 'all';
-      let curSort = params.get('sort') || 'latest';
-      let bubbleCleanups = [];
-
-      // 分类筛选条：全部 + 一级 + 其下的二级，全部平铺展示（带 emoji 图标）
-      const filters = document.getElementById('filters');
-      function renderFilters() {
-        const parts = [`<button class="chip" data-cat="all">${SITE.catIcon('all')} ${window.pick({ zh: '全部', en: 'All' })}</button>`];
-        d.categories.filter(c => c.id !== 'all').forEach(c => {
-          parts.push(`<button class="chip${c.id === curCat ? ' active' : ''}" data-cat="${c.id}">${SITE.catIcon(c.id)} ${SITE.catName(c.id)}</button>`);
-          if (c.children) {
-            c.children.forEach(ch => {
-              parts.push(`<button class="chip sub${ch.id === curCat ? ' active' : ''}" data-cat="${ch.id}">${SITE.catIcon(ch.id)} ${SITE.catName(ch.id)}</button>`);
-            });
-          }
-        });
-        filters.innerHTML = parts.join('');
-        filters.querySelectorAll('.chip').forEach(btn => {
-          btn.addEventListener('click', () => {
-            curCat = btn.dataset.cat;
-            renderFilters();
-            render();
-          });
-        });
-      }
-
-      // 排序
-      const sortEl = document.getElementById('sort');
-      sortEl.value = curSort;
-      sortEl.addEventListener('change', () => { curSort = sortEl.value; render(); });
-
-      function render() {
-        // 清理上一批泡泡计时器，避免筛选切换后泄漏
-        bubbleCleanups.forEach(fn => fn());
-        bubbleCleanups = [];
-        let list = d.works.slice();
-        const ids = SITE.expandCatIds(curCat);
-        if (ids) list = list.filter(w => ids.includes(w.category));
-        list = SITE.sortWorks(list, curSort);
-        document.getElementById('countTip').textContent = `${list.length} ${window.pick({ zh: '个作品', en: 'works' })}`;
-        const grid = document.getElementById('grid');
-        grid.innerHTML = list.map(SITE.cardHTML).join('');
-        document.getElementById('empty').style.display = list.length ? 'none' : 'block';
-        // 每个卡片独立持续飘：该卡片窗口始终有 1 条，下一条提前衔接，不空屏
-        document.querySelectorAll('.card-bubbles').forEach(el => {
-          bubbleCleanups.push(BUBBLE.renderKeep(el, el.dataset.pet, { minDur: 16000, maxDur: 24000 }));
-        });
-      }
-      renderFilters();
-      render();
-
-      // 语言切换时重渲染（筛选条/卡片/气泡按新语言）
-      window.__rerender = () => { renderFilters(); render(); };
-
-      initOpenKounter();
-    })();
-  </script>
+  <script>SITE.boot();</script>
 </body>
 </html>

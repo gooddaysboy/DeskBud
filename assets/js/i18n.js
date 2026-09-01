@@ -46,7 +46,7 @@
 
   function applyStatic() {
     const t = window.I18N.t;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
+    document.querySelectorAll('[data-i18n], [data-i18n-attr]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       const attrSpec = el.getAttribute('data-i18n-attr');
       if (attrSpec) {
@@ -67,6 +67,9 @@
       }
     });
   }
+
+  // 供软导航换页后，对新注入的 #view 重新套用静态翻译
+  window.applyI18nStatic = applyStatic;
 
   function wireSwitch() {
     const btn = document.getElementById('langSwitch');

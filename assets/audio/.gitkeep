@@ -1,0 +1,2 @@
+# 把熊猫详情页 BGM 放到这里：panda-bgm.mp3
+# 文件名需与 detail.html 中 <audio src="assets/audio/panda-bgm.mp3"> 一致

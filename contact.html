@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="contact.pageTitle">联系我们 · DeskBud.xyz</title>
   <meta name="description" data-i18n-attr="content:contact.desc" content="DeskBud 反馈与交流：电子邮件">
-  <link rel="stylesheet" href="assets/css/base.css?v=34">
+  <link rel="stylesheet" href="assets/css/base.css?v=44">
 </head>
 <body>
   <header class="topbar">
@@ -17,6 +17,7 @@
         <div class="site-search-results" id="siteSearchResults" hidden></div>
       </form>
       <nav class="nav">
+        <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-note">♪</span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
         <a href="list.html" data-i18n="nav.works">作品</a>
         <a href="usage.html" data-i18n="nav.usage">使用说明</a>
@@ -27,6 +28,7 @@
     </div>
   </header>
 
+  <main id="view">
   <section class="page-header wrap">
     <h1 data-i18n="contact.title">联系我们</h1>
     <p class="ph-sub" data-i18n="contact.sub">Bug 反馈、功能建议、想聊桌宠——欢迎找我们。</p>
@@ -51,6 +53,7 @@
       </div>
     </div>
   </section>
+  </main>
 
   <footer class="footer">
     <div class="wrap">
@@ -65,16 +68,9 @@
   </footer>
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=1"></script>
-  <script src="assets/js/site.js?v=18"></script>
-  <script>
-    document.getElementById('yr').textContent = new Date().getFullYear();
-    function copyText(btn, text) {
-      const label = () => (window.I18N && window.I18N.t) ? window.I18N.t('contact.copied', '已复制 ✓') : '已复制 ✓';
-      const ok = () => { const old = btn.textContent; btn.textContent = label(); btn.disabled = true; setTimeout(() => { btn.textContent = old; btn.disabled = false; }, 1400); };
-      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok).catch(() => prompt('复制：', text));
-      else prompt('复制：', text);
-    }
-  </script>
+  <script src="assets/js/i18n.js?v=2"></script>
+  <script src="assets/js/site.js?v=26"></script>
+  <script src="assets/js/bubble.js?v=18"></script>
+  <script>SITE.boot();</script>
 </body>
 </html>

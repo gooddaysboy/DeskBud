@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品详情 · DeskBud.xyz</title>
-  <meta name="description" content="桌面宠物作品详情：图文/GIF/视频预览与下载。">
-  <link rel="stylesheet" href="assets/css/base.css?v=34">
+  <meta name="description" content="桌面宠物作品详情：动作姿态、各平台版本与下载。">
+  <link rel="stylesheet" href="assets/css/base.css?v=44">
 </head>
 <body>
   <header class="topbar">
@@ -17,6 +17,7 @@
         <div class="site-search-results" id="siteSearchResults" hidden></div>
       </form>
       <nav class="nav">
+        <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-note">♪</span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
         <a href="list.html" data-i18n="nav.works">作品</a>
         <a href="usage.html" data-i18n="nav.usage">使用说明</a>
@@ -27,15 +28,15 @@
     </div>
   </header>
 
-  <section class="page-header wrap">
-    <h1 id="dtTitle">作品详情</h1>
-    <p class="ph-sub" data-i18n="detail.sub">桌面宠物作品预览与下载</p>
+  <main id="view">
+  <section class="page-header wrap detail-back">
+    <a href="list.html" class="back-link"><span data-i18n="detail.back">← 返回作品</span></a>
   </section>
 
   <section class="section wrap detail-hero">
-    <p style="margin:0 0 8px"><a href="list.html" style="color:var(--ink-faint)" data-i18n="detail.back">← 返回作品</a></p>
     <div id="detail"></div>
   </section>
+  </main>
 
   <footer class="footer">
     <div class="wrap">
@@ -49,68 +50,11 @@
     </div>
   </footer>
 
+  <!-- BGM 音频与开关由 site.js 全站注入（常驻 #view 之外）；竹子背景由路由在详情页注入 -->
   <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=1"></script>
-  <script src="assets/js/site.js?v=18"></script>
-  <script>
-    (async () => {
-      const d = await SITE.load();
-      document.getElementById('yr').textContent = new Date().getFullYear();
-      const id = new URLSearchParams(location.search).get('id');
-
-      function renderDetail(data, wid) {
-        const w = data.works.find(x => x.id === wid);
-        if (!w) {
-          document.getElementById('detail').innerHTML = '<div class="empty">' + window.pick({ zh: '未找到该作品', en: 'Work not found' }) + '</div>';
-          return;
-        }
-        document.title = window.pick(w.title) + ' · DeskBud.xyz';
-        const dt = document.getElementById('dtTitle');
-        if (dt) dt.textContent = window.pick(w.title);
-
-        const mediaHTML = (w.media || []).map(m => {
-          if (m.type === 'video')
-            return `<figure class="m-item"><video src="${m.src}" controls preload="metadata"></video><figcaption>${window.pick(m.caption)}</figcaption></figure>`;
-          return `<figure class="m-item"><img src="${m.src}" alt="${window.pick(m.caption)}" loading="lazy"><figcaption>${window.pick(m.caption)}</figcaption></figure>`;
-        }).join('');
-
-        const extras = [];
-        if (w.cover && !(w.media || []).some(m => m.src === w.cover)) extras.push({ src: w.cover, cap: window.pick({ zh: '封面', en: 'Cover' }) });
-        if (w.thumb && w.thumb !== w.cover && !(w.media || []).some(m => m.src === w.thumb)) extras.push({ src: w.thumb, cap: window.pick({ zh: '缩略图', en: 'Thumbnail' }) });
-        const walkGif = (w.media || []).find(m => m.type === 'gif' && /walk|run|fly|move/i.test(m.src));
-        if (!walkGif) extras.push({ src: w.cover || w.thumb, cap: window.pick({ zh: '动态预览（占位）', en: 'Motion preview (placeholder)' }) });
-        const extraHTML = extras.map(x => `<figure class="m-item"><img src="${x.src}" alt="${x.cap}" loading="lazy"><figcaption>${x.cap}</figcaption></figure>`).join('');
-
-        document.getElementById('detail').innerHTML = `
-          <div class="detail-grid">
-            <div class="detail-main">
-              <h1 class="detail-title">${window.pick(w.title)}</h1>
-              <p class="detail-sub">${window.pick(w.summary)}</p>
-              <div class="detail-body"><p>${window.pick(w.description)}</p></div>
-              <div class="media-gallery">
-                ${mediaHTML}
-                ${extraHTML}
-              </div>
-            </div>
-            <aside class="sidebar">
-              <div class="row"><span>${window.pick({ zh: '分类', en: 'Category' })}</span><span>${SITE.catName(w.category)}</span></div>
-              <div class="row"><span>${window.pick({ zh: '作者', en: 'Author' })}</span><span>${window.pick(w.author)}</span></div>
-              <div class="row"><span>${window.pick({ zh: '更新', en: 'Updated' })}</span><span>${w.date}</span></div>
-              <div class="row"><span>${window.pick({ zh: '页面访问', en: 'Page views' })}</span><span class="stat"><span id="busuanzi_container_page_pv">🔥 <span id="busuanzi_value_page_pv">-</span></span></span></div>
-              <div class="row"><span>${window.pick({ zh: '下载次数', en: 'Downloads' })}</span><span class="stat">${SITE.fmt(w.downloads)}</span></div>
-              <div class="download-box">
-                <a class="btn btn-primary" href="${w.download.url}" target="_blank" rel="noopener">⬇ ${window.pick(w.download.label)}</a>
-              </div>
-            </aside>
-          </div>`;
-        initOpenKounter();
-      }
-
-      renderDetail(d, id);
-
-      // 语言切换时重渲染详情
-      window.__rerender = () => renderDetail(SITE.data, id);
-    })();
-  </script>
+  <script src="assets/js/i18n.js?v=2"></script>
+  <script src="assets/js/site.js?v=26"></script>
+  <script src="assets/js/bubble.js?v=18"></script>
+  <script>SITE.boot();</script>
 </body>
 </html>

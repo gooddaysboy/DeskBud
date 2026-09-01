@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="cane" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#3c7a58"/>
+      <stop offset="0.55" stop-color="#4f8f6c"/>
+      <stop offset="1" stop-color="#6aa884"/>
+    </linearGradient>
+    <linearGradient id="cane2" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#336b4d"/>
+      <stop offset="1" stop-color="#5c9a76"/>
+    </linearGradient>
+    <radialGradient id="moon" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fbfdf6"/>
+      <stop offset="0.7" stop-color="#eef4ec"/>
+      <stop offset="1" stop-color="#eef4ec" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wash" cx="50%" cy="100%" r="80%">
+      <stop offset="0" stop-color="#cfe3d4" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#cfe3d4" stop-opacity="0"/>
+    </radialGradient>
+    <path id="lf" d="M0 0 C 11 -19 32 -28 47 -22 C 32 -9 13 0 0 0 Z"/>
+  </defs>
+
+  <!-- 底部淡墨晕染，托起竹影 -->
+  <rect x="0" y="0" width="1200" height="1000" fill="url(#wash)"/>
+
+  <!-- 远月：留白处一点意境 -->
+  <circle cx="296" cy="214" r="92" fill="url(#moon)"/>
+  <circle cx="296" cy="214" r="92" fill="none" stroke="#d7e6da" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- 雾气：几道横向淡笔 -->
+  <g fill="#ffffff" opacity="0.28">
+    <ellipse cx="520" cy="300" rx="360" ry="20"/>
+    <ellipse cx="700" cy="470" rx="300" ry="15"/>
+    <ellipse cx="430" cy="640" rx="260" ry="12"/>
+  </g>
+
+  <!-- 后景细竹（淡） -->
+  <path d="M900 1000 C 886 720 874 520 860 300" fill="none" stroke="url(#cane2)" stroke-width="13" stroke-linecap="round" opacity="0.55"/>
+  <g stroke="#2f5d44" stroke-width="2.4" opacity="0.5" stroke-linecap="round">
+    <line x1="846" y1="320" x2="878" y2="316"/>
+    <line x1="852" y1="520" x2="884" y2="514"/>
+    <line x1="860" y1="740" x2="892" y2="734"/>
+  </g>
+
+  <!-- 主竹一 -->
+  <path d="M982 1000 C 952 700 932 400 908 78" fill="none" stroke="url(#cane)" stroke-width="27" stroke-linecap="round"/>
+  <g stroke="#234b37" stroke-width="3" opacity="0.8" stroke-linecap="round">
+    <line x1="965" y1="838" x2="1001" y2="832"/>
+    <line x1="952" y1="654" x2="988" y2="648"/>
+    <line x1="940" y1="470" x2="976" y2="463"/>
+    <line x1="926" y1="286" x2="962" y2="279"/>
+    <line x1="915" y1="150" x2="949" y2="143"/>
+  </g>
+
+  <!-- 主竹二 -->
+  <path d="M1078 1000 C 1058 680 1048 420 1030 150" fill="none" stroke="url(#cane2)" stroke-width="20" stroke-linecap="round"/>
+  <g stroke="#234b37" stroke-width="2.6" opacity="0.8" stroke-linecap="round">
+    <line x1="1063" y1="700" x2="1095" y2="694"/>
+    <line x1="1052" y1="500" x2="1084" y2="494"/>
+    <line x1="1040" y1="320" x2="1072" y2="314"/>
+    <line x1="1031" y1="190" x2="1062" y2="184"/>
+  </g>
+
+  <!-- 竹叶：顶部与中部几丛，墨色 -->
+  <g fill="#356b4e">
+    <use href="#lf" transform="translate(905,82) rotate(-18) scale(1.5)"/>
+    <use href="#lf" transform="translate(905,82) rotate(20) scale(1.35)"/>
+    <use href="#lf" transform="translate(905,82) rotate(-55) scale(1.2)"/>
+    <use href="#lf" transform="translate(905,82) rotate(55) scale(1.1)"/>
+    <use href="#lf" transform="translate(1030,150) rotate(-30) scale(1.4)"/>
+    <use href="#lf" transform="translate(1030,150) rotate(18) scale(1.25)"/>
+    <use href="#lf" transform="translate(1030,150) rotate(-66) scale(1.05)"/>
+    <use href="#lf" transform="translate(948,470) rotate(-22) scale(1.15)"/>
+    <use href="#lf" transform="translate(948,470) rotate(34) scale(1.0)"/>
+    <use href="#lf" transform="translate(1052,500) rotate(24) scale(1.1)"/>
+    <use href="#lf" transform="translate(1052,500) rotate(-38) scale(0.95)"/>
+  </g>
+  <g fill="#2c5a40" opacity="0.9">
+    <use href="#lf" transform="translate(905,82) rotate(0) scale(1.6)"/>
+    <use href="#lf" transform="translate(1030,150) rotate(0) scale(1.5)"/>
+  </g>
+
+  <!-- 飘落叶（意境）：两三片斜落 -->
+  <g fill="#4f8f6c" opacity="0.7">
+    <use href="#lf" transform="translate(620,560) rotate(150) scale(1.0)"/>
+    <use href="#lf" transform="translate(700,720) rotate(135) scale(0.9)"/>
+    <use href="#lf" transform="translate(520,780) rotate(165) scale(0.8)"/>
+  </g>
+
+  <!-- 坡石：一笔淡墨收底 -->
+  <path d="M820 1000 C 880 940 1010 950 1100 1000 Z" fill="#5f8a6c" opacity="0.35"/>
+</svg>

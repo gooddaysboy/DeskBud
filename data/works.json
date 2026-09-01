@@ -84,139 +84,171 @@
   ],
   "works": [
     {
-      "id": "panda-orbit",
+      "id": "panda",
+      "status": "online",
       "title": {
-        "zh": "熊猫桌宠 · 绕圈版",
-        "en": "Panda Pet · Orbit Edition"
+        "zh": "织熊猫",
+        "en": "Knitted Panda"
       },
       "category": "panda",
       "author": {
         "zh": "gooddaysboy",
         "en": "gooddaysboy"
       },
-      "cover": "works/panda-orbit/cover.png",
-      "thumb": "works/panda-orbit/thumb.png",
+      "cover": "works/panda/idle.webp",
+      "thumb": "works/panda/idle.webp",
       "summary": {
-        "zh": "真·RGBA 透明窗口熊猫，降落伞式飘落、点击起跳、屏幕绕圈，桌面常驻不打扰。",
-        "en": "A truly RGBA-transparent window panda that floats down like a parachute, jumps on click, and orbits your screen — always on desktop, never in the way."
+        "zh": "会降落伞式飘落、点击起跳、屏幕绕圈、眨眼卖萌的透明桌宠，常驻桌面不打扰。",
+        "en": "A transparent desktop pet that floats down like a parachute, jumps on tap, orbits your screen and blinks at you — always there, never in the way."
       },
       "description": {
-        "zh": "基于 PySide6 开发的桌面宠物，采用真透明无边框置顶窗口，5 种动画状态分帧渲染。支持降落伞式飘落、单击起跳、鼠标拖拽、悬停暂停、屏幕四周绕圈与自定义画圈。轻量单文件，无需安装运行环境。",
-        "en": "A desktop pet built with PySide6, using a real transparent borderless always-on-top window with 5 animation states rendered frame by frame. Supports parachute-style descent, click-to-jump, mouse drag, hover-to-pause, screen-edge orbiting and custom circling. Lightweight single file, no runtime install required."
+        "zh": "织熊猫是一只住在你屏幕上的小宠物。它会自己走来走去，无聊了眨眨眼、打打哈欠、伸个懒腰；你点一下它就开心地跳起来，拖一拖它就跟着你跑。它不抢注意力，只是安静地陪着你——工作累了抬头看一眼，就被治愈了。",
+        "en": "Knitted Panda is a little pet living on your screen. It wanders on its own, blinks and yawns when bored, stretches now and then; tap it and it jumps happily, drag it and it follows you. It never steals your attention — just keeps you company quietly, a small comfort whenever you look up from work."
       },
-      "media": [
+      "states": [
         {
-          "type": "image",
-          "src": "works/panda-orbit/1.png",
+          "src": "works/panda/idle.webp",
           "caption": {
-            "zh": "桌面实拍 · 常驻效果",
-            "en": "Desktop live · always-on effect"
+            "zh": "待机",
+            "en": "Idle"
           }
         },
         {
-          "type": "image",
-          "src": "works/panda-orbit/2.png",
+          "src": "works/panda/idle_left.webp",
           "caption": {
-            "zh": "不同姿态",
-            "en": "Different poses"
+            "zh": "左望",
+            "en": "Look left"
           }
         },
         {
-          "type": "gif",
-          "src": "works/panda-orbit/walk.gif",
+          "src": "works/panda/idle_right.webp",
           "caption": {
-            "zh": "走动动画",
-            "en": "Walking animation"
+            "zh": "右望",
+            "en": "Look right"
           }
         },
         {
-          "type": "video",
-          "src": "works/panda-orbit/preview.mp4",
+          "src": "works/panda/run_left.webp",
           "caption": {
-            "zh": "完整演示视频",
-            "en": "Full demo video"
+            "zh": "走动",
+            "en": "Walk"
+          }
+        },
+        {
+          "src": "works/panda/blink.webp",
+          "caption": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/panda/yawn.webp",
+          "caption": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/panda/stretch.webp",
+          "caption": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/panda/scratch.webp",
+          "caption": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/panda/eat.webp",
+          "caption": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/panda/jumphappy.webp",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/panda/fall.webp",
+          "caption": {
+            "zh": "降落",
+            "en": "Parachute"
           }
         }
       ],
-      "download": {
-        "label": {
-          "zh": "下载 Windows 版 (exe)",
-          "en": "Download Windows (exe)"
+      "versions": [
+        {
+          "platform": "win",
+          "platformLabel": {
+            "zh": "Windows",
+            "en": "Windows"
+          },
+          "video": "works/panda-orbit/preview.mp4",
+          "download": {
+            "label": {
+              "zh": "下载 Windows 版",
+              "en": "Download for Windows"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "下载 exe 后双击即可运行，无需安装环境；若系统提示风险，选择「仍要运行」即可。",
+            "en": "Double-click the exe to run — no setup needed. If warned by the system, choose “Run anyway”."
+          }
         },
-        "url": "https://github.com/gooddaysboy/pet/releases/download/v1.0.2/DesktopPet-Win_1.0.2.exe"
-      },
-      "downloads": 1280,
+        {
+          "platform": "mac",
+          "platformLabel": {
+            "zh": "macOS",
+            "en": "macOS"
+          },
+          "video": "",
+          "download": {
+            "label": {
+              "zh": "下载 macOS 版",
+              "en": "Download for macOS"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "即将上线",
+            "en": "Coming soon"
+          }
+        },
+        {
+          "platform": "android",
+          "platformLabel": {
+            "zh": "Android",
+            "en": "Android"
+          },
+          "video": "works/panda-android/preview.mp4",
+          "download": {
+            "label": {
+              "zh": "下载 Android 版",
+              "en": "Download for Android"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "下载 apk 后，在「设置 - 安全」中允许本次安装，按提示完成即可。",
+            "en": "After downloading the apk, allow this install in Settings › Security, then follow the prompts."
+          }
+        }
+      ],
       "date": "2026-08-20",
       "featured": true
     },
     {
-      "id": "panda-android",
-      "title": {
-        "zh": "熊猫悬浮桌宠 · 安卓版",
-        "en": "Floating Panda Pet · Android"
-      },
-      "category": "panda",
-      "author": {
-        "zh": "gooddaysboy",
-        "en": "gooddaysboy"
-      },
-      "cover": "works/panda-android/cover.png",
-      "thumb": "works/panda-android/thumb.png",
-      "summary": {
-        "zh": "安卓悬浮窗熊猫，前台常驻、崩溃恢复，完整对齐桌面版交互。",
-        "en": "An Android floating-window panda that stays foreground with crash recovery, fully aligned with the desktop interactions."
-      },
-      "description": {
-        "zh": "采用 Flutter + 悬浮窗方案，在安卓手机上实现常驻桌面的熊猫宠物。支持点按起跳、拖拽跟随、长按菜单、自定义绕圈，真机验证通过。",
-        "en": "Built with Flutter + floating window, bringing a panda pet that stays on your Android home screen. Supports tap-to-jump, drag-to-follow, long-press menu and custom orbiting. Verified on real devices."
-      },
-      "media": [
-        {
-          "type": "image",
-          "src": "works/panda-android/1.png",
-          "caption": {
-            "zh": "手机悬浮窗效果",
-            "en": "Phone floating-window effect"
-          }
-        },
-        {
-          "type": "image",
-          "src": "works/panda-android/2.png",
-          "caption": {
-            "zh": "贴边状态",
-            "en": "Edge-docked state"
-          }
-        },
-        {
-          "type": "gif",
-          "src": "works/panda-android/walk.gif",
-          "caption": {
-            "zh": "站立动画",
-            "en": "Standing animation"
-          }
-        },
-        {
-          "type": "video",
-          "src": "works/panda-android/preview.mp4",
-          "caption": {
-            "zh": "熊猫桌宠 · 干饭动画",
-            "en": "Panda pet · eating animation"
-          }
-        }
-      ],
-      "download": {
-        "label": {
-          "zh": "下载 Android 版 (apk)",
-          "en": "Download Android (apk)"
-        },
-        "url": "https://github.com/gooddaysboy/pet/releases/download/v1.1.17/app-release.apk"
-      },
-      "downloads": 642,
-      "date": "2026-08-23",
-      "featured": true
-    },
-    {
       "id": "cat-nap",
+      "status": "hidden",
       "title": {
         "zh": "懒猫打盹",
         "en": "Sleepy Cat Nap"
@@ -253,12 +285,12 @@
         },
         "url": "https://example.com/cat-nap.zip"
       },
-      "downloads": 358,
       "date": "2026-07-15",
       "featured": false
     },
     {
       "id": "pixel-slime",
+      "status": "hidden",
       "title": {
         "zh": "像素史莱姆",
         "en": "Pixel Slime"
@@ -295,12 +327,12 @@
         },
         "url": "https://example.com/pixel-slime.html"
       },
-      "downloads": 521,
       "date": "2026-06-30",
       "featured": false
     },
     {
       "id": "star-fox",
+      "status": "hidden",
       "title": {
         "zh": "星狐",
         "en": "Star Fox"
@@ -337,12 +369,12 @@
         },
         "url": "https://example.com/star-fox.exe"
       },
-      "downloads": 204,
       "date": "2026-08-01",
       "featured": false
     },
     {
       "id": "clock-bot",
+      "status": "hidden",
       "title": {
         "zh": "时钟小机器人",
         "en": "Clock Bot"
@@ -379,7 +411,6 @@
         },
         "url": "https://example.com/clock-bot.zip"
       },
-      "downloads": 877,
       "date": "2026-08-10",
       "featured": true
     }
