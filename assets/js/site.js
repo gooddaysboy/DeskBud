@@ -143,7 +143,7 @@ function initAnnounce() {
       bar.className = 'announce-bar announce-marquee';
       const one = items.map(buildItem).join('');
       // 间隔：作品少宽、作品多窄；复制足够份数铺满 ≥2×视口，平移一份即无缝，时刻有内容不露白
-      const gap = items.length <= 3 ? 76 : (items.length <= 6 ? 48 : 30);
+      const gap = items.length <= 3 ? 120 : (items.length <= 6 ? 78 : (items.length <= 10 ? 54 : 40));
       bar.style.setProperty('--announce-gap', gap + 'px');
       bar.innerHTML = `<div class="announce-track">${one}</div>`;
       const topbar = document.querySelector('.topbar');

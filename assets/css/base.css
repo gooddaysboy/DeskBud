@@ -63,7 +63,7 @@ img, video { max-width: 100%; display: block; }
   display: flex;
   width: max-content;
   align-items: center;
-  gap: var(--announce-gap, 48px);
+  gap: var(--announce-gap, 120px);
   padding: 8px 0;
   animation: announceMarquee 32s linear infinite;
   will-change: transform;
