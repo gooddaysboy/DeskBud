@@ -1,94 +1,69 @@
-# EdgeOne Referer 防盗链 配置指南
+# DeskBud 作品站防盗链实践备忘（EdgeOne Pages）
 
-> 目标：阻止其他网站 `<img src="https://deskbud.xyz/...">` 盗链作品图（外站请求 403），同时保证本站页面正常加载。
-
-## 关键：理解本站 vs 外站 的 Referer 差异
-
-| 场景 | Referer 头部 | 期望结果 |
-|------|--------------|----------|
-| 用户在 `deskbud.xyz` 页面看作品 | `https://deskbud.xyz/index.html` 等 | 放行（200） |
-| 外站 `<img src="https://deskbud.xyz/works/panda/idle.webp">` | 对方域名 | 拦截（403） |
-| 用户直接打开图片 URL（地址栏粘图链） | 空 | 拦截（403，防 URL 转手） |
-| 邮件/文档里点图片 URL | 空 | 拦截（同上） |
+> 最后更新：2026-09-02｜结论先行：**前端三层兜底已够用，EdgeOne Pages「自定义规则」不适合做 Referer 防盗链（会误伤全站）**。
 
 ---
 
-## 入口 A（推荐：规则引擎 — 适配静态站，最快生效）
+## 一、已落地的防盗（前端三层，已部署）
 
-1. 登录 边缘安全加速平台 EO 控制台（https://console.cloud.tencent.com/edgeone）
-2. 左侧菜单 → **站点列表** → 选中 `deskbud.xyz`
-3. 站点详情页 → **站点加速** → 顶栏 **规则引擎** Tab
-4. **创建规则** → 新增空白规则
-5. 配置：
-   - **规则名**：`referer-guard-images`
-   - **匹配条件**（AND 全部满足才执行操作）：
-     - HOST 等于 `deskbud.xyz`
-     - **请求 URL 路径** 通配符匹配 `*/works/*`（仅保护作品资源，不误伤页面/JS/CSS）
-     - **HTTP 请求头 Referer 头部值 正则不匹配** `^https?://(www\.)?deskbud\.xyz(/|$)`
-   - **操作**：HTTP 应答
-   - **响应状态码**：`403`
-   - **响应页面**：选一个错误页（无则先"新建页面"再引用）
-6. **保存并发布** → 立即对全网节点生效
+| 层 | 做法 | 文件 |
+|----|------|------|
+| 1. 防拖 + 防右键 | `img { user-drag:none }` + JS `draggable=false` + 全局 `contextmenu` 拦截命中图片 | `assets/css/base.css` `assets/js/site.js`（`SITE.protectImages()` + boot 挂拦截）|
+| 2. 作品图水印 | 22 张 webp 逐帧叠 `DeskBud.xyz` 半透明字 + 暗描边 | `tools/watermark_webp.py`（Pillow），原始图备份 `works_backup_20260902/` |
+| 3. 上下文菜单兜底 | 右键图片弹菜单被拦，无法直接"图片另存为" | 同上 site.js |
 
-> 关键写法：用「正则不匹配」而不是「字符串包含」，避免子串误判；正则 `^https?://(www\.)?deskbud\.xyz(/|$)` 同时覆盖 `http/https`、`www/裸域`、任何子路径，挡得严。
+> 说明：纯前端防保存是「防君子不防小人」——熟练用户仍能从 DevTools Network / 页面源码拿图 URL。但配合水印，盗出去的图带品牌标识，价值已压到很低。够用，不追求边缘 403。
 
 ---
 
-## 入口 B（Web 防护 → 自定义规则 — 备选，更"安全"入口）
+## 二、踩坑记录（EdgeOne Pages「自定义规则」——此路不通）
 
-1. 控制台 → 站点详情 → **安全防护** → **Web 防护** → 选域名 `deskbud.xyz`
-2. **自定义规则** 卡 → **基础访问管控** → **添加规则**
-3. **规则名**：`referer-block-external`
-4. 匹配条件：**Referer 头部值 通配符 不匹配** `https://deskbud.xyz*`
-5. 处置：**拦截**
-6. **保存并发布**
+### 入口（正确）
+EdgeOne Pages 项目（如 `deskbud-nochina`）→ **项目详情 → 安全防护 → 自定义规则**。
+- 不是 SCDN 加速产品的「站点列表 → 站点加速 → 规则引擎 / Web 防护」（菜单结构完全不同，别套）。
+- `deskbud.xyz` 是**自定义域名**（CNAME 到 `deskbu.xyz.pages.dnse4.com`），自定义规则对它生效；项目默认域名 `*.edgeone.dev` 不支持自定义规则。
+
+### 事故（2026-09-02 实测）
+配了两条规则：
+- 规则 1：`Referer` 匹配内容 = **为空** → 拦截
+- 规则 2：`Referer` 匹配内容 = **适配符不匹配** `*deskbud.xyz*` → 拦截
+
+**发布后打开 `deskbud.xyz` 直接 403「访问受限 / 由 Tencent Cloud EdgeOne 提供防护」，点击站内导航跳详情页也拦（"宠物都无法跳转了"）。** 删规则 2 后恢复。
+
+### 根因
+1. **「自定义规则」是粗粒度全站规则**：对**所有请求生效（含 HTML 页面）**，不像 SCDN 规则引擎能按 URL 路径 / 文件类型只拦 `/works/*`。一站内跳转也走它 → 误伤。
+2. **浏览器首访 / 外部链接点入** `deskbud.xyz` 时 Referer **为空或为外站域名** → 命中规则 1（空 Referer 拦截）→ 首页 403。
+3. **适配符 `*` 语义不认 `.` 分隔**：站内跳转 Referer 是 `https://deskbud.xyz/...`（本应匹配 `*deskbud.xyz*`），仍被规则 2 误伤——EdgeOne 的「适配符」不等于正则，`*` 通配行为未达预期。
+4. 附带语义发现：EdgeOne「匹配内容 = 为空」匹配的是「Referer 头字段存在但值为空字符串」，**不是**「Referer 头不存在」（浏览器直访是头不存在，所以规则 1 未误伤 HTML 首访——但此语义脆弱，未来 EdgeOne 若改判会突然误伤）。
+
+### 决策
+**规则 2（适配符不匹配）永不复用；规则 1（空 Referer 拦截）可留作轻量兜底（当前不误伤）。** 发布任何"安全策略"前，必须先想清楚「首访 / 外部链接点入 / 搜索引擎爬虫」这三类 Referer 都不在内站预设里，否则一发布就瘫痪。
 
 ---
 
-## 规则发布后：必做的两步验证
+## 三、未来若真要做边缘防盗链（正确方向）
 
-### 1. 控制台自检
-- 浏览器开 `https://deskbud.xyz` → 作品图正常加载（DevTools Network 200）
-- 浏览器直接打开 `https://deskbud.xyz/works/panda/idle.webp` → 显示 403/错误页（Referer 空 → 拦截，符合预期）
+不要再用「自定义规则」。两个正路：
 
-### 2. 命令行 curl 三连（需自机或可访问桌机网络的设备）
+**A. EdgeOne Pages「安全防护」下的专门「防盗链 / Referer 防盗链」子菜单**
+与「自定义规则」平级（CDN 厂商标配），可配置「**仅对静态资源（/works/*、/assets/*）生效、放行 HTML**」——细粒度，不会误伤首访 / 站内跳转。需在控制台「安全防护」左侧菜单找该子项，按实际字段填（不凭 SCDN 经验推）。
+
+**B. EdgeOne Pages 边缘函数（Functions）**
+仓库目前无 `functions/` 约定。需要时新建 `functions/works/[[path]].js` 拦截 `works/*`，读 `request.headers.get('Referer')` 决定放行 / 403。需确认所用 Pages 套餐开放自定义边缘函数（先咨询 EdgeOne）。
+
+---
+
+## 四、命令行验证（若未来走 A/B 路径）
 
 ```bash
-# ① 模拟外站盗链：应 403
+# ① 外站盗链 Referer → 应 403
 curl -H "Referer: https://www.baidu.com/" -I https://deskbud.xyz/works/panda/idle.webp
 
-# ② 模拟本站页面：应 200
+# ② 站内页面 Referer → 应 200（必须验证，之前就是这步翻车）
 curl -H "Referer: https://deskbud.xyz/list.html" -I https://deskbud.xyz/works/panda/idle.webp
 
-# ③ 模拟直接打开图链（无 Referer）：应 403
+# ③ 直接打开图链（无 Referer）→ 按策略定 200/403
 curl -I https://deskbud.xyz/works/panda/idle.webp
 ```
 
-### 3. 节点缓存刷新
-- 规则发布后 EdgeOne 边缘节点可能还在用旧策略响应（缓存了 200），建议同步执行 **清除缓存**：
-  - 选 **URL 类型** → 输入 `https://deskbud.xyz/works/` 前缀
-  - 或选 **全部缓存**（最稳，但回源压力大些）
-  - 让全网节点立即按新规则响应
-
----
-
-## 注意事项
-
-- **不要把"Referer 头部值 包含 deskbud.xyz"作为放行条件**：子串匹配会误判（如对方站带 deskbud 字样也能进）。**用"正则不匹配完整域名"**。
-- **规则只匹配 `*/works/*`**：避免误伤 `assets/css/*`、`assets/js/*`（CSS/JS 一般也不会被外站盗，但留个心眼）；如果想让所有静态资源都防，把 URL 路径条件去掉即可。
-- **邮件/书签点图链会 403**：极少数从邮件/文档点原图的用户会被挡，是正常防外站行为。必要时让他们从 `deskbud.xyz` 内点。
-- **开启 HTTPS**：EdgeOne 默认 443；如果站点同时走 HTTP 也想挡，把正则改成 `^https?://...`（已含）。
-
----
-
-## 替代方案：EdgeOne Pages 边缘函数（Functions）
-
-仓库目前没有 `functions/` 约定。如果以后需要更复杂逻辑（远程鉴权、签名 URL、UA 黑名单等），可启用 EdgeOne Pages Functions：
-- 在项目根新建 `functions/` 目录
-- 写 `functions/works/[[path]].js` 拦截 `works/*` 请求，检查 `request.headers.get('Referer')` 后决定放行/403
-- 需 EdgeOne Pages 平台支持自定义边缘函数（标准 Pages 计划可能不开放），**先咨询 EdgeOne 工单/套餐确认**
-- **推荐先用控制台规则引擎**，点几下就生效，零代码、零部署。
-
----
-
-**当前现状**：防盗链配置**尚未在控制台执行**（需要老曹登录 https://console.cloud.tencent.com/edgeone 手动点击发布）。代码层面（item 1 全站图防拖+防右键、item 2 22 个作品 webp 已加半透明水印）已就绪，等你按上面步骤在控制台点完发布，再回来说"推送"，我把这次的全部本地改动（item 1/2 + 之前的累积）一起推 DeskBud.git。
+> 铁律：**② 必须 200**。任何方案只要让「站内 Referer」请求 403，就是误伤全站，立即回滚。
