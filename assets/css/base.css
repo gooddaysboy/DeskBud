@@ -49,47 +49,57 @@ img, video { max-width: 100%; display: block; }
   padding: 0 24px;
 }
 
-/* ---------- 顶部公告栏 ---------- */
-/* 放在导航栏之下、hero 之上，全站通用，由 JS 注入（data/announcements.json 驱动） */
+/* ---------- 顶部公告栏（走马灯） ---------- */
+/* 放在导航栏之下、搜索栏之上，全站通用，由 JS 注入（data/announcements.json 驱动）
+   取全部在期公告，横向无缝滚动（仿详情页姿态走马灯），滚动「作品集公告」 */
 .announce-bar {
-  background: #fff;
-  border-bottom: 1px solid var(--line);
+  background: transparent;
   color: var(--brand-ink);
   font-size: 13.5px;
   line-height: 1.5;
+  overflow: hidden;
 }
-.announce-bar .wrap {
+.announce-marquee .announce-track {
   display: flex;
+  width: max-content;
   align-items: center;
-  justify-content: center; /* 整体 [上新+内容] 居中，标签从红圈位置起 */
-  gap: 14px;
-  min-height: 38px;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  gap: var(--announce-gap, 48px);
+  padding: 8px 0;
+  animation: announceMarquee 32s linear infinite;
+  will-change: transform;
 }
-.announce-tag {
+.announce-marquee:hover .announce-track { animation-play-state: paused; }
+.announce-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
   flex: 0 0 auto;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  padding: 2px 9px;
-  border-radius: 999px;
-  background: var(--brand);
-  color: #fff;
+  text-decoration: none;
+  color: var(--brand-ink);
+  font-weight: 600;
+  opacity: 0.92;
 }
-.announce-bar.is-new .announce-tag { background: var(--accent); }
+.announce-item:hover { opacity: 1; color: var(--brand); }
 .announce-text {
   flex: 0 1 auto;
   text-align: left;
   min-width: 0;
 }
-.announce-text a {
-  color: var(--brand-ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  font-weight: 600;
+.announce-cover {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+  flex: 0 0 auto;
+  -webkit-user-drag: none;
+  user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none; /* 图片不接收拖拽/右键，链接仍可点进详情 */
 }
-.announce-text a:hover { opacity: 0.82; }
+@keyframes announceMarquee { from { transform: translateX(0); } to { transform: translateX(calc(-1 * var(--one-w, 600px))); } }
 
 /* ---------- 顶部导航 ---------- */
 .topbar {
@@ -170,6 +180,17 @@ img, video { max-width: 100%; display: block; }
   line-height: 1.2;
 }
 .site-search-btn:hover { background: var(--brand-ink); }
+/* 搜索栏独立一行：位于公告栏之下、hero 之上，居中显示
+   桌面限宽 460px，移动端满宽（见 ≤680 媒体查询） */
+/* 全站作品图防拖拽：禁浏览器原生拖图（右键另存由 site.js 拦截 IMG 的 contextmenu 处理） */
+img { -webkit-user-drag: none; user-drag: none; }
+.top-search {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 10px 16px;
+}
+.top-search .site-search { flex: 0 1 460px; width: 100%; max-width: 460px; margin: 0; }
 .site-search-results {
   position: absolute;
   top: calc(100% + 8px);
@@ -393,7 +414,10 @@ img, video { max-width: 100%; display: block; }
   .wrap { padding: 0 16px; }
   .brand-sub { display: none; }
   .brand { font-size: 17px; }
-  .nav { gap: 13px; font-size: 13px; }
+  /* 导航允许换行 + 顶栏高度自适应：窄屏不再裁掉「使用说明/隐私说明/联系我们」 */
+  .topbar .wrap { height: auto; min-height: 64px; padding: 8px 16px; flex-wrap: wrap; }
+  .nav { gap: 8px 13px; font-size: 13px; flex-wrap: wrap; justify-content: flex-end; }
+  .top-search .site-search { flex: 1 1 auto; max-width: none; }
   .section { padding: 40px 0; }
   .section-title { font-size: 20px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px 14px; }

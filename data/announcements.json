@@ -3,11 +3,52 @@
     "id": "panda-huahua-online",
     "level": "new",
     "text": {
-      "zh": "🐼 熊猫桌宠正式上线啦，快来带它回桌面陪你办公～ · 欢迎来到 DeskBud.xyz，把常驻桌面的宠物伙伴领回家。",
-      "en": "🐼 The panda pet is now live! Bring it to your desktop and keep you company while you work~ · Welcome to DeskBud.xyz — bring your always-on desktop pet companion home."
+      "zh": "🐼 熊猫桌宠正式上线啦，快来带它回桌面陪你办公～",
+      "en": "🐼 The panda pet is now live! Bring it to your desktop and keep you company while you work~"
     },
     "link": "detail.html?id=panda",
     "start": "2026-08-25",
     "end": "2026-10-01"
+  },
+  {
+    "id": "rabbit-online",
+    "level": "new",
+    "text": {
+      "zh": "🐰 织兔子桌宠新上线，针织萌物陪你桌面～",
+      "en": "🐰 The knitted rabbit pet is now live — a cozy companion for your desktop~"
+    },
+    "link": "detail.html?id=rabbit",
+    "start": "2026-09-01",
+    "end": "2026-10-15"
+  },
+  {
+    "id": "bgm-seamless",
+    "level": "notice",
+    "text": {
+      "zh": "🎵 全站背景音乐已支持跨页无缝循环，打开后浏览所有页面音乐不中断",
+      "en": "🎵 Site-wide BGM now loops seamlessly across pages — open it once and music keeps playing everywhere"
+    },
+    "start": "2026-09-01",
+    "end": "2026-12-31"
+  },
+  {
+    "id": "marquee-fullwidth",
+    "level": "notice",
+    "text": {
+      "zh": "🖼️ 详情页动作姿态走马灯已升级为全屏铺满，滑动浏览宠物每一种状态",
+      "en": "🖼️ Detail-page pose marquee is now full-width — swipe through every mood of your pet"
+    },
+    "start": "2026-09-01",
+    "end": "2026-12-31"
+  },
+  {
+    "id": "cat-filter",
+    "level": "notice",
+    "text": {
+      "zh": "🗂️ 分类栏现已只显示有在线作品的分类，找作品更快",
+      "en": "🗂️ Category bar now shows only categories with live works — find pets faster"
+    },
+    "start": "2026-09-01",
+    "end": "2026-12-31"
   }
 ]

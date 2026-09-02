@@ -59,8 +59,8 @@ const SITE = {
   thumbHTML(work) {
     const ver = (this && this._assetVer) || (SITE && SITE._assetVer) || 9;
     const v = (s) => s + (s.includes('?') ? '&' : '?') + 'v=' + ver;
-    if (work.thumb) return `<img src="${v(work.thumb)}" alt="${window.pick(work.title)}" loading="lazy">`;
-    if (work.cover) return `<img src="${v(work.cover)}" alt="${window.pick(work.title)}" loading="lazy">`;
+    if (work.thumb) return `<img src="${v(work.thumb)}" alt="${window.pick(work.title)}" loading="lazy" draggable="false">`;
+    if (work.cover) return `<img src="${v(work.cover)}" alt="${window.pick(work.title)}" loading="lazy" draggable="false">`;
     return '暂无预览';
   },
   cardHTML(work) {
@@ -117,37 +117,46 @@ function initOpenKounter() {
   fill(pageTarget, 'busuanzi_value_page_pv');  // 当前页 / 作品 PV
 }
 
-// 公告栏：全站注入到 .topbar 之下、hero 之上，由 data/announcements.json 驱动
-// 修复：lang:change 与 DOMContentLoaded 都会触发，故先清再插（幂等），避免重复两条
+// 公告栏：全站注入到 .topbar 之下、搜索栏之上，由 data/announcements.json 驱动
+// 改为「走马灯」：取全部在期公告，横向无缝滚动（仿详情页姿态走马灯），滚动作品集公告
+// 幂等：lang:change 与 DOMContentLoaded 都会触发，故先清再插，避免重复
+// 公告栏：全站注入到 .topbar 之下、搜索栏之上，由 data/works.json 驱动，
+// 横向无缝滚动「在线作品集」（不再显示公告文字）。lang:change 与 DOMContentLoaded 都会触发，故先清再插（幂等）。
 function initAnnounce() {
-  fetch('data/announcements.json', { cache: 'no-cache' })
-    .then(r => (r.ok ? r.json() : []))
-    .then(list => {
-      const today = new Date().toISOString().slice(0, 10);
-      const item = (list || []).find(a =>
-        a.enabled !== false &&
-        (!a.start || today >= a.start) &&
-        (!a.end || today <= a.end)
-      );
+  fetch('data/works.json', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.json() : null))
+    .then(data => {
+      const works = (data && data.works) || [];
+      const items = works.filter(w => w.status === 'online');
       // 幂等：移除旧 bar 再插入
       document.querySelectorAll('.announce-bar').forEach(b => b.remove());
-      if (!item) return;
+      if (!items.length) return;
+      const buildItem = (w) => {
+        const name = window.pick(w.title);
+        const img = w.thumb || w.cover || '';
+        const cover = img
+          ? `<img class="announce-cover" src="${img}" alt="${name}" draggable="false">`
+          : '';
+        return `<a class="announce-item" href="detail.html?id=${encodeURIComponent(w.id)}">${cover}<span class="announce-text">${name}</span></a>`;
+      };
       const bar = document.createElement('div');
-      bar.className = 'announce-bar' + (item.level === 'new' ? ' is-new' : '');
-      const tag = item.level === 'new'
-        ? window.pick({ zh: '上新', en: 'New' })
-        : window.pick({ zh: '公告', en: 'Notice' });
-      const more = window.pick({ zh: '查看详情 →', en: 'View details →' });
-      const text = item.link
-        ? `${window.pick(item.text)} <a href="${item.link}">${more}</a>`
-        : window.pick(item.text);
-      bar.innerHTML = `
-        <div class="wrap">
-          <span class="announce-tag">${tag}</span>
-          <span class="announce-text">${text}</span>
-        </div>`;
+      bar.className = 'announce-bar announce-marquee';
+      const one = items.map(buildItem).join('');
+      // 间隔：作品少宽、作品多窄；复制足够份数铺满 ≥2×视口，平移一份即无缝，时刻有内容不露白
+      const gap = items.length <= 3 ? 76 : (items.length <= 6 ? 48 : 30);
+      bar.style.setProperty('--announce-gap', gap + 'px');
+      bar.innerHTML = `<div class="announce-track">${one}</div>`;
       const topbar = document.querySelector('.topbar');
-      if (topbar) topbar.after(bar); // 导航栏之下、hero 之上，不抢最顶
+      if (!topbar) return;
+      topbar.after(bar); // 先插入 DOM 才能准确测量宽度
+      const track = bar.querySelector('.announce-track');
+      const oneW = track.scrollWidth + gap; // 含末 item 间距，平移此值即严格无缝
+      const barW = bar.clientWidth || document.documentElement.clientWidth;
+      const copies = Math.max(2, Math.ceil((barW * 2) / oneW) + 1);
+      track.innerHTML = one.repeat(copies);
+      track.style.setProperty('--one-w', oneW + 'px');
+      track.style.animationDuration = Math.max(16, Math.round(oneW / 55)) + 's';
+      // 导航栏之下、搜索栏之上，不抢最顶
     })
     .catch(() => {});
 }
@@ -502,6 +511,14 @@ function boot() {
   initSearch();        // 搜索框（常驻顶栏，仅一次）
   initAnnounce();      // 公告栏（常驻，仅一次）
   wireSoftNav();       // 链接拦截 + popstate
+  // 图片右键菜单拦截：右键落在 <img> 上直接阻止（防「图片另存为」）；落在外层链接（如走马灯封面，pointer-events:none）则由链接接管，不拦
+  if (!window.__imgCtxGuard) {
+    window.__imgCtxGuard = true;
+    document.addEventListener('contextmenu', (e) => {
+      let t = e.target;
+      while (t && t !== document) { if (t.tagName === 'IMG') { e.preventDefault(); return; } t = t.parentElement; }
+    });
+  }
   SITE.route();        // 首屏渲染当前页
 }
 SITE.boot = boot;
