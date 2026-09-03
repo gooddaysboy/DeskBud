@@ -175,8 +175,11 @@ function _quoteDuration() {
 function _applyQuoteDuration() {
   if (_quoteEl) _quoteEl.style.setProperty('--quote-dur', _quoteDuration() + 's');
 }
-// 兜底语录：fetch 拉取前先用，避免空白；拿到真实语录后仅替换数组，不闪屏。
-const _QUOTE_FALLBACK = ['今天也要开开心心~', '陪你摸鱼每一刻', '桌面因你而热闹', '小小的伙伴，暖暖的陪伴'];
+// 兜底语录：fetch 拉取前先用，避免空白；拿到真实语录后仅替换数组，不闪屏。双语（切 EN 后兜底也走英文）
+const _QUOTE_FALLBACK = {
+  zh: ['今天也要开开心心~', '陪你摸鱼每一刻', '桌面因你而热闹', '小小的伙伴，暖暖的陪伴'],
+  en: ['Stay happy today~', 'I will keep you company', 'My desktop is livelier with you', 'A tiny pal, warm company']
+};
 
 // 洗牌（Fisher-Yates）：每次刷新开场的第一条语录随机，而不是固定取数组第一句
 function _shuffle(arr) {
@@ -201,8 +204,14 @@ function initQuoteMarquee() {
   else { const tb = document.querySelector('.topbar'); if (tb) tb.after(bar); }
   const qs = bar.querySelectorAll('.q');
   _quoteEl = bar; // 时长变量设在容器上，两条 .q 通过继承共用同一 --quote-dur
+  // 按当前语言取句（zh / en）；lang:change 会重建整个走马灯并重新取句
+  const lang = (window.__lang === 'en') ? 'en' : 'zh';
+  const qlines = src => (src || []).map(x => {
+    if (x && typeof x === 'object') return (x[lang] || x.zh || '').trim();
+    return String(x == null ? '' : x);
+  }).filter(Boolean);
   // 先用兜底语录填字，避免空白；fetch 拿到真实语录后仅替换数组，不闪屏
-  let lines = _QUOTE_FALLBACK.slice();
+  let lines = _QUOTE_FALLBACK[lang].slice();
   let pool = _shuffle(lines);   // 当前这一轮已洗好牌的队列
   let pos = 0;
   let last = null;
@@ -230,7 +239,7 @@ function initQuoteMarquee() {
     .then(r => (r.ok ? r.json() : null))
     .then(d => {
       const pub = (d && d.public) || [];
-      const got = pub.map(x => (x && typeof x === 'object') ? x.zh : x).filter(Boolean);
+      const got = qlines(pub);
       // 换用真实语录：当前显示的两条不动（不闪），从下一条起走新池
       if (got.length) { lines = got; pool = _shuffle(lines); pos = 0; }
     })
