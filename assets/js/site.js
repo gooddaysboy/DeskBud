@@ -352,6 +352,33 @@ SITE.runCleanups = function () {
   SITE._cleanups = [];
 };
 
+/* ---------- 用户手册页：平台 tab + 中英语言块显隐 ---------- */
+// tab 点击：切 .manual-panel 显隐（DOM 事件委托，幂等：每次进入 usage 重新绑到新 #view 内容）
+function initManualTabs() {
+  const tabs = document.getElementById('manualTabs');
+  if (!tabs) return;
+  tabs.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-tab]');
+    if (!btn) return;
+    const name = btn.getAttribute('data-tab');
+    tabs.querySelectorAll('button').forEach(b => {
+      const on = (b === btn);
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.manual-panel').forEach(p => {
+      p.classList.toggle('on', p.getAttribute('data-panel') === name);
+    });
+  });
+}
+// 语言切换：.manual 内 [data-manual-lang] 只显示当前语言块（zh/en 双容器，长文不塞 i18n JSON）
+function syncManualLang() {
+  const lang = (window.__lang === 'en') ? 'en' : 'zh';
+  document.querySelectorAll('.manual [data-manual-lang]').forEach(el => {
+    el.classList.toggle('on', el.getAttribute('data-manual-lang') === lang);
+  });
+}
+
 /* ---------- 各页面初始化逻辑（集中管理，供首次加载与软导航复用） ---------- */
 SITE.pages = {
   // 首页
@@ -484,7 +511,12 @@ SITE.pages = {
     window.__rerender = () => renderDetail(SITE.data, id);
   },
 
-  usage: function () { document.getElementById('yr').textContent = new Date().getFullYear(); },
+  usage: function () {
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    initManualTabs();
+    syncManualLang();
+    window.__rerender = () => { syncManualLang(); };
+  },
   privacy: function () {},
   contact: function () {
     document.getElementById('yr').textContent = new Date().getFullYear();

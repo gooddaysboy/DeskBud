@@ -883,4 +883,100 @@ img { -webkit-user-drag: none; user-drag: none; }
 .bgm-toggle.on .bgm-note { animation: bgmPulse 1.6s ease-in-out infinite; }
 @keyframes bgmPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
 .bgm-toggle.err { color: var(--ink-faint); }
+
+/* ============================================================
+   用户手册页（usage.html → User Manual）
+   胡萝卜橙主题限定在 .manual 容器内，不污染全站鼠尾草绿。
+   排版/配色沿用独立手册文件（DeskBud 豁牙小兔用户手册），
+   经老曹确认直接上站。
+   ============================================================ */
+.manual {
+  --carrot: #ff8c42;
+  --carrot-d: #e8722b;
+  --m-ink: #2b2b2b;
+  --m-sub: #6b6b6b;
+  --m-line: #ffe2c8;
+  --m-soft: #fff1e6;
+  max-width: 840px; margin: 0 auto; padding: 4px 0 40px;
+  color: var(--m-ink);
+  font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.7; font-size: 15px;
+}
+/* 平台标签条 */
+.manual-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 18px;
+}
+.manual-tabs button {
+  appearance: none; cursor: pointer; border: 1px solid var(--m-line);
+  background: #fff; color: var(--carrot-d);
+  font-size: 15px; font-weight: 600;
+  padding: 8px 20px; border-radius: 999px;
+  transition: background .15s, color .15s, border-color .15s, transform .15s;
+  font-family: inherit;
+}
+.manual-tabs button:hover { transform: translateY(-1px); }
+.manual-tabs button.on {
+  background: linear-gradient(135deg, var(--carrot), var(--carrot-d));
+  color: #fff; border-color: transparent;
+  box-shadow: 0 4px 14px rgba(255, 140, 66, .28);
+}
+/* 面板容器 */
+.manual-panel { display: none; }
+.manual-panel.on { display: block; }
+/* 语言块：默认中文；JS 按 __lang 显隐 */
+.manual [data-manual-lang] { display: none; }
+.manual [data-manual-lang].on { display: block; }
+/* 顶部品牌卡 */
+.manual-hero {
+  background: linear-gradient(135deg, #fff1e6, #ffe0c2);
+  border: 1px solid var(--m-line); border-radius: 18px;
+  padding: 24px 28px; margin-bottom: 20px;
+}
+.manual-hero h1 { margin: 0 0 6px; font-size: 25px; color: var(--carrot-d); }
+.manual-hero p { margin: 4px 0; color: var(--m-sub); }
+.manual-tag {
+  display: inline-block; background: #fff; border: 1px solid var(--m-line);
+  color: var(--carrot-d); border-radius: 999px;
+  padding: 2px 12px; font-size: 13px; margin-right: 8px;
+}
+.manual h2 {
+  font-size: 19px; margin: 28px 0 8px;
+  padding-left: 12px; border-left: 5px solid var(--carrot);
+  color: var(--m-ink);
+}
+.manual h3 { font-size: 15px; margin: 16px 0 4px; color: var(--carrot-d); }
+.manual-card {
+  background: #fff; border: 1px solid var(--m-line); border-radius: 14px;
+  padding: 14px 20px; margin: 10px 0;
+  box-shadow: 0 2px 10px rgba(255, 140, 66, .06);
+}
+.manual-card p { margin: 8px 0; }
+.manual-card ul, .manual-card ol { padding-left: 22px; margin: 6px 0; }
+.manual-card li { margin: 5px 0; }
+.manual code {
+  background: var(--m-soft); border: 1px solid var(--m-line); border-radius: 6px;
+  padding: 1px 6px; font-family: Consolas, Menlo, monospace;
+  font-size: 13px; color: var(--carrot-d);
+}
+.manual table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 14px; }
+.manual th, .manual td { border: 1px solid var(--m-line); padding: 6px 10px; text-align: left; vertical-align: top; }
+.manual th { background: var(--m-soft); color: var(--carrot-d); }
+.manual-warn {
+  background: #fff6e9; border: 1px solid #ffd29a; border-left: 5px solid var(--carrot);
+  border-radius: 10px; padding: 10px 14px; margin: 10px 0;
+}
+.manual-note { color: var(--m-sub); font-size: 13px; }
+.manual a { color: var(--carrot-d); }
+.manual-foot {
+  margin-top: 32px; padding-top: 14px; border-top: 1px dashed var(--m-line);
+  color: var(--m-sub); font-size: 13px; text-align: center;
+}
+@media (max-width: 620px) {
+  .manual { font-size: 14px; }
+  .manual-hero { padding: 18px 18px; }
+  .manual-hero h1 { font-size: 21px; }
+  .manual-tabs button { padding: 7px 14px; font-size: 14px; }
+}
+
 .empty { text-align: center; color: var(--ink-faint); padding: 60px 0; }

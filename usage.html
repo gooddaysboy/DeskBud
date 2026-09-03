@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="usage.pageTitle">使用说明 · DeskBud.xyz</title>
-  <meta name="description" data-i18n-attr="content:usage.desc" content="DeskBud 桌面宠物使用说明：安卓手机 / Windows / Mac">
-  <link rel="stylesheet" href="assets/css/base.css?v=60">
+  <title data-i18n="usage.pageTitle">用户手册 · DeskBud.xyz</title>
+  <meta name="description" data-i18n-attr="content:usage.desc" content="DeskBud 用户手册：Windows / macOS / Android 桌宠下载、安装与使用指南">
+  <link rel="stylesheet" href="assets/css/base.css?v=61">
 </head>
 <body>
   <header class="topbar">
@@ -15,7 +15,7 @@
         <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-note">♪</span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
         <a href="list.html" data-i18n="nav.works">作品</a>
-        <a href="usage.html" data-i18n="nav.usage">使用说明</a>
+        <a href="usage.html" data-i18n="nav.usage">用户手册</a>
         <a href="privacy.html" data-i18n="nav.privacy">隐私说明</a>
         <a href="contact.html" data-i18n="nav.contact">联系我们</a>
         <button id="langSwitch" class="lang-switch" type="button">EN</button>
@@ -33,37 +33,336 @@
 
   <main id="view">
   <section class="page-header wrap">
-    <h1 data-i18n="usage.title">宠物使用说明</h1>
-    <p class="ph-sub" data-i18n="usage.sub">桌面宠物操作手册 · 安卓 / Windows / Mac</p>
+    <h1 data-i18n="usage.title">用户手册</h1>
+    <p class="ph-sub" data-i18n="usage.sub">下载 · 安装 · 使用 · 常见问题（Windows / macOS / Android）</p>
   </section>
 
   <section class="section wrap">
-    <div class="usage-grid">
-      <div class="usage-card">
-        <h2 data-i18n="usage.androidTitle">安卓手机用户使用说明</h2>
-        <table class="usage-table">
-          <tr><th data-i18n="usage.thOp">操作</th><th data-i18n="usage.thDesc">说明</th></tr>
-          <tr><td data-i18n="usage.a1op">运动暂停</td><td data-i18n="usage.a1desc">单击宠物</td></tr>
-          <tr><td data-i18n="usage.a2op">跳高降落</td><td data-i18n="usage.a2desc">落到地面 / 拖动后单击</td></tr>
-          <tr><td data-i18n="usage.a3op">位置移动</td><td data-i18n="usage.a3desc">长按宠物拖动</td></tr>
-          <tr><td data-i18n="usage.a4op">持续移动</td><td data-i18n="usage.a4desc">菜单：左 / 右 / 绕圈</td></tr>
-          <tr><td data-i18n="usage.a5op">宠物缩放</td><td data-i18n="usage.a5desc">缩小 · 复位 · 放大</td></tr>
-          <tr><td data-i18n="usage.a6op">宠物菜单</td><td data-i18n="usage.a6desc">长按宠物</td></tr>
-        </table>
+    <div class="manual">
+      <div class="manual-tabs" id="manualTabs" role="tablist" aria-label="平台切换">
+        <button type="button" class="on" data-tab="win" role="tab" aria-selected="true">Windows</button>
+        <button type="button" data-tab="mac" role="tab" aria-selected="false">macOS</button>
+        <button type="button" data-tab="android" role="tab" aria-selected="false">Android</button>
       </div>
 
-      <div class="usage-card">
-        <h2 data-i18n="usage.winmacTitle">Windows / Mac 用户使用说明</h2>
-        <table class="usage-table">
-          <tr><th data-i18n="usage.thOp">操作</th><th data-i18n="usage.thDesc">说明</th></tr>
-          <tr><td data-i18n="usage.w1op">点击宠物</td><td data-i18n="usage.w1desc">起跳后缓缓飘落</td></tr>
-          <tr><td data-i18n="usage.w2op">拖曳宠物</td><td data-i18n="usage.w2desc">移动位置，松手吸附</td></tr>
-          <tr><td data-i18n="usage.w3op">宠物静止</td><td data-i18n="usage.w3desc">鼠标移到宠物身上</td></tr>
-          <tr><td data-i18n="usage.w4op">自定绕圈</td><td data-i18n="usage.w4desc">鼠标移到宠物身上变十字，拖拽画矩形，宠物开始绕圈</td></tr>
-          <tr><td data-i18n="usage.w5op">宠物缩放</td><td data-i18n="usage.w5desc">缩小 / 复位 / 放大</td></tr>
-          <tr><td data-i18n="usage.w6op">鼠标右键</td><td data-i18n="usage.w6desc">菜单</td></tr>
-        </table>
+      <!-- ================= Windows ================= -->
+      <div class="manual-panel on" data-panel="win" role="tabpanel">
+
+        <div data-manual-lang="zh" class="on">
+          <div class="manual-hero">
+            <h1>🐰 DeskBud 豁牙小兔 · Windows</h1>
+            <p><span class="manual-tag">桌面宠物</span><span class="manual-tag">绿色免安装</span><span class="manual-tag">单文件程序</span></p>
+            <p class="manual-note">一只会跑会跳、会冒话的兔子，常驻你的桌面。本文教你 3 分钟装上开玩。</p>
+          </div>
+
+          <h2>一、这是什么</h2>
+          <div class="manual-card">
+            <p><b>豁牙小兔</b>是养在桌面上的宠物兔子：</p>
+            <ul>
+              <li>只有兔子本体可见，背景完全透明，不挡视线；</li>
+              <li>平时在桌面溜达，会自己起跳、飘落、做小动作（打哈欠、伸懒腰、眨眼…）；</li>
+              <li>头顶偶尔冒出一句可爱语录；</li>
+              <li><b>不收集、不上传任何个人信息</b>，联网只为获取公开语录，放心用。</li>
+            </ul>
+          </div>
+
+          <h2>二、下载与运行</h2>
+          <div class="manual-card">
+            <ol>
+              <li>从分享渠道下载 <code>DeskBud_Rabbit_Win_v版本号.exe</code>（单个文件，约 60–70MB）。</li>
+              <li>若为压缩包，先解压。<b>建议放到纯英文路径</b>（如 <code>D:\Pets\</code>），个别老系统对中文路径不友好。</li>
+              <li>双击即运行，<b>免安装、不用装任何东西</b>。</li>
+            </ol>
+            <p class="manual-note">第一次打开请等 1–3 秒兔子才出现，属正常，不是卡死。</p>
+          </div>
+
+          <h2>三、第一次运行：可能被拦一下（常见，别慌）</h2>
+          <div class="manual-warn">这类小软件没做商业签名，Windows 或杀毒软件可能拦一次，都是误报，放行即可，以后就顺了。</div>
+          <div class="manual-card">
+            <h3>1）杀毒软件提示"病毒 / 已隔离 / 已删除"</h3>
+            <p>→ 在 360 / 火绒 / Windows 安全中心里，把 <code>DeskBud_Rabbit_Win_v版本号.exe</code> <b>加白名单 / 信任 / 允许运行</b>，再重新双击。被删掉的话，重新下载一次再放行。</p>
+            <h3>2）弹窗"Windows 已保护你的电脑"</h3>
+            <p>→ 点「更多信息」→「<b>仍要运行</b>」即可。</p>
+          </div>
+
+          <h2>四、怎么玩</h2>
+          <div class="manual-card">
+            <ul>
+              <li><b>单击兔子</b>：起跳后像降落伞一样慢慢飘落；</li>
+              <li><b>拖拽兔子</b>：随手挪位置，松手后自己飘落；</li>
+              <li><b>鼠标悬停</b>：移动或下落会暂停，移开继续；</li>
+              <li><b>右键菜单</b>：向左走 / 向右走（跑得飞快）、自定义画圈（拖个矩形它绕着走）、缩放、退出；</li>
+              <li><b>关于</b>：右键菜单里可看版本号与日期。</li>
+            </ul>
+            <p class="manual-note">待机小动作是随机的，多等一会儿就能看到它换花样。</p>
+          </div>
+
+          <h2>五、头顶的气泡</h2>
+          <div class="manual-card">
+            <ul>
+              <li>偶尔冒出一句兔子语录，<b>联网自动拉取最新内容，离线也有内置的</b>，不联网也能玩；</li>
+              <li>文字会自动黑/白适配桌面明暗，保证看得清，属正常设计。</li>
+            </ul>
+          </div>
+
+          <h2>六、常见问题</h2>
+          <div class="manual-card">
+            <p><b>Q：被杀毒软件删了 / 报毒？</b><br>A：误报，见「三」加白名单即可。</p>
+            <p><b>Q：双击没反应 / 一闪而过？</b><br>A：先看「七」排查；搞不定就把程序旁边的 <code>DeskBud豁牙小兔日志.txt</code> 发给作者（见「七」第 3 条），立刻能定位。</p>
+            <p><b>Q：兔子挡着我干活？</b><br>A：它是置顶的，拖到屏幕角落，或右键让它停下来。</p>
+            <p><b>Q：怎么知道是不是新版？</b><br>A：右键菜单「关于」里有版本号；新版本去原下载渠道重新拿。</p>
+          </div>
+
+          <h2>七、跑不起来的排查（有的电脑能跑、有的不能？）</h2>
+          <div class="manual-warn">不是软件挑电脑，是<b>电脑环境差异</b>。按顺序对号入座，3 分钟能定位。</div>
+          <div class="manual-card">
+            <h3>1）先看系统是否达标（最常见、也最无解）</h3>
+            <p>需要 <b>64 位 Windows 10（2018 年 10 月后的版本）或 Windows 11</b>。<b>Win7 / Win8 / 32 位系统跑不了</b>，这类电脑装任何版本都不行。</p>
+            <p class="manual-note">自查：按 <code>Win+R</code> 输入 <code>winver</code> 回车——显示"版本 1809"及以上或 11 即可；「此电脑」右键→属性看 64 位。</p>
+            <h3>2）再查是否被杀软静默拦掉</h3>
+            <p>装了 360 / 火绒 / 腾讯管家的电脑常"双击没反应"或"提示已删除"——去杀软「信任区」加白名单并<b>重新下载</b>，把程序所在文件夹也加信任。</p>
+            <h3>3）一闪而过 / 秒退？看启动日志（最快）</h3>
+            <p>程序每次启动都会在<b>它自己旁边</b>生成 <code>DeskBud豁牙小兔日志.txt</code>。跑不起来时把这个文件直接发给作者即可定位。</p>
+            <p class="manual-note">如果<b>连这个文件都没有</b>：说明程序没被允许运行（杀软删了或系统太老），回到上面 1、2 条查。</p>
+            <h3>4）其他少见情况</h3>
+            <p>提示缺 <code>.dll</code>：装一下微软"Visual C++ 运行库"再试；很老的显卡可能画面异常，属正常限制。</p>
+          </div>
+
+          <h2>八、关于与联系</h2>
+          <div class="manual-card">
+            <p>🌐 网站：<a href="https://deskbud.xyz" target="_blank" rel="noopener">deskbud.xyz</a>（更多宠物与更新）</p>
+            <p>📮 邮箱：<a href="mailto:deskbud@qq.com">deskbud@qq.com</a>（建议 / 反馈，欢迎来信）</p>
+            <p class="manual-note">Copyright © 2026 DeskBud.xyz All Rights Reserved · 免费个人桌面小工具</p>
+          </div>
+        </div>
+
+        <div data-manual-lang="en">
+          <div class="manual-hero">
+            <h1>🐰 DeskBud Bucky Rabbit · Windows</h1>
+            <p><span class="manual-tag">Desktop pet</span><span class="manual-tag">Portable</span><span class="manual-tag">Single file</span></p>
+            <p class="manual-note">A bunny that runs, hops and chats, living right on your desktop. This guide gets you started in 3 minutes.</p>
+          </div>
+
+          <h2>1. What is it</h2>
+          <div class="manual-card">
+            <p><b>Bucky Rabbit</b> is a pet bunny that lives on your desktop:</p>
+            <ul>
+              <li>Only the bunny itself is visible on a fully transparent background — nothing blocks your view;</li>
+              <li>It wanders around, hops, floats down and does little things (yawns, stretches, blinks…);</li>
+              <li>It occasionally bubbles a cute line above its head;</li>
+              <li><b>It collects or uploads no personal data</b>. The only network use is fetching public quotes — safe to use.</li>
+            </ul>
+          </div>
+
+          <h2>2. Download &amp; run</h2>
+          <div class="manual-card">
+            <ol>
+              <li>Download <code>DeskBud_Rabbit_Win_vVERSION.exe</code> from the release channel (one file, about 60–70&nbsp;MB).</li>
+              <li>If it comes in a zip, extract it first. <b>Use an English-only path</b> (e.g. <code>D:\Pets\</code>) — some older systems dislike Chinese paths.</li>
+              <li>Double-click to run. <b>No installation, nothing else to install.</b></li>
+            </ol>
+            <p class="manual-note">On first launch the bunny may take 1–3 seconds to appear — that's normal, not a freeze.</p>
+          </div>
+
+          <h2>3. First run: you may get a warning (common, don't panic)</h2>
+          <div class="manual-warn">This small app has no commercial code signing, so Windows or antivirus may flag it once. It's a false positive — just allow it and you're set.</div>
+          <div class="manual-card">
+            <h3>1) Antivirus says "virus / quarantined / deleted"</h3>
+            <p>→ In 360 / Huorong / Windows Security, add <code>DeskBud_Rabbit_Win_vVERSION.exe</code> to the <b>whitelist / trusted / allowed</b> list, then double-click again. If it was deleted, download once more and allow it.</p>
+            <h3>2) "Windows protected your PC" dialog</h3>
+            <p>→ Click <b>More info</b> → <b>Run anyway</b>.</p>
+          </div>
+
+          <h2>4. How to play</h2>
+          <div class="manual-card">
+            <ul>
+              <li><b>Click the bunny</b>: it hops up, then floats down slowly like a parachute;</li>
+              <li><b>Drag the bunny</b>: move it anywhere; it floats down when released;</li>
+              <li><b>Hover with the mouse</b>: moving / falling pauses, and resumes when you move away;</li>
+              <li><b>Right-click menu</b>: walk left / walk right (fast!), draw a custom orbit (drag a rectangle for it to circle), resize, quit;</li>
+              <li><b>About</b>: version number and date live in the right-click menu.</li>
+            </ul>
+            <p class="manual-note">Idle animations are random — wait a while and you'll see it switch tricks.</p>
+          </div>
+
+          <h2>5. The bubble above its head</h2>
+          <div class="manual-card">
+            <ul>
+              <li>It occasionally bubbles a rabbit quote. <b>Fresh lines are fetched online, but built-in ones work offline too</b> — it plays fine without a network;</li>
+              <li>Text auto-switches black/white to stay readable on light or dark wallpapers — that's by design.</li>
+            </ul>
+          </div>
+
+          <h2>6. FAQ</h2>
+          <div class="manual-card">
+            <p><b>Q: Antivirus deleted / flagged it?</b><br>A: False positive — see section 3 and whitelist it.</p>
+            <p><b>Q: Double-click does nothing / flashes and closes?</b><br>A: See section 7. If that doesn't help, send the author the <code>DeskBud豁牙小兔日志.txt</code> sitting next to the app (section 7, item 3) and it can be pinpointed quickly.</p>
+            <p><b>Q: The bunny is in my way while working?</b><br>A: It's always-on-top. Drag it to a corner, or right-click to make it stop.</p>
+            <p><b>Q: How do I know if I have the latest version?</b><br>A: Version number is in the right-click menu → About. New builds are published on the original download channel.</p>
+          </div>
+
+          <h2>7. Troubleshooting "it won't run" (works on some PCs, not others?)</h2>
+          <div class="manual-warn">It's not that the app "picks" computers — it's <b>environment differences</b>. Work through these in order and you'll usually find it in 3 minutes.</div>
+          <div class="manual-card">
+            <h3>1) Check the system first (most common, and most hopeless)</h3>
+            <p>You need <b>64-bit Windows 10 (version 1809 or later) or Windows 11</b>. <b>Win7 / Win8 / 32-bit systems cannot run it</b> — no build will work on those.</p>
+            <p class="manual-note">Self-check: press <code>Win+R</code>, type <code>winver</code>, Enter — "Version 1809" or newer, or 11, is fine; right-click "This PC" → Properties to confirm 64-bit.</p>
+            <h3>2) Then check for silently blocked antivirus</h3>
+            <p>PCs with 360 / Huorong / Tencent PC Manager often show "double-click does nothing" or "deleted" — whitelist it in the antivirus "trust zone", <b>re-download</b>, and also trust the folder the app lives in.</p>
+            <h3>3) Flashes / quits instantly? Check the startup log (fastest)</h3>
+            <p>The app writes <code>DeskBud豁牙小兔日志.txt</code> <b>next to itself</b> on every launch. Send that file to the author if it won't start — it pinpoints the cause immediately.</p>
+            <p class="manual-note">If <b>even that file doesn't exist</b>: the app was never allowed to run (antivirus removed it, or the OS is too old) — go back to items 1 and 2.</p>
+            <h3>4) Other rare cases</h3>
+            <p>Missing <code>.dll</code>: install the Microsoft "Visual C++ Redistributable" and retry. Very old GPUs may show glitches — a normal limitation.</p>
+          </div>
+
+          <h2>8. About &amp; contact</h2>
+          <div class="manual-card">
+            <p>🌐 Website: <a href="https://deskbud.xyz" target="_blank" rel="noopener">deskbud.xyz</a> (more pets &amp; updates)</p>
+            <p>📮 Email: <a href="mailto:deskbud@qq.com">deskbud@qq.com</a> (suggestions / feedback welcome)</p>
+            <p class="manual-note">Copyright © 2026 DeskBud.xyz All Rights Reserved · Free personal desktop toy</p>
+          </div>
+        </div>
       </div>
+
+      <!-- ================= macOS ================= -->
+      <div class="manual-panel" data-panel="mac" role="tabpanel">
+
+        <div data-manual-lang="zh" class="on">
+          <div class="manual-hero">
+            <h1>🐰 DeskBud 豁牙小兔 · macOS</h1>
+            <p><span class="manual-tag">桌面宠物</span><span class="manual-tag">macOS 版即将上线</span></p>
+          </div>
+          <div class="manual-warn">
+            <b>Mac 版还在开发中，暂时没有可以下载安装的版本。</b><br>
+            Windows 版已可用；Mac 打包版做好后会更新本页，放上"下载 → 拖进应用程序"的安装说明。<br>
+            <b>现在不用在 Mac 上装任何东西</b>，等正式版即可。
+          </div>
+          <h2>一、这是什么</h2>
+          <div class="manual-card">
+            <p><b>豁牙小兔</b>是养在桌面上的宠物兔子（Windows 版已发布）：</p>
+            <ul>
+              <li>只有兔子本体可见，背景完全透明，不挡视线；</li>
+              <li>平时在桌面溜达，会自己起跳、飘落、做小动作（打哈欠、伸懒腰、眨眼…）；</li>
+              <li>头顶偶尔冒出一句可爱语录，离线也能用；</li>
+              <li><b>不收集、不上传任何个人信息</b>，放心用。</li>
+            </ul>
+          </div>
+          <h2>二、正式版会有哪些功能</h2>
+          <div class="manual-card">
+            <ul>
+              <li>单击起跳、拖拽挪位、像降落伞一样慢慢飘落；</li>
+              <li>右键菜单：向左 / 向右跑、自定义画圈（拖个矩形它绕着走）、缩放、退出；</li>
+              <li>随机小动作与气泡语录，常驻桌面、置顶显示。</li>
+            </ul>
+            <p class="manual-note">版本发布后，本页会更新为完整的下载与使用说明。</p>
+          </div>
+          <h2>三、关于与联系</h2>
+          <div class="manual-card">
+            <p>🌐 网站：<a href="https://deskbud.xyz" target="_blank" rel="noopener">deskbud.xyz</a>（更多宠物与更新）</p>
+            <p>📮 邮箱：<a href="mailto:deskbud@qq.com">deskbud@qq.com</a>（建议 / 反馈，欢迎来信）</p>
+            <p class="manual-note">Copyright © 2026 DeskBud.xyz All Rights Reserved · 免费个人桌面小工具</p>
+          </div>
+        </div>
+
+        <div data-manual-lang="en">
+          <div class="manual-hero">
+            <h1>🐰 DeskBud Bucky Rabbit · macOS</h1>
+            <p><span class="manual-tag">Desktop pet</span><span class="manual-tag">macOS version coming soon</span></p>
+          </div>
+          <div class="manual-warn">
+            <b>The Mac version is still in development — there is no downloadable build yet.</b><br>
+            Windows is available now. Once the Mac build is ready, this page will be updated with a "download → drag into Applications" guide.<br>
+            <b>No need to install anything on your Mac for now</b> — just wait for the release.
+          </div>
+          <h2>1. What is it</h2>
+          <div class="manual-card">
+            <p><b>Bucky Rabbit</b> is a pet bunny that lives on your desktop (Windows build released):</p>
+            <ul>
+              <li>Only the bunny is visible on a fully transparent background — nothing blocks your view;</li>
+              <li>It wanders, hops, floats down and does little things (yawns, stretches, blinks…);</li>
+              <li>It occasionally bubbles a cute line, which also works offline;</li>
+              <li><b>It collects or uploads no personal data</b> — safe to use.</li>
+            </ul>
+          </div>
+          <h2>2. What the release will include</h2>
+          <div class="manual-card">
+            <ul>
+              <li>Click to hop, drag to move, float down slowly like a parachute;</li>
+              <li>Right-click menu: walk left / right, draw a custom orbit (drag a rectangle for it to circle), resize, quit;</li>
+              <li>Random idle animations and bubble quotes, always-on-top on your desktop.</li>
+            </ul>
+            <p class="manual-note">This page will be updated with full download &amp; usage instructions when the release ships.</p>
+          </div>
+          <h2>3. About &amp; contact</h2>
+          <div class="manual-card">
+            <p>🌐 Website: <a href="https://deskbud.xyz" target="_blank" rel="noopener">deskbud.xyz</a> (more pets &amp; updates)</p>
+            <p>📮 Email: <a href="mailto:deskbud@qq.com">deskbud@qq.com</a> (suggestions / feedback welcome)</p>
+            <p class="manual-note">Copyright © 2026 DeskBud.xyz All Rights Reserved · Free personal desktop toy</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= Android ================= -->
+      <div class="manual-panel" data-panel="android" role="tabpanel">
+
+        <div data-manual-lang="zh" class="on">
+          <div class="manual-hero">
+            <h1>🐰 DeskBud 豁牙小兔 · Android</h1>
+            <p><span class="manual-tag">桌面宠物</span><span class="manual-tag">安卓版即将上线</span></p>
+          </div>
+          <div class="manual-warn">
+            <b>Android 版还在开发中，暂时没有可以下载安装的 APK。</b><br>
+            Windows 版已可用；Android 版做好后会更新本页，放上"下载 APK → 授权悬浮窗"的安装说明。<br>
+            <b>现在不用在手机上装任何东西</b>，等正式版即可。
+          </div>
+          <h2>一、正式版会有哪些功能</h2>
+          <div class="manual-card">
+            <ul>
+              <li>以悬浮窗形式常驻桌面，真透明、不挡视线；</li>
+              <li>单击起跳、拖拽挪位、长按打开菜单；</li>
+              <li>菜单：向左 / 向右走、绕圈、自定义绕圈、缩放、退出；</li>
+              <li>头顶气泡语录，待机小动作轮着来。</li>
+            </ul>
+            <p class="manual-note">版本发布后，本页会更新为完整的下载与使用说明。</p>
+          </div>
+          <h2>二、关于与联系</h2>
+          <div class="manual-card">
+            <p>🌐 网站：<a href="https://deskbud.xyz" target="_blank" rel="noopener">deskbud.xyz</a>（更多宠物与更新）</p>
+            <p>📮 邮箱：<a href="mailto:deskbud@qq.com">deskbud@qq.com</a>（建议 / 反馈，欢迎来信）</p>
+            <p class="manual-note">Copyright © 2026 DeskBud.xyz All Rights Reserved · 免费个人桌面小工具</p>
+          </div>
+        </div>
+
+        <div data-manual-lang="en">
+          <div class="manual-hero">
+            <h1>🐰 DeskBud Bucky Rabbit · Android</h1>
+            <p><span class="manual-tag">Desktop pet</span><span class="manual-tag">Android version coming soon</span></p>
+          </div>
+          <div class="manual-warn">
+            <b>The Android version is still in development — there is no downloadable APK yet.</b><br>
+            Windows is available now. Once the Android build is ready, this page will be updated with a "download APK → grant overlay permission" guide.<br>
+            <b>No need to install anything on your phone for now</b> — just wait for the release.
+          </div>
+          <h2>1. What the release will include</h2>
+          <div class="manual-card">
+            <ul>
+              <li>An always-on-top overlay pet — truly transparent, never blocks your apps;</li>
+              <li>Click to hop, drag to move, long-press for the menu;</li>
+              <li>Menu: walk left / right, circle the screen, draw a custom orbit, resize, quit;</li>
+              <li>Bubble quotes above the head and a rotating set of idle animations.</li>
+            </ul>
+            <p class="manual-note">This page will be updated with full download &amp; usage instructions when the release ships.</p>
+          </div>
+          <h2>2. About &amp; contact</h2>
+          <div class="manual-card">
+            <p>🌐 Website: <a href="https://deskbud.xyz" target="_blank" rel="noopener">deskbud.xyz</a> (more pets &amp; updates)</p>
+            <p>📮 Email: <a href="mailto:deskbud@qq.com">deskbud@qq.com</a> (suggestions / feedback welcome)</p>
+            <p class="manual-note">Copyright © 2026 DeskBud.xyz All Rights Reserved · Free personal desktop toy</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
   </main>
@@ -82,7 +381,7 @@
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
   <script src="assets/js/i18n.js?v=2"></script>
-  <script src="assets/js/site.js?v=41"></script>
+  <script src="assets/js/site.js?v=42"></script>
   <script src="assets/js/bubble.js?v=19"></script>
   <script>SITE.boot();</script>
 </body>
