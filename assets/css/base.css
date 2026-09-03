@@ -867,8 +867,8 @@ img { -webkit-user-drag: none; user-drag: none; }
 @media (max-width: 620px) { .pose-item { width: 112px; margin-right: 10px; } }
 
 /* 全站 BGM 总开关：导航栏「首页」左侧，控制全站同一首 BGM（开→所有页访问即播，关→所有页停）。
-   极简：去边框 + 去竖线，仅两段图标 [🔊 ♪]，靠颜色与 on 态 ♪ 脉冲区分；
-   off 灰色（含静音图标本身明确"关"），on 音乐绿 #149a7e + ♪ 缓慢呼吸。 */
+   两段图标：[🔊/🔇 喇叭] + [三根均衡柱 .bgm-eq]；
+   off 灰色（含静音图标本身明确"关"），on 音乐绿 #149a7e + 三柱错峰上下伸缩（频谱跳动感）。 */
 .bgm-toggle {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 16px; line-height: 1; white-space: nowrap;
@@ -879,9 +879,13 @@ img { -webkit-user-drag: none; user-drag: none; }
 .bgm-toggle:hover { transform: translateY(-1px); }
 .bgm-toggle.on { color: #149a7e; }
 .bgm-toggle .bgm-icon { font-size: 15px; line-height: 1; padding: 0; }
-.bgm-toggle .bgm-note { font-size: 16px; line-height: 1; padding: 0; }
-.bgm-toggle.on .bgm-note { animation: bgmPulse 1.6s ease-in-out infinite; }
-@keyframes bgmPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+/* 三根均衡柱：off 矮柱灰静；on 高柱绿并错峰伸缩（scaleY 频谱跳），切换高度平滑过渡 */
+.bgm-toggle .bgm-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 13px; }
+.bgm-toggle .bgm-eq i { display: block; width: 3px; border-radius: 2px; background: currentColor; height: 4px; opacity: .5; transition: height .25s ease, opacity .25s ease; }
+.bgm-toggle.on .bgm-eq i { height: 13px; opacity: 1; animation: eqJump .8s ease-in-out infinite; transform-origin: bottom; }
+.bgm-toggle.on .bgm-eq i:nth-child(2) { animation-delay: .2s; }
+.bgm-toggle.on .bgm-eq i:nth-child(3) { animation-delay: .4s; }
+@keyframes eqJump { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
 .bgm-toggle.err { color: var(--ink-faint); }
 
 /* ============================================================
