@@ -162,7 +162,8 @@ function initAnnounce() {
 }
 
 // 语录接力走马灯：注入到「搜索栏(.top-search)」之前 = 作品走马灯与搜索之间。
-// 单条公共语录从右淡入、向左匀速走到左边缘淡出，下一条从右接力（详见 quoteScroll keyframes，含淡入淡出）。
+// 双轨接力：两条语录（错开半个周期）都从右淡入、向左匀速走到左缘淡出；
+// 一条走到左边将结束时，另一条已从右侧出现，全程无空档（详见 quoteScroll keyframes + nth-of-type 延迟）。
 // 速度恒定像素速度、按浏览器宽度自适应时长（宽屏更久、窄屏更短，观感一致）；窗口缩放自动重算。
 // 幂等：lang:change 与软导航都会触发，故先清再插。
 let _quoteEl = null;
@@ -182,21 +183,23 @@ function initQuoteMarquee() {
   document.querySelectorAll('.quote-bar').forEach(b => b.remove()); // 幂等：先清旧 bar
   const bar = document.createElement('div');
   bar.className = 'quote-bar quote-marquee';
-  bar.innerHTML = '<span class="q"></span>';
+  bar.innerHTML = '<span class="q"></span><span class="q"></span>'; // 双轨接力
   // 始终插到「搜索栏(.top-search)」之前 = 作品走马灯与搜索之间。
   // .top-search 是静态 HTML 加载即存在，不受 initAnnounce 异步时序影响。
   const search = document.querySelector('.top-search') || document.getElementById('siteSearch');
   if (search && search.parentNode) search.parentNode.insertBefore(bar, search);
   else { const tb = document.querySelector('.topbar'); if (tb) tb.after(bar); }
-  const q = bar.querySelector('.q');
-  _quoteEl = q;
+  const qs = bar.querySelectorAll('.q');
+  _quoteEl = bar; // 时长变量设在容器上，两条 .q 通过继承共用同一 --quote-dur
   // 先用兜底语录填字，避免空白；fetch 拿到真实语录后仅替换数组，不闪屏
   let lines = _QUOTE_FALLBACK.slice();
   let idx = 0;
-  const setText = () => { if (!q.textContent) { q.textContent = lines[0]; idx = 1; } };
-  const onTick = () => { q.textContent = lines[idx % lines.length]; idx++; };
-  setText();
-  q.addEventListener('animationiteration', onTick);
+  const next = () => lines[idx++ % lines.length];
+  // 两条轨道各自在自己的 animationiteration 时取下一条；共享计数器保证语序 1→2→3…
+  qs.forEach(el => {
+    el.textContent = next();
+    el.addEventListener('animationiteration', () => { el.textContent = next(); });
+  });
   _applyQuoteDuration(); // 按当前视口宽设定时长变量（覆盖 CSS 默认 22s）
   // 异步拉取真实语录，仅更新数据数组（当前显示不闪）
   fetch('data/bubble.json', { cache: 'no-cache' })

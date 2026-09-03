@@ -110,18 +110,24 @@ img, video { max-width: 100%; display: block; }
   background: transparent;
   min-height: 32px;
 }
+/* 双轨接力：两条语录都跑完整行程（100vw → -100vw），第二条错开半个周期
+   （-0.65 = -0.15 - 0.5）。实现「一条走到左边将结束时，另一条已从右侧出现」，
+   全程无空档，和作品走马灯一样源源不断。 */
+.quote-marquee { position: relative; } /* 两条 .q 绝对定位的参照系 */
 .quote-marquee .q {
-  display: inline-block;
+  position: absolute;   /* 两条叠在同一原点，transform 错开才精确（inline-block 会互相挤位） */
+  left: 0; top: 0; height: 100%;
+  display: flex; align-items: center;  /* 垂直居中交给 flex，transform 只管 translateX */
   white-space: nowrap;
-  padding: 7px 0;
   font-size: 13px;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
   font-weight: 400;
   color: #1a1a1a;
   animation: quoteScroll var(--quote-dur, 22s) linear infinite;
-  animation-delay: calc(var(--quote-dur, 22s) * -0.15); /* 首条刷新即从右侧可见区起步，不等 */
   will-change: transform;
 }
+.quote-marquee .q:nth-of-type(1) { animation-delay: calc(var(--quote-dur, 22s) * -0.15); } /* 刷新即从右侧可见区起步，不等 */
+.quote-marquee .q:nth-of-type(2) { animation-delay: calc(var(--quote-dur, 22s) * -0.65); } /* 错开半个周期做接力 */
 .quote-marquee:hover .q { animation-play-state: paused; cursor: default; }
 @keyframes quoteScroll {
   0%   { transform: translateX(100vw); opacity: 0; }   /* 右侧屏外，淡入开始进入 */
