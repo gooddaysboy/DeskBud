@@ -161,6 +161,60 @@ function initAnnounce() {
     .catch(() => {});
 }
 
+// 语录接力走马灯：注入到「搜索栏(.top-search)」之前 = 作品走马灯与搜索之间。
+// 单条公共语录从右淡入、向左匀速走到左边缘淡出，下一条从右接力（详见 quoteScroll keyframes，含淡入淡出）。
+// 速度恒定像素速度、按浏览器宽度自适应时长（宽屏更久、窄屏更短，观感一致）；窗口缩放自动重算。
+// 幂等：lang:change 与软导航都会触发，故先清再插。
+let _quoteEl = null;
+function _quoteDuration() {
+  const SPEED = 110; // px/s 恒定像素速度
+  const w = window.innerWidth || document.documentElement.clientWidth || 1280;
+  return Math.max(8, Math.round((2 * w) / SPEED));
+}
+function _applyQuoteDuration() {
+  if (_quoteEl) _quoteEl.style.setProperty('--quote-dur', _quoteDuration() + 's');
+}
+// 兜底语录：fetch 拉取前先用，避免空白；拿到真实语录后仅替换数组，不闪屏。
+const _QUOTE_FALLBACK = ['今天也要开开心心~', '陪你摸鱼每一刻', '桌面因你而热闹', '小小的伙伴，暖暖的陪伴'];
+
+function initQuoteMarquee() {
+  // 立即插入走马灯 DOM，动画即刻启动（不等 fetch；首条由负 animation-delay 从右侧可见区起步）
+  document.querySelectorAll('.quote-bar').forEach(b => b.remove()); // 幂等：先清旧 bar
+  const bar = document.createElement('div');
+  bar.className = 'quote-bar quote-marquee';
+  bar.innerHTML = '<span class="q"></span>';
+  // 始终插到「搜索栏(.top-search)」之前 = 作品走马灯与搜索之间。
+  // .top-search 是静态 HTML 加载即存在，不受 initAnnounce 异步时序影响。
+  const search = document.querySelector('.top-search') || document.getElementById('siteSearch');
+  if (search && search.parentNode) search.parentNode.insertBefore(bar, search);
+  else { const tb = document.querySelector('.topbar'); if (tb) tb.after(bar); }
+  const q = bar.querySelector('.q');
+  _quoteEl = q;
+  // 先用兜底语录填字，避免空白；fetch 拿到真实语录后仅替换数组，不闪屏
+  let lines = _QUOTE_FALLBACK.slice();
+  let idx = 0;
+  const setText = () => { if (!q.textContent) { q.textContent = lines[0]; idx = 1; } };
+  const onTick = () => { q.textContent = lines[idx % lines.length]; idx++; };
+  setText();
+  q.addEventListener('animationiteration', onTick);
+  _applyQuoteDuration(); // 按当前视口宽设定时长变量（覆盖 CSS 默认 22s）
+  // 异步拉取真实语录，仅更新数据数组（当前显示不闪）
+  fetch('data/bubble.json', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.json() : null))
+    .then(d => {
+      const pub = (d && d.public) || [];
+      const got = pub.map(x => (x && typeof x === 'object') ? x.zh : x).filter(Boolean);
+      if (got.length) lines = got;
+    })
+    .catch(() => {});
+  // 窗口缩放：时长随宽度重算（防抖），只绑一次
+  if (!window.__quoteResizeBound) {
+    window.__quoteResizeBound = true;
+    let t;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(_applyQuoteDuration, 150); });
+  }
+}
+
 // 全站搜索：顶部搜索框，匹配作品名称/描述/作者/分类，结果下拉点击跳详情页
 function initSearch() {
   const form = document.getElementById('siteSearch');
@@ -212,6 +266,7 @@ function initSearch() {
 // 语言切换时：公告重渲染 + 动态内容（卡片/列表/详情）由页面注册的 __rerender 重渲染
 window.addEventListener('lang:change', () => {
   initAnnounce();
+  initQuoteMarquee();
   if (typeof window.__rerender === 'function') window.__rerender();
 });
 
@@ -510,6 +565,7 @@ function boot() {
   SITE.initBgm();      // 绑定开关 + 跨页续播
   initSearch();        // 搜索框（常驻顶栏，仅一次）
   initAnnounce();      // 公告栏（常驻，仅一次）
+  initQuoteMarquee();   // 语录连续走马灯（作品走马灯与搜索之间）
   wireSoftNav();       // 链接拦截 + popstate
   // 图片右键菜单拦截：右键落在 <img> 上直接阻止（防「图片另存为」）；落在外层链接（如走马灯封面，pointer-events:none）则由链接接管，不拦
   if (!window.__imgCtxGuard) {

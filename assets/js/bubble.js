@@ -168,3 +168,6 @@ const BUBBLE = {
     return () => { if (timer) { clearTimeout(timer); timer = null; } };
   }
 };
+
+// 暴露到全局，供 site.js 的卡片气泡逻辑（if (window.BUBBLE) 判断）调用
+window.BUBBLE = BUBBLE;

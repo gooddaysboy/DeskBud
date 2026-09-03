@@ -101,6 +101,53 @@ img, video { max-width: 100%; display: block; }
 }
 @keyframes announceMarquee { from { transform: translateX(0); } to { transform: translateX(calc(-1 * var(--one-w, 600px))); } }
 
+/* ---------- 语录接力走马灯（作品走马灯与搜索栏之间） ---------- */
+/* 语录接力走马灯：一次只显示一条公共语录，一条向左消失时右侧接上下一条（详见 quoteScroll keyframes）。
+   系统字体、不加粗；hover 暂停。 */
+.quote-bar {
+  overflow: hidden;
+  text-align: center;
+  background: transparent;
+  min-height: 32px;
+}
+.quote-marquee .q {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 7px 0;
+  font-size: 13px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-weight: 400;
+  color: #1a1a1a;
+  animation: quoteScroll var(--quote-dur, 22s) linear infinite;
+  animation-delay: calc(var(--quote-dur, 22s) * -0.15); /* 首条刷新即从右侧可见区起步，不等 */
+  will-change: transform;
+}
+.quote-marquee:hover .q { animation-play-state: paused; cursor: default; }
+@keyframes quoteScroll {
+  0%   { transform: translateX(100vw); opacity: 0; }   /* 右侧屏外，淡入开始进入 */
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translateX(-100vw); opacity: 0; } /* 左侧屏外，淡出；下一句右侧接力 */
+}
+
+/* footer 版权可点击跳隐私页 */
+.footer-copy {
+  color: var(--brand, #4a8f6d);
+  text-decoration: none;
+}
+.footer-copy:hover { text-decoration: underline; }
+
+/* 隐私页正文末尾简洁版权声明 */
+.privacy-legal {
+  text-align: center;
+  color: #333;
+  font-size: 13px;
+  font-family: "Microsoft YaHei", "Heiti SC", "PingFang SC", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  margin: 24px 0 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line, rgba(0, 0, 0, 0.08));
+}
+
 /* ---------- 顶部导航 ---------- */
 .topbar {
   position: sticky;
@@ -172,7 +219,7 @@ img, video { max-width: 100%; display: block; }
   border: 0;
   background: var(--brand);
   color: #fff;
-  font-size: 12px;
+  font-size: 14px;
   padding: 4px 11px;
   border-radius: 999px;
   cursor: pointer;
@@ -714,6 +761,10 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 .block-label::before { content: ""; width: 4px; height: 18px; border-radius: 3px; background: var(--brand); }
 .block-label .hint { font-size: 13px; font-weight: 500; color: var(--ink-faint); margin-left: auto; }
+
+/* 区块标题：隐私/版权等说明区块统一使用，与页面级 h1 区分层级；hint 靠右 */
+.block-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 20px; font-weight: 700; color: var(--ink); margin: 40px 0 18px; padding-bottom: 10px; border-bottom: 2px solid var(--brand); }
+.block-title .hint { font-size: 13px; font-weight: 500; color: var(--ink-faint); }
 
 /* 九宫格：动画状态方格墙 */
 .state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 14px; }
