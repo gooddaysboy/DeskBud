@@ -830,6 +830,18 @@ img { -webkit-user-drag: none; user-drag: none; }
   mask-image: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, #000 30%, #000 100%);
 }
 
+/* 田野背景层：兔子详情页使用（与 .bamboo-bg 同一套衬底参数，仅换图）
+   由 site.js 按作品 id 注入：rabbit → field-bg，其余（熊猫等）→ bamboo-bg */
+.field-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-color: var(--bg);
+  background-image: url("../img/field.svg");
+  background-size: cover; background-repeat: no-repeat; background-position: center bottom;
+  opacity: 0.26;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, #000 30%, #000 100%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, #000 30%, #000 100%);
+}
+
 /* 走马灯：动作姿态无缝横滚（不显示名字 + 防下载）
    用 margin-right 而非 gap，保证 -50% 平移严格无缝 */
 .pose-marquee {

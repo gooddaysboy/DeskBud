@@ -178,6 +178,16 @@ function _applyQuoteDuration() {
 // 兜底语录：fetch 拉取前先用，避免空白；拿到真实语录后仅替换数组，不闪屏。
 const _QUOTE_FALLBACK = ['今天也要开开心心~', '陪你摸鱼每一刻', '桌面因你而热闹', '小小的伙伴，暖暖的陪伴'];
 
+// 洗牌（Fisher-Yates）：每次刷新开场的第一条语录随机，而不是固定取数组第一句
+function _shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
 function initQuoteMarquee() {
   // 立即插入走马灯 DOM，动画即刻启动（不等 fetch；首条由负 animation-delay 从右侧可见区起步）
   document.querySelectorAll('.quote-bar').forEach(b => b.remove()); // 幂等：先清旧 bar
@@ -193,9 +203,23 @@ function initQuoteMarquee() {
   _quoteEl = bar; // 时长变量设在容器上，两条 .q 通过继承共用同一 --quote-dur
   // 先用兜底语录填字，避免空白；fetch 拿到真实语录后仅替换数组，不闪屏
   let lines = _QUOTE_FALLBACK.slice();
-  let idx = 0;
-  const next = () => lines[idx++ % lines.length];
-  // 两条轨道各自在自己的 animationiteration 时取下一条；共享计数器保证语序 1→2→3…
+  let pool = _shuffle(lines);   // 当前这一轮已洗好牌的队列
+  let pos = 0;
+  let last = null;
+  const next = () => {
+    if (pos >= pool.length) {            // 一轮取完，重洗下一轮
+      pool = _shuffle(lines);
+      // 语录多于 1 条时，避免新一轮首句与上一条重复（衔接处不撞句）
+      if (pool.length > 1 && last !== null && pool[0] === last) {
+        const k = 1 + Math.floor(Math.random() * (pool.length - 1));
+        const t = pool[0]; pool[0] = pool[k]; pool[k] = t;
+      }
+      pos = 0;
+    }
+    last = pool[pos++];
+    return last;
+  };
+  // 两条轨道各自在自己的 animationiteration 时取下一条；共享计数器保证不重复、不串行
   qs.forEach(el => {
     el.textContent = next();
     el.addEventListener('animationiteration', () => { el.textContent = next(); });
@@ -207,7 +231,8 @@ function initQuoteMarquee() {
     .then(d => {
       const pub = (d && d.public) || [];
       const got = pub.map(x => (x && typeof x === 'object') ? x.zh : x).filter(Boolean);
-      if (got.length) lines = got;
+      // 换用真实语录：当前显示的两条不动（不闪），从下一条起走新池
+      if (got.length) { lines = got; pool = _shuffle(lines); pos = 0; }
     })
     .catch(() => {});
   // 窗口缩放：时长随宽度重算（防抖），只绑一次
@@ -482,13 +507,26 @@ function setActiveNav(path) {
     if (match) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
 }
-function toggleBamboo(on) {
-  let b = document.querySelector('.bamboo-bg');
-  if (on && !b) {
-    b = document.createElement('div'); b.className = 'bamboo-bg'; b.setAttribute('aria-hidden', 'true');
+// 详情页场景背景：按作品 id 分流（兔子 → 田野，其余 → 竹子），非详情页不铺背景。
+// 场景表：以后新增作品想换背景，在这里加一行即可（需配套 CSS 背景层 + assets/img/*.svg）。
+const SCENE_BG = {
+  rabbit: 'field-bg'
+};
+const DEFAULT_SCENE_BG = 'bamboo-bg';
+
+function setSceneBg(path, workId) {
+  const want = (path === 'detail.html')
+    ? (SCENE_BG[workId] || DEFAULT_SCENE_BG)
+    : '';
+  // 清掉所有场景层，再按需建一个新的（软导航换作品时也会正确切换）
+  document.querySelectorAll('.bamboo-bg, .field-bg').forEach(el => {
+    if (!want || !el.classList.contains(want)) el.remove();
+  });
+  if (want && !document.querySelector('.' + want)) {
+    const b = document.createElement('div');
+    b.className = want;
+    b.setAttribute('aria-hidden', 'true');
     document.body.insertBefore(b, document.body.firstChild);
-  } else if (!on && b) {
-    b.remove();
   }
 }
 
@@ -496,7 +534,7 @@ SITE.route = async function () {
   SITE.runCleanups();
   const path = location.pathname.split('/').pop();
   const params = new URLSearchParams(location.search);
-  toggleBamboo(path === 'detail.html');
+  setSceneBg(path, params.get('id') || ''); // 兔子→田野，其余→竹子
   setActiveNav(path);
   const p = SITE.pages;
   let fn;

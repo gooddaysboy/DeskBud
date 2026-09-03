@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a9d4ee"/>
+      <stop offset="0.5" stop-color="#d6ecf6"/>
+      <stop offset="1" stop-color="#f4f8ea"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a7c98d"/>
+      <stop offset="1" stop-color="#8bb473"/>
+    </linearGradient>
+    <linearGradient id="meadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fc169"/>
+      <stop offset="0.6" stop-color="#79b055"/>
+      <stop offset="1" stop-color="#5f9644"/>
+    </linearGradient>
+    <linearGradient id="furrow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6ba247" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#6ba247" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff8dc"/>
+      <stop offset="0.55" stop-color="#fdf1c4" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#fdf1c4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 天空 -->
+  <rect x="0" y="0" width="1200" height="1000" fill="url(#sky)"/>
+
+  <!-- 暖阳：右上留白 -->
+  <circle cx="960" cy="150" r="190" fill="url(#sun)"/>
+  <circle cx="960" cy="150" r="46" fill="#fdf3cf"/>
+
+  <!-- 云：柔和几朵 -->
+  <g fill="#ffffff" opacity="0.72">
+    <ellipse cx="250" cy="150" rx="96" ry="34"/>
+    <ellipse cx="312" cy="132" rx="66" ry="30"/>
+    <ellipse cx="196" cy="136" rx="54" ry="24"/>
+    <ellipse cx="700" cy="98" rx="78" ry="27"/>
+    <ellipse cx="752" cy="86" rx="52" ry="22"/>
+    <ellipse cx="1080" cy="230" rx="70" ry="24"/>
+  </g>
+
+  <!-- 远山：两层叠出纵深 -->
+  <path d="M0 470 C 140 400 250 452 360 424 C 470 396 560 448 690 420 C 820 392 930 442 1050 416 C 1120 402 1170 412 1200 404 L1200 520 L0 520 Z" fill="url(#hill)" opacity="0.55"/>
+  <path d="M0 512 C 160 462 280 500 420 476 C 560 452 660 494 800 470 C 940 446 1080 486 1200 462 L1200 600 L0 600 Z" fill="url(#hill)" opacity="0.8"/>
+
+  <!-- 草地主体：地平线以下 -->
+  <path d="M0 570 C 200 548 380 582 600 566 C 820 550 1010 580 1200 562 L1200 1000 L0 1000 Z" fill="url(#meadow)"/>
+
+  <!-- 田垄：近大远小的透视线 -->
+  <g stroke="url(#furrow)" stroke-width="6" fill="none" opacity="0.75">
+    <path d="M120 1000 C 330 860 430 720 480 574"/>
+    <path d="M-40 1000 C 190 852 300 706 356 572"/>
+    <path d="M330 1000 C 470 858 540 718 572 578"/>
+    <path d="M540 1000 C 620 862 656 722 672 582"/>
+    <path d="M760 1000 C 780 862 786 722 788 584"/>
+    <path d="M980 1000 C 930 858 902 716 890 576"/>
+    <path d="M1240 1000 C 1110 856 1030 712 992 570"/>
+  </g>
+
+  <!-- 草丛：底部剪影，托住画面 -->
+  <g fill="#4f8439" opacity="0.85">
+    <path d="M0 1000 L0 900 C 60 866 120 918 170 892 C 220 866 268 908 320 884 L320 1000 Z"/>
+    <path d="M320 1000 L320 906 C 380 878 430 916 486 894 C 542 872 592 910 650 890 L650 1000 Z"/>
+    <path d="M650 1000 L650 898 C 710 872 760 912 816 890 C 872 868 920 906 980 886 L980 1000 Z"/>
+    <path d="M980 1000 L980 908 C 1040 880 1090 918 1146 896 L1200 904 L1200 1000 Z"/>
+  </g>
+
+  <!-- 零星小花：点缀田野 -->
+  <g opacity="0.9">
+    <g fill="#fff6f8" stroke="#f2c9d4" stroke-width="3">
+      <circle cx="180" cy="700" r="11"/><circle cx="392" cy="742" r="9"/>
+      <circle cx="612" cy="694" r="12"/><circle cx="842" cy="754" r="9"/>
+      <circle cx="1046" cy="708" r="11"/><circle cx="286" cy="856" r="13"/>
+      <circle cx="700" cy="880" r="12"/><circle cx="1090" cy="862" r="13"/>
+    </g>
+    <g fill="#ffd97a">
+      <circle cx="180" cy="700" r="4"/><circle cx="392" cy="742" r="3.5"/>
+      <circle cx="612" cy="694" r="4.5"/><circle cx="842" cy="754" r="3.5"/>
+      <circle cx="1046" cy="708" r="4"/><circle cx="286" cy="856" r="5"/>
+      <circle cx="700" cy="880" r="4.5"/><circle cx="1090" cy="862" r="5"/>
+    </g>
+  </g>
+
+  <!-- 前景草叶：靠近镜头的一撮 -->
+  <g stroke="#3f7433" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.9">
+    <path d="M70 1000 C 74 946 58 916 40 894"/>
+    <path d="M110 1000 C 116 950 110 918 96 892"/>
+    <path d="M156 1000 C 150 952 162 922 180 902"/>
+    <path d="M1120 1000 C 1126 948 1112 918 1094 898"/>
+    <path d="M1160 1000 C 1154 952 1166 922 1184 902"/>
+  </g>
+</svg>

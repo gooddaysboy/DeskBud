@@ -36,7 +36,8 @@
     "rights": "© 2026 DeskBud.xyz · All rights reserved",
     "made": "Made with ❤",
     "site": "All rights reserved",
-    "visits": "Total visits"
+    "visits": "Total visits",
+    "copyright": "Copyright"
   },
   "detail": {
     "sub": "Desktop pet preview & download",
@@ -93,10 +94,10 @@
     "w6desc": "Menu"
   },
   "privacy": {
-    "title": "Privacy Policy",
+    "title": "Privacy Policy & Copyright Notice",
     "sub": "This desktop pet is a personal hobby project.",
-    "pageTitle": "Privacy Policy · DeskBud.xyz",
-    "desc": "DeskBud desktop pet privacy and data collection notes",
+    "pageTitle": "Privacy & Copyright · DeskBud.xyz",
+    "desc": "DeskBud desktop pet privacy policy and copyright notice",
     "intro": "DeskBud never collects or uploads your personal information, documents, photos, or window contents.",
     "p1h": "1. Local runtime",
     "p1": "The app runs entirely on your local device. By default it requires no network and never uploads any data from your machine.",
@@ -105,7 +106,9 @@
     "p3h": "3. Private files",
     "p3": "The app does not read, scan, or peek at private files, photos, or documents on your device.",
     "p4h": "4. No background reporting",
-    "p4": "The app contains no background reporting, behavioral statistics, or user tracking modules."
+    "p4": "The app contains no background reporting, behavioral statistics, or user tracking modules.",
+    "sectionTitle": "Privacy Policy",
+    "sectionHint": "Desktop pet companion · runs locally"
   },
   "contact": {
     "title": "Contact Us",
@@ -116,5 +119,19 @@
     "emailDesc": "Collaboration / Media / Serious bugs / Long-term contact",
     "copy": "Copy",
     "copied": "Copied ✓"
+  },
+  "copyright": {
+    "title": "Copyright Notice",
+    "hint": "© 2026 DeskBud.xyz. All rights reserved.",
+    "intro": "Site copy, pet character art, animations and quotes are original works protected by copyright law.",
+    "c1n": "1.",
+    "c1": "For personal use only. Reproducing, repackaging, reselling or redistributing the original assets of this project is prohibited without permission.",
+    "c2n": "2.",
+    "c2": "Third-party open-source libraries used by this project remain the property of their respective authors and are governed by their own licenses; those licenses do not cover the character art or quote assets.",
+    "c3n": "3.",
+    "c3": "You are responsible for the copyright of any assets you upload yourself.",
+    "c4n": "4.",
+    "c4": "The software is provided as is, without warranty of any kind.",
+    "contact": "For commercial collaboration or licensing, contact:"
   }
 }
