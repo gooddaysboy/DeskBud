@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "public": [
     {
       "zh": "今天天气怎么样呢",
@@ -60,6 +60,22 @@
     {
       "zh": "不知道接下来会发生啥",
       "en": "No idea what's coming next"
+    },
+    {
+      "zh": "我就在桌面安安静静陪着你",
+      "en": "I'll just stay quietly on your desktop, keeping you company"
+    },
+    {
+      "zh": "累了就歇一歇，不用硬扛",
+      "en": "If you're tired, take a rest, no need to tough it out"
+    },
+    {
+      "zh": "慢慢来，一切都会变好的",
+      "en": "Take it slow, everything will turn out fine"
+    },
+    {
+      "zh": "你的烦恼，可以悄悄说给我听",
+      "en": "You can whisper your worries to me, quietly"
     }
   ],
   "pets": {
@@ -103,6 +119,90 @@
       {
         "zh": "圆滚滚才是本体",
         "en": "Round and chubby is my true form"
+      },
+      {
+        "zh": "工作别卷啦，陪我躺一会儿🐼",
+        "en": "Work's not worth the grind, come lie down with me for a bit 🐼"
+      },
+      {
+        "zh": "人生苦短，睡觉为先，竹子其次",
+        "en": "Life's short, napping first, bamboo second"
+      },
+      {
+        "zh": "滚一滚，烦恼全部都滚走",
+        "en": "Roll around a bit, and all the worries roll away"
+      },
+      {
+        "zh": "努力太累，摆烂才是熊生真谛",
+        "en": "Trying too hard is exhausting, slacking is the true panda way"
+      },
+      {
+        "zh": "不想动，只想当一团毛茸茸团子",
+        "en": "Don't wanna move, just wanna be a fluffy little ball"
+      },
+      {
+        "zh": "再忙也要抽空打个哈欠😴",
+        "en": "No matter how busy, make time for a yawn 😴"
+      },
+      {
+        "zh": "哪里跌倒，就在哪里就地趴下",
+        "en": "Where you fall, just flop down right there"
+      },
+      {
+        "zh": "竹子呢？我的笋笋什么时候到！",
+        "en": "Where's the bamboo? When's my bamboo shoot coming?!"
+      },
+      {
+        "zh": "干饭不积极，思想有问题",
+        "en": "No enthusiasm for food? That's a problem"
+      },
+      {
+        "zh": "一口脆笋，治愈所有不开心",
+        "en": "One crunchy shoot heals all the unhappiness"
+      },
+      {
+        "zh": "吃饱喝足，万事不愁✨",
+        "en": "Full belly, easy mind ✨"
+      },
+      {
+        "zh": "世间万般美好，不如一口鲜竹",
+        "en": "All the beauty in the world can't beat a bite of fresh bamboo"
+      },
+      {
+        "zh": "别戳我圆圆的脸蛋！",
+        "en": "Don't poke my round little cheeks!"
+      },
+      {
+        "zh": "警告，不要疯狂点我脑袋",
+        "en": "Warning, do not furiously click my head"
+      },
+      {
+        "zh": "我只是胖，这叫毛茸茸可爱",
+        "en": "I'm not fat, this is fluffy cuteness"
+      },
+      {
+        "zh": "摸头可以，不许薅我毛毛",
+        "en": "Head pats are okay, but don't pull my fur"
+      },
+      {
+        "zh": "代码写累了，抬头看看我吧",
+        "en": "Tired of coding? Look up and see me"
+      },
+      {
+        "zh": "盯屏幕太久，记得休息眼睛",
+        "en": "Staring at the screen too long? Rest your eyes"
+      },
+      {
+        "zh": "任务好多，不要把自己压太紧",
+        "en": "So many tasks, don't press yourself too hard"
+      },
+      {
+        "zh": "喝口水，我们短暂摸鱼一下",
+        "en": "Take a sip of water, let's slack off for a bit"
+      },
+      {
+        "zh": "加油，你已经做得很棒了",
+        "en": "Keep going, you're already doing great"
       }
     ],
     "cat": [
@@ -271,6 +371,74 @@
       {
         "zh": "兔界显眼包，门牙是专属。颜值不在乎，快乐打不住",
         "en": "Bunny show-off with signature teeth. Cares not for looks, joy won't stop"
+      },
+      {
+        "zh": "耳朵竖高高，来看看你在干嘛",
+        "en": "Ears perked up high, come to see what you're up to"
+      },
+      {
+        "zh": "哒哒哒，蹦到你的桌面来啦",
+        "en": "Tap-tap-tap, hopping onto your desktop"
+      },
+      {
+        "zh": "摸摸耳朵，会变开心哦🥕",
+        "en": "Pet my ears and you'll feel happier 🥕"
+      },
+      {
+        "zh": "我小小的，但是很治愈",
+        "en": "I'm small, but I'm healing"
+      },
+      {
+        "zh": "蹲在这里，默默守护你",
+        "en": "Sitting here, quietly watching over you"
+      },
+      {
+        "zh": "有胡萝卜吗？给我来一口！",
+        "en": "Got a carrot? Gimme a bite!"
+      },
+      {
+        "zh": "啃一口青菜，元气满满",
+        "en": "A bite of greens, full of energy"
+      },
+      {
+        "zh": "肚子咕咕叫，想吃小零食",
+        "en": "Tummy's rumbling, want a little snack"
+      },
+      {
+        "zh": "蹦来蹦去，扰乱你的思路😜",
+        "en": "Hopping around, messing with your train of thought 😜"
+      },
+      {
+        "zh": "别抓我耳朵，会害羞的！",
+        "en": "Don't grab my ears, I'll get shy!"
+      },
+      {
+        "zh": "溜啦溜啦，我去桌面角落躲猫猫",
+        "en": "Zoom, off I go to hide in the desktop corner"
+      },
+      {
+        "zh": "咻！从屏幕这边跳到那边",
+        "en": "Whoosh, jumping from this side of the screen to that"
+      },
+      {
+        "zh": "代码写累了，抬头看看我吧",
+        "en": "Tired of coding? Look up and see me"
+      },
+      {
+        "zh": "盯屏幕太久，记得休息眼睛",
+        "en": "Staring at the screen too long? Rest your eyes"
+      },
+      {
+        "zh": "任务好多，不要把自己压太紧",
+        "en": "So many tasks, don't press yourself too hard"
+      },
+      {
+        "zh": "喝口水，我们短暂摸鱼一下",
+        "en": "Take a sip of water, let's slack off for a bit"
+      },
+      {
+        "zh": "加油，你已经做得很棒了",
+        "en": "Keep going, you're already doing great"
       }
     ]
   }
