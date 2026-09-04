@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="privacy.pageTitle">隐私说明 · DeskBud.xyz</title>
-  <meta name="description" data-i18n-attr="content:privacy.desc" content="DeskBud 桌面宠物的隐私与数据收集说明">
-  <link rel="stylesheet" href="assets/css/base.css?v=62">
+  <title data-i18n="privacy.pageTitle">软件许可及隐私说明 · DeskBud</title>
+  <meta name="description" data-i18n-attr="content:privacy.desc" content="DeskBud 桌宠软件的使用许可（EULA）、隐私声明与版权声明">
+  <link rel="stylesheet" href="assets/css/base.css?v=64">
 </head>
 <body>
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="index.html"><span class="dot"></span>DeskBud.xyz<span class="brand-sub" data-i18n="brand.sub"> · 让桌面不再孤单</span></a>
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud<span class="brand-sub" data-i18n="brand.sub"> · 让桌面不再孤单</span></a>
       <nav class="nav">
         <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-eq" aria-hidden="true"><i></i><i></i><i></i></span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
         <a href="list.html" data-i18n="nav.works">作品</a>
         <a href="usage.html" data-i18n="nav.usage">用户手册</a>
-        <a href="privacy.html" data-i18n="nav.privacy">隐私说明</a>
+        <a href="privacy.html" data-i18n="nav.privacy">许可与隐私</a>
         <a href="contact.html" data-i18n="nav.contact">联系我们</a>
         <button id="langSwitch" class="lang-switch" type="button">EN</button>
       </nav>
@@ -33,36 +33,60 @@
 
   <main id="view">
   <section class="page-header wrap">
-    <h1 data-i18n="privacy.title">隐私说明与版权声明</h1>
-    <p class="ph-sub" data-i18n="privacy.sub">本桌面宠物是个人开发的桌面趣味软件。</p>
+    <h1 data-i18n="privacy.title">软件许可及隐私说明</h1>
+    <p class="ph-sub" data-i18n="privacy.sub">本页包含 DeskBud 桌宠软件的使用许可条款（EULA）、隐私声明与版权声明，请在使用前仔细阅读。</p>
   </section>
 
-  <section class="section wrap">
+  <!-- 一、软件使用许可条款（EULA） -->
+  <section class="section privacy-sec wrap">
     <h2 class="block-title">
-      <span data-i18n="privacy.sectionTitle">隐私说明</span>
-      <span class="hint" data-i18n="privacy.sectionHint">桌面宠物伙伴 · 本地运行</span>
+      <span data-i18n="eula.title">一、软件使用许可条款（EULA）</span>
+      <span class="hint" data-i18n="eula.hint">使用即代表同意</span>
     </h2>
     <div class="detail-body privacy-block">
-      <p data-i18n="privacy.intro">桌面宠物伙伴不会收集、上传任何您的个人信息、文档、图片、窗口内容。</p>
-      <p><strong data-i18n="privacy.p1h">1. 本地运行</strong>：<span data-i18n="privacy.p1">程序完全运行于用户本地设备，默认无需网络，不会主动上传本机任何数据。</span></p>
-      <p><strong data-i18n="privacy.p2h">2. 网络行为</strong>：<span data-i18n="privacy.p2">若开启网络功能，仅拉取公开的宠物泡泡语录素材；该过程仅执行下载，不会向外上传本机任何信息。</span></p>
-      <p><strong data-i18n="privacy.p3h">3. 隐私文件</strong>：<span data-i18n="privacy.p3">软件不会读取、扫描、窥探设备内的私人文件、照片、文档。</span></p>
-      <p><strong data-i18n="privacy.p4h">4. 无后台上报</strong>：<span data-i18n="privacy.p4">本程序不存在后台上报、行为统计、用户追踪相关模块。</span></p>
+      <p class="legal-notice" data-i18n="eula.notice">使用本软件即代表您已阅读、理解并同意本协议全部条款。若不同意，请立即关闭并停止使用本软件。</p>
+      <p><strong data-i18n="eula.s1h">1. 知识产权与权属</strong>：<span data-i18n="eula.s1">本软件程序本体、界面设计、交互逻辑、所有官方素材包的全部著作权、知识产权均归开发者独家所有。用户仅获得个人、非商业、仅限本地设备使用的有限使用权，不获得软件及素材的所有权、著作权、改编权、分发权。</span></p>
+      <p><strong data-i18n="eula.s2h">2. 允许使用范围</strong>：<span data-i18n="eula.s2">用户可在个人私有设备内正常运行本软件，加载已合法获取的官方桌宠素材，仅供个人娱乐、桌面装饰使用。</span></p>
+      <p><strong data-i18n="eula.s3h">3. 严格禁止行为</strong>：<span data-i18n="eula.s3">未经开发者书面授权，用户禁止进行以下任意行为：</span></p>
+      <ul class="privacy-list">
+        <li data-i18n="eula.s3a">对本软件进行反编译、逆向、拆解、篡改、剥离核心逻辑；</li>
+        <li data-i18n="eula.s3b">解密、提取、导出、批量扒取官方素材内各类资源；</li>
+        <li data-i18n="eula.s3c">对官方素材进行二次分发、分享、网盘流转、转售、免费公开传播；</li>
+        <li data-i18n="eula.s3d">基于本软件、官方素材进行商业改编、二次售卖、商用引流等盈利行为；</li>
+        <li data-i18n="eula.s3e">用于违规、低俗、侵权、破坏公序良俗的场景。</li>
+      </ul>
+      <p><strong data-i18n="eula.s4h">4. 当前功能说明</strong>：<span data-i18n="eula.s4">当前软件版本暂不支持用户自制、自定义、导入第三方 DIY 素材功能。自定义素材功能为后续迭代规划功能，未开放前一切非官方素材导入行为均不受支持与认可。</span></p>
+      <p><strong data-i18n="eula.s5h">5. 用户责任与免责</strong>：<span data-i18n="eula.s5">本软件以“现状提供”，无任何明示或暗示运行保证。在法律允许范围内，开发者不对软件使用异常、系统兼容问题、使用产生的间接损失承担责任。开发者保留随时更新版本、调整功能、优化素材机制、修订本协议的权利。</span></p>
     </div>
   </section>
 
-  <section class="section wrap" id="copyright">
+  <!-- 二、隐私声明 -->
+  <section class="section privacy-sec wrap">
     <h2 class="block-title">
-      <span data-i18n="copyright.title">版权声明</span>
-      <span class="hint" data-i18n="copyright.hint">© 2026 DeskBud.xyz 版权所有</span>
+      <span data-i18n="privacy.sectionTitle">二、隐私声明（个人信息保护）</span>
+      <span class="hint" data-i18n="privacy.sectionHint">本软件不收集、不上传任何个人信息</span>
     </h2>
     <div class="detail-body privacy-block">
-      <p data-i18n="copyright.intro">网站文案、桌宠角色图片、动画、语录均为原创，受著作权法保护。</p>
-      <p><strong data-i18n="copyright.c1n">1.</strong> <span data-i18n="copyright.c1">仅供个人使用，未经许可禁止盗用、二次打包、转售、分发本项目原创素材。</span></p>
-      <p><strong data-i18n="copyright.c2n">2.</strong> <span data-i18n="copyright.c2">项目使用的第三方开源库，版权归原作者，遵循各自开源协议；开源协议不包含角色美术与语录资源。</span></p>
-      <p><strong data-i18n="copyright.c3n">3.</strong> <span data-i18n="copyright.c3">用户自行上传的素材，版权由用户负责。</span></p>
-      <p><strong data-i18n="copyright.c4n">4.</strong> <span data-i18n="copyright.c4">软件按现状提供，不做使用担保。</span></p>
-      <p><span data-i18n="copyright.contact">商业合作 / 授权请联系：</span><strong>deskbud@qq.com</strong></p>
+      <p><strong data-i18n="privacy.s1h">1. 数据收集说明</strong>：<span data-i18n="privacy.s1">本软件全程不收集、不上传、不记录任何用户个人信息、设备信息、隐私文件、浏览记录与使用行为数据。</span></p>
+      <p><strong data-i18n="privacy.s2h">2. 网络请求用途（仅主动触发）</strong>：<span data-i18n="privacy.s2">本软件不会开机自联网、不会后台静默联网。仅在用户手动打开素材商店面板时发起 HTTPS 网络请求，用途仅限：</span></p>
+      <ul class="privacy-list">
+        <li data-i18n="privacy.s2a">拉取官方免费素材清单；</li>
+        <li data-i18n="privacy.s2b">用户主动点击下载时，获取并下载官方免费素材包。</li>
+      </ul>
+      <p><strong data-i18n="privacy.s3h">3. 离线使用能力</strong>：<span data-i18n="privacy.s3">设备断网状态下，已下载的本地官方素材可正常完整使用，仅素材商店在线下载功能不可用，软件主体功能不受影响。</span></p>
+      <p><strong data-i18n="privacy.s4h">4. 付费素材说明</strong>：<span data-i18n="privacy.s4">付费专属素材不通过软件联网下载，由用户购买后通过官方渠道获取素材包，本地手动加载，全程无用户隐私数据交互。</span></p>
+      <p><strong data-i18n="privacy.s5h">5. 第三方服务说明</strong>：<span data-i18n="privacy.s5">本软件支付与交易交付流程依托爱发电第三方平台完成，用户交易相关隐私遵循对应平台隐私政策，本软件不获取、不存储交易信息。</span></p>
+    </div>
+  </section>
+
+  <!-- 三、版权声明 -->
+  <section class="section privacy-sec wrap" id="copyright">
+    <h2 class="block-title">
+      <span data-i18n="copyright.title">三、版权声明</span>
+    </h2>
+    <div class="detail-body privacy-block">
+      <p><span data-i18n="copyright.c1">©2026 DeskBud 保留所有权利。官网：</span><a href="https://deskbud.xyz" target="_blank" rel="noopener">deskbud.xyz</a><span data-i18n="copyright.c2">。本软件及全部官方素材未经授权禁止一切侵权与滥用行为。</span></p>
+      <p><span data-i18n="copyright.contact">商业合作 / 授权请联系：</span><a class="legal-mail" href="mailto:deskbud@qq.com">deskbud@qq.com</a></p>
     </div>
   </section>
 
@@ -71,7 +95,7 @@
   <footer class="footer">
     <div class="wrap">
       <div class="footer-top">
-        <div>© <span id="yr"></span> DeskBud.xyz · <span data-i18n="footer.site">保留所有权利</span> | <a class="footer-copy" data-i18n="footer.copyright" href="privacy.html#copyright">版权声明</a></div>
+        <div>© <span id="yr"></span> DeskBud · <span data-i18n="footer.site">保留所有权利</span> | <a class="footer-copy" data-i18n="footer.legal" href="privacy.html">许可与隐私</a></div>
         <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
       </div>
       <div class="footer-bottom">
@@ -82,7 +106,7 @@
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
   <script src="assets/js/i18n.js?v=2"></script>
-  <script src="assets/js/site.js?v=43"></script>
+  <script src="assets/js/site.js?v=44"></script>
   <script src="assets/js/bubble.js?v=19"></script>
   <script>SITE.boot();</script>
 </body>

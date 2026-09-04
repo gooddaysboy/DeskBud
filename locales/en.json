@@ -3,7 +3,7 @@
     "home": "Home",
     "works": "Works",
     "usage": "User Manual",
-    "privacy": "Privacy",
+    "privacy": "License & Privacy",
     "contact": "Contact"
   },
   "brand": {
@@ -33,11 +33,11 @@
   "footer": {
     "tagline": "Fun desktop pet companions · always on your screen",
     "contact": "Contact (Email)",
-    "rights": "© 2026 DeskBud.xyz · All rights reserved",
+    "rights": "© 2026 DeskBud · All rights reserved",
     "made": "Made with ❤",
     "site": "All rights reserved",
     "visits": "Total visits",
-    "copyright": "Copyright"
+    "legal": "License & Privacy"
   },
   "detail": {
     "sub": "Desktop pet preview & download",
@@ -62,30 +62,33 @@
   "usage": {
     "title": "User Manual",
     "sub": "Download · Install · Use · FAQ (Windows / macOS / Android)",
-    "pageTitle": "User Manual · DeskBud.xyz",
+    "pageTitle": "User Manual · DeskBud",
     "desc": "DeskBud user manual: Windows / macOS / Android desktop pet download, install & usage guide"
   },
   "privacy": {
-    "title": "Privacy Policy & Copyright Notice",
-    "sub": "This desktop pet is a personal hobby project.",
-    "pageTitle": "Privacy & Copyright · DeskBud.xyz",
-    "desc": "DeskBud desktop pet privacy policy and copyright notice",
-    "intro": "DeskBud never collects or uploads your personal information, documents, photos, or window contents.",
-    "p1h": "1. Local runtime",
-    "p1": "The app runs entirely on your local device. By default it requires no network and never uploads any data from your machine.",
-    "p2h": "2. Network activity",
-    "p2": "If network features are enabled, it only fetches public bubble-quote assets. This is an access-only operation and never sends any local information outward.",
-    "p3h": "3. Private files",
-    "p3": "The app does not read, scan, or peek at private files, photos, or documents on your device.",
-    "p4h": "4. No background reporting",
-    "p4": "The app contains no background reporting, behavioral statistics, or user tracking modules.",
-    "sectionTitle": "Privacy Policy",
-    "sectionHint": "Desktop pet companion · runs locally"
+    "title": "Software License & Privacy Policy",
+    "sub": "This page covers the DeskBud desktop-pet software license (EULA), privacy statement and copyright notice. Please read carefully before use.",
+    "pageTitle": "Software License & Privacy · DeskBud",
+    "desc": "DeskBud desktop-pet software license (EULA), privacy statement and copyright notice",
+    "sectionTitle": "2. Privacy Statement (Personal Information Protection)",
+    "sectionHint": "No personal data is collected or uploaded",
+    "s1h": "2.1 Data collection",
+    "s1": "The software never collects, uploads or records any personal information, device information, private files, browsing history or usage-behavior data.",
+    "s2h": "2.2 Network requests (user-triggered only)",
+    "s2": "The software never connects at startup and never connects silently in the background. HTTPS requests are made only when you manually open the asset store panel, solely for:",
+    "s2a": "fetching the list of official free assets;",
+    "s2b": "fetching and downloading an official free asset pack when you actively click to download it.",
+    "s3h": "2.3 Offline capability",
+    "s3": "When offline, locally downloaded official assets keep working normally and fully. Only the store's online download is unavailable; core features are unaffected.",
+    "s4h": "2.4 Paid assets",
+    "s4": "Paid exclusive assets are not downloaded over the network. After purchase you obtain the asset pack through official channels and load it locally — no personal data is exchanged during the process.",
+    "s5h": "2.5 Third-party services",
+    "s5": "Payment and delivery rely on the third-party platform Afdian (爱发电). Transaction-related privacy follows that platform's privacy policy; the software neither fetches nor stores transaction information."
   },
   "contact": {
     "title": "Contact Us",
     "sub": "Bug reports, feature ideas, or just to chat about pets — reach out anytime.",
-    "pageTitle": "Contact Us · DeskBud.xyz",
+    "pageTitle": "Contact Us · DeskBud",
     "desc": "DeskBud feedback & contact: email",
     "emailTitle": "Email",
     "emailDesc": "Collaboration / Media / Serious bugs / Long-term contact",
@@ -93,17 +96,29 @@
     "copied": "Copied ✓"
   },
   "copyright": {
-    "title": "Copyright Notice",
-    "hint": "© 2026 DeskBud.xyz. All rights reserved.",
-    "intro": "Site copy, pet character art, animations and quotes are original works protected by copyright law.",
-    "c1n": "1.",
-    "c1": "For personal use only. Reproducing, repackaging, reselling or redistributing the original assets of this project is prohibited without permission.",
-    "c2n": "2.",
-    "c2": "Third-party open-source libraries used by this project remain the property of their respective authors and are governed by their own licenses; those licenses do not cover the character art or quote assets.",
-    "c3n": "3.",
-    "c3": "You are responsible for the copyright of any assets you upload yourself.",
-    "c4n": "4.",
-    "c4": "The software is provided as is, without warranty of any kind.",
-    "contact": "For commercial collaboration or licensing, contact:"
+    "title": "3. Copyright Notice",
+    "c1": "©2026 DeskBud. All rights reserved. Official website: ",
+    "c2": ". Any unauthorized infringement or misuse of the software and all official assets is prohibited.",
+    "contact": "Business cooperation / licensing: "
+  },
+  "eula": {
+    "title": "1. Software License Terms (EULA)",
+    "hint": "By using, you agree",
+    "notice": "By using this software, you acknowledge that you have read, understood and agree to all terms of this agreement. If you do not agree, please close and stop using the software immediately.",
+    "s1h": "1.1 Intellectual property & ownership",
+    "s1": "The developer holds exclusive copyright and intellectual property over the software program itself, its interface design, interaction logic and all official asset packs. Users are granted only a limited, personal, non-commercial, local-device license, and acquire no ownership, copyright, adaptation or distribution rights over the software or its assets.",
+    "s2h": "1.2 Permitted use",
+    "s2": "You may run the software normally on your own private devices and load lawfully obtained official desktop-pet assets, for personal entertainment and desktop decoration only.",
+    "s3h": "1.3 Strictly prohibited",
+    "s3": "Without the developer's written authorization, you are prohibited from:",
+    "s3a": "decompiling, reverse-engineering, disassembling, tampering with, or stripping the core logic of the software;",
+    "s3b": "decrypting, extracting, exporting or bulk-scraping any resources inside official assets;",
+    "s3c": "re-distributing, sharing, cloud-drive circulating, reselling, or publicly distributing official assets free of charge;",
+    "s3d": "commercial adaptation, resale, or commercial traffic-driving based on the software or official assets;",
+    "s3e": "using the software or assets in illegal, vulgar, infringing or otherwise socially harmful scenarios.",
+    "s4h": "1.4 Current feature scope",
+    "s4": "The current version does not support user-created, customized, or third-party DIY assets. Such features are planned for future releases; until they are opened, any import of non-official assets is neither supported nor recognized.",
+    "s5h": "1.5 User responsibility & disclaimer",
+    "s5": "The software is provided \"as is\" without any express or implied warranty. To the extent permitted by law, the developer is not liable for abnormal behavior, compatibility issues, or indirect losses arising from use. The developer reserves the right to update versions, adjust features, refine the asset mechanism and revise this agreement at any time."
   }
 }

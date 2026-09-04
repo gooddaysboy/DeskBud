@@ -740,11 +740,28 @@ img { -webkit-user-drag: none; user-drag: none; }
 .contact-wechat img { width: 168px; height: 168px; border-radius: 10px; border: 1px solid var(--line); object-fit: contain; background: #fff; }
 .contact-tip { font-size: 12px; color: var(--ink-faint); }
 
-/* ---------- 隐私说明页（privacy.html） ---------- */
+/* ---------- 许可与隐私页（privacy.html，EULA+隐私+版权 三合一） ---------- */
+.privacy-sec { padding: 26px 0; } /* 收紧三节间上下留白（默认 .section 56px 太松） */
+.privacy-sec .block-title { margin: 24px 0 14px; } /* 标题与正文收紧 */
 .privacy-block { max-width: 1080px; }
-.privacy-block p { line-height: 1.85; color: var(--ink-soft); margin: 0 0 14px; }
-.privacy-block strong { color: var(--ink); margin-right: 6px; }
+.privacy-block p { line-height: 1.7; color: var(--ink-soft); margin: 0 0 9px; }
+.privacy-block strong { color: var(--ink); margin-right: 5px; }
 .privacy-block code { background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+/* 协议条款高亮提示条（页面首句"使用即同意"） */
+.privacy-block .legal-notice {
+  background: var(--bg-soft);
+  border-left: 3px solid var(--brand);
+  padding: 9px 14px;
+  border-radius: var(--radius-sm, 10px);
+  color: var(--ink);
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+/* 条款禁止行为 / 用途列表 */
+.privacy-block ul.privacy-list { margin: -2px 0 12px; padding-left: 1.4em; }
+.privacy-block ul.privacy-list li { line-height: 1.7; color: var(--ink-soft); margin-bottom: 3px; }
+.privacy-block ul.privacy-list li::marker { color: var(--brand); }
+.privacy-block a.legal-mail { color: var(--brand); font-weight: 600; word-break: break-all; }
 
 /* ---------- 详情页重构（单宠物单页 · 九宫格 + 三版本卡） ---------- */
 .detail-back { text-align: left; padding: 30px 0 0; }

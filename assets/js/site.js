@@ -474,7 +474,7 @@ SITE.pages = {
       const el = document.getElementById('detail');
       if (!w) { el.innerHTML = '<div class="empty">' + window.pick({ zh: '未找到该作品', en: 'Work not found' }) + '</div>'; return; }
       if (w.status === 'hidden') { el.innerHTML = '<div class="empty">' + window.pick({ zh: '该作品暂未上线', en: 'This work is not available yet' }) + '</div>'; return; }
-      document.title = window.pick(w.title) + ' · DeskBud.xyz';
+      document.title = window.pick(w.title) + ' · DeskBud';
       const icon = SITE.catIcon(w.category);
       const catName = SITE.catName(w.category);
       const onePose = (w.states || []).map(s => `
