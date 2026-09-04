@@ -3,78 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="contact.pageTitle">联系我们 · DeskBud</title>
-  <meta name="description" data-i18n-attr="content:contact.desc" content="DeskBud 反馈与交流：电子邮件">
-  <link rel="stylesheet" href="assets/css/base.css?v=64">
+  <title>联系我们 · DeskBud</title>
+  <meta name="description" content="DeskBud 反馈与交流：电子邮件">
+  <!-- 联系我们已并入「许可与隐私」页（章四），本页保留仅为旧链接兼容，自动跳转 -->
+  <meta http-equiv="refresh" content="0; url=privacy.html#contact">
+  <link rel="canonical" href="privacy.html">
+  <style>
+    body { font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; color: #2b2b2d; }
+    a { color: #e8722b; font-weight: 600; }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="wrap">
-      <a class="brand" href="index.html"><span class="dot"></span>DeskBud<span class="brand-sub" data-i18n="brand.sub"> · 让桌面不再孤单</span></a>
-      <nav class="nav">
-        <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-eq" aria-hidden="true"><i></i><i></i><i></i></span></button>
-        <a href="index.html" data-i18n="nav.home">首页</a>
-        <a href="list.html" data-i18n="nav.works">作品</a>
-        <a href="pets.html" data-i18n="nav.pets">伙伴之家</a>
-        <a href="usage.html" data-i18n="nav.usage">用户手册</a>
-        <a href="privacy.html" data-i18n="nav.privacy">许可与隐私</a>
-        <a href="contact.html" data-i18n="nav.contact">联系我们</a>
-        <button id="langSwitch" class="lang-switch" type="button">EN</button>
-      </nav>
-    </div>
-  </header>
-
-  <div class="top-search">
-    <form class="site-search" id="siteSearch" role="search">
-      <input type="search" id="siteSearchInput" data-i18n-attr="placeholder:search.ph,aria-label:search.label" placeholder="搜索作品名称、描述…" aria-label="搜索作品">
-      <button type="submit" class="site-search-btn" data-i18n="search.btn">搜索</button>
-      <div class="site-search-results" id="siteSearchResults" hidden></div>
-    </form>
-  </div>
-
-  <main id="view">
-  <section class="page-header wrap">
-    <h1 data-i18n="contact.title">联系我们</h1>
-    <p class="ph-sub" data-i18n="contact.sub">Bug 反馈、功能建议、想聊桌宠——欢迎找我们。</p>
-  </section>
-
-  <section class="section wrap">
-    <div class="contact-grid">
-      <div class="contact-card">
-        <div class="contact-head">
-          <span class="contact-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7L4 6h16l-8 6zm-9 6l6-4.5L12 15l3-2.5L21 18H3z"/></svg>
-          </span>
-          <div>
-            <h3 data-i18n="contact.emailTitle">电子邮件</h3>
-            <p data-i18n="contact.emailDesc">合作 / 媒体 / 严重 Bug / 长期沟通</p>
-          </div>
-        </div>
-        <div class="contact-body">
-          <a class="contact-value" href="mailto:deskbud@qq.com">deskbud@qq.com</a>
-          <button class="contact-btn" data-i18n="contact.copy" onclick="copyText(this, 'deskbud@qq.com')">点击复制</button>
-        </div>
-      </div>
-    </div>
-  </section>
-  </main>
-
-  <footer class="footer">
-    <div class="wrap">
-      <div class="footer-top">
-        <div>© <span id="yr"></span> DeskBud · <span data-i18n="footer.site">保留所有权利</span> | <a class="footer-copy" data-i18n="footer.legal" href="privacy.html">许可与隐私</a></div>
-        <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
-      </div>
-      <div class="footer-bottom">
-        <a href="contact.html" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=4"></script>
-  <script src="assets/js/site.js?v=45"></script>
-  <script src="assets/js/bubble.js?v=19"></script>
-  <script>SITE.boot();</script>
+  <noscript><p>联系页面已迁移，<a href="privacy.html#contact">点此前往</a>。</p></noscript>
+  <script>location.replace('privacy.html#contact');</script>
 </body>
 </html>

@@ -48,7 +48,7 @@
     "pageViews": "Page views",
     "downloads": "Downloads",
     "download": "Download",
-    "back": "Back to works"
+    "back": "Back to Pet House"
   },
   "list": {
     "title": "Works",
@@ -107,6 +107,9 @@
     "emailDesc": "Collaboration / Media / Serious bugs / Long-term contact",
     "copy": "Copy",
     "copied": "Copied ✓"
+  },
+  "contactSection": {
+    "title": "4. Contact"
   },
   "copyright": {
     "title": "3. Copyright Notice",

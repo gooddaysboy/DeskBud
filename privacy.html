@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="privacy.pageTitle">软件许可及隐私说明 · DeskBud</title>
   <meta name="description" data-i18n-attr="content:privacy.desc" content="DeskBud 桌宠软件的使用许可（EULA）、隐私声明与版权声明">
-  <link rel="stylesheet" href="assets/css/base.css?v=64">
+  <link rel="stylesheet" href="assets/css/base.css?v=65">
 </head>
 <body>
   <header class="topbar">
@@ -14,11 +14,9 @@
       <nav class="nav">
         <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-eq" aria-hidden="true"><i></i><i></i><i></i></span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
-        <a href="list.html" data-i18n="nav.works">作品</a>
         <a href="pets.html" data-i18n="nav.pets">伙伴之家</a>
         <a href="usage.html" data-i18n="nav.usage">用户手册</a>
         <a href="privacy.html" data-i18n="nav.privacy">许可与隐私</a>
-        <a href="contact.html" data-i18n="nav.contact">联系我们</a>
         <button id="langSwitch" class="lang-switch" type="button">EN</button>
       </nav>
     </div>
@@ -91,6 +89,32 @@
     </div>
   </section>
 
+  <section class="section privacy-sec wrap" id="contact">
+    <h2 class="block-title">
+      <span data-i18n="contactSection.title">四、联系我们</span>
+    </h2>
+    <div class="detail-body privacy-block">
+      <p data-i18n="contact.sub">Bug 反馈、功能建议、想聊桌宠——欢迎找我们。</p>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-head">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7L4 6h16l-8 6zm-9 6l6-4.5L12 15l3-2.5L21 18H3z"/></svg>
+            </span>
+            <div>
+              <h3 data-i18n="contact.emailTitle">电子邮件</h3>
+              <p data-i18n="contact.emailDesc">合作 / 媒体 / 严重 Bug / 长期沟通</p>
+            </div>
+          </div>
+          <div class="contact-body">
+            <a class="contact-value" href="mailto:deskbud@qq.com">deskbud@qq.com</a>
+            <button class="contact-btn" data-i18n="contact.copy" onclick="copyText(this, 'deskbud@qq.com')">点击复制</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   </main>
 
   <footer class="footer">
@@ -100,14 +124,14 @@
         <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
       </div>
       <div class="footer-bottom">
-        <a href="contact.html" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
+        <a href="privacy.html#contact" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
       </div>
     </div>
   </footer>
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=4"></script>
-  <script src="assets/js/site.js?v=45"></script>
+  <script src="assets/js/i18n.js?v=6"></script>
+  <script src="assets/js/site.js?v=47"></script>
   <script src="assets/js/bubble.js?v=19"></script>
   <script>SITE.boot();</script>
 </body>

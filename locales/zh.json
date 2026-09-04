@@ -48,7 +48,7 @@
     "pageViews": "页面访问",
     "downloads": "下载次数",
     "download": "下载",
-    "back": "返回作品"
+    "back": "返回伙伴之家"
   },
   "list": {
     "title": "作品",
@@ -107,6 +107,9 @@
     "emailDesc": "合作 / 媒体 / 严重 Bug / 长期沟通",
     "copy": "点击复制",
     "copied": "已复制 ✓"
+  },
+  "contactSection": {
+    "title": "四、联系我们"
   },
   "copyright": {
     "title": "三、版权声明",

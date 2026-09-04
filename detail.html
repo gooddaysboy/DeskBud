@@ -5,7 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品详情 · DeskBud</title>
   <meta name="description" content="桌面宠物作品详情：动作姿态、各平台版本与下载。">
-  <link rel="stylesheet" href="assets/css/base.css?v=64">
+  <link rel="stylesheet" href="assets/css/base.css?v=65">
+  <style>
+    /* 详情页购买区（仅本页，不动 base.css） */
+    .buy-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .buy-chans { font-size: 13px; color: var(--ink-soft); }
+    .buy-chans a { color: var(--brand); font-weight: 600; text-decoration: none; }
+    .buy-chans a:hover { text-decoration: underline; }
+    .buy-soon { font-size: 13px; color: var(--ink-faint); }
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -14,11 +22,9 @@
       <nav class="nav">
         <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-eq" aria-hidden="true"><i></i><i></i><i></i></span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
-        <a href="list.html" data-i18n="nav.works">作品</a>
         <a href="pets.html" data-i18n="nav.pets">伙伴之家</a>
         <a href="usage.html" data-i18n="nav.usage">用户手册</a>
         <a href="privacy.html" data-i18n="nav.privacy">许可与隐私</a>
-        <a href="contact.html" data-i18n="nav.contact">联系我们</a>
         <button id="langSwitch" class="lang-switch" type="button">EN</button>
       </nav>
     </div>
@@ -34,7 +40,7 @@
 
   <main id="view">
   <section class="page-header wrap detail-back">
-    <a href="list.html" class="back-link"><span data-i18n="detail.back">← 返回作品</span></a>
+    <a href="pets.html" class="back-link"><span data-i18n="detail.back">← 返回伙伴之家</span></a>
   </section>
 
   <section class="section wrap detail-hero">
@@ -49,15 +55,15 @@
         <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
       </div>
       <div class="footer-bottom">
-        <a href="contact.html" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
+        <a href="privacy.html#contact" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
       </div>
     </div>
   </footer>
 
   <!-- BGM 音频与开关由 site.js 全站注入（常驻 #view 之外）；竹子背景由路由在详情页注入 -->
   <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=4"></script>
-  <script src="assets/js/site.js?v=45"></script>
+  <script src="assets/js/i18n.js?v=6"></script>
+  <script src="assets/js/site.js?v=47"></script>
   <script src="assets/js/bubble.js?v=19"></script>
   <script>SITE.boot();</script>
 </body>

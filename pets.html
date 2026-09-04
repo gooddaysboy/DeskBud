@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="kiKp8RTtEvynkp1nkn4icv">
+<head data-page-node-id="s2r7s0yIsfreHUAPTGzJQp">
+  <meta charset="UTF-8" data-page-node-id="CHJJsHdx4ZnZnGD076qhH7">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="K7OniPAUIS8zci602VSQc9">
   <title>伙伴之家 · DeskBud</title>
-  <meta name="description" content="DeskBud 伙伴之家：领养一只常驻桌面的针织宠物伙伴，织熊猫、织兔子已上线，更多伙伴陆续织制中。">
-  <link rel="stylesheet" href="assets/css/base.css?v=64">
+  <meta name="description" content="DeskBud 伙伴之家：领养一只常驻桌面的针织宠物伙伴，织熊猫、织兔子已上线，更多伙伴陆续织制中。" data-page-node-id="V7Xi8i1Bpig8PqIq7uuMxt">
+  <link rel="stylesheet" href="assets/css/base.css?v=65" data-page-node-id="ckSWnQdAfvJTtdRCuVLBzz">
   <style>
     /* 伙伴之家专属样式（不动 base.css） */
     .pets-lead { max-width: 640px; }
@@ -25,52 +25,54 @@
     .pet-actions .btn { font-size: 14px; padding: 8px 16px; border-radius: var(--radius-sm); }
     .pet-soon-note { font-size: 13px; color: var(--ink-faint); }
     .pets-note { margin-top: 30px; font-size: 13px; color: var(--ink-faint); text-align: center; }
+    .pets-channels { margin-top: 10px; font-size: 13px; color: var(--ink-soft); text-align: center; }
+    .pets-channels a { color: var(--brand); text-decoration: none; font-weight: 600; }
+    .pets-channels a:hover { text-decoration: underline; }
   </style>
 </head>
-<body>
-  <header class="topbar">
-    <div class="wrap">
-      <a class="brand" href="index.html"><span class="dot"></span>DeskBud<span class="brand-sub" data-i18n="brand.sub"> · 让桌面不再孤单</span></a>
-      <nav class="nav">
-        <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-eq" aria-hidden="true"><i></i><i></i><i></i></span></button>
-        <a href="index.html" data-i18n="nav.home">首页</a>
-        <a href="list.html" data-i18n="nav.works">作品</a>
-        <a href="pets.html" data-i18n="nav.pets">伙伴之家</a>
-        <a href="usage.html" data-i18n="nav.usage">用户手册</a>
-        <a href="privacy.html" data-i18n="nav.privacy">许可与隐私</a>
-        <a href="contact.html" data-i18n="nav.contact">联系我们</a>
-        <button id="langSwitch" class="lang-switch" type="button">EN</button>
+<body data-page-node-id="bRT0LcSkgW3REE2KqUPb0i">
+  <header class="topbar" data-page-node-id="0SIkYgeENw3qyGpWEnGM9W">
+    <div class="wrap" data-page-node-id="zaJEKSMOvINTpQTiVK1nwH">
+      <a class="brand" href="index.html" data-page-node-id="gKWzNmuQ1Dyyl3fILr1rZC"><span class="dot" data-page-node-id="3lkHdo8zSTmOIcXjmQzZTQ"></span>DeskBud<span class="brand-sub" data-i18n="brand.sub" data-page-node-id="B3dVGG2y0S09SCtllhfjw1"> · 让桌面不再孤单</span></a>
+      <nav class="nav" data-page-node-id="2Wv5NRiGPnYBhDMIuB25tZ">
+        <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关" data-page-node-id="8WfZRIenPLthk57h4cRLvY"><span id="bgmIcon" class="bgm-icon" data-page-node-id="FjBim7qQ4zblrG4FSJGatu">🔇</span><span class="bgm-eq" aria-hidden="true" data-page-node-id="47qUHXQfVdhqPmUkXPbNGb"><i data-page-node-id="PxxeCPGEPldawqGfxZKgSe"></i><i data-page-node-id="OeEhsCh1QMg22H5gWxcAJ9"></i><i data-page-node-id="cEujndA2MAojYlRWsz7fyl"></i></span></button>
+        <a href="index.html" data-i18n="nav.home" data-page-node-id="EEU0aMklWum7GO2P4HrPaG">首页</a>
+        <a href="pets.html" data-i18n="nav.pets" data-page-node-id="wLfWCR64Klr6Uz8YgtVL98">伙伴之家</a>
+        <a href="usage.html" data-i18n="nav.usage" data-page-node-id="VAzKOavailG6UneJC397Ph">用户手册</a>
+        <a href="privacy.html" data-i18n="nav.privacy" data-page-node-id="V8Oit4qYhNqL3nyyg9FILO">联系我们</a>
+        <button id="langSwitch" class="lang-switch" type="button" data-page-node-id="LD7IJSYlrbKXCzahcfaG56">EN</button>
       </nav>
     </div>
   </header>
 
-  <main id="view">
-  <section class="page-header wrap">
-    <h1 data-i18n="pets.title">伙伴之家</h1>
-    <p class="ph-sub pets-lead" data-i18n="pets.sub">每一只 DeskBud 伙伴都是一针一针织出来的。挑一只喜欢的领回家，让它常驻你的桌面。</p>
+  <main id="view" data-page-node-id="2szOzW0PCGVAG6WVygDHyo">
+  <section class="page-header wrap" data-page-node-id="pFOxmuQ7FAHR0Hgj9w5vhb">
+    <h1 data-i18n="pets.title" data-page-node-id="VekA7U1bBZYVFk7Fhax1Df">伙伴之家</h1>
+    <p class="ph-sub pets-lead" data-i18n="pets.sub" data-page-node-id="URVUWy3C4Q5VPBCbphTvRI">每一只 DeskBud 伙伴都是一针一针织出来的。挑一只喜欢的领回家，让它常驻你的桌面。</p>
   </section>
 
-  <section class="section wrap">
-    <div class="pets-grid" id="petsGrid"></div>
-    <p class="pets-note" data-i18n="pets.note">下载后双击即可运行，无需安装；已上线伙伴均为透明悬浮窗，右键可切换宠物。更多伙伴陆续织制中。</p>
+  <section class="section wrap" data-page-node-id="7pfD6XR9I2uBR9aPXqDoPJ">
+    <div class="pets-grid" id="petsGrid" data-page-node-id="RhUVBA0pAjNAwceVqhVs1V"></div>
+    <p class="pets-channels" id="petsChannels" hidden></p>
+    <p class="pets-note" data-i18n="pets.note" data-page-node-id="XBHXE64estDbg3GHjFaNAG">下载后双击即可运行，无需安装；已上线伙伴均为透明悬浮窗，右键可切换宠物。更多伙伴陆续织制中。</p>
   </section>
   </main>
 
-  <footer class="footer">
-    <div class="wrap">
-      <div class="footer-top">
-        <div>© <span id="yr"></span> DeskBud · <span data-i18n="footer.site">保留所有权利</span> | <a class="footer-copy" data-i18n="footer.legal" href="privacy.html">许可与隐私</a></div>
-        <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
+  <footer class="footer" data-page-node-id="lcAvDLS3V1YoA8eVK0SMTy">
+    <div class="wrap" data-page-node-id="4JG3JXNBcn2TDVUQxRckBO">
+      <div class="footer-top" data-page-node-id="fFVQPlB2S7uheRrmE9Sxen">
+        <div data-page-node-id="3qa9mILVGDaOHg2wfMdqYG">© <span id="yr" data-page-node-id="0qWHhr4T4xvItb592VqAsm"></span> DeskBud · <span data-i18n="footer.site" data-page-node-id="7xXH5iPayWGSlqnCCe7uBz">保留所有权利</span> | <a class="footer-copy" data-i18n="footer.legal" href="privacy.html" data-page-node-id="8DBAnZWTeQHtG9vd7Cp5CJ">许可与隐私</a></div>
+        <div data-i18n="footer.tagline" data-page-node-id="6v3N1X4GYmDQQ0dWAKXfEz">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
       </div>
-      <div class="footer-bottom">
-        <a href="contact.html" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
+      <div class="footer-bottom" data-page-node-id="lj3ts420tuP1nnX3W7TJeB">
+        <a href="list.html" data-i18n="nav.works">作品</a> <a href="privacy.html#contact" data-i18n="footer.contact" data-page-node-id="QFIByIbWgp9e3thxmCHgpj">联系我们（邮箱）</a> <span class="site-pv" data-page-node-id="TWO6wAQ5K6jFIZuAw93slm">🌐 <span data-i18n="footer.visits" data-page-node-id="YbyGSoFK4F3ePm66OxguA8">全站访问</span> <span id="busuanzi_value_site_pv" data-page-node-id="HmKEhthdF7NwbsQwspas1h">-</span></span>
       </div>
     </div>
   </footer>
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=4"></script>
-  <script src="assets/js/site.js?v=45"></script>
+  <script src="assets/js/i18n.js?v=6"></script>
+  <script src="assets/js/site.js?v=47"></script>
   <script src="assets/js/bubble.js?v=19"></script>
   <script>
   (function () {
@@ -121,15 +123,32 @@
         '</div></article>';
     }
 
-    function render(data) {
-      var pets = (data && data.pets) || [];
-      grid.innerHTML = pets.map(card).join('');
-      window.addEventListener('lang:change', function () {
-        grid.innerHTML = pets.map(card).join('');
-      });
+    var chansBox = document.getElementById('petsChannels');
+    function renderChans(data) {
+      var chans = (data && data.channels) || [];
+      if (!chans.length || !data.channelsVisible || !chansBox) return;
+      var items = chans.map(function (c) {
+        var name = esc(window.pick(c.label));
+        return c.url ? '<a href="' + esc(withFrom(c.url)) + '" target="_blank" rel="noopener">' + name + '</a>' : name;
+      }).join(' / ');
+      chansBox.innerHTML = window.pick({ zh: '也可在 {list} 搜索 DeskBud', en: 'Also find DeskBud on {list}' }).replace('{list}', items);
+      chansBox.hidden = false;
     }
 
-    fetch('data/catalog.json?cv=1', { cache: 'no-cache' })
+    function render(data) {
+      var pets = (data && data.pets) || [];
+      function paint() {
+        grid.innerHTML = pets.map(card).join('');
+        renderChans(data);
+      }
+      paint();
+      if (!window.__petsLangWired) {
+        window.__petsLangWired = true;
+        window.addEventListener('lang:change', paint);  // 只绑一次，避免切 N 次语言叠 N 个监听
+      }
+    }
+
+    fetch('data/catalog.json?cv=3', { cache: 'no-cache' })
       .then(function (r) { return r.json(); })
       .then(render)
       .catch(function () { grid.innerHTML = '<p class="pets-note">加载失败，请刷新重试。</p>'; });
