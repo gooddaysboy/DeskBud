@@ -1,7 +1,18 @@
 {
-  "version": 1,
+  "version": 2,
   "updated": "2026-09-04",
-  "note": "伙伴之家数据源：加角色/换渠道只改这个文件，页面零改动。url 留空则按钮显示「即将上线」占位；buy 是角色包购买渠道（爱发电/小红书等），download 是主程序下载。",
+  "note": "伙伴之家数据源：加角色/换渠道只改这个文件，页面零改动。url 留空则按钮显示「即将上线」占位；buy 是角色包购买渠道（爱发电/小红书等），download 是主程序下载。channels 是全站兜底渠道（伙伴之家底部+详情页小字展示），url 留空显示纯文字；channelsVisible=false 时整行不渲染，渠道谈妥后改 true 即上线。",
+  "channelsVisible": false,
+  "channels": [
+    { "label": { "zh": "小红书", "en": "Xiaohongshu" }, "url": "" },
+    { "label": { "zh": "淘宝", "en": "Taobao" }, "url": "" },
+    { "label": { "zh": "闲鱼", "en": "Xianyu" }, "url": "" },
+    { "label": { "zh": "面包多", "en": "Mianbaoduo" }, "url": "" },
+    { "label": { "zh": "货摊网", "en": "Huotan" }, "url": "" },
+    { "label": { "zh": "爱发电", "en": "Afdian" }, "url": "" },
+    { "label": { "zh": "米画师", "en": "Mihuashi" }, "url": "" },
+    { "label": { "zh": "引力圈", "en": "Yinliquan" }, "url": "" }
+  ],
   "pets": [
     {
       "id": "panda",

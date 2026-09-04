@@ -8,6 +8,12 @@ const SITE = {
     this.data = await res.json();
     return this.data;
   },
+  // 伙伴之家目录（catalog.json）：详情页购买区用；cv 参数改内容时同步升
+  async loadCatalog() {
+    if (this.__cat) return this.__cat;
+    this.__cat = fetch('data/catalog.json?cv=2', { cache: 'no-cache' }).then(r => r.json());
+    return this.__cat;
+  },
   // 仅返回已上线的作品（status 不为 "hidden"），隐藏的占位作品统一在此过滤
   onlineWorks() {
     if (!this.data) return [];
@@ -514,6 +520,31 @@ SITE.pages = {
         <div class="pose-marquee" oncontextmenu="return false"><div class="pose-track">${states}</div></div>
         <div class="block-label">${window.pick({ zh: '各平台版本', en: 'Available Platforms' })}<span class="hint">${window.pick({ zh: '动作一样，下载与安装不同', en: 'Same pet, different install' })}</span></div>
         <div class="ver-grid">${vers}</div>`;
+      // 购买角色包区（数据来自 catalog.json，按作品 id 匹配宠物；渠道兜底行 = 全站 channels）
+      const buyHost = document.createElement('div');
+      buyHost.className = 'buy-block';
+      el.appendChild(buyHost);
+      SITE.loadCatalog().then(cat => {
+        const pet = (cat.pets || []).find(x => x.id === id);
+        const chans = (cat.channelsVisible ? (cat.channels || []) : []).filter(c => c && c.label);
+        if (!pet && !chans.length) { buyHost.remove(); return; }
+        const items = chans.map(c => {
+          const name = window.pick(c.label);
+          return c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${name}</a>` : name;
+        }).join(' / ');
+        let main = '';
+        if (pet && pet.buy && pet.buy.url) {
+          main = `<a class="btn btn-primary" href="${pet.buy.url}" target="_blank" rel="noopener">🛒 ${window.pick(pet.buy.label || { zh: '购买角色包', en: 'Buy PetPack' })}</a>`;
+        } else if (pet && pet.buy) {
+          main = `<span class="buy-soon">${window.pick({ zh: '购买渠道即将上线', en: 'Purchase channels coming soon' })}</span>`;
+        }
+        const tail = items
+          ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` })
+          : '';
+        buyHost.innerHTML = `
+          <div class="block-label">${window.pick({ zh: '购买角色包', en: 'Buy PetPack' })}<span class="hint">${window.pick({ zh: '解锁更多动作、表情与皮肤', en: 'Unlock more actions, moods & skins' })}</span></div>
+          <div class="buy-row">${main}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
+      }).catch(() => { buyHost.remove(); });
       initOpenKounter();
     }
     renderDetail(d, id);
