@@ -33,7 +33,7 @@ body {
   margin: 0;
   font-family: var(--font);
   color: var(--ink);
-  background: var(--bg);
+  background: linear-gradient(180deg, #fff6ee 0%, #ffffff 480px) fixed;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden; /* 兜底：100vw 走马灯 break-out 不产生横向滚动条 */
