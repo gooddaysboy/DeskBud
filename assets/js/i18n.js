@@ -37,9 +37,11 @@
   window.I18N = { t: _t, lang: 'zh' };
 
   async function loadRes() {
+    // RES_VER：语言包内容有改动时升号（HTML 侧 i18n.js?v= 同步升）——URL 变了缓存键变，穿透 CDN/浏览器旧缓存，防半新半旧拼句
+    const V = 'v3';
     const [zh, en] = await Promise.all([
-      fetch('locales/zh.json', { cache: 'no-cache' }).then(r => r.json()).catch(() => ({})),
-      fetch('locales/en.json', { cache: 'no-cache' }).then(r => r.json()).catch(() => ({}))
+      fetch(`locales/zh.json?${V}`, { cache: 'no-cache' }).then(r => r.json()).catch(() => ({})),
+      fetch(`locales/en.json?${V}`, { cache: 'no-cache' }).then(r => r.json()).catch(() => ({}))
     ]);
     return { zh: { translation: zh }, en: { translation: en } };
   }

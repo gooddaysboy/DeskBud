@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "updated": "2026-09-04",
+  "note": "伙伴之家数据源：加角色/换渠道只改这个文件，页面零改动。url 留空则按钮显示「即将上线」占位；buy 是角色包购买渠道（爱发电/小红书等），download 是主程序下载。",
+  "pets": [
+    {
+      "id": "panda",
+      "status": "online",
+      "title": { "zh": "织熊猫", "en": "Knitted Panda" },
+      "cover": "works/panda/idle.webp",
+      "tagline": {
+        "zh": "会降落伞式飘落、点击起跳、屏幕绕圈、眨眼卖萌的透明桌宠，常驻桌面不打扰。",
+        "en": "A transparent desktop pet that floats down like a parachute, jumps on tap, orbits your screen and blinks at you."
+      },
+      "detail": "detail.html?id=panda",
+      "download": { "label": { "zh": "免费下载 Windows 版", "en": "Free Download for Windows" }, "url": "" },
+      "buy": { "label": { "zh": "购买角色包", "en": "Buy PetPack" }, "url": "" }
+    },
+    {
+      "id": "rabbit",
+      "status": "online",
+      "title": { "zh": "织兔子", "en": "Knitted Rabbit" },
+      "cover": "works/rabbit/idle.webp",
+      "tagline": {
+        "zh": "软乎乎的透明桌宠兔子，会蹦跳、打盹、挠痒、挥手卖萌，常驻桌面不占地。",
+        "en": "A soft transparent desktop rabbit that hops, naps, scratches and waves at you."
+      },
+      "detail": "detail.html?id=rabbit",
+      "download": { "label": { "zh": "免费下载 Windows 版", "en": "Free Download for Windows" }, "url": "" },
+      "buy": { "label": { "zh": "购买角色包", "en": "Buy PetPack" }, "url": "" }
+    },
+    {
+      "id": "cat",
+      "status": "soon",
+      "title": { "zh": "织猫咪", "en": "Knitted Cat" },
+      "emoji": "🐱",
+      "tagline": { "zh": "正在织…一只傲娇的小猫，敬请期待。", "en": "On the knitting needles — a proud little cat, stay tuned." },
+      "detail": "",
+      "download": { "label": { "zh": "下载 Windows 版", "en": "Download for Windows" }, "url": "" },
+      "buy": { "label": { "zh": "购买角色包", "en": "Buy PetPack" }, "url": "" }
+    },
+    {
+      "id": "dog",
+      "status": "soon",
+      "title": { "zh": "织小狗", "en": "Knitted Dog" },
+      "emoji": "🐶",
+      "tagline": { "zh": "正在织…一只摇尾巴的傻狗，敬请期待。", "en": "On the knitting needles — a tail-wagging goofball, stay tuned." },
+      "detail": "",
+      "download": { "label": { "zh": "下载 Windows 版", "en": "Download for Windows" }, "url": "" },
+      "buy": { "label": { "zh": "购买角色包", "en": "Buy PetPack" }, "url": "" }
+    },
+    {
+      "id": "plant",
+      "status": "soon",
+      "title": { "zh": "织小盆栽", "en": "Knitted Plant" },
+      "emoji": "🪴",
+      "tagline": { "zh": "正在织…一盆不浇水也会陪你的绿植，敬请期待。", "en": "On the knitting needles — a plant that keeps you company without watering, stay tuned." },
+      "detail": "",
+      "download": { "label": { "zh": "下载 Windows 版", "en": "Download for Windows" }, "url": "" },
+      "buy": { "label": { "zh": "购买角色包", "en": "Buy PetPack" }, "url": "" }
+    }
+  ]
+}

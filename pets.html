@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>伙伴之家 · DeskBud</title>
+  <meta name="description" content="DeskBud 伙伴之家：领养一只常驻桌面的针织宠物伙伴，织熊猫、织兔子已上线，更多伙伴陆续织制中。">
+  <link rel="stylesheet" href="assets/css/base.css?v=64">
+  <style>
+    /* 伙伴之家专属样式（不动 base.css） */
+    .pets-lead { max-width: 640px; }
+    .pets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-top: 26px; }
+    .pet-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform .18s ease, box-shadow .18s ease; }
+    .pet-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .pet-card.is-soon { opacity: .78; }
+    .pet-cover { position: relative; height: 210px; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--brand-soft), var(--accent-soft)); }
+    .pet-cover img { max-width: 72%; max-height: 88%; object-fit: contain; }
+    .pet-cover .pet-emoji { font-size: 84px; filter: saturate(.9); }
+    .pet-badge { position: absolute; top: 12px; left: 12px; font-size: 12px; padding: 4px 10px; border-radius: 999px; background: var(--brand); color: #fff; letter-spacing: .5px; }
+    .pet-badge.soon { background: var(--accent); }
+    .pet-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .pet-name { font-size: 19px; font-weight: 700; color: var(--ink); margin: 0; }
+    .pet-tagline { font-size: 14px; color: var(--ink-soft); line-height: 1.65; margin: 0; flex: 1; }
+    .pet-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+    .pet-actions .btn { font-size: 14px; padding: 8px 16px; border-radius: var(--radius-sm); }
+    .pet-soon-note { font-size: 13px; color: var(--ink-faint); }
+    .pets-note { margin-top: 30px; font-size: 13px; color: var(--ink-faint); text-align: center; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud<span class="brand-sub" data-i18n="brand.sub"> · 让桌面不再孤单</span></a>
+      <nav class="nav">
+        <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-eq" aria-hidden="true"><i></i><i></i><i></i></span></button>
+        <a href="index.html" data-i18n="nav.home">首页</a>
+        <a href="list.html" data-i18n="nav.works">作品</a>
+        <a href="pets.html" data-i18n="nav.pets">伙伴之家</a>
+        <a href="usage.html" data-i18n="nav.usage">用户手册</a>
+        <a href="privacy.html" data-i18n="nav.privacy">许可与隐私</a>
+        <a href="contact.html" data-i18n="nav.contact">联系我们</a>
+        <button id="langSwitch" class="lang-switch" type="button">EN</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="view">
+  <section class="page-header wrap">
+    <h1 data-i18n="pets.title">伙伴之家</h1>
+    <p class="ph-sub pets-lead" data-i18n="pets.sub">每一只 DeskBud 伙伴都是一针一针织出来的。挑一只喜欢的领回家，让它常驻你的桌面。</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="pets-grid" id="petsGrid"></div>
+    <p class="pets-note" data-i18n="pets.note">下载后双击即可运行，无需安装；已上线伙伴均为透明悬浮窗，右键可切换宠物。更多伙伴陆续织制中。</p>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div>© <span id="yr"></span> DeskBud · <span data-i18n="footer.site">保留所有权利</span> | <a class="footer-copy" data-i18n="footer.legal" href="privacy.html">许可与隐私</a></div>
+        <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
+      </div>
+      <div class="footer-bottom">
+        <a href="contact.html" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/vendor/i18n/i18next.min.js"></script>
+  <script src="assets/js/i18n.js?v=4"></script>
+  <script src="assets/js/site.js?v=45"></script>
+  <script src="assets/js/bubble.js?v=19"></script>
+  <script>
+  (function () {
+    var grid = document.getElementById('petsGrid');
+    var from = '';
+    try { from = new URLSearchParams(location.search).get('from') || ''; } catch (e) {}
+
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+    function withFrom(url) {
+      if (!url || !from) return url;
+      return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'from=' + encodeURIComponent(from);
+    }
+
+    function action(url, label, cls, soonKey, soonFb) {
+      var text = url ? esc(window.pick(label)) : esc(window.I18N.t(soonKey, soonFb));
+      if (url) return '<a class="btn ' + cls + '" href="' + esc(withFrom(url)) + '" target="_blank" rel="noopener">' + text + '</a>';
+      return '<span class="btn ' + cls + '" style="opacity:.5;pointer-events:none">' + text + '</span>';
+    }
+
+    function card(p) {
+      var online = p.status === 'online';
+      var cover = p.cover
+        ? '<img src="' + esc(p.cover) + '" alt="' + esc(window.pick(p.title)) + '" loading="lazy" draggable="false">'
+        : '<span class="pet-emoji">' + esc(p.emoji || '🐾') + '</span>';
+      var badge = online
+        ? '<span class="pet-badge">' + esc(window.I18N.t('pets.badgeOnline', '已上线')) + '</span>'
+        : '<span class="pet-badge soon">' + esc(window.I18N.t('pets.badgeSoon', '织制中')) + '</span>';
+      var detail = p.detail
+        ? '<a class="btn" href="' + esc(withFrom(p.detail)) + '">' + esc(window.I18N.t('pets.detail', '了解详情')) + '</a>'
+        : '';
+      var actions = '';
+      if (online) {
+        actions =
+          action(p.download && p.download.url, (p.download && p.download.label) || { zh: '下载', en: 'Download' }, 'btn-primary', 'pets.soonBtn', '下载即将上线') +
+          action(p.buy && p.buy.url, (p.buy && p.buy.label) || { zh: '购买角色包', en: 'Buy PetPack' }, '', 'pets.soonBuy', '购买渠道即将上线') +
+          detail;
+      } else {
+        actions = '<span class="pet-soon-note">' + esc(window.I18N.t('pets.soonNote', '织好之后第一时间上线，敬请期待～')) + '</span>';
+      }
+      return '<article class="pet-card' + (online ? '' : ' is-soon') + '">' +
+        '<div class="pet-cover">' + cover + badge + '</div>' +
+        '<div class="pet-body">' +
+          '<h3 class="pet-name">' + esc(window.pick(p.title)) + '</h3>' +
+          '<p class="pet-tagline">' + esc(window.pick(p.tagline)) + '</p>' +
+          '<div class="pet-actions">' + actions + '</div>' +
+        '</div></article>';
+    }
+
+    function render(data) {
+      var pets = (data && data.pets) || [];
+      grid.innerHTML = pets.map(card).join('');
+      window.addEventListener('lang:change', function () {
+        grid.innerHTML = pets.map(card).join('');
+      });
+    }
+
+    fetch('data/catalog.json?cv=1', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(render)
+      .catch(function () { grid.innerHTML = '<p class="pets-note">加载失败，请刷新重试。</p>'; });
+  })();
+  </script>
+  <script>SITE.boot();</script>
+</body>
+</html>
