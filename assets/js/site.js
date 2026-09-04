@@ -660,3 +660,34 @@ function boot() {
   SITE.route();        // 首屏渲染当前页
 }
 SITE.boot = boot;
+
+/* ---------- 全站更新探测（1C 混合）：HEAD 探 index.html 版本，有新版才整页刷新 ----------
+   触发：load 记基线 → 切回标签页 / 点击（60s 节流）→ 每 5 分钟轮询兜底（挂机看走马灯场景）。
+   HEAD 只拿响应头（ETag / Last-Modified），流量几字节；拿不到版本头则静默跳过，绝不误刷。 */
+(function () {
+  let known = null;
+  let lastTap = 0;
+  const check = async () => {
+    try {
+      const r = await fetch('index.html', { method: 'HEAD', cache: 'no-store' });
+      if (!r.ok) return;
+      const tag = r.headers.get('ETag') || r.headers.get('Last-Modified');
+      if (!tag) return;                              // 托管不发版本头 → 不探测，防误刷
+      if (known === null) { known = tag; return; }   // 首次只记基线，不刷
+      if (tag !== known) { known = tag; location.reload(); }
+    } catch { /* 离线/请求中断：静默 */ }
+  };
+  window.addEventListener('load', () => {
+    check();
+    setInterval(check, 5 * 60 * 1000);               // 5 分钟兜底轮询
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') check();  // 切回标签页即探
+    });
+    document.addEventListener('click', () => {       // 点击即探，60s 节流防狂发
+      const now = Date.now();
+      if (now - lastTap < 60000) return;
+      lastTap = now;
+      check();
+    });
+  });
+})();
