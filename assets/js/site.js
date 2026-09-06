@@ -1,7 +1,127 @@
-// DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计
+// DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计、webmeji 加载器
 const SITE = {
   data: null,
-  _assetVer: 24, // 与 css/js ?v= 同步，图片缓存破除用
+  _assetVer: 25, // 与 css/js ?v= 同步，图片缓存破除用
+
+  // ====== webmeji 网页宠物加载器（全站统一开关） ======
+  // 引擎基于 webmeji (Lars de Rooij, 2026)，详见 assets/webmeji/webmeji.js 头部注释
+  webmeji: {
+    base: 'assets/webmeji/',
+    enabledPaths: ['/', '/index.html', '/pets.html'],  // 当前启用页：首页 + 伙伴之家
+    init() {
+      const path = location.pathname;
+      const enabled = this.enabledPaths.some(p => path === p || path.endsWith(p));
+      if (!enabled) return;
+      // 1. 注入 css
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = this.base + 'webmeji.css?v=2';
+      document.head.appendChild(css);
+      // 2. 注入 config（先于 webmeji.js 定义 window.DESKBUD_RABBIT_CONFIG / DESKBUD_RABBIT_SPAWNING）
+      const cfg = document.createElement('script');
+      cfg.src = this.base + 'rabbit.config.js?v=2';
+      cfg.onload = () => {
+        // 3. 把 SPAWNING 挂到 webmeji.js 期望的全局名（必须在 engine 加载前）
+        window.SPAWNING = window.DESKBUD_RABBIT_SPAWNING;
+        const s = document.createElement('script');
+        s.src = this.base + 'webmeji.js?v=5';
+        s.onload = () => {
+          // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
+          window.dispatchEvent(new Event('DOMContentLoaded'));
+          // 5. 引擎异步预载图片后才 new Creature 创建 .webmeji-container，用观察器兜底绑冒泡
+          this.bindSpeechBubble();
+        };
+        document.head.appendChild(s);
+      };
+      document.head.appendChild(cfg);
+    },
+
+    // 取一句 deskbud 语录（复用 bubble.js 的 window.BUBBLE 池，失败兜底）
+    _pickQuote() {
+      let pool = [];
+      if (window.BUBBLE && typeof window.BUBBLE.linesFor === 'function') {
+        pool = window.BUBBLE.linesFor('rabbit') || [];
+      }
+      const line = pool.length ? pool[Math.floor(Math.random() * pool.length)] : '今天也要元气满满哦';
+      if (window.pick) {
+        try { return window.pick(line); } catch (e) {}
+      }
+      return (line && (line.zh || line.en || line)) || '今天也要元气满满哦';
+    },
+
+    // 给单只宠物容器绑定点击/抚摸冒泡。气泡 append 到 body(fixed)，避免被容器 overflow:hidden 裁掉
+    _bindSpeechBubble(container) {
+      if (!container || container._wmBubbleBound) return;
+      container._wmBubbleBound = true;
+
+      const show = () => {
+        const old = document.querySelector('.wm-bubble');
+        if (old) { if (old._wmRaf) cancelAnimationFrame(old._wmRaf); old.remove(); }
+        const bubble = document.createElement('div');
+        bubble.className = 'wm-bubble';
+        const bbl = document.createElement('span');
+        bbl.className = 'wm-bbl';
+        bbl.textContent = this._pickQuote();
+        bubble.appendChild(bbl);
+        document.body.appendChild(bubble);
+        // 定位到容器正上方居中（fixed，相对视口），并用 rAF 持续跟随宠物移动
+        const place = () => {
+          const r = container.getBoundingClientRect();
+          bubble.style.left = (r.left + r.width / 2) + 'px';
+          bubble.style.top = (r.top - 6) + 'px';
+        };
+        place();
+        const follow = () => {
+          if (!bubble.isConnected) return;   // 已被新气泡替换/移除则停止
+          place();
+          bubble._wmRaf = requestAnimationFrame(follow);
+        };
+        bubble._wmRaf = requestAnimationFrame(follow);
+        // 3s 后渐隐移除
+        const clear = () => { if (bubble._wmRaf) cancelAnimationFrame(bubble._wmRaf); bubble.remove(); };
+        setTimeout(() => {
+          bubble.classList.add('wm-bubble-out');
+          setTimeout(clear, 450);
+        }, 3000);
+      };
+
+      let hoverTimer = null;
+      container.addEventListener('click', () => {
+        if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
+        show();
+      });
+      container.addEventListener('mouseenter', () => {
+        hoverTimer = setTimeout(show, 900);   // 抚摸延迟冒泡
+      });
+      container.addEventListener('mouseleave', () => {
+        if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
+      });
+
+      // DeskBud: 宠物自己玩时随机自动冒语录(8~20s 一条)
+      const scheduleAuto = () => {
+        container._wmAutoTimer = setTimeout(() => {
+          show();
+          scheduleAuto();
+        }, 8000 + Math.random() * 12000);
+      };
+      scheduleAuto();
+    },
+
+    // 监听 .webmeji-container 创建，逐个绑冒泡
+    bindSpeechBubble() {
+      const bind = (node) => {
+        if (node && node.classList && node.classList.contains('webmeji-container')) {
+          this._bindSpeechBubble(node);
+        }
+      };
+      document.querySelectorAll('.webmeji-container').forEach(bind);
+      if (this._wmObserver) return;
+      this._wmObserver = new MutationObserver((mutations) => {
+        mutations.forEach((m) => m.addedNodes.forEach(bind));
+      });
+      this._wmObserver.observe(document.body, { childList: true });
+    }
+  },
   async load() {
     if (this.data) return this.data;
     const res = await fetch('data/works.json', { cache: 'no-cache' });
@@ -689,6 +809,7 @@ function boot() {
     });
   }
   SITE.route();        // 首屏渲染当前页
+  SITE.webmeji.init(); // 全站统一：当前页在启用列表时挂载网页宠物
 }
 SITE.boot = boot;
 

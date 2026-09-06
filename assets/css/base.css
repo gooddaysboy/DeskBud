@@ -1001,3 +1001,50 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 
 .empty { text-align: center; color: var(--ink-faint); padding: 60px 0; }
+
+/* ---------- 网页宠物说话气泡（webmeji 点击/抚摸触发） ---------- */
+.wm-bubble {
+  position: fixed;
+  z-index: 10000;
+  max-width: 220px;
+  min-width: 60px;
+  pointer-events: none;
+  animation: none !important;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-100%);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.wm-bubble .wm-bbl {
+  display: inline-block;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+  font-family: var(--font-bubble);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  white-space: normal;
+  word-break: break-word;
+  text-shadow: none;
+  position: relative;
+}
+.wm-bubble .wm-bbl::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.96);
+  border-bottom-width: 0;
+}
+.wm-bubble-out {
+  opacity: 0;
+  transform: translateX(-50%) translateY(calc(-100% - 6px));
+}
