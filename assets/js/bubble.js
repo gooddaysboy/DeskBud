@@ -5,9 +5,31 @@
 const PET_EMOJI = { panda: '🐼', cat: '🐱', dog: '🐶', plant: '🌱', rabbit: '🐰', public: '💭' };
 const CUTE = ['#ffd9e8', '#d8f3e6', '#fff1ca', '#d8ecff', '#e9ddff', '#ffe2d1'];
 
+// v6 交互/状态气泡内置兜底（与桌宠 pet_window_v2.py 的 _REACT_CLICK/_REACT_DRAG 一致）
+const _FB_REACT = {
+  click: {
+    public: [
+      { zh: '呀！', en: 'Oof!' }, { zh: '别戳我～', en: 'Stop poking me~' },
+      { zh: '干嘛～', en: 'Hey~' }, { zh: '嘿嘿，起飞！', en: 'Wheee!' },
+      { zh: '吓我一跳', en: 'You startled me' }
+    ],
+    pets: {}
+  },
+  drag: {
+    public: [
+      { zh: '哎呀，放我下来！', en: 'Put me down!' }, { zh: '轻点轻点～', en: 'Gently please~' },
+      { zh: '要被拎走了', en: 'Being carried away' }, { zh: '呜哇——', en: 'Whoa——' },
+      { zh: '稳住稳住！', en: 'Hold steady!' }
+    ],
+    pets: {}
+  }
+};
+
 const BUBBLE = {
   data: null,
   ready: false,
+  reactions: null,   // v6: L2 交互池 {click:{public,pets}, drag:{...}}
+  states: null,      // v6: L3 状态池 {climb:{public,pets}, ...}
   // 内置备用文案（兜底，保证降级不白屏）
   fallback: {
     version: 0,
@@ -37,6 +59,9 @@ const BUBBLE = {
         public: Array.isArray(json.public) ? json.public : [],
         pets: (json.pets && typeof json.pets === 'object') ? json.pets : {}
       };
+      // v6: L2 反应池 / L3 状态池（远端缺失则退回内置兜底，逻辑不空转）
+      this.reactions = (json.reactions && typeof json.reactions === 'object') ? json.reactions : null;
+      this.states = (json.states && typeof json.states === 'object') ? json.states : null;
       // 若 public 为空，至少用兜底 public，保证有内容可飘
       if (!this.data.public.length) this.data.public = this.fallback.public.slice();
       this.ready = true;
@@ -47,6 +72,30 @@ const BUBBLE = {
       this.ready = true;
     }
     return this.data;
+  },
+  // 条目可能是 {zh,en} 双语对象，也可能是纯字符串；取当前语言文本
+  text(entry) {
+    if (!entry) return '';
+    if (typeof entry === 'string') return entry;
+    if (window.pick) { try { const t = window.pick(entry); if (t) return t; } catch (e) {} }
+    return entry.zh || entry.en || '';
+  },
+  // v6 L2 交互气泡：click / drag。优先级 = 远端 v6 → 内置兜底（与桌宠一致）
+  pickReaction(kind, pet) {
+    const g = (this.reactions && this.reactions[kind]) || _FB_REACT[kind];
+    if (!g) return '';
+    const pool = (g.public || []).concat((g.pets && g.pets[pet]) || []);
+    if (!pool.length) return '';
+    return this.text(pool[Math.floor(Math.random() * pool.length)]);
+  },
+  // v6 L3 状态气泡：climb / hang / slip / fall / land / walk / idle_stare / sleep / coquetry / naughty
+  // 无对应池返回空串 —— 调用方据此跳过（桌面版同策略，不硬凑文案）
+  pickState(key, pet) {
+    const g = this.states && this.states[key];
+    if (!g) return '';
+    const pool = (g.public || []).concat((g.pets && g.pets[pet]) || []);
+    if (!pool.length) return '';
+    return this.text(pool[Math.floor(Math.random() * pool.length)]);
   },
   // 取某宠物（category 叶子 id）的合并语录：公共 + 该宠物专属，随机打散
   linesFor(category) {

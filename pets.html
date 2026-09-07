@@ -72,11 +72,12 @@
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
   <script src="assets/js/i18n.js?v=6"></script>
-  <script src="assets/js/site.js?v=53"></script>
-  <script src="assets/js/bubble.js?v=19"></script>
+  <script src="assets/js/site.js?v=64"></script>
+  <script src="assets/js/bubble.js?v=20"></script>
+
   <script type="application/json" id="catalogData">
 {
-  "version": 2,
+  "version": 3,
   "channelsVisible": false,
   "channels": [
     {
@@ -195,7 +196,7 @@
     },
     {
       "id": "cat",
-      "status": "soon",
+      "status": "hidden",
       "title": {
         "zh": "织猫咪",
         "en": "Knitted Cat"
@@ -223,7 +224,7 @@
     },
     {
       "id": "dog",
-      "status": "soon",
+      "status": "hidden",
       "title": {
         "zh": "织小狗",
         "en": "Knitted Dog"
@@ -251,7 +252,7 @@
     },
     {
       "id": "plant",
-      "status": "soon",
+      "status": "hidden",
       "title": {
         "zh": "织小盆栽",
         "en": "Knitted Plant"
@@ -281,106 +282,6 @@
 }
   </script>
 
-  <script>
-  (function () {
-    var grid = document.getElementById('petsGrid');
-    var from = '';
-    try { from = new URLSearchParams(location.search).get('from') || ''; } catch (e) {}
-
-    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-
-    function withFrom(url) {
-      if (!url || !from) return url;
-      return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'from=' + encodeURIComponent(from);
-    }
-
-    function action(url, label, cls, soonKey, soonFb) {
-      var text = url ? esc(window.pick(label)) : esc(window.I18N.t(soonKey, soonFb));
-      if (url) return '<a class="btn ' + cls + '" href="' + esc(withFrom(url)) + '" target="_blank" rel="noopener">' + text + '</a>';
-      return '<span class="btn ' + cls + '" style="opacity:.5;pointer-events:none">' + text + '</span>';
-    }
-
-    function card(p) {
-      var online = p.status === 'online';
-      var cover = p.cover
-        ? '<img src="' + esc(p.cover) + '" alt="' + esc(window.pick(p.title)) + '" loading="lazy" draggable="false">'
-        : '<span class="pet-emoji">' + esc(p.emoji || '🐾') + '</span>';
-      var badge = online
-        ? '<span class="pet-badge">' + esc(window.I18N.t('pets.badgeOnline', '已上线')) + '</span>'
-        : '<span class="pet-badge soon">' + esc(window.I18N.t('pets.badgeSoon', '织制中')) + '</span>';
-      var detail = p.detail
-        ? '<a class="btn" href="' + esc(withFrom(p.detail)) + '">' + esc(window.I18N.t('pets.detail', '了解详情')) + '</a>'
-        : '';
-      var actions = '';
-      if (online) {
-        actions =
-          action(p.download && p.download.url, (p.download && p.download.label) || { zh: '下载', en: 'Download' }, 'btn-primary', 'pets.soonBtn', '下载即将上线') +
-          action(p.buy && p.buy.url, (p.buy && p.buy.label) || { zh: '购买角色包', en: 'Buy PetPack' }, '', 'pets.soonBuy', '购买渠道即将上线') +
-          detail;
-      } else {
-        actions = '<span class="pet-soon-note">' + esc(window.I18N.t('pets.soonNote', '织好之后第一时间上线，敬请期待～')) + '</span>';
-      }
-      return '<article class="pet-card' + (online ? '' : ' is-soon') + '">' +
-        '<div class="pet-cover">' + cover + badge + '</div>' +
-        '<div class="pet-body">' +
-          '<h3 class="pet-name">' + esc(window.pick(p.title)) + '</h3>' +
-          '<p class="pet-tagline">' + esc(window.pick(p.tagline)) + '</p>' +
-          '<div class="pet-actions">' + actions + '</div>' +
-        '</div></article>';
-    }
-
-    var chansBox = document.getElementById('petsChannels');
-    function renderChans(data) {
-      var chans = (data && data.channels) || [];
-      if (!chans.length || !data.channelsVisible || !chansBox) return;
-      var items = chans.map(function (c) {
-        var name = esc(window.pick(c.label));
-        return c.url ? '<a href="' + esc(withFrom(c.url)) + '" target="_blank" rel="noopener">' + name + '</a>' : name;
-      }).join(' / ');
-      chansBox.innerHTML = window.pick({ zh: '也可在 {list} 搜索 DeskBud', en: 'Also find DeskBud on {list}' }).replace('{list}', items);
-      chansBox.hidden = false;
-    }
-
-    var currentData = null;
-    function render(data) {
-      if (!data || !data.pets || !data.pets.length) return;
-      currentData = data;
-      function paint() {
-        var pets = currentData.pets || [];
-        grid.innerHTML = pets.map(card).join('');
-        renderChans(currentData);
-      }
-      paint();
-      if (!window.__petsLangWired) {
-        window.__petsLangWired = true;
-        window.addEventListener('lang:change', paint);  // 只绑一次，避免切 N 次语言叠 N 个监听
-      }
-    }
-
-    // 首屏直出：优先读内联数据，不依赖 fetch 网络往返 → 杜绝线上首访空白
-    var hasInlined = false;
-    var inlineEl = document.getElementById('catalogData');
-    if (inlineEl) {
-      try {
-        var inlineData = JSON.parse(inlineEl.textContent);
-        if (inlineData && inlineData.pets && inlineData.pets.length) {
-          render(inlineData);
-          hasInlined = true;
-        }
-      } catch (e) { /* 内联损坏则走 fetch */ }
-    }
-
-    // fetch 更新通道：catalog.json 改版后，下一次访问静默覆盖为最新数据
-    fetch('data/catalog.json?cv=3', { cache: 'no-cache' })
-      .then(function (r) { return r.json(); })
-      .then(function (data) { if (data && data.pets && data.pets.length) render(data); })
-      .catch(function () {
-        // 已有内联兜底则静默；仅内联也缺失时才提示
-        if (!hasInlined) grid.innerHTML = '<p class="pets-note">加载失败，请刷新重试。</p>';
-      });
-  })();
-  </script>
   <script>SITE.boot();</script>
 </body>
 </html>

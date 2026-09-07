@@ -113,6 +113,7 @@ class Creature {
     this.maxPos = window.innerWidth - this.containerWidth; // max horizontal position
     this.forceWalkAfter = false; // flag for forcing walk after some actions
     this.forceThinkAfter = false;
+    this.inverted = false;   // DeskBud: 顶部倒立行走时垂直翻转(头朝下脚朝上)
 
     this.container.style.left = `${this.positionX}px`;
     this.container.style.top = 'auto'; // reset top for CSS positioning
@@ -153,9 +154,10 @@ class Creature {
     return array;
   }
 
-  // flip sprite horizontally depending on facing
+  // flip sprite horizontally depending on facing (+ vertical when inverted on top)
   updateImageDirection() {
-    this.img.style.transform = this.facing === 'left' ? 'scaleX(1)' : 'scaleX(-1)';
+    const base = this.facing === 'left' ? 'scaleX(1)' : 'scaleX(-1)';
+    this.img.style.transform = this.inverted ? `${base} scaleY(-1)` : base;
   }
 
   // update facing from horizontal delta (dx)
@@ -205,11 +207,11 @@ class Creature {
   applyEdgeOffset() {
       if (this.isDragging) return this.container.style.cssText = `left:${this.positionX}px;top:${this.positionY}px`;
 
-      const offsetX = this.currentEdge === 'left' ? -this.containerWidth/2 :
-                      this.currentEdge === 'right' ? this.containerHeight/2 : 0;
-      // DeskBud: hangstillTop 素材为头朝上正挂(双手上举抓杆)，挂顶时应贴顶边整体下垂，
-      // 不再用 -height/2 的"倒挂"偏移(那会把头推到视口外只剩半身)
-      const offsetY = this.currentEdge === 'top' ? 0 : 0;
+      // DeskBud: 素材为无道具纯动作(兔子占满画布居中、无墙/杆参照)，
+      // 贴边 = 容器边缘对齐屏幕边缘即可(offset=0)。
+      // 原 -width/2 等"半出屏"偏移是给带参照素材设计的，会把兔子裁掉半身(挂顶/侧边同源问题，均已归零)
+      const offsetX = 0;
+      const offsetY = 0;
 
       this.container.style.left = `${(this.positionX||0)+offsetX}px`;
       this.container.style.top  = `${(this.positionY||0)+offsetY}px`;
@@ -287,9 +289,13 @@ class Creature {
         if (t < 1) {
             requestAnimationFrame(step);
         } else {
-            clearInterval(frameTimer); 
+            clearInterval(frameTimer);
             this.isJumping = false;
             this.currentEdge = targetEdge;
+            // DeskBud: 侧边落地后强制设朝向(覆盖 step 里 setFacingFromDelta 的镜像结果), 攀爬脸朝屏外(扒着屏缘外侧)
+            if (targetEdge === 'left') this.facing = 'right';         // 镜像 scaleX(-1) → 面朝左 → 朝屏外
+            else if (targetEdge === 'right') this.facing = 'left';    // 不镜像 → 素材面朝右 → 朝屏外
+            this.updateImageDirection();
             this.updateEdgeClass();
             this.startEdgeIdle(); // start idle after landing
         }
@@ -297,20 +303,48 @@ class Creature {
     requestAnimationFrame(step);
   }
 
-  // start idle animation on edge
+  // 边缘行为入口：side 抓稳后向上爬升到顶；top 挂住/倒立行走轮换(不掉落)
   startEdgeIdle() {
     this.updateEdgeClass();
-    if (this.currentEdge === 'top') this.startAction('hangstillTop');
-    else if (this.isSideEdge(this.currentEdge)) this.startAction('hangstillSide');
+    this.edgeAction();
   }
 
-  // pick random edge action: hang, climb, fall
+  // pick edge behavior by current edge (side => hang briefly then climb up; top => hang/topwalk)
   edgeAction() {
     if(this.isJumping||this.isFalling) return;
-    const choice=this.spriteConfig.EDGE_ACTIONS[Math.floor(Math.random()*this.spriteConfig.EDGE_ACTIONS.length)];
-    choice==='hang'?this.startEdgeIdle():
-    choice==='climb'?this.startAction(this.currentEdge==='top'?'climbTop':'climbSide'):
-    choice==='fall'&&this.fallToBottom();
+    if (this.isSideEdge(this.currentEdge)) {
+      // DeskBud: 侧边被抓 → 先抓稳(短暂挂住)，结束时转 climbSide 向上爬升
+      this.startAction('hangstillSide');
+    } else if (this.currentEdge === 'top') {
+      // DeskBud: 顶部(爬/跳到顶抵达) → 以倒立行走为主, 挂顶偶尔; 刚抵达不直接掉
+      this.topDecide(false);
+    }
+  }
+
+  // DeskBud: 顶边行为决策——主体为倒立行走(走远), 悬挂偶尔切换, 偶尔回落地面恢复日常动作
+  // allowDrop=false(刚爬/跳到顶)时把"回落"并入悬挂, 不至于刚上来就掉
+  topDecide(allowDrop) {
+    if (this.isJumping || this.isFalling) return;
+    if (this.currentEdge !== 'top') { this.setNextAction(); return; }
+    const r = Math.random();
+    if (r < 0.62) {                       // ~62% 继续/开始倒立行走 → 走得远
+      if (this.currentAction === 'topwalk') this.continueTopwalk();
+      else this.startAction('topwalk');
+      return;
+    }
+    // 离开行走 → 先停行走帧, 再转挂顶或回落
+    if (this.frameTimer) { clearInterval(this.frameTimer); this.frameTimer = null; }
+    if (r < 0.85) this.startAction('hangstillTop');   // ~23% 偶尔挂顶摆动
+    else if (allowDrop) this.fallToBottom();          // ~15% 偶尔回落地面(坐/想/蹦等日常)
+    else this.startAction('hangstillTop');            // 刚抵达不落 → 并回悬挂
+  }
+
+  // DeskBud: 延续当前倒立行走(不重启帧序、方向多数保持), 一段到点再决策 → 走得远不碎切
+  continueTopwalk() {
+    if (this.actionCompletionTimer) { clearTimeout(this.actionCompletionTimer); this.actionCompletionTimer = null; }
+    if (Math.random() < 0.3) this.direction *= -1;    // 偶发换向增变化, 多数直行
+    const dur = 3000 + Math.random() * 3500;           // 每段 3~6.5s
+    this.actionCompletionTimer = setTimeout(() => this.topDecide(true), dur);
   }
 
   // user interactions ---------------------------------------------------
@@ -398,6 +432,7 @@ class Creature {
     this.isFalling = false;
     this.isPetting = false;
     this._pressStartTime = performance.now();   // DeskBud: 记录按下时刻，用于点击蓄力判断
+    this._dragSamples = [];                      // DeskBud: 拖动轨迹样本(算松手甩动速度)
 
     this.currentAction = 'drag';
     this.img.style.transform = this.facing === 'left' ? 'scaleX(1)' : 'scaleX(-1)';
@@ -439,6 +474,13 @@ class Creature {
 
         this.container.style.left = this.positionX + 'px';
         this.container.style.top  = this.positionY + 'px';
+
+        // DeskBud: 记录轨迹样本(保留最近 6 个, 丢弃 150ms 前的)
+        const now = performance.now();
+        this._dragSamples.push({ x: clientX, y: clientY, t: now });
+        if (this._dragSamples.length > 6) this._dragSamples.shift();
+        const cutoff = now - 150;
+        while (this._dragSamples.length > 1 && this._dragSamples[0].t < cutoff) this._dragSamples.shift();
     };
 
     const onPointerUp = () => {
@@ -458,9 +500,22 @@ class Creature {
 
         this.resetAnimation();
 
+        // DeskBud: 甩动速度(末段 ~150ms 轨迹, px/s)
+        let vx = 0, vy = 0;
+        if (this._dragSamples && this._dragSamples.length >= 2) {
+          const a = this._dragSamples[0];
+          const b = this._dragSamples[this._dragSamples.length - 1];
+          const dt = Math.max((b.t - a.t) / 1000, 0.001);
+          vx = (b.x - a.x) / dt;
+          vy = (b.y - a.y) / dt;
+        }
+
+        // DeskBud: 交互气泡（先于动作处理派发 —— 反应气泡优先级高于状态气泡，slip 等不会抢它）
+        this.emitReact(moved ? 'drag' : 'click');
+
         if (!moved) {
-          // DeskBud: 点击(未拖动)——底部蹦高(至少超半屏)、顶部挂着则落下
-          if (this.currentEdge === 'top') {
+          // DeskBud: 点击(未拖动)——挂顶/挂边则掉下；底部则长按蓄力蹦高
+          if (this.currentEdge !== 'bottom') {
             this.fallToBottom();
           } else {
             // 长按蓄力：按住越久跳越高。快速点=半屏起，蓄满约 0.9s 接近屏幕顶部
@@ -470,14 +525,37 @@ class Creature {
             const jumpHeight = (window.innerHeight - this.containerHeight) - targetPeak;
             this.bounce(Math.max(jumpHeight, 10));
           }
-        } else if (this.positionY <= this.containerHeight) {
-          // DeskBud: 拖到顶部附近松手 → 挂顶
-          this.positionY = 0;
-          this.currentEdge = 'top';
-          this.updateEdgeClass();
-          this.startEdgeIdle();
         } else {
-          this.fallToBottom(); // 拖到别处 → 回底部
+          // DeskBud: 拖动/甩动松手——按"落点 + 220ms 惯性预估"决定抓哪条边 / 回底部
+          const W = this.containerWidth, H = this.containerHeight;
+          const iW = window.innerWidth, iH = window.innerHeight;
+          const px = this.positionX + vx * 0.22;   // 惯性预估落点(甩动捕捉)
+          const py = this.positionY + vy * 0.22;
+          if (py <= H * 1.2) {
+            // 拖/甩到顶部 → 先挂顶(玩家亲手挂上去), 挂完自动转顶边日常(倒走为主)
+            this.positionY = 0;
+            this.currentEdge = 'top';
+            this.updateEdgeClass();
+            this.startAction('hangstillTop');
+          } else if (px <= W * 1.3) {
+            // 拖/甩到左缘 → 抓边向上攀爬
+            this.positionX = 0;
+            this.currentEdge = 'left';
+            this.facing = 'right';         // 贴左壁脸朝屏外(镜像 scaleX(-1), 素材面朝右→镜像后面朝左朝外)
+            this.updateImageDirection();
+            this.updateEdgeClass();
+            this.startEdgeIdle();
+          } else if (px >= iW - 2.3 * W) {
+            // 拖/甩到右缘 → 抓边向上攀爬
+            this.positionX = iW - W;
+            this.currentEdge = 'right';
+            this.facing = 'left';          // 贴右壁脸朝屏外(不镜像, 素材面朝右即朝外)
+            this.updateImageDirection();
+            this.updateEdgeClass();
+            this.startEdgeIdle();
+          } else {
+            this.fallToBottom(); // 拖到屏幕中部 / 向下甩 → 回底部
+          }
         }
 
         this.animationFrameId = requestAnimationFrame(this.animate);
@@ -541,8 +619,12 @@ class Creature {
   // animate falling to bottom
   fallToBottom(fallSpeed=this.spriteConfig.fallspeed){
     if(this.isFalling) return;
+    // DeskBud: 爬墙中途脱落（还在侧边、没爬到顶就掉）→ slip「脚脚打滑」，区别于普通坠落
+    if (this.currentAction === 'climbSide' && this.isSideEdge(this.currentEdge)) this.emitAction('slip');
     this.tripAfterFallActive = false;
     this.isFalling = true;
+    this.inverted = false;          // DeskBud: 落地复位(防倒立状态残留)
+    this.updateImageDirection();
     this.currentEdge='bottom';
     this.updateEdgeClass();
     this.resetAnimation();
@@ -725,20 +807,115 @@ class Creature {
   }
 
   // start a given action (handles direction, frames, loops, and special cases)
+  // DeskBud: 向外派发动作变化（site.js 据此按概率冒状态气泡，见 bubble.json v6 的 states）
+  emitAction(action, extra) {
+    try {
+      document.dispatchEvent(new CustomEvent('webmeji:action', {
+        detail: Object.assign({ action: action, edge: this.currentEdge }, extra || {})
+      }));
+    } catch (e) {}
+  }
+
+  // DeskBud: 交互气泡触发源（click 单击 / drag 拖拽松手），100% 触发、最高优先级
+  emitReact(kind) {
+    try {
+      document.dispatchEvent(new CustomEvent('webmeji:react', { detail: { kind: kind } }));
+    } catch (e) {}
+  }
+
   startAction(action) {  
     if (this.isDragging || this.isFalling ) return;
     this.currentAction = action;
     this.resetAnimation();
+    this.emitAction(action);
 
     if (action === 'climbTop') {
       this.direction = Math.random() < 0.5 ? -1 : 1;
       this.updateImageDirection();
     }
-    if (action === 'climbSide') {
-      this.direction = Math.random() < 0.5 ? -1 : 1;
-    }
     if (this.isJumping) {
       this.animationFrameId = requestAnimationFrame(this.animate);
+      return;
+    }
+
+    // DeskBud: 顶部倒立行走(头朝下、脚朝上, 沿顶边水平来回)——walk 帧 + scaleY(-1)
+    // 一段 3~6.5s 到点后由 topDecide 决策: 多数续走(帧续播不重启), 偶尔挂/回落
+    if (action === 'topwalk') {
+      this.inverted = true;
+      this.updateImageDirection();   // 进入即头朝下, 防上一动作的 transform 残留
+      this.positionY = 0;
+      this.direction = Math.random() < 0.5 ? -1 : 1;
+      const walk = this.spriteConfig.walk;
+      this.img.src = walk.frames[0];
+      let f = 0;
+      this.frameTimer = setInterval(() => {
+        f = (f + 1) % walk.frames.length;
+        this.img.src = walk.frames[f];
+      }, walk.interval);
+      this.actionCompletionTimer = setTimeout(() => this.topDecide(true), 3000 + Math.random() * 3500);
+      return;
+    }
+
+    // DeskBud: 侧边攀爬——固定向上爬升到顶(位移在 animate 的 climbSide 分支, 到顶自动转顶部)
+    if (action === 'climbSide') {
+      this.inverted = false;
+      this.direction = -1;   // 恒向上(移除原随机方向的"往下爬/方向反")
+      if (this.currentEdge === 'left') this.facing = 'right';     // 贴左壁脸朝屏外(镜像)
+      else if (this.currentEdge === 'right') this.facing = 'left'; // 贴右壁脸朝屏外(不镜像)
+      this.updateImageDirection();
+      const cfg = this.spriteConfig.climbSide;
+      this.img.src = cfg.frames[0];
+      let f = 0;
+      this.frameTimer = setInterval(() => {
+        f = (f + 1) % cfg.frames.length;
+        this.img.src = cfg.frames[f];
+      }, cfg.interval);
+      return;
+    }
+
+    // DeskBud: 侧边被抓稳——短暂挂住后转 climbSide 向上爬(不再中途掉落)
+    if (action === 'hangstillSide') {
+      this.inverted = false;
+      this.updateImageDirection();   // 清除可能残留的 scaleY(-1)
+      const cfg = this.spriteConfig.hangstillSide;
+      this.img.src = cfg.frames[0];
+      let f = 0;
+      if (cfg.frames.length > 1) {
+        this.frameTimer = setInterval(() => {
+          f = (f + 1) % cfg.frames.length;
+          this.img.src = cfg.frames[f];
+        }, cfg.interval);
+      }
+      const dur = 450 + Math.random() * 700;   // 抓稳 ~0.45-1.15s
+      this.actionCompletionTimer = setTimeout(() => {
+        if (this.frameTimer) { clearInterval(this.frameTimer); this.frameTimer = null; }
+        if (this.isSideEdge(this.currentEdge)) this.startAction('climbSide');
+        else this.setNextAction();
+      }, dur);
+      return;
+    }
+
+    // DeskBud: 挂顶摆动(头朝上正挂，不倒置)；结束后交 topDecide 转顶边日常
+    if (action === 'hangstillTop') {
+      this.inverted = false;
+      this.updateImageDirection();   // 立即清除倒走残留的 scaleY(-1)，避免悬挂显示成头朝下
+      const cfg = this.spriteConfig.hangstillTop;
+      this.img.src = cfg.frames[0];
+      let f = 0;
+      if (cfg.frames.length > 1) {
+        this.frameTimer = setInterval(() => {
+          f = (f + 1) % cfg.frames.length;
+          this.img.src = cfg.frames[f];
+        }, cfg.interval);
+      }
+      const dur = cfg.randomizeDuration
+        ? Math.random() * (cfg.max - cfg.min) + cfg.min
+        : cfg.interval * cfg.loops;
+      this.actionCompletionTimer = setTimeout(() => {
+        if (this.frameTimer) { clearInterval(this.frameTimer); this.frameTimer = null; }
+        if (this.currentEdge === 'top') this.topDecide(true);
+        else this.setNextAction();
+      }, dur);
       return;
     }
 
@@ -747,7 +924,11 @@ class Creature {
 
     const { frames, interval, loops = 1 } = config;
 
-    if (action === 'sit' || action === 'hangstillSide' || action === 'hangstillTop') {
+    // DeskBud: 常规/地面动作复位倒立标记
+    this.inverted = false;
+    this.updateImageDirection();
+
+    if (action === 'sit') {
       const duration = config.randomizeDuration
         ? Math.random() * (config.max - config.min) + config.min
         : interval * loops;
@@ -811,7 +992,7 @@ class Creature {
         this.animationFrameId = requestAnimationFrame(this.animate);
         return;
     }
-    const movingActions = ['walk', 'forced-walk', 'climbTop']; // add actions with horizontal movement here
+    const movingActions = ['walk', 'forced-walk', 'climbTop', 'topwalk']; // add actions with horizontal movement here
     if (movingActions.includes(this.currentAction)) {
         const dx = this.direction * this.spriteConfig.walkspeed * delta;
         this.positionX += dx;
@@ -833,25 +1014,21 @@ class Creature {
     }
 
     if (this.currentAction === 'climbSide') {
-      this.positionY += this.direction * this.spriteConfig.walkspeed * delta;
-
-      if (this.currentEdge === 'left') {
-        this.facing = 'left';
-      } else if (this.currentEdge === 'right') {
-        this.facing = 'right';
-      }
-      this.updateImageDirection();
-
-      // flips sprites and movement direction upon reaching a wall
-      const maxY = window.innerHeight - this.containerHeight;
+      // DeskBud: 侧边攀爬 = 恒向上爬升(方向反已修: direction 固定 -1), 到顶转顶部倒挂活动
+      const climbSpeed = this.spriteConfig.fallspeed * 0.8;   // ~144px/s 向上
+      this.positionY -= climbSpeed * delta;
       if (this.positionY <= 0) {
         this.positionY = 0;
-        this.direction = 1;
-      } else if (this.positionY >= maxY) {
-        this.positionY = maxY;
-        this.direction = -1;
+        this.container.style.top = '0px';
+        // 爬到顶部 → 清爬行帧, 转顶部行为
+        if (this.frameTimer) { clearInterval(this.frameTimer); this.frameTimer = null; }
+        this.currentAction = null;
+        this.currentEdge = 'top';
+        this.updateEdgeClass();
+        this.startEdgeIdle();
+      } else {
+        this.container.style.top = `${this.positionY}px`;
       }
-      this.applyEdgeOffset();
     }
     this.animationFrameId = requestAnimationFrame(this.animate);
   }

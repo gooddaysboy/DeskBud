@@ -9,6 +9,12 @@ import os
 import socketserver
 import sys
 
+# pythonw(无控制台)下 stdout/stderr 为 None，print 会崩——重定向到空设备
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, "w", encoding="utf-8")
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, "w", encoding="utf-8")
+
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

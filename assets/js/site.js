@@ -19,12 +19,12 @@ const SITE = {
       document.head.appendChild(css);
       // 2. 注入 config（先于 webmeji.js 定义 window.DESKBUD_RABBIT_CONFIG / DESKBUD_RABBIT_SPAWNING）
       const cfg = document.createElement('script');
-      cfg.src = this.base + 'rabbit.config.js?v=2';
+      cfg.src = this.base + 'rabbit.config.js?v=4';
       cfg.onload = () => {
         // 3. 把 SPAWNING 挂到 webmeji.js 期望的全局名（必须在 engine 加载前）
         window.SPAWNING = window.DESKBUD_RABBIT_SPAWNING;
         const s = document.createElement('script');
-        s.src = this.base + 'webmeji.js?v=5';
+        s.src = this.base + 'webmeji.js?v=13';
         s.onload = () => {
           // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
           window.dispatchEvent(new Event('DOMContentLoaded'));
@@ -49,46 +49,126 @@ const SITE = {
       return (line && (line.zh || line.en || line)) || '今天也要元气满满哦';
     },
 
-    // 给单只宠物容器绑定点击/抚摸冒泡。气泡 append 到 body(fixed)，避免被容器 overflow:hidden 裁掉
+    // ====== 气泡三层触发（对齐桌宠 v6，2026-09-07） ======
+    // L1 随机（自动 + hover 抚摸） / L2 交互（click·drag，100% 触发、最高优先级）
+    // L3 状态（进状态按概率 + 冷却，不抢正在显示的气泡）
+    _BUBBLE_CFG: {
+      pet: 'rabbit',
+      reactMs: 3000,                 // L2 反应气泡时长
+      stateMs: 2800,                 // L3 状态气泡时长（比反应略短）
+      prob: {                        // 各状态触发概率（0 = 暂不启用，与桌宠一致）
+        climb: 0.30, hang: 0.50, slip: 0.80, fall: 0.40, land: 0.60,
+        walk: 0.15, idle_stare: 0.20, sleep: 0.40, coquetry: 0.25, naughty: 0.0
+      },
+      sameCd: 30000,                 // 同一状态冷却，防每次爬墙都念同一句
+      minGap: 5000                   // 任意两条气泡最小间隔，防碎碎念
+    },
+    // webmeji 动作 → v6 状态池 key
+    _WM_STATE_MAP: {
+      climbSide: 'climb', climbTop: 'climb',
+      hangstillTop: 'hang', hangstillSide: 'hang',
+      slip: 'slip', falling: 'fall', trip: 'fall',
+      fallen: 'land',
+      walk: 'walk', forcewalk: 'walk', topwalk: 'walk',
+      sit: 'sleep',
+      stand: 'idle_stare', forcethink: 'idle_stare',
+      pet: 'coquetry', spin: 'naughty', dance: 'naughty'
+    },
+    _wmContainers: [],
+    _wmLastAny: 0,
+    _wmStateLast: {},
+
+    // 往某只宠物头上挂一条气泡（气泡 append 到 body(fixed)，避免被容器 overflow:hidden 裁掉）
+    _wmBubbleShow(container, text, ms) {
+      if (!container || !text) return;
+      const old = container._wmBubbleEl;
+      if (old) {
+        if (old._wmRaf) cancelAnimationFrame(old._wmRaf);
+        if (old._wmTimer) clearTimeout(old._wmTimer);
+        old.remove();
+      }
+      const bubble = document.createElement('div');
+      bubble.className = 'wm-bubble';
+      const bbl = document.createElement('span');
+      bbl.className = 'wm-bbl';
+      bbl.textContent = text;                 // textContent 防注入
+      bubble.appendChild(bbl);
+      document.body.appendChild(bubble);
+      // 定位到容器正上方居中（fixed，相对视口），并用 rAF 持续跟随宠物移动
+      const place = () => {
+        const r = container.getBoundingClientRect();
+        bubble.style.left = (r.left + r.width / 2) + 'px';
+        bubble.style.top = (r.top - 6) + 'px';
+      };
+      place();
+      const follow = () => {
+        if (!bubble.isConnected) return;   // 已被新气泡替换/移除则停止
+        place();
+        bubble._wmRaf = requestAnimationFrame(follow);
+      };
+      bubble._wmRaf = requestAnimationFrame(follow);
+      container._wmBubbleEl = bubble;
+      bubble._wmTimer = setTimeout(() => {
+        bubble.classList.add('wm-bubble-out');
+        bubble._wmTimer = setTimeout(() => {
+          if (bubble._wmRaf) cancelAnimationFrame(bubble._wmRaf);
+          bubble.remove();
+          if (container._wmBubbleEl === bubble) container._wmBubbleEl = null;
+        }, 450);
+      }, ms || 3000);
+      this._wmLastAny = Date.now();
+    },
+    _wmAnyShowing() {
+      return this._wmContainers.some(c => !!(c && c._wmBubbleEl));
+    },
+
+    // L3 状态气泡：概率 → 最小间隔 → 同状态冷却 → 有池 → 不抢当前气泡
+    _wmTryState(key) {
+      const cfg = this._BUBBLE_CFG;
+      if (Math.random() > (cfg.prob[key] || 0)) return;
+      const now = Date.now();
+      if (now - (this._wmLastAny || 0) < cfg.minGap) return;
+      if (now - (this._wmStateLast[key] || -1e9) < cfg.sameCd) return;
+      const text = (window.BUBBLE && window.BUBBLE.pickState)
+        ? window.BUBBLE.pickState(key, cfg.pet) : '';
+      if (!text) return;
+      if (this._wmAnyShowing()) return;      // 反应/随机气泡优先，状态气泡不抢
+      this._wmStateLast[key] = now;
+      this._wmContainers.forEach(c => this._wmBubbleShow(c, text, cfg.stateMs));
+    },
+
+    // 事件总线只绑一次：webmeji:react（L2）/ webmeji:action（L3）
+    _ensureBubbleBus() {
+      if (this._wmBusBound) return;
+      this._wmBusBound = true;
+      document.addEventListener('webmeji:react', (e) => {
+        const kind = (e.detail && e.detail.kind) || 'click';
+        const text = (window.BUBBLE && window.BUBBLE.pickReaction)
+          ? window.BUBBLE.pickReaction(kind, this._BUBBLE_CFG.pet) : '';
+        if (!text) return;
+        this._wmContainers.forEach(c => this._wmBubbleShow(c, text, this._BUBBLE_CFG.reactMs));
+      });
+      document.addEventListener('webmeji:action', (e) => {
+        const key = this._WM_STATE_MAP[(e.detail && e.detail.action) || ''];
+        if (!key) return;
+        this._wmTryState(key);
+      });
+    },
+
+    // 给单只宠物容器绑定点击/抚摸冒泡
     _bindSpeechBubble(container) {
       if (!container || container._wmBubbleBound) return;
       container._wmBubbleBound = true;
+      if (this._wmContainers.indexOf(container) === -1) this._wmContainers.push(container);
+      this._ensureBubbleBus();
 
-      const show = () => {
-        const old = document.querySelector('.wm-bubble');
-        if (old) { if (old._wmRaf) cancelAnimationFrame(old._wmRaf); old.remove(); }
-        const bubble = document.createElement('div');
-        bubble.className = 'wm-bubble';
-        const bbl = document.createElement('span');
-        bbl.className = 'wm-bbl';
-        bbl.textContent = this._pickQuote();
-        bubble.appendChild(bbl);
-        document.body.appendChild(bubble);
-        // 定位到容器正上方居中（fixed，相对视口），并用 rAF 持续跟随宠物移动
-        const place = () => {
-          const r = container.getBoundingClientRect();
-          bubble.style.left = (r.left + r.width / 2) + 'px';
-          bubble.style.top = (r.top - 6) + 'px';
-        };
-        place();
-        const follow = () => {
-          if (!bubble.isConnected) return;   // 已被新气泡替换/移除则停止
-          place();
-          bubble._wmRaf = requestAnimationFrame(follow);
-        };
-        bubble._wmRaf = requestAnimationFrame(follow);
-        // 3s 后渐隐移除
-        const clear = () => { if (bubble._wmRaf) cancelAnimationFrame(bubble._wmRaf); bubble.remove(); };
-        setTimeout(() => {
-          bubble.classList.add('wm-bubble-out');
-          setTimeout(clear, 450);
-        }, 3000);
-      };
+      // L1：随机语录（自动 / 抚摸）
+      const show = () => this._wmBubbleShow(container, this._pickQuote(), 3000);
 
       let hoverTimer = null;
       container.addEventListener('click', () => {
+        // 单击反应由 webmeji:react 统一触发（L2），这里不再重复冒，避免两条打架
         if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
-        show();
       });
       container.addEventListener('mouseenter', () => {
         hoverTimer = setTimeout(show, 900);   // 抚摸延迟冒泡
@@ -514,8 +594,120 @@ function syncManualLang() {
   });
 }
 
+/* ---------- 伙伴之家卡片渲染（整页加载 / 软导航共用） ----------
+   背景：渲染逻辑原本写在 pets.html 页尾内联 script，只有整页加载才执行；
+   软导航只替换 #view，不重跑内联脚本 → 从首页点「伙伴之家」进来是空 grid（必须刷新）。
+   故搬到这里，由 SITE.route() 统一调度（见 SITE.pages.pets）。 */
+const PetsView = {
+  data: null,
+
+  esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  },
+  // 渠道来源透传（?from=xx），每次动态读 location，软导航换页后也准
+  from() { try { return new URLSearchParams(location.search).get('from') || ''; } catch (e) { return ''; } },
+  withFrom(url) {
+    const f = this.from();
+    if (!url || !f) return url;
+    return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'from=' + encodeURIComponent(f);
+  },
+  action(url, label, cls, soonKey, soonFb) {
+    const text = url ? this.esc(window.pick(label)) : this.esc(window.I18N.t(soonKey, soonFb));
+    if (url) return '<a class="btn ' + cls + '" href="' + this.esc(this.withFrom(url)) + '" target="_blank" rel="noopener">' + text + '</a>';
+    return '<span class="btn ' + cls + '" style="opacity:.5;pointer-events:none">' + text + '</span>';
+  },
+  card(p) {
+    const online = p.status === 'online';
+    const cover = p.cover
+      ? '<img src="' + this.esc(p.cover) + '" alt="' + this.esc(window.pick(p.title)) + '" loading="lazy" draggable="false">'
+      : '<span class="pet-emoji">' + this.esc(p.emoji || '🐾') + '</span>';
+    const badge = online
+      ? '<span class="pet-badge">' + this.esc(window.I18N.t('pets.badgeOnline', '已上线')) + '</span>'
+      : '<span class="pet-badge soon">' + this.esc(window.I18N.t('pets.badgeSoon', '织制中')) + '</span>';
+    const detail = p.detail
+      ? '<a class="btn" href="' + this.esc(this.withFrom(p.detail)) + '">' + this.esc(window.I18N.t('pets.detail', '了解详情')) + '</a>'
+      : '';
+    let actions;
+    if (online) {
+      actions =
+        this.action(p.download && p.download.url, (p.download && p.download.label) || { zh: '下载', en: 'Download' }, 'btn-primary', 'pets.soonBtn', '下载即将上线') +
+        this.action(p.buy && p.buy.url, (p.buy && p.buy.label) || { zh: '购买角色包', en: 'Buy PetPack' }, '', 'pets.soonBuy', '购买渠道即将上线') +
+        detail;
+    } else {
+      actions = '<span class="pet-soon-note">' + this.esc(window.I18N.t('pets.soonNote', '织好之后第一时间上线，敬请期待～')) + '</span>';
+    }
+    return '<article class="pet-card' + (online ? '' : ' is-soon') + '">' +
+      '<div class="pet-cover">' + cover + badge + '</div>' +
+      '<div class="pet-body">' +
+        '<h3 class="pet-name">' + this.esc(window.pick(p.title)) + '</h3>' +
+        '<p class="pet-tagline">' + this.esc(window.pick(p.tagline)) + '</p>' +
+        '<div class="pet-actions">' + actions + '</div>' +
+      '</div></article>';
+  },
+  renderChans(data) {
+    const box = document.getElementById('petsChannels');
+    const chans = (data && data.channels) || [];
+    if (!chans.length || !data.channelsVisible || !box) return;
+    const items = chans.map(c => {
+      const name = this.esc(window.pick(c.label));
+      return c.url ? '<a href="' + this.esc(this.withFrom(c.url)) + '" target="_blank" rel="noopener">' + name + '</a>' : name;
+    }).join(' / ');
+    box.innerHTML = window.pick({ zh: '也可在 {list} 搜索 DeskBud', en: 'Also find DeskBud on {list}' }).replace('{list}', items);
+    box.hidden = false;
+  },
+
+  // 幂等重绘：不在本页（#petsGrid 不存在）时静默跳过，跨页软导航安全
+  paint() {
+    const grid = document.getElementById('petsGrid');
+    if (!grid || !this.data) return;
+    // status:'hidden' = 未上线占位（织制中但暂不展示），与 works.json 的 hidden 语义一致
+    const pets = (this.data.pets || []).filter(p => p.status !== 'hidden');
+    grid.innerHTML = pets.map(p => this.card(p)).join('');
+    this.renderChans(this.data);
+  },
+  apply(data) {
+    if (!(data && data.pets && data.pets.length)) return false;
+    this.data = data;
+    this.paint();
+    return true;
+  },
+
+  async load() {
+    const grid = document.getElementById('petsGrid');
+    if (!grid) return;
+    // 1. 首屏：整页加载时页面上带内联 catalogData（首屏直出，不依赖网络往返 → 线上首访不空白）
+    let hasInlined = false;
+    const inlineEl = document.getElementById('catalogData');
+    if (inlineEl) {
+      try { hasInlined = this.apply(JSON.parse(inlineEl.textContent)); } catch (e) { /* 内联损坏则走 fetch */ }
+    }
+    // 2. 更新通道：catalog.json 改版后静默覆盖（软导航进本页时内联块不在 DOM，靠这条出内容）
+    try {
+      const r = await fetch('data/catalog.json?cv=4', { cache: 'no-cache' });
+      this.apply(await r.json());
+    } catch (e) {
+      if (!hasInlined) grid.innerHTML = '<p class="pets-note">加载失败，请刷新重试。</p>';
+    }
+  }
+};
+// 语言切换重绘：全局只绑一次（切 N 次语言不叠 N 个监听）
+if (!window.__petsLangWired) {
+  window.__petsLangWired = true;
+  window.addEventListener('lang:change', () => PetsView.paint());
+}
+
 /* ---------- 各页面初始化逻辑（集中管理，供首次加载与软导航复用） ---------- */
 SITE.pages = {
+  // 伙伴之家
+  pets: async function () {
+    const yr = document.getElementById('yr');
+    if (yr) yr.textContent = new Date().getFullYear();
+    await PetsView.load();
+    window.__rerender = () => PetsView.paint();
+  },
+
   // 首页
   home: async function () {
     await SITE.load();
@@ -731,6 +923,7 @@ SITE.route = async function () {
   const p = SITE.pages;
   let fn;
   if (path === '' || path === 'index.html') fn = p.home;
+  else if (path === 'pets.html') fn = p.pets;
   else if (path === 'list.html') fn = p.list;
   else if (path === 'detail.html') fn = () => p.detail(params);
   else if (path === 'usage.html') fn = p.usage;
@@ -843,3 +1036,6 @@ SITE.boot = boot;
     });
   });
 })();
+
+// 暴露到全局：便于控制台调试与自动化验证（气泡三层参数、路由等）
+window.SITE = SITE;
