@@ -87,11 +87,13 @@ window.addEventListener('DOMContentLoaded', () => {
     .catch(e => console.error('[webmeji] 核心帧加载异常：', e))
     .then(() => {
       console.log('[webmeji] 核心帧就绪，生成宠物');
+      const created = [];
       window.SPAWNING.forEach(({ id, config }) => {
         const cfg = window[config];
         if (!cfg) { console.warn(`config not found: ${config}`); return; }
-        try { new Creature(id, cfg); } catch (e) { console.error('[webmeji] 生成失败：', e); }
+        try { created.push(new Creature(id, cfg)); } catch (e) { console.error('[webmeji] 生成失败：', e); }
       });
+      window.__WM_CREATURES = created;   // 调试/自动化验证出口（可读 currentAction / inverted / currentEdge）
       // 2) 后台补齐其余动作（不阻塞首屏）
       Promise.all(configs.map(cfg => preloadActions(cfg, allActions(cfg))))
         .then(() => console.log('[webmeji] 全部帧就绪'));
@@ -99,6 +101,9 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // creature class -------------------------------------------------------
+// 复合动作 → 其帧来源动作（这些动作自身无 frames 配置，就绪性跟着源动作走）
+const ACTION_FRAME_ALIAS = { topwalk: 'walk' };
+
 class Creature {
   constructor(containerId, spriteConfig) {
     this.currentEdge = 'bottom';
@@ -676,9 +681,14 @@ class Creature {
 
     let frameIndex=0;
     this.img.src=cfg.frames[0];
-    this.frameTimer=setInterval(()=>{ 
-      frameIndex=(frameIndex+1)%cfg.frames.length; 
-      this.img.src=cfg.frames[frameIndex]; 
+    // DeskBud: 下落动画只播一轮后停在末帧（持续下落姿态）。
+    // ⚠️ 不循环：3 帧 × 120ms=360ms 一轮，长距离下落会循环 10+ 次，视觉上"忽闪忽闪"抽搐。
+    let played=1;
+    this.frameTimer=setInterval(()=>{
+      if (played >= cfg.frames.length) { clearInterval(this.frameTimer); this.frameTimer=null; return; }
+      frameIndex=played;
+      this.img.src=cfg.frames[frameIndex];
+      played++;
       }, cfg.interval);
 
     const startY=this.positionY, endY=window.innerHeight-this.containerHeight, distance=endY-startY;
@@ -870,7 +880,9 @@ class Creature {
   isActionReady(action) {
     const set = this.spriteConfig.__ready;
     if (!set) return true;                       // 未启用渐进式 → 全部可用
-    return set.has(action);
+    // 复合动作无独立 frames 配置（复用其它动作的帧）→ 就绪性跟随源动作。
+    // ⚠️ 否则 topwalk 永远"未就绪"，startAction 会在顶部被兜底随机换成 trip/spin，倒立走消失。
+    return set.has(ACTION_FRAME_ALIAS[action] || action);
   }
 
   startAction(action) {  
