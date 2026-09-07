@@ -19,12 +19,12 @@ const SITE = {
       document.head.appendChild(css);
       // 2. 注入 config（先于 webmeji.js 定义 window.DESKBUD_RABBIT_CONFIG / DESKBUD_RABBIT_SPAWNING）
       const cfg = document.createElement('script');
-      cfg.src = this.base + 'rabbit.config.js?v=4';
+      cfg.src = this.base + 'rabbit.config.js?v=5';
       cfg.onload = () => {
         // 3. 把 SPAWNING 挂到 webmeji.js 期望的全局名（必须在 engine 加载前）
         window.SPAWNING = window.DESKBUD_RABBIT_SPAWNING;
         const s = document.createElement('script');
-        s.src = this.base + 'webmeji.js?v=13';
+        s.src = this.base + 'webmeji.js?v=14';
         s.onload = () => {
           // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
           window.dispatchEvent(new Event('DOMContentLoaded'));

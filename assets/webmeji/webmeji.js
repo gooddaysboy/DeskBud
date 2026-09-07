@@ -8,52 +8,95 @@
 // this is likely very unoptimized and quite messy code, i apologize for that. plain info on each function is at the bottom of the readme
 // this project was made with the intention that changing anything in the config.js would be easy. this is not that. modifying this comes at your own risk.
 
+/* DeskBud 帧缓存 ---------------------------------------------------------
+   原实现：预载用 new Image() 但不持有引用，之后每帧靠改 img.src 播放。
+   线上资源头是 Cache-Control: public, max-age=0, must-revalidate（等于不缓存），
+   于是每次切帧浏览器都要为这个 URL 发一次条件请求（跨境 RTT 几百 ms），
+   而帧间隔只有 100ms → 帧永远切不过来 → 宠物定格成一个动作。
+   解法：预载时把每帧 fetch 成 blob URL 常驻内存，并重写 config.frames。
+   此后切帧走 blob:，永不触网，同时免疫缓存策略与弱网抖动。
+------------------------------------------------------------------------ */
+const FRAME_BLOBS = new Map();   // 原始 URL -> blob URL
+// 核心动作：先载这些就让宠物出现并开跑，其余后台补齐
+const CORE_ACTIONS = ['walk', 'stand', 'drag', 'falling', 'fallen', 'climbSide'];
+
+function actionFrames(config, action) {
+  const item = config[action];
+  return (item && Array.isArray(item.frames)) ? item.frames : [];
+}
+
+// 单帧 → blob URL（失败退回原 URL，绝不阻断整体）
+async function materializeFrame(src) {
+  if (!src || src.startsWith('blob:')) return src;
+  if (FRAME_BLOBS.has(src)) return FRAME_BLOBS.get(src);
+  try {
+    const res = await fetch(src, { cache: 'force-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const url = URL.createObjectURL(await res.blob());
+    FRAME_BLOBS.set(src, url);
+    return url;
+  } catch (e) {
+    console.warn('[webmeji] 帧加载失败，退回原 URL：', src, e && e.message);
+    FRAME_BLOBS.set(src, src);
+    return src;
+  }
+}
+
+// 预载指定动作，并把这些动作的 frames 重写为 blob URL
+async function preloadActions(config, actions) {
+  if (!config.__ready) config.__ready = new Set();
+  const todo = actions.filter(a => !config.__ready.has(a) && actionFrames(config, a).length);
+  const paths = [];
+  todo.forEach(a => actionFrames(config, a).forEach(f => {
+    if (f && !f.startsWith('blob:') && !paths.includes(f)) paths.push(f);
+  }));
+  const CONC = 8;                       // 并发上限，避免一次打满连接
+  for (let i = 0; i < paths.length; i += CONC) {
+    await Promise.all(paths.slice(i, i + CONC).map(materializeFrame));
+  }
+  todo.forEach(a => {
+    const item = config[a];
+    if (item && Array.isArray(item.frames)) {
+      item.frames = item.frames.map(f => FRAME_BLOBS.get(f) || f);
+    }
+    config.__ready.add(a);
+  });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-  // collect unique config names from SPAWNING
-  const configNames = [...new Set(
-    window.SPAWNING.map(spawn => spawn.config)
-  )];
+  if (window.__WM_SPAWNED) return;      // 动态注入会重复派发，防重复生成
+  window.__WM_SPAWNED = true;
 
-  // resolve them to actual config objects on window
-  const configs = configNames
-    .map(name => window[name])
-    .filter(Boolean);
+  const configNames = [...new Set(window.SPAWNING.map(spawn => spawn.config))];
+  const configs = configNames.map(name => window[name]).filter(Boolean);
+  configs.forEach(c => { if (!c.__ready) c.__ready = new Set(); });
 
-  // preload all images
-  Promise.all(configs.map(preloadImages))
+  const allActions = (cfg) => Object.keys(cfg).filter(k => {
+    const v = cfg[k];
+    return v && typeof v === 'object' && Array.isArray(v.frames);
+  });
+
+  // 超时兜底：网络再烂也最多等 CORE_TIMEOUT 就生成宠物（缺的帧走原 URL，由 img 自己加载）
+  const withTimeout = (p, ms) => Promise.race([
+    p, new Promise(r => setTimeout(() => { console.warn('[webmeji] 核心帧超时，先出宠物'); r(); }, ms))
+  ]);
+  const CORE_TIMEOUT = 8000;
+
+  // 1) 核心动作先就绪 → 宠物秒出并跑起来
+  Promise.all(configs.map(cfg => withTimeout(preloadActions(cfg, CORE_ACTIONS), CORE_TIMEOUT)))
+    .catch(e => console.error('[webmeji] 核心帧加载异常：', e))
     .then(() => {
-      console.log("all images are loaded!");
-
-      const creatures = [];
+      console.log('[webmeji] 核心帧就绪，生成宠物');
       window.SPAWNING.forEach(({ id, config }) => {
         const cfg = window[config];
-        if (!cfg) {
-          console.warn(`config not found: ${config}`);
-          return;
-        }
-        creatures.push(new Creature(id, cfg));
+        if (!cfg) { console.warn(`config not found: ${config}`); return; }
+        try { new Creature(id, cfg); } catch (e) { console.error('[webmeji] 生成失败：', e); }
       });
-    })
-    .catch(error => {
-      console.error("error loading images:", error);
+      // 2) 后台补齐其余动作（不阻塞首屏）
+      Promise.all(configs.map(cfg => preloadActions(cfg, allActions(cfg))))
+        .then(() => console.log('[webmeji] 全部帧就绪'));
     });
 });
-
-
-// preloads all frames from a given configuration
-function preloadImages(config) {
-  // collect all frames from every action in the config
-  const imagePaths = Object.values(config)
-    .flatMap(item => (item.frames && Array.isArray(item.frames)) ? item.frames : []);
-
-  // return a promise that resolves when all images are loaded
-  return Promise.all(imagePaths.map(src => new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = resolve;  // resolve when image loads
-    img.onerror = reject;  // reject if error occurs
-    img.src = src;
-  })));
-}
 
 // creature class -------------------------------------------------------
 class Creature {
@@ -823,8 +866,21 @@ class Creature {
     } catch (e) {}
   }
 
+  // DeskBud: 渐进式预载下，动作帧是否已转成 blob（未就绪则不能播，否则破图/空帧）
+  isActionReady(action) {
+    const set = this.spriteConfig.__ready;
+    if (!set) return true;                       // 未启用渐进式 → 全部可用
+    return set.has(action);
+  }
+
   startAction(action) {  
     if (this.isDragging || this.isFalling ) return;
+    // DeskBud: 帧未就绪 → 换一个已就绪的常规动作（最多再递归一次，不会死循环）
+    if (!this.isActionReady(action)) {
+      const avail = (this.spriteConfig.ORIGINAL_ACTIONS || []).filter(a => this.isActionReady(a));
+      if (avail.length) this.startAction(avail[Math.floor(Math.random() * avail.length)]);
+      return;
+    }
     this.currentAction = action;
     this.resetAnimation();
     this.emitAction(action);
