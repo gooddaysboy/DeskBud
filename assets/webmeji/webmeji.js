@@ -82,22 +82,32 @@ window.addEventListener('DOMContentLoaded', () => {
   ]);
   const CORE_TIMEOUT = 8000;
 
+  // 生成逻辑（幂等）：核心帧就绪 / 8s 兜底 / 切回前台补生，三条路径共用
+  const spawnAll = () => {
+    if (window.__WM_CREATURES && window.__WM_CREATURES.length) return;
+    console.log('[webmeji] 生成宠物');
+    const created = [];
+    window.SPAWNING.forEach(({ id, config }) => {
+      const cfg = window[config];
+      if (!cfg) { console.warn(`config not found: ${config}`); return; }
+      try { created.push(new Creature(id, cfg)); } catch (e) { console.error('[webmeji] 生成失败：', e); }
+    });
+    window.__WM_CREATURES = created;   // 调试/自动化验证出口（可读 currentAction / inverted / currentEdge）
+    // 后台补齐其余动作（不阻塞首屏）
+    Promise.all(configs.map(cfg => preloadActions(cfg, allActions(cfg))))
+      .then(() => console.log('[webmeji] 全部帧就绪'));
+  };
+
   // 1) 核心动作先就绪 → 宠物秒出并跑起来
   Promise.all(configs.map(cfg => withTimeout(preloadActions(cfg, CORE_ACTIONS), CORE_TIMEOUT)))
     .catch(e => console.error('[webmeji] 核心帧加载异常：', e))
-    .then(() => {
-      console.log('[webmeji] 核心帧就绪，生成宠物');
-      const created = [];
-      window.SPAWNING.forEach(({ id, config }) => {
-        const cfg = window[config];
-        if (!cfg) { console.warn(`config not found: ${config}`); return; }
-        try { created.push(new Creature(id, cfg)); } catch (e) { console.error('[webmeji] 生成失败：', e); }
-      });
-      window.__WM_CREATURES = created;   // 调试/自动化验证出口（可读 currentAction / inverted / currentEdge）
-      // 2) 后台补齐其余动作（不阻塞首屏）
-      Promise.all(configs.map(cfg => preloadActions(cfg, allActions(cfg))))
-        .then(() => console.log('[webmeji] 全部帧就绪'));
-    });
+    .then(spawnAll);
+
+  // 后台标签会把 setTimeout 节流到 1 分钟级，8s 兜底可能被拖很久 →
+  // 切回前台时若宠物仍未生成（打开后立刻切走 + 弱网的组合），立即补生，不等定时器
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') spawnAll();
+  });
 });
 
 // creature class -------------------------------------------------------
@@ -864,7 +874,7 @@ class Creature {
   emitAction(action, extra) {
     try {
       document.dispatchEvent(new CustomEvent('webmeji:action', {
-        detail: Object.assign({ action: action, edge: this.currentEdge }, extra || {})
+        detail: Object.assign({ action: action, edge: this.currentEdge, id: this.img.id }, extra || {})
       }));
     } catch (e) {}
   }
@@ -872,7 +882,7 @@ class Creature {
   // DeskBud: 交互气泡触发源（click 单击 / drag 拖拽松手），100% 触发、最高优先级
   emitReact(kind) {
     try {
-      document.dispatchEvent(new CustomEvent('webmeji:react', { detail: { kind: kind } }));
+      document.dispatchEvent(new CustomEvent('webmeji:react', { detail: { kind: kind, id: this.img.id } }));
     } catch (e) {}
   }
 
@@ -1054,8 +1064,10 @@ class Creature {
   // main animation loop --------------------------------------------------
   animate(time) {
     if (!this.lastTime) this.lastTime = time;
-    const delta = (time - this.lastTime) / 1000;
+    let delta = (time - this.lastTime) / 1000;
     this.lastTime = time;
+    // 后台标签 rAF 停摆，切回首帧 delta 可能是几十秒 → 钳到 50ms，防瞬移/朝向跳变
+    if (delta > 0.05) delta = 0.05;
     if (this.isDragging || this.isFalling) {
         this.animationFrameId = requestAnimationFrame(this.animate);
         return;

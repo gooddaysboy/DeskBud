@@ -5,30 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>伙伴之家 · DeskBud</title>
   <meta name="description" content="DeskBud 伙伴之家：领养一只常驻桌面的针织宠物伙伴，织熊猫、织兔子已上线，更多伙伴陆续织制中。">
-  <link rel="stylesheet" href="assets/css/base.css?v=68">
-  <style>
-    /* 伙伴之家专属样式（不动 base.css） */
-    .pets-lead { max-width: 640px; }
-    .pets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-top: 26px; }
-    .pet-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform .18s ease, box-shadow .18s ease; }
-    .pet-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-    .pet-card.is-soon { opacity: .78; }
-    .pet-cover { position: relative; height: 210px; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--brand-soft), var(--accent-soft)); }
-    .pet-cover img { max-width: 72%; max-height: 88%; object-fit: contain; }
-    .pet-cover .pet-emoji { font-size: 84px; filter: saturate(.9); }
-    .pet-badge { position: absolute; top: 12px; left: 12px; font-size: 12px; padding: 4px 10px; border-radius: 999px; background: var(--brand); color: #fff; letter-spacing: .5px; }
-    .pet-badge.soon { background: var(--accent); }
-    .pet-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-    .pet-name { font-size: 19px; font-weight: 700; color: var(--ink); margin: 0; }
-    .pet-tagline { font-size: 14px; color: var(--ink-soft); line-height: 1.65; margin: 0; flex: 1; }
-    .pet-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
-    .pet-actions .btn { font-size: 14px; padding: 8px 16px; border-radius: var(--radius-sm); }
-    .pet-soon-note { font-size: 13px; color: var(--ink-faint); }
-    .pets-note { margin-top: 30px; font-size: 13px; color: var(--ink-faint); text-align: center; }
-    .pets-channels { margin-top: 10px; font-size: 13px; color: var(--ink-soft); text-align: center; }
-    .pets-channels a { color: var(--brand); text-decoration: none; font-weight: 600; }
-    .pets-channels a:hover { text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="assets/css/base.css?v=69">
+  <!-- 伙伴之家卡片样式已迁入 base.css v69（软导航只换 #view，页内 style 不生效） -->
 </head>
 <body>
   <header class="topbar">
@@ -72,7 +50,7 @@
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
   <script src="assets/js/i18n.js?v=6"></script>
-  <script src="assets/js/site.js?v=66"></script>
+  <script src="assets/js/site.js?v=68"></script>
   <script src="assets/js/bubble.js?v=20"></script>
 
   <script type="application/json" id="catalogData">

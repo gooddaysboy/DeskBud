@@ -17,30 +17,39 @@ const SITE = {
       css.rel = 'stylesheet';
       css.href = this.base + 'webmeji.css?v=2';
       document.head.appendChild(css);
-      // 2. 注入 config（先于 webmeji.js 定义 window.DESKBUD_RABBIT_CONFIG / DESKBUD_RABBIT_SPAWNING）
-      const cfg = document.createElement('script');
-      cfg.src = this.base + 'rabbit.config.js?v=6';
-      cfg.onload = () => {
-        // 3. 把 SPAWNING 挂到 webmeji.js 期望的全局名（必须在 engine 加载前）
-        window.SPAWNING = window.DESKBUD_RABBIT_SPAWNING;
-        const s = document.createElement('script');
-        s.src = this.base + 'webmeji.js?v=15';
-        s.onload = () => {
-          // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
-          window.dispatchEvent(new Event('DOMContentLoaded'));
-          // 5. 引擎异步预载图片后才 new Creature 创建 .webmeji-container，用观察器兜底绑冒泡
-          this.bindSpeechBubble();
-        };
-        document.head.appendChild(s);
+      // 2. 注入 config（先于 webmeji.js；多宠物 = 多个 config 脚本，全部加载完拼接 SPAWNING）
+      const configFiles = ['rabbit.config.js?v=6', 'panda.config.js?v=1'];
+      const loadCfg = (i) => {
+        if (i >= configFiles.length) {
+          window.SPAWNING = [
+            ...(window.DESKBUD_RABBIT_SPAWNING || []),
+            ...(window.DESKBUD_PANDA_SPAWNING || []),
+          ];
+          const s = document.createElement('script');
+          s.src = this.base + 'webmeji.js?v=16';
+          s.onload = () => {
+            // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
+            window.dispatchEvent(new Event('DOMContentLoaded'));
+            // 5. 引擎异步预载图片后才 new Creature 创建 .webmeji-container，用观察器兜底绑冒泡
+            this.bindSpeechBubble();
+          };
+          document.head.appendChild(s);
+          return;
+        }
+        const cfg = document.createElement('script');
+        cfg.src = this.base + configFiles[i];
+        cfg.onload = () => loadCfg(i + 1);
+        document.head.appendChild(cfg);
       };
-      document.head.appendChild(cfg);
+      loadCfg(0);
     },
 
-    // 取一句 deskbud 语录（复用 bubble.js 的 window.BUBBLE 池，失败兜底）
-    _pickQuote() {
+    // 取一句 deskbud 语录（复用 bubble.js 的 window.BUBBLE 池，按宠物物种取池，失败兜底）
+    _pickQuote(container) {
+      const species = (container && container._wmSpecies) || this._BUBBLE_CFG.pet;
       let pool = [];
       if (window.BUBBLE && typeof window.BUBBLE.linesFor === 'function') {
-        pool = window.BUBBLE.linesFor('rabbit') || [];
+        pool = window.BUBBLE.linesFor(species) || [];
       }
       const line = pool.length ? pool[Math.floor(Math.random() * pool.length)] : '今天也要元气满满哦';
       if (window.pick) {
@@ -122,19 +131,25 @@ const SITE = {
       return this._wmContainers.some(c => !!(c && c._wmBubbleEl));
     },
 
-    // L3 状态气泡：概率 → 最小间隔 → 同状态冷却 → 有池 → 不抢当前气泡
-    _wmTryState(key) {
+    // L3 状态气泡：概率 → 最小间隔 → 同状态冷却 → 有池 → 不抢当前气泡（只给做动作的那只冒）
+    _wmTryState(key, container) {
       const cfg = this._BUBBLE_CFG;
       if (Math.random() > (cfg.prob[key] || 0)) return;
       const now = Date.now();
       if (now - (this._wmLastAny || 0) < cfg.minGap) return;
       if (now - (this._wmStateLast[key] || -1e9) < cfg.sameCd) return;
+      const species = (container && container._wmSpecies) || cfg.pet;
       const text = (window.BUBBLE && window.BUBBLE.pickState)
-        ? window.BUBBLE.pickState(key, cfg.pet) : '';
+        ? window.BUBBLE.pickState(key, species) : '';
       if (!text) return;
       if (this._wmAnyShowing()) return;      // 反应/随机气泡优先，状态气泡不抢
       this._wmStateLast[key] = now;
-      this._wmContainers.forEach(c => this._wmBubbleShow(c, text, cfg.stateMs));
+      this._wmBubbleShow(container, text, cfg.stateMs);
+    },
+
+    // 按 img.id 找宠物容器（引擎事件 detail.id → 'deskbud-rabbit' / 'deskbud-panda'）
+    _wmById(id) {
+      return this._wmContainers.find(c => c && c._wmId === id) || null;
     },
 
     // 事件总线只绑一次：webmeji:react（L2）/ webmeji:action（L3）
@@ -143,15 +158,19 @@ const SITE = {
       this._wmBusBound = true;
       document.addEventListener('webmeji:react', (e) => {
         const kind = (e.detail && e.detail.kind) || 'click';
+        const container = this._wmById(e.detail && e.detail.id);
+        const species = (container && container._wmSpecies) || this._BUBBLE_CFG.pet;
         const text = (window.BUBBLE && window.BUBBLE.pickReaction)
-          ? window.BUBBLE.pickReaction(kind, this._BUBBLE_CFG.pet) : '';
+          ? window.BUBBLE.pickReaction(kind, species) : '';
         if (!text) return;
-        this._wmContainers.forEach(c => this._wmBubbleShow(c, text, this._BUBBLE_CFG.reactMs));
+        // 只给被交互的那只冒（找不到容器则退化为第一只）
+        this._wmBubbleShow(container || this._wmContainers[0], text, this._BUBBLE_CFG.reactMs);
       });
       document.addEventListener('webmeji:action', (e) => {
         const key = this._WM_STATE_MAP[(e.detail && e.detail.action) || ''];
         if (!key) return;
-        this._wmTryState(key);
+        // 事件不带 id（外部测试派发/旧逻辑）时退化为第一只
+        this._wmTryState(key, this._wmById(e.detail && e.detail.id) || this._wmContainers[0]);
       });
     },
 
@@ -162,8 +181,13 @@ const SITE = {
       if (this._wmContainers.indexOf(container) === -1) this._wmContainers.push(container);
       this._ensureBubbleBus();
 
-      // L1：随机语录（自动 / 抚摸）
-      const show = () => this._wmBubbleShow(container, this._pickQuote(), 3000);
+      // 物种：img.id 'deskbud-rabbit' / 'deskbud-panda' → 气泡语录按物种取池
+      const img = container.querySelector('img');
+      container._wmId = (img && img.id) || '';
+      container._wmSpecies = container._wmId.replace('deskbud-', '') || this._BUBBLE_CFG.pet;
+
+      // L1：随机语录（自动 / 抚摸）——按各自物种的语录池
+      const show = () => this._wmBubbleShow(container, this._pickQuote(container), 3000);
 
       let hoverTimer = null;
       container.addEventListener('click', () => {
@@ -631,9 +655,13 @@ const PetsView = {
       : '';
     let actions;
     if (online) {
+      // 购买渠道未上线时不输出占位（2026-09-07 老曹要求去掉"购买渠道即将上线"）；有 url 才显示购买按钮
+      const buy = p.buy && p.buy.url
+        ? this.action(p.buy.url, (p.buy && p.buy.label) || { zh: '购买角色包', en: 'Buy PetPack' }, '', '', '')
+        : '';
       actions =
         this.action(p.download && p.download.url, (p.download && p.download.label) || { zh: '下载', en: 'Download' }, 'btn-primary', 'pets.soonBtn', '下载即将上线') +
-        this.action(p.buy && p.buy.url, (p.buy && p.buy.label) || { zh: '购买角色包', en: 'Buy PetPack' }, '', 'pets.soonBuy', '购买渠道即将上线') +
+        buy +
         detail;
     } else {
       actions = '<span class="pet-soon-note">' + this.esc(window.I18N.t('pets.soonNote', '织好之后第一时间上线，敬请期待～')) + '</span>';
@@ -847,12 +875,12 @@ SITE.pages = {
         let main = '';
         if (pet && pet.buy && pet.buy.url) {
           main = `<a class="btn btn-primary" href="${pet.buy.url}" target="_blank" rel="noopener">🛒 ${window.pick(pet.buy.label || { zh: '购买角色包', en: 'Buy PetPack' })}</a>`;
-        } else if (pet && pet.buy) {
-          main = `<span class="buy-soon">${window.pick({ zh: '购买渠道即将上线', en: 'Purchase channels coming soon' })}</span>`;
         }
+        // 购买渠道未上线时不再显示"购买渠道即将上线"占位（2026-09-07）；主按钮与渠道提示都没有就移除整个区块
         const tail = items
           ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` })
           : '';
+        if (!main && !tail) { buyHost.remove(); return; }
         buyHost.innerHTML = `
           <div class="block-label">${window.pick({ zh: '购买角色包', en: 'Buy PetPack' })}<span class="hint">${window.pick({ zh: '解锁更多动作、表情与皮肤', en: 'Unlock more actions, moods & skins' })}</span></div>
           <div class="buy-row">${main}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;

@@ -1048,3 +1048,25 @@ img { -webkit-user-drag: none; user-drag: none; }
   opacity: 0;
   transform: translateX(-50%) translateY(calc(-100% - 6px));
 }
+
+/* ===== 伙伴之家（pets）卡片体系 —— 从 pets.html 页内样式迁入：软导航只换 #view，页内 <style> 不会生效 ===== */
+.pets-lead { max-width: 640px; }
+.pets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-top: 26px; }
+.pet-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform .18s ease, box-shadow .18s ease; }
+.pet-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+.pet-card.is-soon { opacity: .78; }
+.pet-cover { position: relative; height: 210px; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--brand-soft), var(--accent-soft)); }
+.pet-cover img { max-width: 72%; max-height: 88%; object-fit: contain; }
+.pet-cover .pet-emoji { font-size: 84px; filter: saturate(.9); }
+.pet-badge { position: absolute; top: 12px; left: 12px; font-size: 12px; padding: 4px 10px; border-radius: 999px; background: var(--brand); color: #fff; letter-spacing: .5px; }
+.pet-badge.soon { background: var(--accent); }
+.pet-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.pet-name { font-size: 19px; font-weight: 700; color: var(--ink); margin: 0; }
+.pet-tagline { font-size: 14px; color: var(--ink-soft); line-height: 1.65; margin: 0; flex: 1; }
+.pet-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.pet-actions .btn { font-size: 14px; padding: 8px 16px; border-radius: var(--radius-sm); }
+.pet-soon-note { font-size: 13px; color: var(--ink-faint); }
+.pets-note { margin-top: 30px; font-size: 13px; color: var(--ink-faint); text-align: center; }
+.pets-channels { margin-top: 10px; font-size: 13px; color: var(--ink-soft); text-align: center; }
+.pets-channels a { color: var(--brand); text-decoration: none; font-weight: 600; }
+.pets-channels a:hover { text-decoration: underline; }
