@@ -19,7 +19,8 @@ const ok = (name, pass, info) => { results.push({ name, pass, info }); console.l
 
 const readBubble = (page) => page.evaluate(() => {
   const el = document.querySelector('.wm-bubble .wm-bbl');
-  return el ? el.textContent : '';
+  // site.js 对齐 Kotlin 排版后标点后带 \n（white-space:pre-line 渲染），断言前归一化掉
+  return el ? el.textContent.replace(/\n/g, '') : '';
 });
 const clearBubbles = (page) => page.evaluate(() => {
   document.querySelectorAll('.wm-bubble').forEach(e => e.remove());

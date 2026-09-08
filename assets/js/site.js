@@ -91,6 +91,12 @@ const SITE = {
     _wmStateLast: {},
 
     // 往某只宠物头上挂一条气泡（气泡 append 到 body(fixed)，避免被容器 overflow:hidden 裁掉）
+    // 对齐 Kotlin PetBubble ⑪ 排版：，。！？；后强制换行（标点留行尾），一句一行有节奏。
+    // CSS 侧配 white-space: pre-line；textContent 注入，防注入语义不变
+    _bubbleFormat(text) {
+      return String(text).replace(/([，。！？；])/g, '$1\n').trim();
+    },
+
     _wmBubbleShow(container, text, ms) {
       if (!container || !text) return;
       const old = container._wmBubbleEl;
@@ -103,7 +109,7 @@ const SITE = {
       bubble.className = 'wm-bubble';
       const bbl = document.createElement('span');
       bbl.className = 'wm-bbl';
-      bbl.textContent = text;                 // textContent 防注入
+      bbl.textContent = this._bubbleFormat(text);   // textContent 防注入
       bubble.appendChild(bbl);
       document.body.appendChild(bubble);
       // 定位到容器正上方居中（fixed，相对视口），并用 rAF 持续跟随宠物移动

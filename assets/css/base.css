@@ -1016,18 +1016,18 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 .wm-bubble .wm-bbl {
   display: inline-block;
-  padding: 8px 14px;
+  padding: 6px 10px;
   background: rgba(255, 255, 255, 0.96);
-  color: var(--ink);
+  color: #2E7D32;               /* 对齐 Kotlin PetBubble ⑪：深绿字（亮底方案） */
   font-family: var(--font-bubble);
   font-size: 13px;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.2;             /* 对齐 Kotlin：1.2 行距（一句一行排版） */
   text-align: center;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-  white-space: normal;
+  border: none;                 /* 对齐 Kotlin 定稿：去边框 */
+  border-radius: 10px;          /* 对齐 Kotlin ⑫：圆角收紧 18→10 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);  /* 网页保留极淡阴影（分离度，老曹拍板方案 2） */
+  white-space: pre-line;        /* 标点换行符生效（一句一行） */
   word-break: break-word;
   text-shadow: none;
   position: relative;
