@@ -3,8 +3,8 @@ from PIL import Image
 from collections import deque
 import os
 
-SRC = r"D:/deskbud/Png/IdleLeft"
-OUT_DIR = r"D:/deskbud/website/assets/img"
+SRC = os.environ.get('GIF_SRC', r"D:/deskbud/Png/IdleLeft")  # 源在项目外，换机用 GIF_SRC 指定
+OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'img')
 os.makedirs(OUT_DIR, exist_ok=True)
 
 def load_rgba(path):

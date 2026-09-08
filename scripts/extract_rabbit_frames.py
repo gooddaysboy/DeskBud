@@ -19,8 +19,16 @@ import json
 from PIL import Image, ImageOps
 
 # ---- 配置 ----
-SRC = r'D:\deskbud\pyside6_rabbit_orbit\rabbit'
-OUT = r'D:\deskbud\website\assets\webmeji\rabbit'
+# OUT：本项目 assets，相对脚本定位（换机/换盘免改）。
+# SRC：优先环境变量 RABBIT_SRC → 项目根下 pyside6_rabbit_orbit/rabbit → 老机器绝对路径兜底。
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(_PROJECT_ROOT, 'assets', 'webmeji', 'rabbit')
+_SRC_CANDIDATES = [
+    os.environ.get('RABBIT_SRC'),
+    os.path.join(os.path.dirname(_PROJECT_ROOT), 'pyside6_rabbit_orbit', 'rabbit'),  # 项目根(deskbud)/pyside6_rabbit_orbit
+    r'D:\deskbud\pyside6_rabbit_orbit\rabbit',
+]
+SRC = next((p for p in _SRC_CANDIDATES if p and os.path.isdir(p)), _SRC_CANDIDATES[1])
 CANVAS = 200      # 输出正方形画布
 TARGET_H = 150    # 站姿目标视觉高（用作归一基准）
 

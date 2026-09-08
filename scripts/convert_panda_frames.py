@@ -1,11 +1,12 @@
 """DeskBud Webmeji 熊猫素材转换：kotlin 原始动作 → 网站动作目录。
 
-源: D:/deskbud/kotlin/app/src/main/assets/pets/panda/<源动作>/fNNN.webp (240x240)
+源: <kotlin 仓库>/app/src/main/assets/pets/panda/<源动作>/fNNN.webp (240x240)，项目外素材，
+    用 --src 或环境变量 PANDA_SRC 指定。
 出: assets/webmeji/panda/<网站动作>/fNNN.webp
 特点: 幂等（可重复跑覆盖）、只做选帧+重命名（源已是 240² webp，无需转码）、
       hangstillSide 不单独出目录（config 里复用 hangstillTop 的帧路径，同 rabbit 做法）。
 
-用法: python scripts/convert_panda_frames.py [--src 源目录] [--out 输出目录]
+用法: python scripts/convert_panda_frames.py --src <kotlin素材根> [--out 输出目录]
 """
 import argparse
 import os
@@ -33,9 +34,13 @@ MAP = {
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--src', default=r'D:/deskbud/kotlin/app/src/main/assets/pets/panda')
+    ap.add_argument('--src', default=os.environ.get('PANDA_SRC'),
+                    help='kotlin 熊猫素材根目录（源在项目外，用 --src 或环境变量 PANDA_SRC 指定）')
     ap.add_argument('--out', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'webmeji', 'panda'))
     args = ap.parse_args()
+
+    if not args.src:
+        ap.error('--src 未指定：源素材在项目外（kotlin 仓库），请用 --src <素材根> 或环境变量 PANDA_SRC 指定')
 
     total = 0
     for action, (src_name, idxs) in MAP.items():

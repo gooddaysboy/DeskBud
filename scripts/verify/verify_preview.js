@@ -1,7 +1,7 @@
 // 校验素材预览 HTML：相对路径是否解析正确（图片能否加载）
 const { chromium } = require('playwright-core');
 const path = require('path');
-const EXE = 'C:/Users/Administrator/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
+const EXE = require('./_env.js').chromeExe;
 const files = ['素材预览_webmeji.html', '素材预览_kotlin.html'];
 
 (async () => {

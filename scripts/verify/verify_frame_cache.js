@@ -9,13 +9,13 @@
  *   ④ 无 JS 报错
  *
  * 跑法：
- * NODE_PATH=C:/Users/Administrator/.workbuddy/binaries/node/workspace/node_modules \
+ * NODE_PATH=<WorkBuddy node workspace>/node_modules \
  *   node scripts/verify/verify_frame_cache.js
  */
 const path = require('path');
 const { chromium } = require('playwright-core');
 
-const EXE = 'C:/Users/Administrator/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
+const EXE = require('./_env.js').chromeExe;
 const BASE = 'http://127.0.0.1:8080';
 const RTT = parseInt(process.env.WM_RTT || '400', 10);   // 每个帧请求人为延迟（ms）
 const OBSERVE = 4000;     // 播放观察时长（ms）

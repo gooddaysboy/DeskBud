@@ -1,7 +1,7 @@
 // 对照实验：模拟"境外 RTT + 不缓存"时，宠物跑动帧是否还能正常切换
 // A 组：本地无延迟；B 组：每个 webp 请求 +250ms（模拟高 RTT 下每帧都要走网络）
 const { chromium } = require('playwright-core');
-const EXE = 'C:\\Users\\Administrator\\AppData\\Local\\ms-playwright\\chromium-1234\\chrome-win64\\chrome.exe';
+const EXE = require('./_env.js').chromeExe;
 const URL = 'http://127.0.0.1:8080/index.html';
 
 async function run(delayMs) {

@@ -1,5 +1,5 @@
 const { chromium } = require('playwright-core');
-const EXE = 'C:/Users/Administrator/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
+const EXE = require('./_env.js').chromeExe;
 const BASE = 'http://127.0.0.1:8080';
 (async () => {
   const browser = await chromium.launch({ executablePath: EXE, headless: true, args: ['--no-proxy-server'] });

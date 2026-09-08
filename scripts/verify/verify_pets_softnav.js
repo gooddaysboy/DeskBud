@@ -1,6 +1,6 @@
 // 验证：从首页软导航进伙伴之家，卡片是否渲染（无需刷新）
 const { chromium } = require('playwright-core');
-const EXE = 'C:/Users/Administrator/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
+const EXE = require('./_env.js').chromeExe;
 const BASE = 'http://127.0.0.1:8080';
 
 (async () => {

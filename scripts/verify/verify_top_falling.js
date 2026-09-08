@@ -6,7 +6,7 @@
  */
 const { chromium } = require('playwright-core');
 
-const CHROME = 'C:/Users/Administrator/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
+const CHROME = require('./_env.js').chromeExe;
 const BASE = 'http://127.0.0.1:8080/index.html';
 
 const ok = (name, cond, extra) =>

@@ -10,8 +10,8 @@
 - 输出 html 放在哪都行，图片用相对路径引用（所以 out 最好与 root 同级或上层）
 
 示例:
-  python gen_preview_snapshot.py --root D:/deskbud/pyside6_rabbit_orbit/rabbit_frames \
-      --out D:/deskbud/pyside6_rabbit_orbit/素材预览_桌面.html
+  python gen_preview_snapshot.py --root <素材根目录> \
+      --out <输出目录>/素材预览_桌面.html
 """
 import argparse
 import json

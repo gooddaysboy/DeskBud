@@ -4,7 +4,7 @@ const { chromium } = require('playwright-core');
 const fs = require('fs');
 const path = require('path');
 
-const EXE = 'C:\\Users\\Administrator\\AppData\\Local\\ms-playwright\\chromium-1234\\chrome-win64\\chrome.exe';
+const EXE = require('./_env.js').chromeExe;
 const URL = 'http://127.0.0.1:8080/index.html';
 
 const b = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'data', 'bubble.json'), 'utf8'));

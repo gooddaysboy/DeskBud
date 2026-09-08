@@ -17,7 +17,8 @@
    此后切帧走 blob:，永不触网，同时免疫缓存策略与弱网抖动。
 ------------------------------------------------------------------------ */
 const FRAME_BLOBS = new Map();   // 原始 URL -> blob URL
-// 核心动作：先载这些就让宠物出现并开跑，其余后台补齐
+const FRAME_INFLIGHT = new Map(); // 原始 URL -> 进行中的 fetch Promise（并发去重：逐动作预载时 stand/sit 共享帧源）
+// 核心动作：语义参考（渐进路径已由"全量预载+逐动作就绪"覆盖）
 const CORE_ACTIONS = ['walk', 'stand', 'drag', 'falling', 'fallen', 'climbSide'];
 
 function actionFrames(config, action) {
@@ -25,42 +26,50 @@ function actionFrames(config, action) {
   return (item && Array.isArray(item.frames)) ? item.frames : [];
 }
 
-// 单帧 → blob URL（失败退回原 URL，绝不阻断整体）
+// 单帧 → blob URL（失败退回原 URL，绝不阻断整体；并发调用对同 URL 只发一次请求）
 async function materializeFrame(src) {
   if (!src || src.startsWith('blob:')) return src;
   if (FRAME_BLOBS.has(src)) return FRAME_BLOBS.get(src);
-  try {
-    const res = await fetch(src, { cache: 'force-cache' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const url = URL.createObjectURL(await res.blob());
-    FRAME_BLOBS.set(src, url);
-    return url;
-  } catch (e) {
-    console.warn('[webmeji] 帧加载失败，退回原 URL：', src, e && e.message);
-    FRAME_BLOBS.set(src, src);
-    return src;
-  }
+  if (FRAME_INFLIGHT.has(src)) return FRAME_INFLIGHT.get(src);
+  const p = (async () => {
+    try {
+      const res = await fetch(src, { cache: 'force-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const url = URL.createObjectURL(await res.blob());
+      FRAME_BLOBS.set(src, url);
+      return url;
+    } catch (e) {
+      console.warn('[webmeji] 帧加载失败，退回原 URL：', src, e && e.message);
+      FRAME_BLOBS.set(src, src);
+      return src;
+    } finally {
+      FRAME_INFLIGHT.delete(src);
+    }
+  })();
+  FRAME_INFLIGHT.set(src, p);
+  return p;
 }
 
-// 预载指定动作，并把这些动作的 frames 重写为 blob URL
+// 预载指定动作：各动作独立推进、完成一个立即标记 __ready（弱网下 walk 先好先播，不等整批）
 async function preloadActions(config, actions) {
   if (!config.__ready) config.__ready = new Set();
   const todo = actions.filter(a => !config.__ready.has(a) && actionFrames(config, a).length);
-  const paths = [];
-  todo.forEach(a => actionFrames(config, a).forEach(f => {
-    if (f && !f.startsWith('blob:') && !paths.includes(f)) paths.push(f);
-  }));
-  const CONC = 8;                       // 并发上限，避免一次打满连接
-  for (let i = 0; i < paths.length; i += CONC) {
-    await Promise.all(paths.slice(i, i + CONC).map(materializeFrame));
-  }
-  todo.forEach(a => {
+  const CONC = 8;                       // 单动作内并发上限，避免一次打满连接
+  const loadOne = async (a) => {
+    const paths = [];
+    actionFrames(config, a).forEach(f => {
+      if (f && !f.startsWith('blob:') && !paths.includes(f)) paths.push(f);
+    });
+    for (let i = 0; i < paths.length; i += CONC) {
+      await Promise.all(paths.slice(i, i + CONC).map(materializeFrame));
+    }
     const item = config[a];
     if (item && Array.isArray(item.frames)) {
       item.frames = item.frames.map(f => FRAME_BLOBS.get(f) || f);
     }
     config.__ready.add(a);
-  });
+  };
+  await Promise.all(todo.map(loadOne));
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -93,13 +102,24 @@ window.addEventListener('DOMContentLoaded', () => {
       try { created.push(new Creature(id, cfg)); } catch (e) { console.error('[webmeji] 生成失败：', e); }
     });
     window.__WM_CREATURES = created;   // 调试/自动化验证出口（可读 currentAction / inverted / currentEdge）
-    // 后台补齐其余动作（不阻塞首屏）
-    Promise.all(configs.map(cfg => preloadActions(cfg, allActions(cfg))))
-      .then(() => console.log('[webmeji] 全部帧就绪'));
   };
 
-  // 1) 核心动作先就绪 → 宠物秒出并跑起来
-  Promise.all(configs.map(cfg => withTimeout(preloadActions(cfg, CORE_ACTIONS), CORE_TIMEOUT)))
+  // 0) 全量预载立即后台启动（逐动作标记：walk 帧拉完立刻标 walk，不等整批）
+  //    CORE_ACTIONS 常量保留供语义参考，渐进路径已由"全量预载+逐动作就绪"覆盖
+  Promise.all(configs.map(cfg => preloadActions(cfg, allActions(cfg))))
+    .then(() => console.log('[webmeji] 全部帧就绪'));
+
+  // 1) walk 或 stand 任一就绪 → 宠物即出（最快路径）；
+  //    弱网下 8s 兜底强制出——此时若帧仍未就绪，Creature 进入"静帧站立"等待模式，绝不滑行
+  const readyEither = (cfg) => new Promise(resolve => {
+    if (cfg.__ready.has('walk') || cfg.__ready.has('stand')) return resolve();
+    const poll = setInterval(() => {
+      if (cfg.__ready.has('walk') || cfg.__ready.has('stand')) {
+        clearInterval(poll); resolve();
+      }
+    }, 100);
+  });
+  Promise.all(configs.map(cfg => withTimeout(readyEither(cfg), CORE_TIMEOUT)))
     .catch(e => console.error('[webmeji] 核心帧加载异常：', e))
     .then(spawnAll);
 
@@ -112,7 +132,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // creature class -------------------------------------------------------
 // 复合动作 → 其帧来源动作（这些动作自身无 frames 配置，就绪性跟着源动作走）
-const ACTION_FRAME_ALIAS = { topwalk: 'walk' };
+const ACTION_FRAME_ALIAS = { topwalk: 'walk', 'forced-walk': 'walk', 'force-think': 'forcethink' };
 
 class Creature {
   constructor(containerId, spriteConfig) {
@@ -179,9 +199,9 @@ class Creature {
 
     this.updateImageDirection(); // set initial facing
 
-    // start first action
-    this.currentAction = this.actionSequence[this.currentActionIndex];
-    this.startAction(this.currentAction);
+    // start first action（DeskBud: 帧未就绪时进入静帧站立等待，绝不带病上岗滑行）
+    this.currentAction = null;
+    this.bootIfReady();
 
     // bind animate to this object
     this.animate = this.animate.bind(this);
@@ -278,6 +298,7 @@ class Creature {
   // jump to another edge (top, left, right)
   jumpToEdge(targetEdge) {
     if (this.isFalling || this.isPetting || this.isDragging || this.isJumping) return; // ignore if busy
+    if (!this.isActionReady('walk')) return; // DeskBud: walk 帧未就绪禁跳（跳跃含随机水平位移，静帧等待期禁用）
     if (!this.spriteConfig.ALLOWANCES.includes(targetEdge)) return; // edge not allowed
 
     this.isJumping = true;
@@ -895,12 +916,35 @@ class Creature {
     return set.has(ACTION_FRAME_ALIAS[action] || action);
   }
 
+  // DeskBud: 静帧站立等待——walk/stand 帧未就绪时只显示站立静帧、不启动行为调度，
+  // 轮询等帧就绪后自动开跑（弱网 8s 兜底出生场景，修复"滑行/定格后永远不动"）
+  bootIfReady() {
+    if (this.isActionReady('walk') || this.isActionReady('stand')) {
+      this.currentAction = this.actionSequence[this.currentActionIndex];
+      this.startAction(this.currentAction);
+      return;
+    }
+    const walk = this.spriteConfig.walk;
+    if (walk && Array.isArray(walk.frames) && walk.frames.length) this.img.src = walk.frames[0];
+    if (!this.bootPoll) {
+      this.bootPoll = setInterval(() => {
+        if (this.isActionReady('walk') || this.isActionReady('stand')) {
+          clearInterval(this.bootPoll);
+          this.bootPoll = null;
+          this.currentAction = this.actionSequence[this.currentActionIndex];
+          this.startAction(this.currentAction);
+        }
+      }, 200);
+    }
+  }
+
   startAction(action) {  
     if (this.isDragging || this.isFalling ) return;
     // DeskBud: 帧未就绪 → 换一个已就绪的常规动作（最多再递归一次，不会死循环）
     if (!this.isActionReady(action)) {
       const avail = (this.spriteConfig.ORIGINAL_ACTIONS || []).filter(a => this.isActionReady(a));
       if (avail.length) this.startAction(avail[Math.floor(Math.random() * avail.length)]);
+      else this.bootIfReady();      // 一个就绪的都没有 → 静帧站立等待，绝不滑行
       return;
     }
     this.currentAction = action;
@@ -1074,6 +1118,12 @@ class Creature {
     }
     const movingActions = ['walk', 'forced-walk', 'climbTop', 'topwalk']; // add actions with horizontal movement here
     if (movingActions.includes(this.currentAction)) {
+        // DeskBud: 位移保险——统一 gate 在 walk 就绪上（climbTop/topwalk/forced-walk 的帧
+        // 各自就绪时间不同，walk 未就绪时禁止一切走动位移，堵死"滑行/直线运动"）
+        if (!this.isActionReady('walk')) {
+            this.animationFrameId = requestAnimationFrame(this.animate);
+            return;
+        }
         const dx = this.direction * this.spriteConfig.walkspeed * delta;
         this.positionX += dx;
         this.setFacingFromDelta(dx);

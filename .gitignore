@@ -15,3 +15,4 @@ scripts/素材预览_*.html
 
 # WorkBuddy 项目记忆与运行数据（不发布）
 .workbuddy/
+__pycache__/
