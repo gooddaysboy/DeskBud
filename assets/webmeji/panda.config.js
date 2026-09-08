@@ -17,7 +17,7 @@ window.DESKBUD_PANDA_CONFIG = {
   spin:         { frames: ["assets/webmeji/panda/spin/f000.webp"], interval: 80 },
   dance:        { frames: ["assets/webmeji/panda/dance/f000.webp", "assets/webmeji/panda/dance/f001.webp", "assets/webmeji/panda/dance/f002.webp", "assets/webmeji/panda/dance/f003.webp", "assets/webmeji/panda/dance/f004.webp", "assets/webmeji/panda/dance/f005.webp"], interval: 130 },
   trip:         { frames: ["assets/webmeji/panda/trip/f000.webp", "assets/webmeji/panda/trip/f001.webp", "assets/webmeji/panda/trip/f002.webp", "assets/webmeji/panda/trip/f003.webp", "assets/webmeji/panda/trip/f004.webp"], interval: 130 },
-  forcethink:   { frames: ["assets/webmeji/panda/forcethink/f000.webp", "assets/webmeji/panda/forcethink/f001.webp", "assets/webmeji/panda/forcethink/f002.webp", "assets/webmeji/panda/forcethink/f003.webp", "assets/webmeji/panda/forcethink/f004.webp"], interval: 180 },
+  forcethink:   { frames: ["assets/webmeji/panda/forcethink/f000.webp", "assets/webmeji/panda/forcethink/f001.webp", "assets/webmeji/panda/forcethink/f002.webp", "assets/webmeji/panda/forcethink/f003.webp", "assets/webmeji/panda/forcethink/f004.webp"], interval: 180, loops: 2 },
   pet:          { frames: ["assets/webmeji/panda/pet/f000.webp", "assets/webmeji/panda/pet/f001.webp", "assets/webmeji/panda/pet/f002.webp"], interval: 250 },
   drag:         { frames: ["assets/webmeji/panda/drag/f000.webp", "assets/webmeji/panda/drag/f001.webp", "assets/webmeji/panda/drag/f002.webp"], interval: 100 },
   forcewalk:   { loops: 6 },                                          // 用 walk 帧
@@ -41,6 +41,8 @@ window.DESKBUD_PANDA_CONFIG = {
     'dance','dance',
     'trip'
   ],
+  // DeskBud: 性格权重（引擎 pickWeighted 用）——熊猫憨：多站多走、少转圈
+  actionWeights: { walk: 8, spin: 1, sit: 4, dance: 2, trip: 1 },
 
   EDGE_ACTIONS: ['hang', 'hang', 'climb', 'fall'],
 

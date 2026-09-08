@@ -91,17 +91,27 @@ window.addEventListener('DOMContentLoaded', () => {
   ]);
   const CORE_TIMEOUT = 8000;
 
-  // 生成逻辑（幂等）：核心帧就绪 / 8s 兜底 / 切回前台补生，三条路径共用
-  const spawnAll = () => {
-    if (window.__WM_CREATURES && window.__WM_CREATURES.length) return;
-    console.log('[webmeji] 生成宠物');
-    const created = [];
+  // 生成逻辑（按缺补生）：核心帧就绪 / 8s 兜底 / 切回前台补生，共用。
+  // 谁没出生补谁——config 晚到（注入竞态）或单只构造失败不再永远少一只
+  const spawnAll = (attempt) => {
+    attempt = attempt || 0;
+    if (!window.__WM_CREATURES) window.__WM_CREATURES = [];
+    let missingCfg = false;
     window.SPAWNING.forEach(({ id, config }) => {
+      if (window.__WM_CREATURES.some(c => c && c.img && c.img.id === id)) return;  // 已出生
       const cfg = window[config];
-      if (!cfg) { console.warn(`config not found: ${config}`); return; }
-      try { created.push(new Creature(id, cfg)); } catch (e) { console.error('[webmeji] 生成失败：', e); }
+      if (!cfg) {
+        missingCfg = true;
+        if (attempt < 25) console.warn(`config 未就绪，稍后补生: ${config}`);
+        return;
+      }
+      try {
+        window.__WM_CREATURES.push(new Creature(id, cfg));
+        console.log('[webmeji] 生成宠物:', id);
+      } catch (e) { console.error('[webmeji] 生成失败：', e); }
     });
-    window.__WM_CREATURES = created;   // 调试/自动化验证出口（可读 currentAction / inverted / currentEdge）
+    // config 脚本晚到 → 定时重试补生（visibilitychange 也会再触发）
+    if (missingCfg && attempt < 25) setTimeout(() => spawnAll(attempt + 1), 400);
   };
 
   // 0) 全量预载立即后台启动（逐动作标记：walk 帧拉完立刻标 walk，不等整批）
@@ -146,7 +156,12 @@ class Creature {
     // create img element for first frame of sprite
     this.img = document.createElement('img');
     this.img.id = containerId;
-    this.img.src = spriteConfig.walk.frames[0]; // default to first walk frame
+    // DeskBud: 首帧优先用已 blob 化的帧——spawn 可能由 stand（2帧）先就绪触发，此时 walk
+    // （28帧）尚未重写，赋原 URL 会造成 img+预载双发请求（本地 no-cache 下可见）
+    const wf0 = spriteConfig.walk && spriteConfig.walk.frames[0];
+    const sf0 = spriteConfig.stand && spriteConfig.stand.frames[0];
+    const pickBlob = (a, b) => (a && a.startsWith('blob:')) ? a : b;
+    this.img.src = pickBlob(wf0, pickBlob(sf0, wf0));
     this.container.appendChild(this.img);
 
     // store sprite configuration & randomize action sequence
@@ -662,7 +677,8 @@ class Creature {
     const upDuration = 300 + (jumpHeight / window.innerHeight) * 350;  // 起跳耗时随高度延长，越高越慢
 
     let frameIndex = 0;
-    if (jumpConfig && jumpConfig.frames && jumpConfig.frames.length) {
+    // DeskBud: jump 帧未 blob 化时不换帧（避免原 URL img 直拉与后台预载重复），只做位移蹦跳
+    if (jumpConfig && jumpConfig.frames && jumpConfig.frames.length && this.isActionReady('jump')) {
       this.img.src = jumpConfig.frames[0];
       this.frameTimer = setInterval(() => {
         frameIndex = (frameIndex + 1) % jumpConfig.frames.length;
@@ -836,8 +852,16 @@ class Creature {
 
     if (this.forceThinkAfter) {
       this.forceThinkAfter = false;
-      this.startForceThink();
-      return;
+      // DeskBud: forcethink 帧未 blob 化时先不播（原 URL 直赋 img 会与后台预载重复请求）
+      if (this.isActionReady('forcethink')) { this.startForceThink(); return; }
+      this.forceThinkAfter = true;   // 意图保留，等帧就绪的下一次机会
+    }
+
+    // DeskBud: 加权抽签模式——config 提供 actionWeights 时启用（宠物性格差异化 + 防连播抑制）；
+    // 未提供则沿用洗牌序列（兼容旧 config）
+    if (this.spriteConfig.actionWeights) {
+      const next = this.pickWeighted();
+      if (next) { this.currentAction = next; this.startAction(next); return; }
     }
 
     this.currentActionIndex++;
@@ -850,12 +874,38 @@ class Creature {
     this.startAction(this.currentAction);
   }
 
+  // DeskBud: 按权重抽下一个动作。非走位动作在最近 2 次出现过则权重×0.25（抑制连播但不禁止），
+  // walk 不抑制（走位连续合理）。未就绪的动作不参与抽取。
+  pickWeighted() {
+    const w = this.spriteConfig.actionWeights || {};
+    const pool = Object.keys(w).filter(a => this.isActionReady(a) && (w[a] || 0) > 0);
+    if (!pool.length) return null;
+    const recent = this.recentActions || [];
+    const weightOf = (a) => (a !== 'walk' && recent.includes(a)) ? (w[a] * 0.25) : w[a];
+    let sum = 0;
+    pool.forEach(a => { sum += weightOf(a); });
+    if (sum <= 0) return null;
+    let r = Math.random() * sum;
+    for (const a of pool) { r -= weightOf(a); if (r < 0) return a; }
+    return pool[pool.length - 1];
+  }
+
+  // 记录最近动作（pickWeighted 的防连播依据），只记成功的地面动作
+  rememberAction(action) {
+    if (this.spriteConfig.actionWeights) {
+      this.recentActions = [action, ...(this.recentActions || [])].slice(0, 2);
+    }
+  }
+
   // force walk for a number of cycles
   startForcedWalk() {
     const { frames, interval } = this.spriteConfig.walk;
     const walkCycles = this.spriteConfig.forcewalk;
     this.currentAction = 'forced-walk';
-    this.playAnimation(frames, interval, walkCycles, () => this.setNextAction());
+    // DeskBud: forcewalk 配置是 {loops: N} 对象——取其 loops 数值传给 playAnimation
+    //（旧代码直接传对象，playCount>=对象 恒 false = 无限走）
+    const cycles = (walkCycles && Number.isFinite(walkCycles.loops)) ? walkCycles.loops : 6;
+    this.playAnimation(frames, interval, cycles, () => this.setNextAction());
   }
 
   // force think for a number of cycles
@@ -920,9 +970,15 @@ class Creature {
   // 轮询等帧就绪后自动开跑（弱网 8s 兜底出生场景，修复"滑行/定格后永远不动"）
   bootIfReady() {
     if (this.isActionReady('walk') || this.isActionReady('stand')) {
-      this.currentAction = this.actionSequence[this.currentActionIndex];
-      this.startAction(this.currentAction);
-      return;
+      // DeskBud: 只从已就绪动作里挑（ORIGINAL_ACTIONS 里可能混入未就绪动作，
+      // 旧写法"挑到未就绪→无备选→递归回 bootIfReady"会无限递归 RangeError，熊猫曾因此构造失败）
+      const ready = (this.spriteConfig.ORIGINAL_ACTIONS || []).filter(a => this.isActionReady(a));
+      if (ready.length) {
+        this.currentAction = ready[Math.floor(Math.random() * ready.length)];
+        this.startAction(this.currentAction);
+        return;
+      }
+      // walk/stand 就绪但地面池无一就绪（罕见竞态）→ 不硬启，落到下方 bootPoll 继续等
     }
     const walk = this.spriteConfig.walk;
     if (walk && Array.isArray(walk.frames) && walk.frames.length) this.img.src = walk.frames[0];
@@ -949,6 +1005,7 @@ class Creature {
     }
     this.currentAction = action;
     this.resetAnimation();
+    this.rememberAction(action);       // DeskBud: 记录最近动作，供加权抽签防连播
     this.emitAction(action);
 
     if (action === 'climbTop') {
@@ -1042,7 +1099,15 @@ class Creature {
     }
 
     const config = this.spriteConfig[action];
-    if (!config) return;
+    if (!config) {
+      // DeskBud: 动作名对不上 config（如 sequence 混入别名/配置残缺）→ 不静默卡死，前进下一动作；
+      // 守卫防递归死循环（连续 5 个坏动作就回静帧等待）
+      this.__badActionGuard = (this.__badActionGuard || 0) + 1;
+      if (this.__badActionGuard > 5) { this.__badActionGuard = 0; this.bootIfReady(); return; }
+      this.setNextAction();
+      return;
+    }
+    this.__badActionGuard = 0;
 
     const { frames, interval, loops = 1 } = config;
 
@@ -1088,6 +1153,12 @@ class Creature {
 
   // helper to play a sequence of frames for a given number of loops
   playAnimation(frames, interval, loops, onComplete){
+    // DeskBud: 数据防御——空帧/缺 loops 不再形成"永久卡死黑洞"（熊猫 forcethink 缺 loops 的教训）
+    if (!Array.isArray(frames) || !frames.length) {
+      if (onComplete) setTimeout(onComplete, 0);
+      return;
+    }
+    loops = (Number.isFinite(loops) && loops > 0) ? loops : 1;
     let playCount=0, f=0;
     this.currentFrame=0;
     this.img.src=frames[0];

@@ -86,7 +86,7 @@ const BUBBLE = {
     if (!g) return '';
     const pool = (g.public || []).concat((g.pets && g.pets[pet]) || []);
     if (!pool.length) return '';
-    return this.text(pool[Math.floor(Math.random() * pool.length)]);
+    return this.text(this.pickBag('react:' + kind + ':' + pet, pool) || pool[0]);
   },
   // v6 L3 状态气泡：climb / hang / slip / fall / land / walk / idle_stare / sleep / coquetry / naughty
   // 无对应池返回空串 —— 调用方据此跳过（桌面版同策略，不硬凑文案）
@@ -95,7 +95,7 @@ const BUBBLE = {
     if (!g) return '';
     const pool = (g.public || []).concat((g.pets && g.pets[pet]) || []);
     if (!pool.length) return '';
-    return this.text(pool[Math.floor(Math.random() * pool.length)]);
+    return this.text(this.pickBag('state:' + key + ':' + pet, pool) || pool[0]);
   },
   // 取某宠物（category 叶子 id）的合并语录：公共 + 该宠物专属，随机打散
   linesFor(category) {
@@ -112,13 +112,30 @@ const BUBBLE = {
     }
     return a;
   },
+  // DeskBud v6.1: 洗牌袋——同池相邻两条必不重复，全池轮完一圈才重洗（消除裸随机的"怎么又是这句"）。
+  // bag 以 key 缓存；袋空重洗后，下一条若与上一条撞车则与袋内随机位换位
+  _bags: new Map(),
+  _bagLast: new Map(),
+  pickBag(key, pool) {
+    if (!pool || !pool.length) return null;
+    const last = this._bagLast.get(key);
+    let bag = this._bags.get(key);
+    if (!bag || !bag.length) { bag = this.shuffle(pool); this._bags.set(key, bag); }
+    if (bag.length > 1 && last != null && this.text(bag[bag.length - 1]) === this.text(last)) {
+      const j = Math.floor(Math.random() * (bag.length - 1));
+      [bag[bag.length - 1], bag[j]] = [bag[j], bag[bag.length - 1]];
+    }
+    const item = bag.pop();
+    this._bagLast.set(key, item);
+    return item;
+  },
   // 在单个容器里飘出 1 条气泡（不负责节奏，由 render / startGlobal / renderKeep 调度）
   // animDelay：可选负数（秒），让气泡“已经飘到一半”，用于各列表起始位置错开、像一直在跑
   // dir：运动方向 rise/fall/lr/rl/d1/d2；不传则随机，像随机冒出来的念头
   spawnBubble(container, category, dur, animDelay, dir) {
     const lines = this.linesFor(category);
     if (!lines.length) return;
-    const text = window.pick(lines[Math.floor(Math.random() * lines.length)]);
+    const text = window.pick(this.pickBag('marquee:' + category, lines) || lines[0]);
     if (dur == null) dur = 14000 + Math.random() * 8000;   // 默认 14~22s（缓慢）
     const DIRS = ['rise', 'fall', 'lr', 'rl', 'd1', 'd2'];
     if (!dir || DIRS.indexOf(dir) < 0) dir = DIRS[Math.floor(Math.random() * DIRS.length)];

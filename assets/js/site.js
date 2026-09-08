@@ -18,7 +18,7 @@ const SITE = {
       css.href = this.base + 'webmeji.css?v=2';
       document.head.appendChild(css);
       // 2. 注入 config（先于 webmeji.js；多宠物 = 多个 config 脚本，全部加载完拼接 SPAWNING）
-      const configFiles = ['rabbit.config.js?v=6', 'panda.config.js?v=1'];
+      const configFiles = ['rabbit.config.js?v=7', 'panda.config.js?v=2'];
       const loadCfg = (i) => {
         if (i >= configFiles.length) {
           window.SPAWNING = [
@@ -26,7 +26,7 @@ const SITE = {
             ...(window.DESKBUD_PANDA_SPAWNING || []),
           ];
           const s = document.createElement('script');
-          s.src = this.base + 'webmeji.js?v=17';
+          s.src = this.base + 'webmeji.js?v=18';
           s.onload = () => {
             // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
             window.dispatchEvent(new Event('DOMContentLoaded'));
@@ -45,13 +45,16 @@ const SITE = {
     },
 
     // 取一句 deskbud 语录（复用 bubble.js 的 window.BUBBLE 池，按宠物物种取池，失败兜底）
+    // DeskBud v6.1: 走洗牌袋——同一物种相邻两条必不重复
     _pickQuote(container) {
       const species = (container && container._wmSpecies) || this._BUBBLE_CFG.pet;
-      let pool = [];
+      let line = null;
       if (window.BUBBLE && typeof window.BUBBLE.linesFor === 'function') {
-        pool = window.BUBBLE.linesFor(species) || [];
+        const pool = window.BUBBLE.linesFor(species) || [];
+        if (window.BUBBLE.pickBag) line = window.BUBBLE.pickBag('l1:' + species, pool);
+        else if (pool.length) line = pool[Math.floor(Math.random() * pool.length)];
       }
-      const line = pool.length ? pool[Math.floor(Math.random() * pool.length)] : '今天也要元气满满哦';
+      if (!line) line = '今天也要元气满满哦';
       if (window.pick) {
         try { return window.pick(line); } catch (e) {}
       }
@@ -201,12 +204,19 @@ const SITE = {
         if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
       });
 
-      // DeskBud: 宠物自己玩时随机自动冒语录(8~20s 一条)
+      // DeskBud: 宠物自己玩时随机自动冒语录(8~20s 一条)；双宠全局错峰——
+      // 任意一只刚冒过 3s 内另一只不冒（避免俩同时碎碎念）
+      const showAuto = () => {
+        const now = Date.now();
+        if (now - (this._wmLastAny || 0) < 3000) {    // 错峰：距上条气泡不足 3s → 顺延
+          container._wmAutoTimer = setTimeout(() => { show(); scheduleAuto(); }, 3000);
+          return;
+        }
+        show();
+        scheduleAuto();
+      };
       const scheduleAuto = () => {
-        container._wmAutoTimer = setTimeout(() => {
-          show();
-          scheduleAuto();
-        }, 8000 + Math.random() * 12000);
+        container._wmAutoTimer = setTimeout(showAuto, 8000 + Math.random() * 12000);
       };
       scheduleAuto();
     },
@@ -1002,8 +1012,16 @@ function wireSoftNav() {
     if (target.origin !== location.origin) return;       // 外链整页
     const base = target.pathname.split('/').pop();
     if (SOFTNAV_EXCLUDE.has(base)) return;               // 排除页整页
-    // 同页（路径+查询相同）→ 不软导航，交给浏览器（含锚点滚动）；避免重复历史记录
-    if (target.pathname === location.pathname && target.search === location.search) return;
+    // 同页（路径+查询相同）：
+    //   带锚点 → 交给浏览器（fragment 滚动，不重载页面）
+    //   无锚点 → 必须阻止默认！浏览器对同页无锚点链接的默认行为是整页重载
+    //   （后果：宠物随机重生=位置"回退"、BGM 重启。2026-09-08 老曹实测踩坑）
+    if (target.pathname === location.pathname && target.search === location.search) {
+      if (target.hash) return;
+      e.preventDefault();
+      window.scrollTo(0, 0);
+      return;
+    }
     e.preventDefault();
     SITE.softNav(target.pathname + target.search + target.hash);
   });

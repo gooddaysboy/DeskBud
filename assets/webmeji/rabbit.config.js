@@ -48,6 +48,8 @@ window.DESKBUD_RABBIT_CONFIG = {
     'dance','dance',
     'trip'
   ],
+  // DeskBud: 性格权重（引擎 pickWeighted 用）——兔子灵活：爱转圈爱跳舞、走位少些
+  actionWeights: { walk: 6, spin: 4, sit: 2, dance: 3, trip: 2 },
 
   // 屏顶到达后的随机选择：挂住 / 顶部爬 / 从顶部落下（重力下落 → 触发 fallspeed）
   EDGE_ACTIONS: ['hang', 'hang', 'climb', 'fall'],
