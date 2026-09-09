@@ -369,9 +369,15 @@ function initOpenKounter() {
 // 公告栏：全站注入到 .topbar 之下、搜索栏之上，由 data/works.json 驱动，
 // 横向无缝滚动「在线作品集」（不再显示公告文字）。lang:change 与 DOMContentLoaded 都会触发，故先清再插（幂等）。
 function initAnnounce() {
+  // 首页极简：不注入公告走马灯（新首屏自带大展示卡）；软导航离开首页时由 syncHomeChrome 补建
+  if (typeof isHomePath === 'function' && isMinimalPath()) {
+    document.querySelectorAll('.announce-bar').forEach(b => b.remove());
+    return;
+  }
   fetch('data/works.json', { cache: 'no-cache' })
     .then(r => (r.ok ? r.json() : null))
     .then(data => {
+      if (typeof isHomePath === 'function' && isMinimalPath()) return; // fetch 期间软导航回极简页则放弃插入
       const works = (data && data.works) || [];
       const items = works.filter(w => w.status === 'online');
       // 幂等：移除旧 bar 再插入
@@ -438,6 +444,12 @@ function _shuffle(arr) {
 }
 
 function initQuoteMarquee() {
+  // 首页极简：不注入语录走马灯（软导航离开首页时由 syncHomeChrome 补建）
+  if (typeof isHomePath === 'function' && isMinimalPath()) {
+    document.querySelectorAll('.quote-bar').forEach(b => b.remove());
+    _quoteEl = null;
+    return;
+  }
   // 立即插入走马灯 DOM，动画即刻启动（不等 fetch；首条由负 animation-delay 从右侧可见区起步）
   document.querySelectorAll('.quote-bar').forEach(b => b.remove()); // 幂等：先清旧 bar
   const bar = document.createElement('div');
@@ -708,9 +720,9 @@ const PetsView = {
       : '';
     let actions;
     if (online) {
-      // 购买渠道未上线时不输出占位（2026-09-07 老曹要求去掉"购买渠道即将上线"）；有 url 才显示购买按钮
+      // 渠道未上线时不输出占位（2026-09-07 老曹要求）；有 url 才显示按钮（fallback 文案避免商业用词，2026-09-09）
       const buy = p.buy && p.buy.url
-        ? this.action(p.buy.url, (p.buy && p.buy.label) || { zh: '购买角色包', en: 'Buy PetPack' }, '', '', '')
+        ? this.action(p.buy.url, (p.buy && p.buy.label) || { zh: '把伙伴领回家', en: 'Bring it home' }, '', '', '')
         : '';
       actions =
         this.action(p.download && p.download.url, (p.download && p.download.label) || { zh: '下载', en: 'Download' }, 'btn-primary', 'pets.soonBtn', '下载即将上线') +
@@ -789,20 +801,190 @@ SITE.pages = {
     window.__rerender = () => PetsView.paint();
   },
 
-  // 首页
+  // 首页（2026-09-09 改版）：左选择卡切换 ｜ 右大展示卡姿态轮播 ｜ 下部介绍+下载/购买 ｜ 宣传视频
   home: async function () {
     await SITE.load();
     document.getElementById('yr').textContent = new Date().getFullYear();
-    if (window.BUBBLE) await BUBBLE.load();
-    const fill = () => {
-      const hot = SITE.sortWorks(SITE.onlineWorks(), 'hot').slice(0, 4);
-      document.getElementById('hotGrid').innerHTML = hot.map(SITE.cardHTML).join('');
-      if (window.BUBBLE) document.querySelectorAll('.card-bubbles').forEach(el => {
-        SITE._cleanups.push(BUBBLE.renderKeep(el, el.dataset.pet, { minDur: 16000, maxDur: 24000 }));
+    const works = SITE.onlineWorks();
+    if (!works.length) return;
+    let cur = 0, curPose = 0, timer = null;
+
+    const $ = id => document.getElementById(id);
+const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTrack'), card = $('showcaseCard'),
+          heroKickerText = $('heroKickerText'), heroBig = $('heroBig'), heroLead = $('heroLead'),
+          pickerTitle = $('pickerTitle'),
+          hdBadge = $('hdBadge'),
+          hdTitle = $('hdTitle'), hdSummary = $('hdSummary'), hdDesc = $('hdDesc'),
+          hdGetLabel = $('hdGetLabel'),
+          hdBuy = $('hdBuy'),
+          vdBadge = $('vdBadge'), vdStage = $('vdStage'), vdTabs = $('vdTabs'),
+          hmTitle = $('hmTitle'), hmTabs = $('hmTabs'), hmFrame = $('hmFrame');
+    // 视频轮播：固定顺序 Windows → Android → macOS（老曹拍板），三标签常驻可切换；
+    // 手册卡与视频窗口平台双向同步（点任一侧标签，另一侧跟着切）
+    const PLAT_ORDER = ['win', 'android', 'mac'];
+    let curPlat = 'win', lastPetId = null, curManualSrc = '';
+
+    const poses = w => (w.states && w.states.length ? w.states : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]);
+    const poseName = s => window.pick(s.caption || { zh: '', en: '' }) || '';
+
+    function paintHero() {
+      if (heroKickerText) heroKickerText.textContent = window.pick({ zh: '桌面伙伴 · 与你同欢', en: 'DESK BUDDIES · JOY TOGETHER' });
+      if (heroBig) heroBig.innerHTML = window.pick({
+        zh: '方寸屏间有伙伴，漫游窗口<span class="hl">觅清欢</span>。时而攀沿窗栏看，消解心头百般烦。',
+        en: 'A tiny pal on your screen, <span class="hl">roaming windows with you</span> — melting the day\'s worries away.'
       });
-    };
-    fill();
-    window.__rerender = () => { SITE.runCleanups(); fill(); };
+      // lead 走 innerHTML 才能保留 <span class="hl"> 强调「时光」（老曹 2026-09-09 拍板）
+      if (heroLead) heroLead.innerHTML = window.pick({
+        zh: '屏幕角落趴着一只专属小宠物，安静陪你度过每一段<span class="hl">时光</span>。',
+        en: 'A little pet rests in the corner of your screen, quietly keeping you company through every <span class="hl">moment</span>.'
+      });
+      if (pickerTitle) pickerTitle.textContent = window.pick({ zh: '选择伙伴', en: 'Choose a buddy' });
+      if (hdGetLabel) hdGetLabel.textContent = window.pick({ zh: '把伙伴领回家', en: 'Bring it home' });
+      if (hmTitle) hmTitle.textContent = window.pick({ zh: '用户手册', en: 'User manual' });
+    }
+
+    function paintPicker() {
+      if (!picker) return;
+      picker.innerHTML = works.map((w, i) => `
+        <button type="button" class="pick-card${i === cur ? ' active' : ''}" data-i="${i}">
+          <img class="pick-thumb" src="${w.thumb || w.cover}" alt="" draggable="false">
+          <span class="pick-txt"><b>${window.pick(w.title)}</b><small>${window.pick(w.summary)}</small></span>
+          <span class="pick-arrow">›</span>
+        </button>`).join('');
+      picker.querySelectorAll('.pick-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = +btn.dataset.i;
+          if (i === cur) return;
+          cur = i; curPose = 0;
+          paintPicker(); paintDots(); paintShowcase(); paintDetail(); restart();
+        });
+      });
+    }
+
+    function paintDots() {
+      // 首页展示卡改为横滚走马灯（CSS 动画驱动），圆点导航已废止（HTML 已删 #showcaseDots）；
+      // 保留函数位以避免调用方报错，实际 no-op。
+      return;
+    }
+
+    function paintShowcase() {
+      if (!track || !badge) return;
+      const w = works[cur], list = poses(w);
+      const items = list.map(s => `<figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="${s.src}" alt="${poseName(s) || window.pick(w.title)}" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>`).join('');
+      // 复制一份做无缝循环
+      track.innerHTML = items + items;
+      // 徽标显示第一帧（走马灯自身循环播放，无需人为切换）
+      const first = list[curPose] || list[0];
+      badge.textContent = `${window.pick(w.title)} · ${poseName(first) || ''}`;
+    }
+
+    // 视频轮播渲染：当前平台有视频→静音自动播放，播完按 win→android→mac 顺序切下一个；无视频→占位卡
+    // （ended 自动轮播只切视频，不打扰手册阅读；手动点标签才双向同步）
+    function renderVideo(w) {
+      const byPlat = {};
+      (w.versions || []).forEach(v => { byPlat[v.platform] = v; });
+      const v = byPlat[curPlat];
+      if (vdBadge) vdBadge.textContent = v ? window.pick(v.platformLabel) : curPlat.toUpperCase();
+      if (vdTabs) {
+        vdTabs.innerHTML = PLAT_ORDER.map(p => {
+          const pv = byPlat[p];
+          const label = pv ? window.pick(pv.platformLabel) : p.toUpperCase();
+          return `<button type="button" class="vtab${p === curPlat ? ' on' : ''}" data-p="${p}">${label}</button>`;
+        }).join('');
+        vdTabs.querySelectorAll('.vtab').forEach(b => b.addEventListener('click', () => {
+          if (b.dataset.p === curPlat && b.dataset.p === curManualPlat) return;
+          curPlat = b.dataset.p; curManualPlat = b.dataset.p; // 双向同步：视频标签带动手册
+          renderVideo(works[cur]);
+          setManualPlat();
+        }));
+      }
+      if (!vdStage) return;
+      if (v && v.video) {
+        vdStage.innerHTML = `<video src="${v.video}" autoplay muted loop playsinline preload="metadata"></video>`;
+        const el = vdStage.querySelector('video');
+        el.addEventListener('ended', () => {
+          const withVid = PLAT_ORDER.filter(p => byPlat[p] && byPlat[p].video);
+          if (withVid.length <= 1) { el.currentTime = 0; el.play().catch(() => {}); return; }
+          curPlat = withVid[(withVid.indexOf(curPlat) + 1) % withVid.length];
+          renderVideo(w);
+        });
+      } else {
+        vdStage.innerHTML = `<div class="video-ph"><span class="vplay">▶</span><span>${window.pick({ zh: '视频即将上线', en: 'Video coming soon' })}</span></div>`;
+      }
+    }
+
+    // 手册大卡：三平台标签 + 原版手册 iframe（懒加载：仅平台/语言变化时重设 src，HTTP 缓存复用，单份仅十几 KB）
+    let curManualPlat = 'win';
+    function setManualPlat() {
+      if (!hmTabs) return;
+      const names = { win: 'Windows', android: 'Android', mac: 'macOS' };
+      hmTabs.innerHTML = PLAT_ORDER.map(p =>
+        `<button type="button" class="vtab${p === curManualPlat ? ' on' : ''}" data-p="${p}">${names[p]}</button>`).join('');
+      hmTabs.querySelectorAll('.vtab').forEach(b => b.addEventListener('click', () => {
+        if (b.dataset.p === curManualPlat && b.dataset.p === curPlat) return;
+        curManualPlat = b.dataset.p; curPlat = b.dataset.p; // 双向同步：手册标签带动视频
+        renderVideo(works[cur]);
+        setManualPlat();
+      }));
+      if (hmFrame) {
+        const lang = (window.__lang === 'en') ? 'en' : 'zh';
+        const src = `manual/${curManualPlat}-${lang}.html`;
+        if (curManualSrc !== src) { curManualSrc = src; hmFrame.setAttribute('src', src); }
+      }
+    }
+
+    function paintDetail() {
+      const w = works[cur];
+      if (lastPetId !== w.id) { curPlat = 'win'; curManualPlat = 'win'; lastPetId = w.id; }
+      if (hdBadge) hdBadge.textContent = window.pick({ zh: '伙伴档案', en: 'Profile' });
+      if (hdTitle) hdTitle.textContent = window.pick(w.title);
+      if (hdSummary) hdSummary.textContent = window.pick(w.summary);
+      if (hdDesc) hdDesc.textContent = window.pick(w.description) || '';
+      if (hdBuy) {
+        hdBuy.innerHTML = '';
+        SITE.loadCatalog().then(cat => {
+          const pet = (cat.pets || []).find(x => x.id === w.id);
+          const chans = (cat.channelsVisible ? (cat.channels || []) : []).filter(c => c && c.label);
+          const items = chans.map(c => {
+            const name = window.pick(c.label);
+            return c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${name}</a>` : name;
+          }).join(' / ');
+          let main = '';
+          if (pet && pet.buy && pet.buy.url) {
+            main = `<a class="btn btn-primary" href="${pet.buy.url}" target="_blank" rel="noopener">🏠 ${window.pick(pet.buy.label || { zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+          } else {
+            // URL 未填前显示中性占位（全站不出现商业用词，2026-09-09 老曹要求）；填 catalog.json 即变跳转按钮
+            main = `<span class="hd-soon">${window.pick({ zh: '即将上线', en: 'Coming soon' })}</span>`;
+          }
+          const tail = items ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` }) : '';
+          if (!main && !tail) { hdBuy.innerHTML = ''; return; }
+          hdBuy.innerHTML = `<div class="buy-row">${main}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
+        }).catch(() => {});
+      }
+      renderVideo(w);
+      setManualPlat();
+    }
+
+    function restart() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        const list = poses(works[cur]);
+        curPose = (curPose + 1) % list.length;
+        paintShowcase();
+      }, 3200);
+    }
+
+    paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); restart();
+    // 首页手册大卡 iframe 高度固定（CSS min/max 兜底），不走内容自适应——避免 usage.html 的 fitManualFrame 把它压成 520
+    if (hmFrame) { hmFrame.style.height = '760px'; hmFrame.style.minHeight = '660px'; }
+    // 悬停大卡暂停轮播，移开恢复
+    if (card) {
+      card.addEventListener('mouseenter', () => { if (timer) { clearInterval(timer); timer = null; } });
+      card.addEventListener('mouseleave', restart);
+    }
+    // 软导航离开首页时停掉轮播定时器
+    SITE._cleanups.push(() => { if (timer) { clearInterval(timer); timer = null; } });
+    window.__rerender = () => { paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); };
     initOpenKounter();
   },
 
@@ -888,7 +1070,7 @@ SITE.pages = {
         const cls = 'ver-card' + (v.platform === 'android' ? ' v-android' : '') + (hasUrl ? '' : ' is-soon');
         const videoHTML = `
           <div class="ver-video ${hasVideo ? '' : 'no-video'}">
-            ${hasVideo ? `<video src="${v.video}" controls preload="metadata" onerror="this.style.display='none';this.parentNode.classList.add('no-video')"></video>` : ''}
+            ${hasVideo ? `<video src="${v.video}" autoplay muted loop playsinline preload="metadata" onerror="this.style.display='none';this.parentNode.classList.add('no-video')"></video>` : ''}
             <div class="ver-ph"><span class="vplay">▶</span><span class="vhint">${window.pick({ zh: '演示视频即将上线', en: 'Demo video coming soon' })}</span></div>
           </div>`;
         const actionHTML = hasUrl
@@ -927,15 +1109,15 @@ SITE.pages = {
         }).join(' / ');
         let main = '';
         if (pet && pet.buy && pet.buy.url) {
-          main = `<a class="btn btn-primary" href="${pet.buy.url}" target="_blank" rel="noopener">🛒 ${window.pick(pet.buy.label || { zh: '购买角色包', en: 'Buy PetPack' })}</a>`;
+          main = `<a class="btn btn-primary" href="${pet.buy.url}" target="_blank" rel="noopener">🏠 ${window.pick(pet.buy.label || { zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
         }
-        // 购买渠道未上线时不再显示"购买渠道即将上线"占位（2026-09-07）；主按钮与渠道提示都没有就移除整个区块
+        // 渠道未上线时不显示占位（2026-09-07）；主按钮与渠道提示都没有就移除整个区块（全站不出现商业用词，2026-09-09 老曹要求）
         const tail = items
           ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` })
           : '';
         if (!main && !tail) { buyHost.remove(); return; }
         buyHost.innerHTML = `
-          <div class="block-label">${window.pick({ zh: '购买角色包', en: 'Buy PetPack' })}<span class="hint">${window.pick({ zh: '解锁更多动作、表情与皮肤', en: 'Unlock more actions, moods & skins' })}</span></div>
+          <div class="block-label">${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}<span class="hint">${window.pick({ zh: '解锁更多动作、表情与皮肤', en: 'Unlock more actions, moods & skins' })}</span></div>
           <div class="buy-row">${main}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
       }).catch(() => { buyHost.remove(); });
       initOpenKounter();
@@ -996,12 +1178,41 @@ function setSceneBg(path, workId) {
   }
 }
 
+// 首页判定：'/' 或 /index.html
+function isHomePath() {
+  const p = location.pathname.split('/').pop();
+  return p === '' || p === 'index.html';
+}
+// 极简页判定（2026-09-09 老曹拍板）：首页 + 许可与隐私页都隐藏搜索栏/走马灯
+function isMinimalPath() {
+  return isHomePath() || location.pathname.split('/').pop() === 'privacy.html';
+}
+// 首页极简同步：首页/隐私页隐藏搜索栏 + 移除公告/语录走马灯。
+// 这些块都在 #view 之外，软导航换 #view 带不动它们，故每次路由统一增删。
+// initAnnounce / initQuoteMarquee 均幂等（先清再插 / 极简页守卫），重复调用安全。
+function syncHomeChrome() {
+  const minimal = isMinimalPath();
+  const search = document.querySelector('.top-search');
+  if (search) search.style.display = minimal ? 'none' : '';
+  // 隐私页整页独特色背景（软导航进出同步 body class）
+  const isPrivacy = location.pathname.split('/').pop() === 'privacy.html';
+  document.body.classList.toggle('privacy-warm', isPrivacy);
+  if (minimal) {
+    document.querySelectorAll('.announce-bar, .quote-bar').forEach(b => b.remove());
+    _quoteEl = null;
+  } else if (!document.querySelector('.announce-bar')) {
+    initAnnounce();
+    initQuoteMarquee();
+  }
+}
+
 SITE.route = async function () {
   SITE.runCleanups();
   const path = location.pathname.split('/').pop();
   const params = new URLSearchParams(location.search);
   setSceneBg(path, params.get('id') || ''); // 兔子→田野，其余→竹子
   setActiveNav(path);
+  syncHomeChrome(); // 首页隐藏搜索/走马灯，离开首页补建
   const p = SITE.pages;
   let fn;
   if (path === '' || path === 'index.html') fn = p.home;

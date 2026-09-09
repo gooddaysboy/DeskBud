@@ -32,13 +32,17 @@
     return '';
   };
 
+  // 语言包 URL 缓存击穿：每次切换语言强制刷新，避免旧版缓存导致 footer.download 等新 key 不生效
+  // RES_VER 与下方 loadRes 同步；HTML 侧 i18n.js?v= 也要跟着升
+  window.I18N_RES_VER = 'v7';
+
   // 翻译函数占位（i18next ready 前用，缺 key 时回退到 HTML 原文字）
   let _t = function (k, fb) { return fb != null ? fb : k; };
   window.I18N = { t: _t, lang: 'zh' };
 
   async function loadRes() {
     // RES_VER：语言包内容有改动时升号（HTML 侧 i18n.js?v= 同步升）——URL 变了缓存键变，穿透 CDN/浏览器旧缓存，防半新半旧拼句
-    const V = 'v5';
+    const V = 'v7';
     const [zh, en] = await Promise.all([
       fetch(`locales/zh.json?${V}`, { cache: 'no-cache' }).then(r => r.json()).catch(() => ({})),
       fetch(`locales/en.json?${V}`, { cache: 'no-cache' }).then(r => r.json()).catch(() => ({}))

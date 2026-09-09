@@ -33,7 +33,7 @@ body {
   margin: 0;
   font-family: var(--font);
   color: var(--ink);
-  background: linear-gradient(180deg, #fff6ee 0%, #ffffff 480px) fixed;
+  background: #efe5d0 fixed;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden; /* 兜底：100vw 走马灯 break-out 不产生横向滚动条 */
@@ -159,9 +159,8 @@ img, video { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: saturate(140%) blur(10px);
-  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #f3ecdc 0%, #efe5d0 100%);
+  border-bottom: 1px solid rgba(232, 114, 43, .14);
 }
 .topbar .wrap {
   display: flex;
@@ -183,7 +182,7 @@ img, video { max-width: 100%; display: block; }
   flex: 0 0 auto;
   align-self: center;
   border-radius: 50%;
-  background-image: url("../img/brand-panda.gif");
+  background-image: url("../img/deskbud-icon.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -440,20 +439,29 @@ img { -webkit-user-drag: none; user-drag: none; }
   color: var(--ink);
 }
 
-/* ---------- 页脚 ---------- */
+/* ---------- 页脚（三行：客户端下载入口 / 联系邮箱+PV / 版权+tagline；老曹 2026-09-09 拍板） ---------- */
 .footer {
   border-top: 1px solid var(--line);
-  background: #ffffff;
-  padding: 36px 0 32px;
-  margin-top: 40px;
+  background: transparent; /* 继承 body 暖米，与上下区色块连续 */
+  padding: 28px 0 32px;
+  margin-top: 24px;
   color: var(--ink-soft);
   font-size: 14px;
 }
 .footer .wrap { display: block; }
-.footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-bottom: 22px; border-bottom: 1px dashed var(--line); }
+/* 行2（原 footer-bottom 内容）：联系邮箱+tagline；footer-dl 链接已合并进 footer-bottom-left（v8） */
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 16px 0; border-bottom: 1px dashed var(--line); font-size: 13px; color: var(--ink-faint); }
+.footer-bottom-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.footer-bottom-left a { color: var(--brand-ink); transition: box-shadow .18s ease, background .18s ease; padding: 2px 6px; border-radius: 8px; }
+.footer-bottom-left a:hover { text-decoration: none; background: rgba(255,255,255,.6); box-shadow: 0 4px 12px rgba(232, 114, 43, .22); }
+.footer-dl-link { font-weight: 600; background: rgba(255, 255, 255, .55); padding: 5px 14px !important; border-radius: 999px !important; }
+.footer-dl-link:hover { background: #fff !important; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(232, 114, 43, .22) !important; }
+.footer-mailto { font-weight: 600; }
+/* 行3（原 footer-top 内容）：版权 + tagline */
+.footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-top: 16px; font-size: 13px; color: var(--ink-faint); }
 .footer a { color: var(--brand-ink); }
-.footer-bottom { padding-top: 18px; font-size: 13px; color: var(--ink-faint); }
-.footer-bottom a { color: var(--brand-ink); }
+.footer-copy { transition: box-shadow .18s ease, background .18s ease; padding: 2px 6px; border-radius: 8px; }
+.footer-copy:hover { background: rgba(255,255,255,.6); box-shadow: 0 4px 12px rgba(232, 114, 43, .22); text-decoration: none; }
 
 /* ---------- 统计数 ---------- */
 .stat {
@@ -489,6 +497,204 @@ img { -webkit-user-drag: none; user-drag: none; }
   .hero { padding: 48px 0 28px; }
   .hero h1 { font-size: 30px; }
   .hero .slogan { font-size: 16px; }
+}
+
+/* ============================================================
+   首页改版（2026-09-09 老曹拍板，布局语言借鉴 pet.aisuper.win）：
+   首屏 = 左侧文案+伙伴选择卡 ｜ 右侧大展示卡（姿态轮播）；
+   下部 = 左侧介绍+下载/购买 ｜ 右侧宣传视频。
+   首页隐藏搜索栏/公告/语录走马灯（syncHomeChrome 控制）。
+   ============================================================ */
+/* 背景分层（2026-09-09 七轮拍板：整页只分上下两段——上部暖米独特色、下部与 footer 一体色；许可与隐私页=上部独特色） */
+.home-hero-band { background: linear-gradient(180deg, #f1e9d4 0%, #ede2c9 100%); }
+/* 下部区域与 footer 同色 #efe5d0（消除手册卡与页脚色差，老曹 2026-09-09 拍板） */
+.home-detail-band { background: #efe5d0; }
+/* 隐私页整页独特色（与首页底部同色，老曹 2026-09-09 拍板统一上下色块） */
+body.privacy-warm { background: #efe5d0 fixed; }
+.hero-split { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: 48px; align-items: start; padding: 52px 0 64px; }
+.hero-kicker { display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 2px; color: var(--ink-soft); margin-bottom: 18px; }
+.hero-kicker i { width: 26px; height: 2px; background: var(--brand); border-radius: 2px; }
+.hero-big { font-family: Georgia, "Songti SC", "STSong", "SimSun", serif; font-size: clamp(25px, 2.4vw, 32px); line-height: 1.65; margin: 0 0 16px; color: var(--ink); font-weight: 700; letter-spacing: .5px; }
+.hero-big .hl { color: var(--brand); }
+.hero-lead .hl { color: var(--brand); font-weight: 600; }
+.hero-lead { color: var(--ink-soft); font-size: 15px; line-height: 1.85; margin: 0 0 26px; max-width: 470px; }
+.picker-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+.picker-head b { font-size: 15px; color: var(--ink); }
+.pet-picker { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.pick-card {
+  display: flex; align-items: center; gap: 12px; text-align: left; overflow: hidden;
+  background: #fff; border: 1.5px solid transparent; border-radius: 16px; padding: 12px 14px;
+  cursor: pointer; font: inherit;
+  box-shadow: 0 2px 10px rgba(120, 80, 40, .06);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.pick-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232, 114, 43, .14); }
+.pick-card.active { border-color: var(--brand); box-shadow: 0 6px 18px rgba(232, 114, 43, .18); background: linear-gradient(180deg, #fff, #fff7ef); }
+.pick-thumb { width: 46px; height: 46px; object-fit: contain; border-radius: 12px; background: #fdf3e9; flex: 0 0 auto; }
+.pick-txt { flex: 1; min-width: 0; }
+.pick-txt b { display: block; font-size: 14px; color: var(--ink); }
+.pick-txt small { display: block; font-size: 12px; color: var(--ink-faint); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pick-arrow { color: var(--brand); font-size: 18px; line-height: 1; flex: 0 0 auto; }
+/* 右侧大展示卡：立体感 = 双层投影 + 内虚线框 + 横滚姿态走马灯；色块弱化与 band 融（老曹 2026-09-09 六轮拍板） */
+.showcase-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 28px; padding: 24px 24px 18px;
+  box-shadow: 0 18px 44px rgba(190, 120, 60, .14), 0 4px 14px rgba(120, 80, 40, .07);
+}
+.showcase-card::before { content: ""; position: absolute; inset: 12px; border: 1.5px dashed rgba(232, 114, 43, .20); border-radius: 20px; pointer-events: none; }
+/* 首屏展示卡内的横滚走马灯（不走 100vw 突破，与详情页 pose-marquee 区分） */
+.showcase-marquee { position: relative; overflow: hidden; margin: 0 -24px; padding: 4px 24px 10px; }
+.showcase-track { display: flex; width: max-content; animation: poseMarquee 44s linear infinite; }
+.showcase-marquee:hover .showcase-track { animation-play-state: paused; }
+.spose-item {
+  position: relative; flex: 0 0 auto; width: 152px; aspect-ratio: 1 / 1; margin-right: 14px;
+  background: transparent; border: none; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.spose-item img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; user-select: none; }
+.spose-guard { position: absolute; inset: 0; z-index: 2; cursor: default; }
+/* 与 showcase 大卡同高 = 上部播放窗口与中间视频播窗口一样大（老曹 2026-09-09 拍板） */
+.showcase-track-wrap { position: relative; z-index: 1; height: 400px; display: flex; align-items: center; overflow: hidden; }
+@media (max-width: 620px) { .spose-item { width: 112px; margin-right: 10px; } }
+.showcase-badge {
+  position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; border-radius: 999px; padding: 7px 14px;
+  font-size: 13px; color: var(--ink-soft); box-shadow: 0 3px 10px rgba(120, 80, 40, .10);
+}
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #3e9e6c; animation: livePulse 2s infinite; }
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(62, 158, 108, .40); }
+  70% { box-shadow: 0 0 0 7px rgba(62, 158, 108, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(62, 158, 108, 0); }
+}
+.showcase-imgwrap { position: relative; z-index: 1; height: 400px; display: flex; align-items: center; justify-content: center; }
+.showcase-imgwrap img { max-height: 100%; max-width: 100%; object-fit: contain; filter: drop-shadow(0 18px 22px rgba(120, 80, 40, .18)); }
+.showcase-dots { position: relative; z-index: 1; display: flex; justify-content: center; gap: 8px; padding: 8px 0 2px; }
+.sdot {
+  width: 8px; height: 8px; border-radius: 999px; border: 0; padding: 0; cursor: pointer;
+  background: #dcd3c6; transition: width .25s ease, background .25s ease, box-shadow .25s ease;
+}
+.sdot:hover { background: #c9bda9; }
+.sdot.on { width: 26px; background: linear-gradient(90deg, #e8722b, #cf5f1c); box-shadow: 0 2px 8px rgba(232, 114, 43, .45); }
+/* 下部详情区：左文字立体大卡（上文字·下领回家链接） ｜ 右视频大卡（轮播+三平台标签），结构与上部一致 */
+/* 下部详情区：左右两卡底边对齐（老曹 2026-09-09 拍板）+ 立体大卡风格 */
+.home-detail { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 44px; padding: 72px 0 64px; align-items: stretch; }
+.hd-left, .hd-right { display: flex; flex-direction: column; }
+.hd-left {
+  position: relative;
+  background: linear-gradient(175deg, #fffdf9 0%, #f7efdf 100%);
+  border-radius: 26px; padding: 30px 32px 36px;
+  box-shadow: 0 20px 50px rgba(190, 120, 60, .13), 0 4px 14px rgba(120, 80, 40, .07);
+}
+.hd-left::before { content: ""; position: absolute; inset: 10px; border: 1.5px dashed rgba(232, 114, 43, .18); border-radius: 18px; pointer-events: none; }
+.hd-left > * { position: relative; z-index: 1; }
+.hd-badge { margin-bottom: 14px; }
+.hd-left h2 { font-size: 26px; margin: 0 0 8px; letter-spacing: .3px; }
+.hd-tagline { color: var(--brand); font-weight: 600; margin: 0 0 12px; line-height: 1.7; }
+.hd-desc { color: var(--ink-soft); line-height: 1.95; margin: 0 0 22px; font-size: 14.5px; }
+.hd-buy .buy-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.hd-soon { font-size: 13px; color: var(--ink-faint); border: 1px dashed var(--ink-faint); border-radius: 999px; padding: 7px 14px; transition: color .18s, border-color .18s; }
+.hd-soon:hover { color: var(--brand); border-color: var(--brand); }
+.hd-buy .buy-chans { font-size: 13px; color: var(--ink-soft); }
+.hd-buy .buy-chans a { color: var(--brand); font-weight: 600; text-decoration: none; padding: 2px 4px; border-radius: 8px; transition: box-shadow .18s, background .18s; }
+.hd-buy .buy-chans a:hover { text-decoration: none; background: #fff; box-shadow: 0 4px 14px rgba(232, 114, 43, .28); }
+/* 链接焦点态（老曹 2026-09-09：有链接处 hover 一律浮起+阴影） */
+.home-hero-band .btn:hover, .home-detail-band .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232, 114, 43, .32); }
+/* 隐私页大立体卡（与首页展示卡/手册卡同风格；背景=body.privacy-warm 独特色） */
+.privacy-card-wrap { padding: 40px 24px 64px; }
+.privacy-card { padding: 36px 40px 32px; }
+.privacy-ph { padding: 0 0 8px; }
+.privacy-ph h1 { font-size: 28px; margin: 0 0 10px; }
+.privacy-sec { padding-top: 26px; }
+.privacy-sec .block-title { margin-top: 0; }
+@media (max-width: 720px) { .privacy-card { padding: 24px 20px; } }
+/* 右侧视频大卡：与上部展示卡同构（渐变+虚线内框+徽标），内含视频舞台 + 三平台标签 */
+.hd-video-card { display: flex; flex-direction: column; gap: 14px; }
+.video-stage {
+  position: relative; z-index: 1; border-radius: 18px; overflow: hidden;
+  height: 400px; background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(232, 114, 43, .10), 0 10px 26px rgba(120, 80, 40, .10);
+}
+.video-stage video { width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; }
+.video-ph {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  color: var(--ink-faint); font-size: 12.5px; text-align: center; padding: 8px;
+  background: linear-gradient(175deg, #fffdf9, #f6efe2);
+}
+.video-ph .vplay {
+  width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--brand);
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  box-shadow: 0 6px 18px rgba(232, 114, 43, .25);
+}
+.video-tabs { position: relative; z-index: 1; display: flex; gap: 10px; flex-wrap: wrap; }
+.vtab {
+  border: 1.5px solid transparent; background: #fff; border-radius: 999px; padding: 7px 16px;
+  font: inherit; font-size: 13px; color: var(--ink-soft); cursor: pointer;
+  box-shadow: 0 2px 8px rgba(120, 80, 40, .08);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, color .18s ease, background .18s ease;
+}
+.vtab:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(232, 114, 43, .18); }
+.vtab.on { border-color: var(--brand); color: var(--brand); background: linear-gradient(180deg, #fff, #fff7ef); box-shadow: 0 4px 14px rgba(232, 114, 43, .22); }
+/* 手册大立体卡（下部色带内，与展示卡/视频卡同风格）：三平台标签 + 原版手册 iframe（限高卡内滚动） */
+.home-manual-wrap { padding: 8px 0 64px; }
+.home-manual-card { display: flex; flex-direction: column; gap: 14px; }
+.hm-head { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.home-manual-card .manual-frame {
+  position: relative; z-index: 1; min-height: 480px; max-height: 560px; height: 520px;
+  border-radius: 16px; background: #fffdf9;
+}
+@media (max-width: 960px) {
+  .home-manual-card .manual-frame { min-height: 380px; max-height: 440px; height: 400px; }
+}
+@media (max-width: 960px) {
+  .hero-split, .home-detail { grid-template-columns: 1fr; gap: 28px; }
+  .showcase-imgwrap { height: 320px; }
+  .home-detail { padding-top: 48px; }
+}
+
+/* ---------- 首页三步上手（奶油色卡片带，借鉴竞品的轻量引导） ---------- */
+.home-steps {
+  background: linear-gradient(180deg, #fff6ec 0%, #fffaf3 100%);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 48px 40px;
+  margin: 8px 0;
+  box-shadow: var(--shadow);
+}
+.home-steps .section-head { margin-bottom: 28px; }
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.step-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 30px 22px 22px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(40,40,36,.04);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+.step-no {
+  position: absolute;
+  top: -15px; left: 50%; transform: translateX(-50%);
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--brand); color: #fff;
+  font-weight: 700; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(232,114,43,.28);
+}
+.step-emoji { font-size: 40px; line-height: 1; margin: 4px 0 12px; }
+.step-card h3 { margin: 0 0 8px; font-size: 18px; color: var(--ink); }
+.step-card p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.65; }
+.steps-cta { text-align: center; margin-top: 30px; }
+@media (max-width: 680px) {
+  .home-steps { padding: 40px 18px; border-radius: 18px; }
+  .steps-grid { grid-template-columns: 1fr; gap: 18px; }
 }
 
 /* ---------- 子页轻量标题区（列表/详情/使用/隐私/联系） ---------- */
@@ -818,8 +1024,8 @@ img { -webkit-user-drag: none; user-drag: none; }
 .ver-badge { font-size: 14px; font-weight: 700; color: #fff; background: var(--brand); padding: 4px 12px; border-radius: 999px; }
 .ver-card.is-soon .ver-badge { background: var(--ink-faint); }
 .ver-soon-tag { font-size: 12px; color: var(--ink-faint); margin-left: auto; }
-.ver-video { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #eef1ef; display: flex; }
-.ver-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ver-video { position: relative; width: 100%; aspect-ratio: 16 / 10; background: #fffefb; display: flex; box-shadow: inset 0 0 0 1px rgba(232, 114, 43, .08); }
+.ver-video video { width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; }
 .ver-ph { display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--ink-faint); background: linear-gradient(135deg,#f3f6f4,#e9eeec); }
 .ver-video.no-video .ver-ph { display: flex; }
 .ver-ph .vplay { font-size: 28px; opacity: .5; }

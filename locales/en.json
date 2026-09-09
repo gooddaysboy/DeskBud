@@ -4,6 +4,7 @@
     "works": "Works",
     "pets": "Pet House",
     "usage": "User Manual",
+    "download": "Download",
     "privacy": "License & Privacy",
     "contact": "Contact"
   },
@@ -13,12 +14,23 @@
   "hero": {
     "title": "DeskBud",
     "slogan": "Your desktop pet companion",
-    "sub": "Always-on desktop pets, each with its own personality and soul"
+    "sub": "Always-on desktop pets, each with its own personality and soul",
+    "cta1": "Meet the pets",
+    "cta2": "User manual"
   },
   "home": {
-    "hot": "Popular Pets",
+    "hot": "Featured Buddies",
     "hotSub": "Pick a favorite pet and bring it to your desktop",
-    "all": "View All"
+    "all": "View All",
+    "stepsTitle": "Three steps to bring a buddy home",
+    "stepsSub": "No tech skills needed — have a pet on your desktop in 3 minutes",
+    "step1Title": "Download",
+    "step1Desc": "Pick a favorite in Pet House, grab the install-free program",
+    "step2Title": "Double-click to run",
+    "step2Desc": "Double-click the exe — no setup. If warned, choose “Run anyway”",
+    "step3Title": "Always with you",
+    "step3Desc": "It floats onto your desktop and keeps you company — working, napping, goofing",
+    "stepsCta": "Browse Pet House →"
   },
   "search": {
     "ph": "Search by name or description…",
@@ -33,7 +45,8 @@
   },
   "footer": {
     "tagline": "Fun desktop pet companions · always on your screen",
-    "contact": "Contact (Email)",
+    "contact": "Contact · deskbud@qq.com",
+    "download": "Download",
     "rights": "© 2026 DeskBud · All rights reserved",
     "made": "Made with ❤",
     "site": "All rights reserved",
@@ -70,7 +83,7 @@
     "soon2": "Coming soon",
     "soonBtn": "Download coming soon",
     "soonNote": "Will be online as soon as it's knitted — stay tuned!",
-    "soonBuy": "Buy channel coming soon"
+    "soonBuy": "Coming soon"
   },
   "usage": {
     "title": "User Manual",

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>伙伴之家 · DeskBud</title>
   <meta name="description" content="DeskBud 伙伴之家：领养一只常驻桌面的针织宠物伙伴，织熊猫、织兔子已上线，更多伙伴陆续织制中。">
-  <link rel="stylesheet" href="assets/css/base.css?v=71">
+  <link rel="stylesheet" href="assets/css/base.css?v=79">
   <!-- 伙伴之家卡片样式已迁入 base.css v69（软导航只换 #view，页内 style 不生效） -->
 </head>
 <body>
@@ -15,9 +15,8 @@
       <nav class="nav">
         <button id="bgmToggle" class="bgm-toggle nav-bgm" type="button" aria-label="背景音乐开关"><span id="bgmIcon" class="bgm-icon">🔇</span><span class="bgm-eq" aria-hidden="true"><i></i><i></i><i></i></span></button>
         <a href="index.html" data-i18n="nav.home">首页</a>
-        <a href="pets.html" data-i18n="nav.pets">伙伴之家</a>
-        <a href="usage.html" data-i18n="nav.usage">用户手册</a>
-        <a href="privacy.html" data-i18n="nav.privacy">联系我们</a>
+        <a href="list.html" data-i18n="nav.download">客户端下载</a>
+        <a href="privacy.html" data-i18n="nav.privacy">许可与隐私</a>
         <button id="langSwitch" class="lang-switch" type="button">EN</button>
       </nav>
     </div>
@@ -37,21 +36,19 @@
   </main>
 
   <footer class="footer">
-    <div class="wrap">
-      <div class="footer-top">
+    <div class="wrap"><div class="footer-bottom">
+        <div class="footer-bottom-left"><a href="list.html" data-i18n="footer.download" class="footer-dl-link">客户端下载</a> <a href="mailto:deskbud@qq.com" class="footer-mailto" data-i18n="footer.contact">联系我们 · deskbud@qq.com</a> </div> <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
+      </div><div class="footer-top">
         <div>© <span id="yr"></span> DeskBud · <span data-i18n="footer.site">保留所有权利</span> | <a class="footer-copy" data-i18n="footer.legal" href="privacy.html">许可与隐私</a></div>
-        <div data-i18n="footer.tagline">趣味桌面宠物伙伴 · 常驻你的屏幕</div>
-      </div>
-      <div class="footer-bottom">
-        <a href="list.html" data-i18n="nav.works">作品</a> <a href="privacy.html#contact" data-i18n="footer.contact">联系我们（邮箱）</a> <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
-      </div>
-    </div>
+        <span class="site-pv">🌐 <span data-i18n="footer.visits">全站访问</span> <span id="busuanzi_value_site_pv">-</span></span>
+      </div></div>
   </footer>
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
-  <script src="assets/js/i18n.js?v=6"></script>
-  <script src="assets/js/site.js?v=73"></script>
+  <script src="assets/js/i18n.js?v=8"></script>
+  <script src="assets/js/site.js?v=79"></script>
   <script src="assets/js/bubble.js?v=21"></script>
+
 
   <script type="application/json" id="catalogData">
 {
@@ -138,8 +135,8 @@
       },
       "buy": {
         "label": {
-          "zh": "购买角色包",
-          "en": "Buy PetPack"
+          "zh": "把伙伴领回家",
+          "en": "Bring it home"
         },
         "url": ""
       }
@@ -166,8 +163,8 @@
       },
       "buy": {
         "label": {
-          "zh": "购买角色包",
-          "en": "Buy PetPack"
+          "zh": "把伙伴领回家",
+          "en": "Bring it home"
         },
         "url": ""
       }
@@ -194,8 +191,8 @@
       },
       "buy": {
         "label": {
-          "zh": "购买角色包",
-          "en": "Buy PetPack"
+          "zh": "把伙伴领回家",
+          "en": "Bring it home"
         },
         "url": ""
       }
@@ -222,8 +219,8 @@
       },
       "buy": {
         "label": {
-          "zh": "购买角色包",
-          "en": "Buy PetPack"
+          "zh": "把伙伴领回家",
+          "en": "Bring it home"
         },
         "url": ""
       }
@@ -250,8 +247,8 @@
       },
       "buy": {
         "label": {
-          "zh": "购买角色包",
-          "en": "Buy PetPack"
+          "zh": "把伙伴领回家",
+          "en": "Bring it home"
         },
         "url": ""
       }

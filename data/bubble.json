@@ -961,5 +961,67 @@
         ]
       }
     }
+  },
+  "greetings": {
+    "public": [
+      {
+        "zh": "我来啦～",
+        "en": "I'm here~"
+      },
+      {
+        "zh": "报到！",
+        "en": "Reporting in!"
+      },
+      {
+        "zh": "嗨～",
+        "en": "Hi there~"
+      }
+    ],
+    "pets": {
+      "rabbit": [
+        {
+          "zh": "我回来啦！今天也要元气满满",
+          "en": "I'm back! Full energy today!"
+        },
+        {
+          "zh": "主人主人，我落地啦～",
+          "en": "Boss, I've landed~"
+        },
+        {
+          "zh": "嗨！想我了没有？",
+          "en": "Hey! Missed me?"
+        },
+        {
+          "zh": "兔子报到！桌面我来守护",
+          "en": "Bunny on duty! Desktop secured"
+        },
+        {
+          "zh": "嘿嘿，又见面啦",
+          "en": "Hehe, here we go again"
+        }
+      ],
+      "panda": [
+        {
+          "zh": "咚！熊猫驾到",
+          "en": "Thud! Panda has arrived"
+        },
+        {
+          "zh": "圆滚滚已就位",
+          "en": "Roundness in position"
+        },
+        {
+          "zh": "嗯……今天吃啥",
+          "en": "Hmm... what's for lunch"
+        },
+        {
+          "zh": "打了个滚，报到！",
+          "en": "Did a roll, reporting!"
+        },
+        {
+          "zh": "慢慢来，我先趴会",
+          "en": "No rush, napping first"
+        }
+      ]
+    }
   }
 }
