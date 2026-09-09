@@ -1,7 +1,7 @@
 // DeskBud Webmeji 兔子配置
 // 基于 webmeji (Lars de Rooij, 2026) 改编为 DeskBud 兔子角色
 // 行为池：底部全行为 + 屏顶跳跃/倒挂（ALLOWANCES.top）
-// 素材由 scripts/extract_rabbit_frames.py 从 pyside6_rabbit_orbit/rabbit/*.webp 抽帧生成
+// 素材由 scripts/extract_rabbit_frames.py 从 pyside6/rabbit/*.webp 抽帧生成
 
 // 帧 URL 用站点相对路径（不带前导斜杠）。
 // 当前页在根路径（/ 或 /index.html）下浏览器会解析到 /assets/webmeji/rabbit/...

@@ -79,7 +79,12 @@ def main():
     emb = 'const EMBEDDED = ' + json.dumps(items, ensure_ascii=False) + ';'
     html, n1 = re.subn(r'const EMBEDDED = \[.*?\];\n', emb + '\n', html,
                        count=1, flags=re.S)
-    snap = 'const SNAP_ROOT = ' + json.dumps(root) + ';'
+    # SNAP_ROOT 只作展示：写相对路径（相对输出目录），跨盘无法相对化时退回目录名
+    try:
+        root_disp = os.path.relpath(root, base).replace('\\', '/')
+    except ValueError:
+        root_disp = os.path.basename(root)
+    snap = 'const SNAP_ROOT = ' + json.dumps(root_disp) + ';'
     html, n2 = re.subn(r'const SNAP_ROOT = ".*?";', snap, html, count=1)
     if a.title:
         html = re.sub(r'<title>.*?</title>', f'<title>{a.title}</title>',

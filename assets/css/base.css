@@ -945,6 +945,12 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* 面板容器 */
 .manual-panel { display: none; }
 .manual-panel.on { display: block; }
+/* 原版手册整页嵌入（iframe，高度由 site.js 按内容自适应） */
+.manual-frame {
+  display: block; width: 100%; min-height: 600px;
+  border: 0; border-radius: 16px; background: #fff6ec;
+  box-shadow: 0 2px 14px rgba(255, 140, 66, .08);
+}
 /* 语言块：默认中文；JS 按 __lang 显隐 */
 .manual [data-manual-lang] { display: none; }
 .manual [data-manual-lang].on { display: block; }

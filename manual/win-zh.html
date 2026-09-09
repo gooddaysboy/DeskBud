@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="j3tZKgGDyn4b1B6o7U5cAm">
+<head data-page-node-id="BRHtR5TWpGbnGsLOazsVuO">
+<meta charset="UTF-8" data-page-node-id="PaEU32j5j8XhDnN6EkvEnG">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="sL8kiMHvugpycQ19F2OCoe">
+<title>DeskBud 桌宠用户手册（Windows）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff6ec;
+    color: #4a3a2e;
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- 顶部 ---------- */
+  .hero {
+    background: linear-gradient(160deg, #ffd9b8 0%, #ffe9d6 55%, #fff6ec 100%);
+    text-align: center;
+    padding: 52px 20px 44px;
+    border-radius: 0 0 32px 32px;
+  }
+  .hero .pets { font-size: 64px; letter-spacing: 8px; animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: 30px; margin-top: 14px; color: #b35410; }
+  .hero h1 a { color: inherit; text-decoration: none; }
+  .hero p { margin-top: 10px; font-size: 16px; color: #8a6a50; }
+  .hero .tag {
+    display: inline-block; margin-top: 16px; padding: 6px 18px;
+    background: #e8722b; color: #fff; border-radius: 999px; font-size: 14px;
+  }
+
+  /* ---------- 分区标题 ---------- */
+  section { margin-top: 44px; }
+  h2 {
+    font-size: 22px; color: #b35410;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  h2 .num {
+    width: 34px; height: 34px; flex: none;
+    background: #e8722b; color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .lead { color: #8a6a50; font-size: 15px; margin-bottom: 18px; padding-left: 44px; }
+
+  /* ---------- 卡片 ---------- */
+  .card {
+    background: #fff; border-radius: 20px; padding: 22px 22px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 14px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* 这是什么 */
+  .intro .ic { font-size: 34px; }
+  .intro h3 { font-size: 17px; margin: 8px 0 4px; color: #7a4a1e; }
+  .intro p { font-size: 14.5px; color: #6b5847; }
+
+  /* 安装步骤 */
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step + .step { margin-top: 18px; padding-top: 18px; border-top: 1px dashed #f0dcc4; }
+  .step .n {
+    width: 42px; height: 42px; flex: none; border-radius: 14px;
+    background: #ffe3c8; color: #b35410;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+  }
+  .step h3 { font-size: 16.5px; color: #7a4a1e; }
+  .step p { font-size: 14.5px; color: #6b5847; margin-top: 2px; }
+  .step b { color: #b35410; }
+
+  /* 玩法 */
+  .play .ic { font-size: 30px; }
+  .play h3 { font-size: 16.5px; margin: 8px 0 4px; color: #7a4a1e; }
+  .play h3 .gesture {
+    font-size: 12.5px; font-weight: normal; color: #e8722b;
+    background: #ffeeda; border-radius: 999px; padding: 2px 10px; margin-left: 6px;
+    white-space: nowrap;
+  }
+  .play p { font-size: 14.5px; color: #6b5847; }
+
+  /* FAQ */
+  details {
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 12px; overflow: hidden;
+  }
+  summary {
+    cursor: pointer; padding: 16px 20px;
+    font-size: 15.5px; font-weight: 600; color: #7a4a1e;
+    list-style: none; display: flex; align-items: center; gap: 10px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "🐰"; font-size: 18px; }
+  details[open] summary { border-bottom: 1px dashed #f0dcc4; }
+  details .a { padding: 14px 20px 16px; font-size: 14.5px; color: #6b5847; }
+  details .a b { color: #b35410; }
+  details .a h4 { font-size: 14.5px; color: #7a4a1e; margin: 10px 0 2px; }
+
+  /* 底部提示 */
+  .tips {
+    margin-top: 36px; background: #fff2df; border-radius: 20px;
+    padding: 20px 22px; font-size: 14px; color: #8a6a50;
+  }
+  .tips b { color: #b35410; }
+  footer { display: block; margin-top: 30px; font-size: 13px; color: #bda58d; }
+  footer > span:first-child { display: block; margin-bottom: 5px; text-align: center; }
+  footer > span:last-child { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px 16px; }
+  .site-link { color: inherit; text-decoration: none; border-bottom: 1px solid #d9b893; }
+  .site-link:hover { color: #e8722b; border-bottom-color: #e8722b; }
+  code {
+    background: #ffeeda; border-radius: 6px; padding: 1px 6px;
+    font-family: Consolas, monospace; font-size: 13px; color: #b35410;
+  }
+</style>
+</head>
+<body data-page-node-id="WY0tYaVYwHwpncItHywVWV">
+
+<div class="hero" data-page-node-id="H4J1ySl9hF7bfsW7Vvhmnd">
+  <div class="pets" data-page-node-id="G81fgSuuo9yjBt5Is4JDgo">🐰 🐼</div>
+  <h1 data-page-node-id="W2riHlotNsewZ6kmzTdaDg"><a class="site-link" href="https://deskbud.xyz" data-page-node-id="DE32YH7DldVRVDvjD1PlOw">DeskBud</a> 桌宠</h1>
+  <p data-page-node-id="9fB5x3czVSfNaHMsSvVH5r">Windows 版用户手册 · 一只住在电脑桌面上的小宠物</p>
+  <span class="tag" data-page-node-id="2zTkpGeFj8OCJEd2N270TF">绿色免安装 · 单文件 · 不收集隐私</span>
+</div>
+
+<div class="wrap" data-page-node-id="RDVcAQVKTZ29ZmTfTZrAh7">
+
+  <!-- 1 这是什么 -->
+  <section data-page-node-id="7J5yeW1TsU53embWs5gIvU">
+    <h2 data-page-node-id="PHA6AP29Bri5WHd9Ss3niP"><span class="num" data-page-node-id="k2bnzooiySD9MGjIoh9qAF">1</span>这是什么</h2>
+    <p class="lead" data-page-node-id="JJEX4NS0iw4vjONe8KilcT">装好后，小家伙就直接生活在你的桌面上，不挡视线、不用管它。</p>
+    <div class="grid2" data-page-node-id="qi5GrOeLqACuDbnlccPk1e">
+      <div class="card intro" data-page-node-id="hEQiisPgCn5ZEcEOvQKGWf"><div class="ic" data-page-node-id="y0qwcyjKRqkXb2M0yJ7Gea">🚶</div><h3 data-page-node-id="fQJQY14qXr4ref5Ugn4PHy">它自己会玩</h3><p data-page-node-id="r12GHDjR5inHJCtfNiUACo">在桌面溜达、起跳、爬墙、倒挂天花板，还会打哈欠、伸懒腰、眨眼睛，你只管忙自己的。</p></div>
+      <div class="card intro" data-page-node-id="T6RAwV02nGAMICX2OMqGcW"><div class="ic" data-page-node-id="De6FlVJY0QTSxIUaYAomoo">🖱️</div><h3 data-page-node-id="bJ4KsemztLLomT9YvRH5cf">也爱跟你闹</h3><p data-page-node-id="AiaHbv1cmk3qf1NPvCZh5Q">点它、拖它、甩它都有反应——大胆下手，摔不坏。</p></div>
+      <div class="card intro" data-page-node-id="GPFVU95bGdwsnOaKIj5WcL"><div class="ic" data-page-node-id="31ioepVG8lfCLcYsSNLGjT">💬</div><h3 data-page-node-id="PbCWn1Z4Y08IDob2UPiCUS">会冒气泡说话</h3><p data-page-node-id="RFMpiFbVnjrcfsFmEcvPKG">时不时冒出一句碎碎念，联网自动更新语录，离线也有内置的，不联网照样玩。</p></div>
+      <div class="card intro" data-page-node-id="IFceRjjXtgJNYGiRGHODIG"><div class="ic" data-page-node-id="MWxJNnictBWYqKT6F8peRh">🐰🐼+</div><h3 data-page-node-id="8OTfi05NHxWRyLaD6zC34D">可以养一群</h3><p data-page-node-id="EvVTHMFrQ4RjNicvBnUXGE">小兔和熊猫只是开始——以后会有越来越多的新宠物上线，想养几只养几只，它们能同时在桌上嬉戏。</p></div>
+    </div>
+    <div class="card" style="font-size:14.5px;color:#6b5847" data-page-node-id="HqSlfliPHbaN01YsA0SJXJ">
+      🔒 <b style="color:#b35410" data-page-node-id="7826TUzKSNuUH7J72c3poP">不收集、不上传任何个人信息</b>，联网只为获取公开语录，放心用。
+    </div>
+  </section>
+
+  <!-- 2 三步玩上 -->
+  <section data-page-node-id="7qqDBpRTK7oYRtL7oB9At1">
+    <h2 data-page-node-id="caQ8nFeC67iRvg3aG1LCRY"><span class="num" data-page-node-id="vuGdnzSxAzfMuksYB6JMwC">2</span>三步玩上</h2>
+    <p class="lead" data-page-node-id="jIiDUiPGe9hlKFLG0YnjWF">免安装、不用装任何东西，全程不到一分钟。</p>
+    <div class="card" data-page-node-id="kpmrGGhgNn1b8MJnxUExCU">
+      <div class="step" data-page-node-id="7f13vtYVgc6roGrkfiMG5g">
+        <div class="n" data-page-node-id="YO9uGCy1i43ebkTFZWuWep">1</div>
+        <div data-page-node-id="uB8578qMqkaEuGt1RpTmH5"><h3 data-page-node-id="Sicxh623HbVuo6vdPK9Cmf">下载并解压</h3><p data-page-node-id="G4x3vt4lsJFdmFwzJJ5Nlo">拿到 <code data-page-node-id="5N1sMBr9SAwRZboobOTg1n">DeskBud_Rabbit_Win_v版本号.exe</code>（单个文件，约 60–70MB）。若为压缩包先解压，<b data-page-node-id="NwUTaUFR5ahJcCv0b1e9nG">建议放到纯英文路径</b>（如 <code data-page-node-id="0ayR81jpw6AyB14lm6onEB">D:\Pets\</code>），个别老系统对中文路径不友好。</p></div>
+      </div>
+      <div class="step" data-page-node-id="5uHReGqCdbFOF9Q3qcC21s">
+        <div class="n" data-page-node-id="2BYoYtmc3Wd8jj2Qjs64qw">2</div>
+        <div data-page-node-id="tb3cbTkavk267cBHnASzPu"><h3 data-page-node-id="vMgCX4KNmcsn9KEup8gFHA">被拦一下？放行即可</h3><p data-page-node-id="93Xd85ZdH7NmxbY7h9neZp">没做商业签名，杀毒软件或 Windows 可能<b data-page-node-id="tV08ayQxsK6R5qyrw6Vi9L">误报拦一次</b>，都是正常现象：杀软提示就<b data-page-node-id="oCdh2Vc1YBn1D0v3AyRBre">加白名单 / 信任</b>；弹"Windows 已保护你的电脑"就点「更多信息」→「<b data-page-node-id="3xXSvGz52PO2DuRVcePrwP">仍要运行</b>」。放行一次，以后就顺了。</p></div>
+      </div>
+      <div class="step" data-page-node-id="ztVDfF9dHla1aPm3BC03Ei">
+        <div class="n" data-page-node-id="ATV7PDS5UsJZSIsinXuDel">3</div>
+        <div data-page-node-id="PsF8kmHX5AbmW3pDUA3Omv"><h3 data-page-node-id="Yl7qsDNssAStIL3K77kveW">双击运行</h3><p data-page-node-id="RHWAXTbEQbRsiW4JqRYFTr">双击 exe——第一次打开请等 <b data-page-node-id="qWSTre3ZLKAqBSwCQqdzsP">1–3 秒</b>兔子才出现，属正常，不是卡死。它落桌后就开始自己过日子了。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 怎么玩 -->
+  <section data-page-node-id="N2fjNWICvxDKSr48dLl9At">
+    <h2 data-page-node-id="45rijnxVvEPytlewMvlm8n"><span class="num" data-page-node-id="2A9UtkfylCMqExcazagFkX">3</span>怎么玩</h2>
+    <p class="lead" data-page-node-id="xg2uSoq6pAjGUdYZasFHnv">就这几个手势，剩下的交给它自己发挥。</p>
+    <div class="grid2" data-page-node-id="NEb4eZjFyBEylI5mvNyd5F">
+      <div class="card play" data-page-node-id="Wc9GvXszXXP41D115dKBat"><div class="ic" data-page-node-id="kMPCpojbQgKXUw0JoKBhDJ">🪂</div><h3 data-page-node-id="FS3UXljJHeInwQ1jtHU8W3">跳伞<span class="gesture" data-page-node-id="joul9svtrWFwjEre7KyKCE">轻点一下</span></h3><p data-page-node-id="GclOEEtRWC3AKB9qHPrgDB">轻轻点它一下，它就从当前位置开伞，缓缓飘落。</p></div>
+      <div class="card play" data-page-node-id="7WLn7kRkZTJkFIjhfi5EeL"><div class="ic" data-page-node-id="nxVyY4Ptcym7f0663B0WKg">🚀</div><h3 data-page-node-id="WAKMvF0uz2Gw754zHDgEc3">冲上天花板<span class="gesture" data-page-node-id="B30WLYkw5tYOKZWMy7Ge0p">按住不放</span></h3><p data-page-node-id="XteAdIjKwghAhfPNaZ38MD">按住它攒一下劲再松手，它直冲屏幕顶，倒挂着走来走去。</p></div>
+      <div class="card play" data-page-node-id="ndCqxGFw9t2YN0XIDyTq7s"><div class="ic" data-page-node-id="x2odVLczheeX82aYyhwlze">🧶</div><h3 data-page-node-id="Xj7RjOk7bPKtcJfiueX8Bl">叫它下来<span class="gesture" data-page-node-id="tLhbyC5HHFDoDCkmF2clvO">点一下</span></h3><p data-page-node-id="dSPhTNdtH8CLXrxy5rbMAd">它倒挂在天花板时，点它一下就松手掉下来，还带个小弹跳。</p></div>
+      <div class="card play" data-page-node-id="3DvEG8JVZioaodeDjQugjB"><div class="ic" data-page-node-id="QE5HXJFLwQk0HSe4dzJlBf">💨</div><h3 data-page-node-id="DXXHQFWHr92fx4NxmyLELT">甩出去<span class="gesture" data-page-node-id="bFyf68E1t4qrsLyiRHvQzT">快速一甩</span></h3><p data-page-node-id="kSTvnEQsSFVpHtCHsVtFgv">拖住快速甩出去它会飞，撞到屏幕边还会顺着墙往上爬。</p></div>
+      <div class="card play" data-page-node-id="GscFRm22BEIIxYKUlmepJB"><div class="ic" data-page-node-id="2oud9MqB1CIAWveHUrdmxl">🤏</div><h3 data-page-node-id="XW2QDwcdByEIADczaVikfi">拖着走<span class="gesture" data-page-node-id="WffDAdp8eFdPSEsKxoPFHq">按住拖动</span></h3><p data-page-node-id="toEKJgjLAjeKGWI7TIHjrl">按住它满屏拖，挪到想要的位置松手即可。鼠标悬停在它身上时会暂停，移开继续。</p></div>
+      <div class="card play" data-page-node-id="uYxFTXTBgQIVGXVH0CvhdN"><div class="ic" data-page-node-id="rFG43IeQrQqqevhuQNKmh4">📋</div><h3 data-page-node-id="SZFM5TtSorfzfGlkvjVseG">右键菜单<span class="gesture" data-page-node-id="Bdq3M2a90J6Ow3TGNVOuam">右键点它</span></h3><p data-page-node-id="BeHHb5fxjui8CMaJe3s992">向左走 / 向右走（跑得飞快）、自定义画圈（拖个矩形它绕着走）、缩放、桌面宠物、伙伴之家、关于与退出。</p></div>
+    </div>
+  </section>
+
+  <!-- 4 养两只 -->
+  <section data-page-node-id="VwKcZwA0JTn6iC7DKHM29N">
+    <h2 data-page-node-id="4T2f9LxTUL954iiAL287Pi"><span class="num" data-page-node-id="EwNC2eHWPN97oMthaWT9uK">4</span>多宠同养</h2>
+    <p class="lead" data-page-node-id="gFY31FbOxJRo6OpaQGZjI2">想养几只养几只——新宠陆续上线，你的宠物圈随你扩充。</p>
+    <div class="card" data-page-node-id="0YfoygDXH0j6mYP70K7UWs">
+      <div class="step" data-page-node-id="RAWaLf5OLTxcw1a4eGhKWv">
+        <div class="n" data-page-node-id="FGb4DNGyWPnqQT5Dm9Pi7d">🐰</div>
+        <div data-page-node-id="xqJRJFSCJwCSY4biSTycay"><h3 data-page-node-id="9zrD0LaSGqiKaFir5bDpCM">勾选上桌</h3><p data-page-node-id="qUWn6UQL3ynS5laFUR1ZBh">右键菜单 →「桌面宠物」→ 勾选想养的宠物（现在有小兔和熊猫）一起上桌；取消勾选即收起，<b data-page-node-id="WbwobhI1LHeViHFeX7ifxZ">至少保留一只</b>。</p></div>
+      <div class="step">
+        <div class="n">🐾</div>
+        <div><h3>更多伙伴在路上</h3><p>后续会有<b>越来越多的新宠物上线</b>，到时在菜单里勾选，就能让它们一起在桌上嬉戏——宠物圈随你扩充。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 常见问题 -->
+  <section data-page-node-id="GQz2rH5oFfCL6q4ShdLFZV">
+    <h2 data-page-node-id="lHtWnmebn1IzCro0gbyBhT"><span class="num" data-page-node-id="69dbT1GXh87oyhPEVRlHZS">5</span>常见问题</h2>
+    <p class="lead" data-page-node-id="PNCLKZYCasgTf5K02XZcSY">点开问题看答案，多数小状况 10 秒解决。</p>
+
+    <details open data-page-node-id="MOY8K8OzuTAHpN9pFh5h0n">
+      <summary data-page-node-id="zNBPflFwCm0jiguIDTxuQE">被杀毒软件删了 / 报毒？</summary>
+      <div class="a" data-page-node-id="jNKtfPtSWEGN2Febngqu86">误报（程序没做商业签名）。在 360 / 火绒 / Windows 安全中心里把 <code data-page-node-id="GIRdXLnDaLyVx3ahjzLRXV">DeskBud_Rabbit_Win_v版本号.exe</code> <b data-page-node-id="pXKKSzFAnnpu3gAZvexwNJ">加白名单 / 信任 / 允许运行</b>，被删掉就重新下载一次再放行，以后不会再拦。</div>
+    </details>
+    <details data-page-node-id="pmLSBmEhXulrIeLeR1ZfT7">
+      <summary data-page-node-id="JXCyO1YjELZIaa4duCJnKP">双击没反应 / 一闪而过？</summary>
+      <div class="a" data-page-node-id="r3fFwDjfFYiW2pEKJRnbU6">不是软件挑电脑，是<b data-page-node-id="UtH8npVn6sEXfqt0u0LjFE">电脑环境差异</b>，按顺序查：
+        <h4 data-page-node-id="e7AWNRsIbNnJHWpmnY7l5b">① 系统是否达标（最常见）</h4>
+        需要 <b data-page-node-id="TeOsRwInPsAbFpwwwB3qZn">64 位 Windows 10（2018 年 10 月后的版本）或 Windows 11</b>；Win7 / Win8 / 32 位跑不了。自查：按 <code data-page-node-id="sgNmJcXlJzFkIxNHBOT4kD">Win+R</code> 输入 <code data-page-node-id="WHGtJBNH2j6MZlE0EUhqGJ">winver</code> 回车，显示"版本 1809"及以上或 11 即可。
+        <h4 data-page-node-id="wXAdbn0bI7fC4Wp1dpNPsi">② 是否被杀软静默拦掉</h4>
+        装 360 / 火绒 / 腾讯管家的电脑常"双击没反应"——去杀软「信任区」加白名单并<b data-page-node-id="AqCykUJFbv6RBD0ee2QN6D">重新下载</b>，程序所在文件夹也加信任。
+        <h4 data-page-node-id="MhqIK56jI1HvoK51v8jDS4">③ 看启动日志（最快）</h4>
+        程序每次启动都会在<b data-page-node-id="DnCDajXiALDhXBEE246bmg">它自己旁边</b>生成 <code data-page-node-id="dKRcDQ5DdGdjXsj1siuCDY">DeskBud豁牙小兔日志.txt</code>，跑不起来时把这个文件发给作者即可定位（联系方式见 <a class="site-link" href="https://deskbud.xyz">deskbud.xyz</a>）。如果<b data-page-node-id="EuyomVzOhSXlttoDdWdDKP">连这个文件都没有</b>，说明程序没被允许运行，回到上面①②查。
+      </div>
+    </details>
+    <details data-page-node-id="icB2BvbZQ4F6XNtxxB2C8q">
+      <summary data-page-node-id="Kc9uqAVYumHSUSaLcoqV4P">兔子挡着我干活？</summary>
+      <div class="a" data-page-node-id="CypJVdIAq6LxvvD3tUEn2D">它是置顶显示的，直接<b data-page-node-id="mqaniKVQ9nAPFHbCa6CbFL">按住拖到屏幕角落</b>，或右键让它停下 / 收起。</div>
+    </details>
+    <details data-page-node-id="SqyDtxOxIY8MxUeacrZJgL">
+      <summary data-page-node-id="qcmJmcWmnGJ6FBwPTroD7X">怎么知道是不是新版？</summary>
+      <div class="a" data-page-node-id="ZPudScANBJG5NAK8QJCwe3">右键菜单「关于」里有版本号和日期；新版本去原下载渠道重新拿，直接覆盖运行即可。</div>
+    </details>
+    <details data-page-node-id="QCFJS3tKiwksKFbxhpU4sO">
+      <summary data-page-node-id="4rJ7Omergdi6MB6XDzgDEf">提示缺 .dll / 画面异常？</summary>
+      <div class="a" data-page-node-id="t6fspqh1Q04b4YInYyZTWz">提示缺 <code data-page-node-id="vGrdS2u6NzN5NR3ct7rApF">.dll</code>：装一下微软"Visual C++ 运行库"再试。很老的显卡可能画面异常，属正常限制。</div>
+    </details>
+  </section>
+
+  <div class="tips" data-page-node-id="mR76rpcpqH8Wf72gCWY0us">
+    💡 <b data-page-node-id="Ae2dM4lSpBqWwztxtBF1iW">小提示：</b>小家伙摔不坏、玩不坏，随便折腾。发现它有奇怪的小动作，那不是 bug，是性格。
+  </div>
+
+  <footer data-page-node-id="7H11hWMJ3jKvBP60FXiCRM">
+    <span data-page-node-id="8u5DApBLpSDkj64iFheMP4"><a class="site-link" href="https://deskbud.xyz" data-page-node-id="FHgEFHgTDsYlrbGoGbDbHy">DeskBud</a> 桌宠用户手册（Windows）</span>
+    <span data-page-node-id="GInTyHZtUvnJBeONHTP6Fx"><span>🌐 <a class="site-link" href="https://deskbud.xyz" data-page-node-id="Lx1AitaPQ8sh52u4Ke9Sw6">deskbud.xyz</a></span><span>© 2026 <a class="site-link" href="https://deskbud.xyz">DeskBud</a> · 保留所有权利</span></span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeskBud 桌宠用户手册（Mac）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff6ec;
+    color: #4a3a2e;
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- 顶部 ---------- */
+  .hero {
+    background: linear-gradient(160deg, #ffd9b8 0%, #ffe9d6 55%, #fff6ec 100%);
+    text-align: center;
+    padding: 52px 20px 44px;
+    border-radius: 0 0 32px 32px;
+  }
+  .hero .pets { font-size: 64px; letter-spacing: 8px; animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: 30px; margin-top: 14px; color: #b35410; }
+  .hero h1 a { color: inherit; text-decoration: none; }
+  .hero p { margin-top: 10px; font-size: 16px; color: #8a6a50; }
+  .hero .tag {
+    display: inline-block; margin-top: 16px; padding: 6px 18px;
+    background: #e8722b; color: #fff; border-radius: 999px; font-size: 14px;
+  }
+
+  /* ---------- 分区标题 ---------- */
+  section { margin-top: 44px; }
+  h2 {
+    font-size: 22px; color: #b35410;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  h2 .num {
+    width: 34px; height: 34px; flex: none;
+    background: #e8722b; color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .lead { color: #8a6a50; font-size: 15px; margin-bottom: 18px; padding-left: 44px; }
+
+  /* ---------- 卡片 ---------- */
+  .card {
+    background: #fff; border-radius: 20px; padding: 22px 22px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 14px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* 这是什么 */
+  .intro .ic { font-size: 34px; }
+  .intro h3 { font-size: 17px; margin: 8px 0 4px; color: #7a4a1e; }
+  .intro p { font-size: 14.5px; color: #6b5847; }
+
+  /* 安装步骤 */
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step + .step { margin-top: 18px; padding-top: 18px; border-top: 1px dashed #f0dcc4; }
+  .step .n {
+    width: 42px; height: 42px; flex: none; border-radius: 14px;
+    background: #ffe3c8; color: #b35410;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+  }
+  .step h3 { font-size: 16.5px; color: #7a4a1e; }
+  .step p { font-size: 14.5px; color: #6b5847; margin-top: 2px; }
+  .step b { color: #b35410; }
+
+  /* 玩法 */
+  .play .ic { font-size: 30px; }
+  .play h3 { font-size: 16.5px; margin: 8px 0 4px; color: #7a4a1e; }
+  .play h3 .gesture {
+    font-size: 12.5px; font-weight: normal; color: #e8722b;
+    background: #ffeeda; border-radius: 999px; padding: 2px 10px; margin-left: 6px;
+    white-space: nowrap;
+  }
+  .play p { font-size: 14.5px; color: #6b5847; }
+
+  /* FAQ */
+  details {
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 12px; overflow: hidden;
+  }
+  summary {
+    cursor: pointer; padding: 16px 20px;
+    font-size: 15.5px; font-weight: 600; color: #7a4a1e;
+    list-style: none; display: flex; align-items: center; gap: 10px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "🐰"; font-size: 18px; }
+  details[open] summary { border-bottom: 1px dashed #f0dcc4; }
+  details .a { padding: 14px 20px 16px; font-size: 14.5px; color: #6b5847; }
+  details .a b { color: #b35410; }
+  details .a h4 { font-size: 14.5px; color: #7a4a1e; margin: 10px 0 2px; }
+
+  /* 底部提示 */
+  .tips {
+    margin-top: 36px; background: #fff2df; border-radius: 20px;
+    padding: 20px 22px; font-size: 14px; color: #8a6a50;
+  }
+  .tips b { color: #b35410; }
+  footer { display: block; margin-top: 30px; font-size: 13px; color: #bda58d; }
+  footer > span:first-child { display: block; margin-bottom: 5px; text-align: center; }
+  footer > span:last-child { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px 16px; }
+  .site-link { color: inherit; text-decoration: none; border-bottom: 1px solid #d9b893; }
+  .site-link:hover { color: #e8722b; border-bottom-color: #e8722b; }
+  code {
+    background: #ffeeda; border-radius: 6px; padding: 1px 6px;
+    font-family: Menlo, Consolas, monospace; font-size: 13px; color: #b35410;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="pets">🐰 🐼</div>
+  <h1><a class="site-link" href="https://deskbud.xyz">DeskBud</a> 桌宠</h1>
+  <p>Mac 版用户手册 · 一只住在电脑桌面上的小宠物</p>
+  <span class="tag">免安装 · 不收集隐私</span>
+</div>
+
+<div class="wrap">
+
+  <!-- 1 这是什么 -->
+  <section>
+    <h2><span class="num">1</span>这是什么</h2>
+    <p class="lead">装好后，小家伙就直接生活在你的桌面上，不挡视线、不用管它。</p>
+    <div class="grid2">
+      <div class="card intro"><div class="ic">🚶</div><h3>它自己会玩</h3><p>在桌面溜达、起跳、爬墙、倒挂天花板，还会打哈欠、伸懒腰、眨眼睛，你只管忙自己的。</p></div>
+      <div class="card intro"><div class="ic">🖱️</div><h3>也爱跟你闹</h3><p>点它、拖它、甩它都有反应——大胆下手，摔不坏。</p></div>
+      <div class="card intro"><div class="ic">💬</div><h3>会冒气泡说话</h3><p>时不时冒出一句碎碎念，联网自动更新语录，离线也有内置的，不联网照样玩。</p></div>
+      <div class="card intro"><div class="ic">🐰🐼+</div><h3>可以养一群</h3><p>小兔和熊猫只是开始——以后会有越来越多的新宠物上线，想养几只养几只，它们能同时在桌上嬉戏。</p></div>
+    </div>
+    <div class="card" style="font-size:14.5px;color:#6b5847">
+      🔒 <b style="color:#b35410">不收集、不上传任何个人信息</b>，联网只为获取公开语录，放心用。
+    </div>
+  </section>
+
+  <!-- 2 三步玩上 -->
+  <section>
+    <h2><span class="num">2</span>三步玩上</h2>
+    <p class="lead">拖进应用程序文件夹就能用，全程不到一分钟。</p>
+    <div class="card">
+      <div class="step">
+        <div class="n">1</div>
+        <div><h3>下载并拖进「应用程序」</h3><p>拿到 Mac 版压缩包（<code>.dmg</code> 或 <code>.zip</code>），打开后把 <b>DeskBud 拖进「应用程序」（Applications）文件夹</b>。放哪都行，但<b>别在 dmg / 压缩包里直接运行</b>——先拖出来再打开。</p></div>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <div><h3>第一次打开被拦？放行即可</h3><p>没做商业签名（苹果公证），首次打开 macOS 会拦一下，都是正常现象：提示"<b>无法验证开发者</b>"时，<b>在访达里右键点 DeskBud →「打开」→ 再点「打开」</b>；或在 <b>系统设置 → 隐私与安全性</b> 里点「<b>仍要打开</b>」。放行一次，以后就顺了（详见下方常见问题）。</p></div>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <div><h3>打开 DeskBud</h3><p>打开后第一次请等 <b>1–3 秒</b>小家伙才出现，属正常，不是卡死。它落桌后就开始自己过日子了。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 怎么玩 -->
+  <section>
+    <h2><span class="num">3</span>怎么玩</h2>
+    <p class="lead">就这几个手势，剩下的交给它自己发挥。</p>
+    <div class="grid2">
+      <div class="card play"><div class="ic">🪂</div><h3>跳伞<span class="gesture">轻点一下</span></h3><p>轻轻点它一下，它就从当前位置开伞，缓缓飘落。</p></div>
+      <div class="card play"><div class="ic">🚀</div><h3>冲上天花板<span class="gesture">按住不放</span></h3><p>按住它攒一下劲再松手，它直冲屏幕顶，倒挂着走来走去。</p></div>
+      <div class="card play"><div class="ic">🧶</div><h3>叫它下来<span class="gesture">点一下</span></h3><p>它倒挂在天花板时，点它一下就松手掉下来，还带个小弹跳。</p></div>
+      <div class="card play"><div class="ic">💨</div><h3>甩出去<span class="gesture">快速一甩</span></h3><p>拖住快速甩出去它会飞，撞到屏幕边还会顺着墙往上爬。</p></div>
+      <div class="card play"><div class="ic">🤏</div><h3>拖着走<span class="gesture">按住拖动</span></h3><p>按住它满屏拖，挪到想要的位置松手即可。鼠标悬停在它身上时会暂停，移开继续。</p></div>
+      <div class="card play"><div class="ic">📋</div><h3>菜单<span class="gesture">右键点它</span></h3><p>向左走 / 向右走（跑得飞快）、自定义画圈（拖个矩形它绕着走）、缩放、桌面宠物、伙伴之家、关于与退出。<b>触控板用户：双指轻点或 Ctrl+点按就是右键</b>。</p></div>
+    </div>
+  </section>
+
+  <!-- 4 换宠·养两只 -->
+  <section>
+    <h2><span class="num">4</span>多宠同养</h2>
+    <p class="lead">想养几只养几只——新宠陆续上线，你的宠物圈随你扩充。</p>
+    <div class="card">
+      <div class="step">
+        <div class="n">🐰</div>
+        <div><h3>勾选上桌</h3><p>右键菜单 →「桌面宠物」→ 勾选想养的宠物（现在有小兔和熊猫）一起上桌；取消勾选即收起，<b>至少保留一只</b>。</p></div>
+      <div class="step">
+        <div class="n">🐾</div>
+        <div><h3>更多伙伴在路上</h3><p>后续会有<b>越来越多的新宠物上线</b>，到时在菜单里勾选，就能让它们一起在桌上嬉戏——宠物圈随你扩充。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 常见问题 -->
+  <section>
+    <h2><span class="num">5</span>常见问题</h2>
+    <p class="lead">点开问题看答案，多数小状况 10 秒解决。</p>
+
+    <details open>
+      <summary>提示"无法验证开发者 / 无法打开"？</summary>
+      <div class="a">正常现象（程序没做苹果公证）。两种放行方式任选：<br>① 在访达里<b>右键点 DeskBud →「打开」→ 再点「打开」</b>——注意是右键打开，不是双击；<br>② 或打开 <b>系统设置 → 隐私与安全性</b>，拉到下面点「<b>仍要打开</b>」。<br>放行一次，以后正常打开。</div>
+    </details>
+    <details>
+      <summary>提示"已损坏，无法打开"？</summary>
+      <div class="a">这是 macOS 把"未公证"标记成了损坏，程序本身没坏。打开「<b>终端</b>」（启动台搜"终端"），粘贴这行命令回车即可：<br><code>xattr -cr /Applications/DeskBud.app</code><br>（如果没把 DeskBud 放进应用程序文件夹，把路径换成 DeskBud 实际所在的位置。）</div>
+    </details>
+    <details>
+      <summary>双击没反应 / 一闪而过？</summary>
+      <div class="a">先确认没在 dmg / 压缩包里直接运行（先拖进「应用程序」再打开）。还不行就看启动日志：程序每次启动都会在<b>它自己旁边</b>生成一个日志 <code>.txt</code> 文件，跑不起来时把这个文件发给作者即可定位（联系方式见 <a class="site-link" href="https://deskbud.xyz">deskbud.xyz</a>）。</div>
+    </details>
+    <details>
+      <summary>小家伙挡着我干活？</summary>
+      <div class="a">它是置顶显示的，直接<b>按住拖到屏幕角落</b>，或右键让它停下 / 收起。</div>
+    </details>
+    <details>
+      <summary>怎么知道是不是新版？</summary>
+      <div class="a">右键菜单「关于」里有版本号和日期；新版本去原下载渠道重新拿，覆盖安装即可。</div>
+    </details>
+  </section>
+
+  <div class="tips">
+    💡 <b>小提示：</b>小家伙摔不坏、玩不坏，随便折腾。发现它有奇怪的小动作，那不是 bug，是性格。
+  </div>
+
+  <footer>
+    <span><a class="site-link" href="https://deskbud.xyz">DeskBud</a> 桌宠用户手册（Mac）</span>
+    <span><span>🌐 <a class="site-link" href="https://deskbud.xyz">deskbud.xyz</a></span><span>© 2026 <a class="site-link" href="https://deskbud.xyz">DeskBud</a> · 保留所有权利</span></span>
+  </footer>
+
+</div>
+</body>
+</html>

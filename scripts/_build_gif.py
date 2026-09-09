@@ -3,7 +3,11 @@ from PIL import Image
 from collections import deque
 import os
 
-SRC = os.environ.get('GIF_SRC', r"D:/deskbud/Png/IdleLeft")  # 源在项目外，换机用 GIF_SRC 指定
+# 源在项目外，换机/换盘必须用 GIF_SRC 环境变量指定，不写死默认路径
+SRC = os.environ.get('GIF_SRC')
+if not SRC or not os.path.isdir(SRC):
+    raise SystemExit("ERR 未找到帧目录，请用环境变量 GIF_SRC 指定，例如：\n"
+                     "  GIF_SRC=<IdleLeft帧目录> python scripts/_build_gif.py")
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'img')
 os.makedirs(OUT_DIR, exist_ok=True)
 

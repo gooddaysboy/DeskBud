@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="YDlarPFtmsTOjUV3RTi8uK">
+<head data-page-node-id="rtlGDlO2CdgRp7iwDIrpnW">
+<meta charset="UTF-8" data-page-node-id="YpAHTwetB98qSDPXnFR4fa">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="ToT3tyMSv82Vo2lSdlXZgl">
+<title>DeskBud 桌宠 · 使用手册</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff6ec;
+    color: #4a3a2e;
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- 顶部 ---------- */
+  .hero {
+    background: linear-gradient(160deg, #ffd9b8 0%, #ffe9d6 55%, #fff6ec 100%);
+    text-align: center;
+    padding: 52px 20px 44px;
+    border-radius: 0 0 32px 32px;
+  }
+  .hero .pets { font-size: 64px; letter-spacing: 8px; animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: 30px; margin-top: 14px; color: #b35410; }
+  .hero p { margin-top: 10px; font-size: 16px; color: #8a6a50; }
+  .hero .tag {
+    display: inline-block; margin-top: 16px; padding: 6px 18px;
+    background: #e8722b; color: #fff; border-radius: 999px; font-size: 14px;
+  }
+
+  /* ---------- 分区标题 ---------- */
+  section { margin-top: 44px; }
+  h2 {
+    font-size: 22px; color: #b35410;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  h2 .num {
+    width: 34px; height: 34px; flex: none;
+    background: #e8722b; color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .lead { color: #8a6a50; font-size: 15px; margin-bottom: 18px; padding-left: 44px; }
+
+  /* ---------- 卡片 ---------- */
+  .card {
+    background: #fff; border-radius: 20px; padding: 22px 22px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 14px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* 这是什么 */
+  .intro .ic { font-size: 34px; }
+  .intro h3 { font-size: 17px; margin: 8px 0 4px; color: #7a4a1e; }
+  .intro p { font-size: 14.5px; color: #6b5847; }
+
+  /* 安装步骤 */
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step + .step { margin-top: 18px; padding-top: 18px; border-top: 1px dashed #f0dcc4; }
+  .step .n {
+    width: 42px; height: 42px; flex: none; border-radius: 14px;
+    background: #ffe3c8; color: #b35410;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+  }
+  .step h3 { font-size: 16.5px; color: #7a4a1e; }
+  .step p { font-size: 14.5px; color: #6b5847; margin-top: 2px; }
+  .step b { color: #b35410; }
+
+  /* 玩法 */
+  .play .ic { font-size: 30px; }
+  .play h3 { font-size: 16.5px; margin: 8px 0 4px; color: #7a4a1e; }
+  .play h3 .gesture {
+    font-size: 12.5px; font-weight: normal; color: #e8722b;
+    background: #ffeeda; border-radius: 999px; padding: 2px 10px; margin-left: 6px;
+    white-space: nowrap;
+  }
+  .play p { font-size: 14.5px; color: #6b5847; }
+
+  /* FAQ */
+  details {
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 12px; overflow: hidden;
+  }
+  summary {
+    cursor: pointer; padding: 16px 20px;
+    font-size: 15.5px; font-weight: 600; color: #7a4a1e;
+    list-style: none; display: flex; align-items: center; gap: 10px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "🐰"; font-size: 18px; }
+  details[open] summary { border-bottom: 1px dashed #f0dcc4; }
+  details .a { padding: 14px 20px 16px; font-size: 14.5px; color: #6b5847; }
+  details .a b { color: #b35410; }
+
+  /* 底部提示 */
+  .tips {
+    margin-top: 36px; background: #fff2df; border-radius: 20px;
+    padding: 20px 22px; font-size: 14px; color: #8a6a50;
+  }
+  .tips b { color: #b35410; }
+  footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px 16px; margin-top: 30px; font-size: 13px; color: #bda58d; }
+  @media (max-width: 480px) { footer { flex-direction: column; } }
+  .site-link { color: inherit; text-decoration: none; border-bottom: 1px solid #d9b893; }
+  .site-link:hover { color: #e8722b; border-bottom-color: #e8722b; }
+</style>
+</head>
+<body data-page-node-id="d33JqozIvVHsPi4PPhhJLn">
+
+<div class="hero" data-page-node-id="w8GZE8P4fSspbp1taGjdoJ">
+  <div class="pets" data-page-node-id="0XUCsnrIccPEPVEjgGk2c0">🐰 🐼</div>
+  <h1 data-page-node-id="ahiq9anbc5HP0sOfsPvWt3"><a class="site-link" href="https://deskbud.xyz">DeskBud</a> 桌宠</h1>
+  <p data-page-node-id="vvcMkOXlPcxKruS76gOubX">一只住在手机屏幕上的小宠物</p>
+  <span class="tag" data-page-node-id="jgNCgHXc0Cbd2hSVcx10FM">会走 · 会跳 · 会爬墙 · 会说话</span>
+</div>
+
+<div class="wrap" data-page-node-id="XMuMcYdND1ZX6OXV6gV52b">
+
+  <!-- 1 这是什么 -->
+  <section data-page-node-id="iOF2W92ahEP5jfRWCG2GtK">
+    <h2 data-page-node-id="aesHCAQaMrhfkrkzauK7O5"><span class="num" data-page-node-id="MC5GB6e4tl4v8QeKjiK48p">1</span>这是什么</h2>
+    <p class="lead" data-page-node-id="v4qGwoAoM7srkkIlD0xnWR">装好后，小家伙就直接生活在你的手机屏幕上，不用打开任何页面。</p>
+    <div class="grid2" data-page-node-id="puvK9cTvnqLJuPgHcqgca1">
+      <div class="card intro" data-page-node-id="ScGNrFeMj0ahAZQWsDD14D"><div class="ic" data-page-node-id="pNKUdRaad44DbKSx3DaRBc">🚶</div><h3 data-page-node-id="zLhU8H7XAf5UgOt8uS8cR5">它自己会玩</h3><p data-page-node-id="T3GEHCUkBdzPRuKC6vK8WQ">散散步、发发呆、蹦一蹦，还会自己找乐子，你只管忙自己的。</p></div>
+      <div class="card intro" data-page-node-id="ksGXn3MoChRwUGbj8Y91AM"><div class="ic" data-page-node-id="pQuHOJ7N71kW4d3UC15Pip">👆</div><h3 data-page-node-id="9w3teZcGFz3qUqA6bYjEuM">也爱跟你闹</h3><p data-page-node-id="hPv6xUaT4BBNsBMbM617Fr">拖它、甩它、点它、按住它，它都会有反应——大胆下手，摔不坏。</p></div>
+      <div class="card intro" data-page-node-id="utsh13UR7dSYhKGBxsv96A"><div class="ic" data-page-node-id="zDzEGqkNniRJARFLpjWMPB">💬</div><h3 data-page-node-id="xFedC1VImS5eH1GyRxruUx">会冒气泡说话</h3><p data-page-node-id="AJfFaFDD9WPJYF6JdBFaMZ">时不时冒出一句碎碎念，看看它今天想说点什么。</p></div>
+      <div class="card intro" data-page-node-id="WJ7vdz3nkH7lz4xBsBK6lt"><div class="ic" data-page-node-id="DVaC4wf39qAqBOb4h5p2PH">🐰+🐼</div><h3 data-page-node-id="gDUWHXWWbctRrK1Df7Swnv">可以养两只</h3><p data-page-node-id="6kNTbRMuHIfnAkjkjbvmlh">小兔和熊猫可以同时上屏，各过各的日子，互不打扰。</p></div>
+    </div>
+  </section>
+
+  <!-- 2 三步装好 -->
+  <section data-page-node-id="vZgKQlJ6WcV7qZ2e1mBg0t">
+    <h2 data-page-node-id="UxpC62eZDE4bt9r0QiAb8G"><span class="num" data-page-node-id="5ffBkoA4W4KH1BOHhJuR2I">2</span>三步装好</h2>
+    <p class="lead" data-page-node-id="MMLMnEpQd2HAwco8sULnyS">全程不到一分钟，装完小家伙马上落屏报到。</p>
+    <div class="card" data-page-node-id="EKEnAmhaStEmE06ZtTswcA">
+      <div class="step" data-page-node-id="mod34GTxckN7RsxQYCzSco">
+        <div class="n" data-page-node-id="wzAhBvKHLB52bvMQOa9C65">1</div>
+        <div data-page-node-id="JvNxzHAGcyQKyvYYTr8CuW"><h3 data-page-node-id="JcbTGAgozmiJQXbtnloQRj">安装</h3><p data-page-node-id="eTQ4mfYnsRCUUFc3f5Hy1s">打开收到的安装包，点<b data-page-node-id="otIaYCKEX9PtIHVmNAMHBd">安装</b>。手机如果提示"不允许安装未知应用"，按提示允许一次即可。</p></div>
+      </div>
+      <div class="step" data-page-node-id="KGehUFOZhbLoW77I2LEaRE">
+        <div class="n" data-page-node-id="7x6HCtBQEivM1iPF2XIe6q">2</div>
+        <div data-page-node-id="QiVrp3zIyoGPmbitTR1TfK"><h3 data-page-node-id="bVTLbuymxO7IzW19rWK2jL">打开 App</h3><p data-page-node-id="ZY14HJGOlenHSJt0NALOiX">首次打开会引导你授权：<b data-page-node-id="kVCMRHG8F91RwJYQzpI394">允许"显示在其他应用上层"</b>。这个权限就是让小家伙能浮在屏幕上的钥匙，必须给。</p></div>
+      </div>
+      <div class="step" data-page-node-id="RXETPFf0NQUJFl5mtTJQ6p">
+        <div class="n" data-page-node-id="OcOBk4ZAmMDG8N8FJBoKPt">3</div>
+        <div data-page-node-id="MZpTYgI8y4EvhPOoaqOBuB"><h3 data-page-node-id="CKVsetiWxDdWbpuHhaOXik">点"开始"</h3><p data-page-node-id="zb7z99AeCe9UgT0W0RUIqj">选好想养的宠物，点开始——它就从天而降，落在你屏幕上了。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 怎么玩 -->
+  <section data-page-node-id="gFjaBq6Mq8oFZRuBVvx1WH">
+    <h2 data-page-node-id="0dtljgL5vhjZ0bQBT5EUiR"><span class="num" data-page-node-id="DXZIJRjTn7C29ECA6lxPgQ">3</span>怎么玩</h2>
+    <p class="lead" data-page-node-id="A1OWhLXxG6JquUkRuYak34">就四个手势，剩下的交给它自己发挥。</p>
+    <div class="grid2" data-page-node-id="0FI8cCQPWGZCWiUCmJXhmT">
+      <div class="card play" data-page-node-id="Uu5uDvXxoMbCTx3doPItzW"><div class="ic" data-page-node-id="5lAnBqH0S2w1j7qnDLbKa2">🤏</div><h3 data-page-node-id="OQWcCdJKk5rzi0mJgH51R8">拖着走<span class="gesture" data-page-node-id="YMG3mBWdFwUOPmkShpueig">按住拖动</span></h3><p data-page-node-id="98vSHkOZN6HfLL1g1II9Mx">按住它满屏拖，松手它会掉下来，还带个小弹跳。</p></div>
+      <div class="card play" data-page-node-id="dRweDfu5sAA91Qb3d2aNF5"><div class="ic" data-page-node-id="Myi0GQtlDBwFVn98iF2ZCn">💨</div><h3 data-page-node-id="YTUbRuA4iVCoSsf60RlfB3">甩出去<span class="gesture" data-page-node-id="E4CVX94edc3W3CaSauONvx">快速一甩</span></h3><p data-page-node-id="tgqXAsHeUHfmKIzCd5oV5G">拖住快速甩出去它会飞，撞到屏幕边还会顺着墙往上爬。</p></div>
+      <div class="card play" data-page-node-id="zF1fOZANgTFgapubDtSLSH"><div class="ic" data-page-node-id="WHBMWwBOq0eRN7xEEElrCS">🪂</div><h3 data-page-node-id="V8eDdDzjND98vARoKUa3FB">跳伞<span class="gesture" data-page-node-id="HnDYJlNeNm5mfVsYV7yInK">轻点一下</span></h3><p data-page-node-id="5K0tapd0yDIogaXCasKRDI">轻轻点它一下，它就从当前位置开伞缓缓飘落。</p></div>
+      <div class="card play" data-page-node-id="UjYvf9jN9nP1oOHJ8NzXQu"><div class="ic" data-page-node-id="iGy4MZoiEe7Uj3u26pGvz6">🚀</div><h3 data-page-node-id="2BhFZtq37FcIVGooYwaDOC">冲上天花板<span class="gesture" data-page-node-id="urUQ4KWGdzjtiUKyfE7aJI">按住不放</span></h3><p data-page-node-id="qK0x5t9IcdJyRu2M5YLKB5">按住它攒一下劲再松手，它直冲屏幕顶，倒挂着走来走去。</p></div>
+      <div class="card play" data-page-node-id="j7aI4awqc77bhPdwquMCSB"><div class="ic" data-page-node-id="VLW5pvwVl35eqD8K9Lprjt">🧶</div><h3 data-page-node-id="Salp3adPV1CtDxkBGIg2PI">叫它下来<span class="gesture" data-page-node-id="hj4T1oAuhcebH9a680pC09">点一下</span></h3><p data-page-node-id="1HvgeC9phZYbJkWLRX9Uf1">它倒挂在天花板时，点它一下就松手掉下来。</p></div>
+      <div class="card play" data-page-node-id="YHM9GzMirHTRwsFLHSV31k"><div class="ic" data-page-node-id="raA1pa04SQWFWlMNhRXJHY">🏠</div><h3 data-page-node-id="fjQzcUr2U7aQzxofqBwTVX">换宠 · 养两只<span class="gesture" data-page-node-id="lMIrHwV8bQOzwVs32GkX7K">App 里选</span></h3><p data-page-node-id="eSwCKuRcAGytJgM0N9azuB">打开 App，勾选兔子和熊猫，两只同时在桌面上陪你。</p></div>
+    </div>
+  </section>
+
+  <!-- 4 常见问题 -->
+  <section data-page-node-id="mbPCyGb4D8TEeCgQrZSvAD">
+    <h2 data-page-node-id="7HC2NvpSszW9EvDb9hx8HC"><span class="num" data-page-node-id="dKBClLNsNIdM9lhEYkO3Es">4</span>常见问题</h2>
+    <p class="lead" data-page-node-id="D65MsMdY0zcEseo2BaiPVy">点开问题看答案，多数小状况 10 秒解决。</p>
+
+    <details open data-page-node-id="Bg0WDkRMrBeVXf1MJkLQnE">
+      <summary data-page-node-id="H79bQOF7QqeYuezveHFDMA">打开 App 后看不到宠物？</summary>
+      <div class="a" data-page-node-id="jt4yPAd5WpmpM1UcLeKpmw">十有八九是<b data-page-node-id="ZAYGWabcOIYCcH0AC3GkJX">"显示在其他应用上层"权限没给</b>。去手机<b data-page-node-id="DzcTxef0Rxi1ngJeuuGHFW">设置 → 应用管理 → DeskBud</b>，打开这个开关（小米手机在"其他权限"里，叫"显示悬浮窗"）。回到 App 再点一次开始即可。</div>
+    </details>
+    <details data-page-node-id="MrN5jpHhDA9H2fzAswUEuX">
+      <summary data-page-node-id="3EOnjC1o7bSQn22G3PHBBt">宠物用着用着不见了？</summary>
+      <div class="a" data-page-node-id="6GUAj0zqrhEAjRUIxVxiOy">多半是被手机清理后台时"顺手"关掉了。从通知栏点开 DeskBud 重新进入就好。想让它常驻，可以在最近任务里把 DeskBud <b data-page-node-id="OLLD4BrXPVBq5zL3G1WjHg">锁定/加白名单</b>。</div>
+    </details>
+    <details data-page-node-id="GZkzl3VWnQkYc5WqbuG01Q">
+      <summary data-page-node-id="DrDdbQJebJRtUXJJDDu68C">它会不会挡住我点别的东西？</summary>
+      <div class="a" data-page-node-id="PDby6agAV9ZEg6F2et7GGS">不会。挡到哪儿了直接<b data-page-node-id="ejDzllYeOUmayL7I5THjyC">按住拖走</b>就行，它不占你的按键和通知。</div>
+    </details>
+    <details data-page-node-id="xuoOc5EBUc52Pa2YbAbPCS">
+      <summary data-page-node-id="0mFuHmxg0O1kEPhIfmmZzy">耗电吗？</summary>
+      <div class="a" data-page-node-id="ljsHvJncyRjRB8QNjDKfkD">占用很小，正常用一整天几乎无感。特别在意的话，不用时从通知栏退出即可，下次想它了再开。</div>
+    </details>
+    <details data-page-node-id="LR79Gtwc66W002oR0L70Ww">
+      <summary data-page-node-id="lMLLBjD6TawvYc86yM7Awd">卸载重装后，之前养的还在吗？</summary>
+      <div class="a" data-page-node-id="HATOvR4fr3OpqKFb8wmjbM">卸载会一并清掉，重新装好后再选一次宠物就行，一分钟的事。</div>
+    </details>
+    <details data-page-node-id="RWwzNtoy6CaGj8ngBDYzdj">
+      <summary data-page-node-id="fSzyUWAOvGO3onduzlLXkX">安装时一直没弹出确认？</summary>
+      <div class="a" data-page-node-id="C6swdZaq5IwtcYD4CMNqbN">部分手机息屏时会自动取消安装确认。<b data-page-node-id="0pRGwYwIBHRHl9EilvsAvG">先解锁屏幕再点安装</b>；个别机型还需要在设置里允许"USB 安装"。</div>
+    </details>
+  </section>
+
+  <div class="tips" data-page-node-id="7HdoajUjkIFmfoLRf7Pj7x">
+    💡 <b data-page-node-id="zmmGFVYAcFi2wFkShM29RM">小提示：</b>小家伙摔不坏、玩不坏，随便折腾。发现它有奇怪的小动作，那不是 bug，是性格。
+  </div>
+
+  <footer data-page-node-id="Iz9WZSihEfRZpZnA78iSeD"><span><a class="site-link" href="https://deskbud.xyz">DeskBud</a> 桌宠 · 使用手册</span><span>© 2026 <a class="site-link" href="https://deskbud.xyz">DeskBud</a> · 保留所有权利</span></footer>
+
+</div>
+</body>
+</html>

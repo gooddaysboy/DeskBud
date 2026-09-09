@@ -1,9 +1,9 @@
 @echo off
 chcp 65001 >nul
-title DeskBud 预览服务 (http://127.0.0.1:8080)
+title DeskBud Preview (http://127.0.0.1:8081)
 cd /d "%~dp0"
 
-rem ---- 按优先级探测可用的 Python ----
+rem ---- Find a usable Python ----
 set "PY="
 py -3 --version >nul 2>nul && set "PY=py -3"
 if not defined PY (
@@ -17,11 +17,13 @@ if not defined PY (
 )
 
 if not defined PY (
-  echo [错误] 没找到可用的 Python，请先安装 Python 或检查 PATH。
+  echo [ERROR] No Python found. Please install Python or check PATH.
   pause
   exit /b 1
 )
 
-echo [serve] 使用解释器: %PY%
-%PY% serve.py 8080
+echo [serve] Python: %PY%
+echo [serve] Starting preview at http://127.0.0.1:8081/usage.html
+echo [serve] Close this window to stop the server.
+%PY% serve.py 8081
 pause

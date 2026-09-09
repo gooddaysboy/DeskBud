@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 extract_rabbit_frames.py
-从 pyside6_rabbit_orbit/rabbit/*.webp 动画抽帧，归一到统一画布，输出到 assets/webmeji/rabbit/。
+从 pyside6/rabbit/*.webp 动画抽帧，归一到统一画布，输出到 assets/webmeji/rabbit/。
 锚点：内容脚底中点 = 画布底部中点；等比缩放；站姿 idle 为基准参考高度。
 
 【朝向约定】
@@ -20,13 +20,13 @@ from PIL import Image, ImageOps
 
 # ---- 配置 ----
 # OUT：本项目 assets，相对脚本定位（换机/换盘免改）。
-# SRC：优先环境变量 RABBIT_SRC → 项目根下 pyside6_rabbit_orbit/rabbit → 老机器绝对路径兜底。
+# SRC：优先环境变量 RABBIT_SRC → 项目根(deskbud)下 pyside6/rabbit。
+# 不留硬编码盘符兜底：相对候选已覆盖标准目录结构，非标准位置请设 RABBIT_SRC。
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(_PROJECT_ROOT, 'assets', 'webmeji', 'rabbit')
 _SRC_CANDIDATES = [
     os.environ.get('RABBIT_SRC'),
-    os.path.join(os.path.dirname(_PROJECT_ROOT), 'pyside6_rabbit_orbit', 'rabbit'),  # 项目根(deskbud)/pyside6_rabbit_orbit
-    r'D:\deskbud\pyside6_rabbit_orbit\rabbit',
+    os.path.join(os.path.dirname(_PROJECT_ROOT), 'pyside6', 'rabbit'),  # 项目根(deskbud)/pyside6
 ]
 SRC = next((p for p in _SRC_CANDIDATES if p and os.path.isdir(p)), _SRC_CANDIDATES[1])
 CANVAS = 200      # 输出正方形画布

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-page-node-id="cdZlOCeHwktMkVmytbxU70">
+<head data-page-node-id="x2JnaHHh0DUDEbSg98XhXB">
+<meta charset="UTF-8" data-page-node-id="GfLbwLGyqfeHrCm22P29KA">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="1pHKs8jnxRWHZdDLNWAdm1">
+<title>DeskBud Desktop Pet User Manual (Windows)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: #fff6ec;
+    color: #4a3a2e;
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(160deg, #ffd9b8 0%, #ffe9d6 55%, #fff6ec 100%);
+    text-align: center;
+    padding: 52px 20px 44px;
+    border-radius: 0 0 32px 32px;
+  }
+  .hero .pets { font-size: 64px; letter-spacing: 8px; animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: 30px; margin-top: 14px; color: #b35410; }
+  .hero h1 a { color: inherit; text-decoration: none; }
+  .hero p { margin-top: 10px; font-size: 16px; color: #8a6a50; }
+  .hero .tag {
+    display: inline-block; margin-top: 16px; padding: 6px 18px;
+    background: #e8722b; color: #fff; border-radius: 999px; font-size: 14px;
+  }
+
+  /* ---------- Sections ---------- */
+  section { margin-top: 44px; }
+  h2 {
+    font-size: 22px; color: #b35410;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  h2 .num {
+    width: 34px; height: 34px; flex: none;
+    background: #e8722b; color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .lead { color: #8a6a50; font-size: 15px; margin-bottom: 18px; padding-left: 44px; }
+
+  /* ---------- Cards ---------- */
+  .card {
+    background: #fff; border-radius: 20px; padding: 22px 22px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 14px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .intro .ic { font-size: 34px; }
+  .intro h3 { font-size: 17px; margin: 8px 0 4px; color: #7a4a1e; }
+  .intro p { font-size: 14.5px; color: #6b5847; }
+
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step + .step { margin-top: 18px; padding-top: 18px; border-top: 1px dashed #f0dcc4; }
+  .step .n {
+    width: 42px; height: 42px; flex: none; border-radius: 14px;
+    background: #ffe3c8; color: #b35410;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+  }
+  .step h3 { font-size: 16.5px; color: #7a4a1e; }
+  .step p { font-size: 14.5px; color: #6b5847; margin-top: 2px; }
+  .step b { color: #b35410; }
+
+  .play .ic { font-size: 30px; }
+  .play h3 { font-size: 16.5px; margin: 8px 0 4px; color: #7a4a1e; }
+  .play h3 .gesture {
+    font-size: 12.5px; font-weight: normal; color: #e8722b;
+    background: #ffeeda; border-radius: 999px; padding: 2px 10px; margin-left: 6px;
+    white-space: nowrap;
+  }
+  .play p { font-size: 14.5px; color: #6b5847; }
+
+  details {
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 12px; overflow: hidden;
+  }
+  summary {
+    cursor: pointer; padding: 16px 20px;
+    font-size: 15.5px; font-weight: 600; color: #7a4a1e;
+    list-style: none; display: flex; align-items: center; gap: 10px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "🐰"; font-size: 18px; }
+  details[open] summary { border-bottom: 1px dashed #f0dcc4; }
+  details .a { padding: 14px 20px 16px; font-size: 14.5px; color: #6b5847; }
+  details .a b { color: #b35410; }
+  details .a h4 { font-size: 14.5px; color: #7a4a1e; margin: 10px 0 2px; }
+
+  .tips {
+    margin-top: 36px; background: #fff2df; border-radius: 20px;
+    padding: 20px 22px; font-size: 14px; color: #8a6a50;
+  }
+  .tips b { color: #b35410; }
+  footer { display: block; margin-top: 30px; font-size: 13px; color: #bda58d; }
+  footer > span:first-child { display: block; margin-bottom: 5px; text-align: center; }
+  footer > span:last-child { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px 16px; }
+  .site-link { color: inherit; text-decoration: none; border-bottom: 1px solid #d9b893; }
+  .site-link:hover { color: #e8722b; border-bottom-color: #e8722b; }
+  code {
+    background: #ffeeda; border-radius: 6px; padding: 1px 6px;
+    font-family: Consolas, monospace; font-size: 13px; color: #b35410;
+  }
+</style>
+</head>
+<body data-page-node-id="klVYyNbkj8o3FyoLMJqbsK">
+
+<div class="hero" data-page-node-id="PAoK0NgL0HjeeFyM2ILgUe">
+  <div class="pets" data-page-node-id="1hMMOb9OFjXzb0cP8DUQqu">🐰 🐼</div>
+  <h1 data-page-node-id="canL6JwCQTfYHTZIENpywE"><a class="site-link" href="https://deskbud.xyz" data-page-node-id="I0xZ7iytTZQda6iKeKJp5q">DeskBud</a> Desktop Pet</h1>
+  <p data-page-node-id="XuxpF4hdyf1yIBlD8Z0tM4">User Manual (Windows) · A little pet living on your desktop</p>
+  <span class="tag" data-page-node-id="9KVmvJnYoRBYXNr8hMBbOW">Portable · Single file · No data collection</span>
+</div>
+
+<div class="wrap" data-page-node-id="ptpb8rHLcnWa6eammUEnmC">
+
+  <!-- 1 What is this -->
+  <section data-page-node-id="whBeE8uKXvz7RsdJG4HSxi">
+    <h2 data-page-node-id="eMXjo19cQJ8zYAqPcMGSCB"><span class="num" data-page-node-id="iCdnke0greeVlFSuH6v5Of">1</span>What is this</h2>
+    <p class="lead" data-page-node-id="SO3H9msC2yXUsrKmztJo9r">Once installed, your little friend lives right on your desktop — out of your way, no babysitting needed.</p>
+    <div class="grid2" data-page-node-id="EHbAdKzEfqc17XD4VPgSea">
+      <div class="card intro" data-page-node-id="17TEJIulZrbdb6oyv7grwr"><div class="ic" data-page-node-id="WyCHENsFqa8CyvBq6Y1WSf">🚶</div><h3 data-page-node-id="YYb1KAjOhKcKLv9bu545EO">Plays on its own</h3><p data-page-node-id="Wy6HIEMM6PCrmdgqe9bK7g">Strolls around, jumps, climbs walls, hangs upside down from the ceiling — and yawns, stretches and blinks. You just do your thing.</p></div>
+      <div class="card intro" data-page-node-id="aKNmcUImHwJ5wfC6pOsk9D"><div class="ic" data-page-node-id="zjsqVq7ybEK9b1buX7ymWd">🖱️</div><h3 data-page-node-id="N6Awz6WJTNYjx4ZTZboY4e">Loves to play with you</h3><p data-page-node-id="PH4HFMKNHLIWbeYTRNYEw9">Click it, drag it, fling it — it reacts to everything. Go ahead, it can't break.</p></div>
+      <div class="card intro" data-page-node-id="rNY09shYj680LGsrh7sSvu"><div class="ic" data-page-node-id="cenOaRIJ7EV0HFGRk6vXGq">💬</div><h3 data-page-node-id="Qs31OwkpjPmhoXgbJjAUrG">Talks in bubbles</h3><p data-page-node-id="ebQSARSMCMvMCWHrSuHukb">Pops up a silly little quote now and then. Quotes update online automatically; built-in ones work offline too.</p></div>
+      <div class="card intro" data-page-node-id="mjDCGcZq03Ot4X1iNXjkE8"><div class="ic" data-page-node-id="luwxdGV58xsuWXKVWoFP32">🐰🐼+</div><h3 data-page-node-id="SjThoNiWJmj6YpjAJGglK8">Keep a whole crew</h3><p data-page-node-id="o5WC9ObWIYz5baon3TO3Xa">The bunny and the panda are just the start &mdash; more pets are on the way, and they can all play on your desktop together.</p></div>
+    </div>
+    <div class="card" style="font-size:14.5px;color:#6b5847" data-page-node-id="8dskfl376iAf9ng1xgOIIa">
+      🔒 <b style="color:#b35410" data-page-node-id="dl16H37ivu0Clgceryvnvp">No personal data is collected or uploaded</b> — the network is only used to fetch public quotes. Use with peace of mind.
+    </div>
+  </section>
+
+  <!-- 2 Three steps -->
+  <section data-page-node-id="lPsHKeevTb2EZzZhCCa8f1">
+    <h2 data-page-node-id="q21eg76HTIx1sfrKW1JFMx"><span class="num" data-page-node-id="ZJ7GHbU4ZJcSgHSDaQXFAm">2</span>Three steps to start</h2>
+    <p class="lead" data-page-node-id="EhJpYaTqHBtpdVpUoVY99b">No installer, nothing to set up. Under a minute.</p>
+    <div class="card" data-page-node-id="eiOpxUMQzUkWd0J7weo4WH">
+      <div class="step" data-page-node-id="BrK5FdjrZxA9P8adPRChpp">
+        <div class="n" data-page-node-id="B6RrZDBeYZvGCsVPP6rjC3">1</div>
+        <div data-page-node-id="N1wd8HzMHenzMz9ANJilLM"><h3 data-page-node-id="uwP6XHsoYKin7fLCPGFNCx">Download &amp; unzip</h3><p data-page-node-id="Ihr3vujuurz3qv6ObZDvyS">Get <code data-page-node-id="e7UfsTqxyKT0eVw0QM4ZdQ">DeskBud_Rabbit_Win_vVERSION.exe</code> (a single file, about 60–70MB). If it's in a zip, unzip it first. <b data-page-node-id="DYvC97QCGiK43srUtHeoT1">A path with only English characters is recommended</b> (e.g. <code data-page-node-id="TNiTc0DYaMiUDbGNLSxgcF">D:\Pets\</code>) — some older systems don't like non-ASCII paths.</p></div>
+      </div>
+      <div class="step" data-page-node-id="FtEcbOxWCGAbcVVGnLhylB">
+        <div class="n" data-page-node-id="O6FBxmlliJ4yqzftL411mS">2</div>
+        <div data-page-node-id="QFptl9DEVFigkd2Ssu88GY"><h3 data-page-node-id="PV915TCLLqOKvqv4nsAbP4">Blocked once? Just allow it</h3><p data-page-node-id="W9Q177yneS5Uh9EbJUlDPd">The app isn't code-signed, so your antivirus or Windows may <b data-page-node-id="5Xb6SAcHShhfTHluipCJP2">false-flag it once</b> — that's normal. If your antivirus complains, <b data-page-node-id="pYLva04EYas2pp9w0TRpOM">add it to the whitelist / trust list</b>; if you see "Windows protected your PC", click "More info" → "<b data-page-node-id="E0LpCUHETIA7YCJKCVQeGB">Run anyway</b>". Allow it once and it'll be smooth afterwards.</p></div>
+      </div>
+      <div class="step" data-page-node-id="QRgQ7IVdkbIG6QgLnzkdSf">
+        <div class="n" data-page-node-id="Ai1NBiAyc4mC2XShCr8eF8">3</div>
+        <div data-page-node-id="sUWCgHmQvMlogPYMHqlZ4W"><h3 data-page-node-id="wRU6S6pMCTAORmcFFas7zr">Double-click to run</h3><p data-page-node-id="sUAyFDmiZ1t0LmGXDYxPgn">Double-click the exe — on the very first launch, wait <b data-page-node-id="gGg0FQo3YR6Lz14zMn5Gex">1–3 seconds</b> before your pet appears. That's normal, not a freeze. Then it starts living its life on your desktop.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 How to play -->
+  <section data-page-node-id="3WP1m9uuCTjTaDjNbIsAko">
+    <h2 data-page-node-id="nJAB84aIgOc9kHMSAaaeWU"><span class="num" data-page-node-id="9nxD2Cfb6sGXbMS3eEKtTG">3</span>How to play</h2>
+    <p class="lead" data-page-node-id="i7YODJmQBsXVFtjPgnSGGY">Just a few gestures — the rest is up to your pet.</p>
+    <div class="grid2" data-page-node-id="Qtw6mjx6Wa1YwhEqOZNubx">
+      <div class="card play" data-page-node-id="qBxpWTZdcDyt5Z0F8dmDaH"><div class="ic" data-page-node-id="GRPlGp5THBiweK0Xgt9uld">🪂</div><h3 data-page-node-id="75YaeXdk3skbDDYi1VIEmu">Parachute<span class="gesture" data-page-node-id="TIPHF190vwOZpUK3lPgWSo">single click</span></h3><p data-page-node-id="olcJaVlOA8I7B6VrctMdBM">Click it lightly and it opens a parachute, drifting down slowly.</p></div>
+      <div class="card play" data-page-node-id="BGiZaKjb8HaKEe2lM4sHT4"><div class="ic" data-page-node-id="IEcN3kEZGYclRsxzFgKgii">🚀</div><h3 data-page-node-id="Y6qPRyfT5AG8x0hsPS6qzP">Shoot to the ceiling<span class="gesture" data-page-node-id="TRDitMFCQT4ZCibusImRfd">press &amp; hold</span></h3><p data-page-node-id="rQj3OYBP8BUCgw3usA2pDs">Press and hold to charge up, then release — it rockets to the top of the screen and walks around upside down.</p></div>
+      <div class="card play" data-page-node-id="gjRYGpbApman8KQRZ2aFYM"><div class="ic" data-page-node-id="ne4ZFUeCj4aLomSTpSCUrM">🧶</div><h3 data-page-node-id="Hk2T5Az7pbj6MP9TIOfnVI">Call it down<span class="gesture" data-page-node-id="lT7TL86Fp7UxCjpRLKp83y">single click</span></h3><p data-page-node-id="BSzKkA37f6gOJ3YWALR2Kf">While it's hanging from the ceiling, click it once and it lets go — with a little bounce on landing.</p></div>
+      <div class="card play" data-page-node-id="dpnFmQDroMUfHPH6K15l8i"><div class="ic" data-page-node-id="pUL3MYZ8LekxeMBH6GlRpp">💨</div><h3 data-page-node-id="Emd9egG9Cu31VmFJPodEfI">Fling it<span class="gesture" data-page-node-id="oYTiI0pAFM3ZZpN9OePyUN">quick fling</span></h3><p data-page-node-id="HwruRu5wgjaEAY2MtqK9w5">Drag and fling it quickly — it flies, and on hitting the screen edge it climbs up the wall.</p></div>
+      <div class="card play" data-page-node-id="EjxUa44pqicuXxEIevy1vW"><div class="ic" data-page-node-id="6bLGMUxa3aPbGwuJipiMHY">🤏</div><h3 data-page-node-id="91mhg4TaqkzrabUorX77u4">Drag it around<span class="gesture" data-page-node-id="7WW1nfyuFCtgGf3hr5Jqu8">press &amp; drag</span></h3><p data-page-node-id="Um9IhMpmK3MHRO8EEYR8e2">Hold and drag it anywhere. Hovering your mouse over it pauses it; move away and it resumes.</p></div>
+      <div class="card play" data-page-node-id="TgXPMyZwl9l3CqTcq8yGz4"><div class="ic" data-page-node-id="eEgCQxm1l4QLNAREgF62dg">📋</div><h3 data-page-node-id="Q08OuNEJ9l2PujgIqmvqnF">Right-click menu<span class="gesture" data-page-node-id="am90ZuhNCSL3j8T75NGz7u">right-click</span></h3><p data-page-node-id="AGQYcjArRIO5iFsCewQ8QD">Walk left / right (super fast), custom circle (drag a rectangle for it to walk around), resize, desktop pets, pet house, about &amp; quit.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 Pets -->
+  <section data-page-node-id="Wr3uznDtjcnf2bWSOyKeVh">
+    <h2 data-page-node-id="wmOb8wrGr1eBCF5sRJXVRP"><span class="num" data-page-node-id="HVAGu9SgHo2BCQWg1THFBg">4</span>Grow your pet crew</h2>
+    <p class="lead" data-page-node-id="LLHaj3piNJgUmVFxGvvMnN">Tick the ones you want — more pets are coming, and your crew can keep growing.</p>
+    <div class="card" data-page-node-id="y4CvaXHDVNe04703Ibafnz">
+      <div class="step" data-page-node-id="rZnRMazgyoNp3i8x95oUv4">
+        <div class="n" data-page-node-id="7srkCyu0d0PQmgyDaWJ5OE">🐰</div>
+        <div data-page-node-id="qJLteEJDfwxu5EG6n3MTUY"><h3 data-page-node-id="rl0V5DrNm2q18ngKa7ZhLV">Tick to bring them up</h3><p data-page-node-id="K8BoK1qpQIQIJaL2GRv6m1">Right-click menu → "Desktop pets" → tick the ones you want (the bunny and the panda for now). Untick to hide one — <b data-page-node-id="87AX5QENAFstyOjBrobCbP">at least one must stay</b>.</p></div>
+      <div class="step">
+        <div class="n">🐾</div>
+        <div><h3>More friends on the way</h3><p><b>More and more new pets are coming</b> &mdash; when they launch, just tick them in the menu and they will all play on your desktop together. Grow your crew as you like.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 FAQ -->
+  <section data-page-node-id="lIAR8PlTljOjDE0m4OW9RS">
+    <h2 data-page-node-id="AWA2qbgsibZulzO734rv9P"><span class="num" data-page-node-id="b7ZE9JJvp7zcDrpmtxoeOg">5</span>FAQ</h2>
+    <p class="lead" data-page-node-id="AcsrC6aEQ1U3HFjk6XAxD8">Open a question for the answer — most issues take 10 seconds to fix.</p>
+
+    <details open data-page-node-id="XK7MeDCX7tKtKb2O31GPDN">
+      <summary data-page-node-id="KqjUYcWkpcQrqh2DZZkkth">Deleted / flagged by my antivirus?</summary>
+      <div class="a" data-page-node-id="3asnnHRGjsce4QpbnvReno">It's a false positive (the app isn't code-signed). In 360 / Huorong / Windows Security, <b data-page-node-id="kmZR93TRtHtoawhgjtGyWx">whitelist / trust / allow</b> <code data-page-node-id="iPXPjR2qAodvQ5Pgx2HaEH">DeskBud_Rabbit_Win_vVERSION.exe</code>. If it got deleted, download it again and allow it — it won't be flagged again afterwards.</div>
+    </details>
+    <details data-page-node-id="jEbHSszTm1jcnBugkzlPbY">
+      <summary data-page-node-id="bDJKmkgaEBj1pnMUXW2hIp">Double-click does nothing / window flashes?</summary>
+      <div class="a" data-page-node-id="cNNL4MyfFzwoW0JUkq91zp">It's not the app being picky — it's <b data-page-node-id="qTo0cGNS3A1BuHPGvUuNWi">environment differences</b>. Check in order:
+        <h4 data-page-node-id="YkcXxMlXYA6WmjH7LlxrbV">① System requirements (most common)</h4>
+        Requires <b data-page-node-id="Yyb7PluN73jKmIRo8frrwN">64-bit Windows 10 (October 2018 build or later) or Windows 11</b>. Windows 7/8 and 32-bit systems won't run it. Check: press <code data-page-node-id="pW4eV87FuWFq0vhBUDMWwl">Win+R</code>, type <code data-page-node-id="CtS5iO6ZffGFglxmlCLJVX">winver</code>, Enter — "Version 1809" or later, or 11, is fine.
+        <h4 data-page-node-id="RUnfpJiD9YGElinvQnquwj">② Silently blocked by antivirus</h4>
+        PCs with 360 / Huorong / Tencent PC Manager often show "double-click does nothing" — whitelist it in the antivirus "trust zone", <b data-page-node-id="TLeq5CbQDcQ9Z3GThw3yn2">re-download</b>, and trust the program's folder too.
+        <h4 data-page-node-id="V4sYJLh1Aj0zC0QizuntKw">③ Check the launch log (fastest)</h4>
+        Every launch creates <code data-page-node-id="B4uRQPucRvXsADlEMil7S7">DeskBud豁牙小兔日志.txt</code> (a .txt log) <b data-page-node-id="3TyLMx3EUiu6XhyL4zQ8Tg">right next to the program</b>. If it won't start, send that file to the author for a quick diagnosis (contact via <a class="site-link" href="https://deskbud.xyz">deskbud.xyz</a>). If <b data-page-node-id="9fsigsEoGpeBNsPh6JHpOs">no such file exists at all</b>, the program was never allowed to run — go back to ①②.
+      </div>
+    </details>
+    <details data-page-node-id="QmyVP2yVRrQIWfkJLNjtYl">
+      <summary data-page-node-id="9FBPX9A5tJKAWIBEiLOmKA">It blocks my work?</summary>
+      <div class="a" data-page-node-id="37xrKqqB1V7DrDRoql2oF5">It always stays on top. Just <b data-page-node-id="X8YE81Q5Ts3dWNaPP3N9Nc">drag it into a screen corner</b>, or right-click to pause / hide it.</div>
+    </details>
+    <details data-page-node-id="1TmMCuOhXRFyi2Z7ynbZPO">
+      <summary data-page-node-id="JmSuRER61oFKk4B1s8pK1U">How do I know if it's the latest version?</summary>
+      <div class="a" data-page-node-id="kavTJ4akVTHW6oen8M2qAN">Right-click menu → "About" shows the version number and date. For a new version, grab it from where you got this one and run it in place.</div>
+    </details>
+    <details data-page-node-id="QTFIt4OwFV9ELfsDGEkoSY">
+      <summary data-page-node-id="OKmQapN7JRQ7TGYeZO4U97">Missing .dll / graphics glitches?</summary>
+      <div class="a" data-page-node-id="wycnb3b63s7dpcwpw1LT0M">For a missing <code data-page-node-id="uPBHnljGgdhkFIl65jf3Ip">.dll</code>: install Microsoft's "Visual C++ Redistributable" and try again. Very old GPUs may show glitches — that's a known limitation.</div>
+    </details>
+  </section>
+
+  <div class="tips" data-page-node-id="nf5rJggGPT8mAcw4y8pgq8">
+    💡 <b data-page-node-id="y9OCmPVamwIYDqyhG58zaN">Tip:</b> Your pet can't be broken, no matter how you play with it. If it does something odd, that's not a bug — that's personality.
+  </div>
+
+  <footer data-page-node-id="F8SRCSyXgHlvG2Q2o5Klvf">
+    <span data-page-node-id="z5Q2ZxjwIoPrBD4kB6vMMG"><a class="site-link" href="https://deskbud.xyz" data-page-node-id="v4KBlNUYdkzLoy3Y6UDSRo">DeskBud</a> Desktop Pet User Manual (Windows)</span>
+    <span data-page-node-id="qyHh6Ipd7VKSQP0r3JVyCH"><span>🌐 <a class="site-link" href="https://deskbud.xyz" data-page-node-id="mmeC2dMhR9TCgYL6t86xRS">deskbud.xyz</a></span><span>© 2026 <a class="site-link" href="https://deskbud.xyz">DeskBud</a> · All rights reserved</span></span>
+  </footer>
+
+</div>
+</body>
+</html>

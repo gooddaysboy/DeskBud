@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-page-node-id="BptWwK3V3C5K98WrTYli78">
+<head data-page-node-id="BaAEyDXW7y41u3TX3g8Apm">
+<meta charset="UTF-8" data-page-node-id="sCFtlF5V8LmbbjNbXJHBBf">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="3iF5ZSGNpwYG5HqaRwDoFF">
+<title>DeskBud Desktop Pet User Manual (Mac)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: #fff6ec;
+    color: #4a3a2e;
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(160deg, #ffd9b8 0%, #ffe9d6 55%, #fff6ec 100%);
+    text-align: center;
+    padding: 52px 20px 44px;
+    border-radius: 0 0 32px 32px;
+  }
+  .hero .pets { font-size: 64px; letter-spacing: 8px; animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: 30px; margin-top: 14px; color: #b35410; }
+  .hero h1 a { color: inherit; text-decoration: none; }
+  .hero p { margin-top: 10px; font-size: 16px; color: #8a6a50; }
+  .hero .tag {
+    display: inline-block; margin-top: 16px; padding: 6px 18px;
+    background: #e8722b; color: #fff; border-radius: 999px; font-size: 14px;
+  }
+
+  /* ---------- Sections ---------- */
+  section { margin-top: 44px; }
+  h2 {
+    font-size: 22px; color: #b35410;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  h2 .num {
+    width: 34px; height: 34px; flex: none;
+    background: #e8722b; color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .lead { color: #8a6a50; font-size: 15px; margin-bottom: 18px; padding-left: 44px; }
+
+  /* ---------- Cards ---------- */
+  .card {
+    background: #fff; border-radius: 20px; padding: 22px 22px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 14px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .intro .ic { font-size: 34px; }
+  .intro h3 { font-size: 17px; margin: 8px 0 4px; color: #7a4a1e; }
+  .intro p { font-size: 14.5px; color: #6b5847; }
+
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step + .step { margin-top: 18px; padding-top: 18px; border-top: 1px dashed #f0dcc4; }
+  .step .n {
+    width: 42px; height: 42px; flex: none; border-radius: 14px;
+    background: #ffe3c8; color: #b35410;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+  }
+  .step h3 { font-size: 16.5px; color: #7a4a1e; }
+  .step p { font-size: 14.5px; color: #6b5847; margin-top: 2px; }
+  .step b { color: #b35410; }
+
+  .play .ic { font-size: 30px; }
+  .play h3 { font-size: 16.5px; margin: 8px 0 4px; color: #7a4a1e; }
+  .play h3 .gesture {
+    font-size: 12.5px; font-weight: normal; color: #e8722b;
+    background: #ffeeda; border-radius: 999px; padding: 2px 10px; margin-left: 6px;
+    white-space: nowrap;
+  }
+  .play p { font-size: 14.5px; color: #6b5847; }
+
+  details {
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 12px; overflow: hidden;
+  }
+  summary {
+    cursor: pointer; padding: 16px 20px;
+    font-size: 15.5px; font-weight: 600; color: #7a4a1e;
+    list-style: none; display: flex; align-items: center; gap: 10px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "🐰"; font-size: 18px; }
+  details[open] summary { border-bottom: 1px dashed #f0dcc4; }
+  details .a { padding: 14px 20px 16px; font-size: 14.5px; color: #6b5847; }
+  details .a b { color: #b35410; }
+  details .a h4 { font-size: 14.5px; color: #7a4a1e; margin: 10px 0 2px; }
+
+  .tips {
+    margin-top: 36px; background: #fff2df; border-radius: 20px;
+    padding: 20px 22px; font-size: 14px; color: #8a6a50;
+  }
+  .tips b { color: #b35410; }
+  footer { display: block; margin-top: 30px; font-size: 13px; color: #bda58d; }
+  footer > span:first-child { display: block; margin-bottom: 5px; text-align: center; }
+  footer > span:last-child { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px 16px; }
+  .site-link { color: inherit; text-decoration: none; border-bottom: 1px solid #d9b893; }
+  .site-link:hover { color: #e8722b; border-bottom-color: #e8722b; }
+  code {
+    background: #ffeeda; border-radius: 6px; padding: 1px 6px;
+    font-family: Menlo, Consolas, monospace; font-size: 13px; color: #b35410;
+  }
+</style>
+</head>
+<body data-page-node-id="v7F3qsz4JneEk1naGXGtec">
+
+<div class="hero" data-page-node-id="HiFPIFBanVDxHY2ss2Xmt9">
+  <div class="pets" data-page-node-id="oFsf06mctmF6YouIj2jwuI">🐰 🐼</div>
+  <h1 data-page-node-id="7rNxK9OSa9oa4vXim7ofzj"><a class="site-link" href="https://deskbud.xyz" data-page-node-id="UMpiYQF2LPPf8AuQiHXCCm">DeskBud</a> Desktop Pet</h1>
+  <p data-page-node-id="x56E8OYHI44R2dYSrrDhit">User Manual (Mac) · A little pet living on your desktop</p>
+  <span class="tag" data-page-node-id="5HNKG661Pa7oIWkYWlGkU4">No installer · No data collection</span>
+</div>
+
+<div class="wrap" data-page-node-id="dCZQGWsO0IqABxC7Bypy9f">
+
+  <!-- 1 What is this -->
+  <section data-page-node-id="s85Bcd3C0KJDjfd4icKx9T">
+    <h2 data-page-node-id="CZoDTlQuIX4vUcMYuXX1ca"><span class="num" data-page-node-id="gOzhKUH1wtXwkN3EIgA5MA">1</span>What is this</h2>
+    <p class="lead" data-page-node-id="4Pb1wVTDwHi0nXdigELKDY">Once installed, your little friend lives right on your desktop — out of your way, no babysitting needed.</p>
+    <div class="grid2" data-page-node-id="0e90W0Os1lXdEoZqvJpGYB">
+      <div class="card intro" data-page-node-id="ozAXPisCPmpahlEbrn4iws"><div class="ic" data-page-node-id="TKZeydVfNpxO1U6DKuVl8P">🚶</div><h3 data-page-node-id="0ySlt4veRdkFPEi7lvj5b3">Plays on its own</h3><p data-page-node-id="MsgiaP5NcsPBFesH9hZaW1">Strolls around, jumps, climbs walls, hangs upside down from the ceiling — and yawns, stretches and blinks. You just do your thing.</p></div>
+      <div class="card intro" data-page-node-id="y80TiL1AWhZl6GoEQ8CgJE"><div class="ic" data-page-node-id="CmR7IOw39FDPFV0RG3GK6Y">🖱️</div><h3 data-page-node-id="F5F6QvQrB1sfchKEqwekI8">Loves to play with you</h3><p data-page-node-id="Gkcx40MFDRgXn4umJnsf3f">Click it, drag it, fling it — it reacts to everything. Go ahead, it can't break.</p></div>
+      <div class="card intro" data-page-node-id="64JjhZowiWW2lIyqZBUsf9"><div class="ic" data-page-node-id="0RBAD9LFAVh2BBiucZsjNA">💬</div><h3 data-page-node-id="BuEA1JmnXsJTdenBVw8mPa">Talks in bubbles</h3><p data-page-node-id="TUjFhk7iOEk6RMtNoLyOvK">Pops up a silly little quote now and then. Quotes update online automatically; built-in ones work offline too.</p></div>
+      <div class="card intro" data-page-node-id="G1LYebBpUoexSHQHlXTLnN"><div class="ic" data-page-node-id="VcnDbqjMKqDDAUAI4A5eNu">🐰🐼+</div><h3 data-page-node-id="P7Nf2uBGGUqslRiNJfQI7H">Keep a whole crew</h3><p data-page-node-id="fOWkEIiEQFie2eRRxVQSQt">The bunny and the panda are just the start &mdash; more pets are on the way, and they can all play on your desktop together.</p></div>
+    </div>
+    <div class="card" style="font-size:14.5px;color:#6b5847" data-page-node-id="x6uVgcJswCQf9mieID2oxW">
+      🔒 <b style="color:#b35410" data-page-node-id="NYjfOvDHtnihRrxI6CiHhN">No personal data is collected or uploaded</b> — the network is only used to fetch public quotes. Use with peace of mind.
+    </div>
+  </section>
+
+  <!-- 2 Three steps -->
+  <section data-page-node-id="AJXyCY7HEv1AHnQczcjHw2">
+    <h2 data-page-node-id="1klAf6R5gwivFDd7zls8HE"><span class="num" data-page-node-id="LRbNqMntbXLO3xznvaSTNV">2</span>Three steps to start</h2>
+    <p class="lead" data-page-node-id="8fxi9voQWA7H4DiHOLd9xA">Drag it into Applications and you're done — under a minute.</p>
+    <div class="card" data-page-node-id="n1HEhB7SqO79BDeZ8QwA7S">
+      <div class="step" data-page-node-id="pNO9Gu1z0sgIKPLIVAFWpB">
+        <div class="n" data-page-node-id="A9LbVnZGY7ldCnnqgZIUQp">1</div>
+        <div data-page-node-id="CDoVKGzAsVip5iEHE9TzVN"><h3 data-page-node-id="dSnFBa4KMRYnaGw4jOrfEw">Download &amp; drag into Applications</h3><p data-page-node-id="9Txy3EG30YgGfbZSrpFyG4">Get the Mac package (<code data-page-node-id="5ZFGxyYqcAyhzhOLM3osVe">.dmg</code> or <code data-page-node-id="Af6IMqxRdo38VI7oL4vcNc">.zip</code>), open it, and <b data-page-node-id="Njy8bZiVsRX7ESc9Q0tWx4">drag DeskBud into the Applications folder</b>. Any location works, but <b data-page-node-id="GZiwVo0EREIgyuTHwoaokm">don't run it straight from the dmg / zip</b> — drag it out first.</p></div>
+      </div>
+      <div class="step" data-page-node-id="lOFMbBurjIbZ8yXn2q6EWW">
+        <div class="n" data-page-node-id="MPXeSE8VQSlogHeO64kmUW">2</div>
+        <div data-page-node-id="Ma6i8p5yAQzMAKMeOQG53Q"><h3 data-page-node-id="PhJJiO5kcD31w0kbHvexYg">Blocked on first open? Just allow it</h3><p data-page-node-id="YZuD8kXGDDLcBAzvGtiD0J">The app isn't code-signed (notarized), so macOS will step in once on first launch — that's normal. If you see "<b data-page-node-id="75CVJNy6xJkBEBV69rASmV">cannot verify the developer</b>", <b data-page-node-id="mhF9L8M5gli5RfG5BwrHHJ">right-click DeskBud in Finder → "Open" → "Open" again</b>; or go to <b data-page-node-id="A8mE9bCF30YvH7b5MGQEkO">System Settings → Privacy &amp; Security</b> and click "<b data-page-node-id="OXXp9fmsUEq66NA7okAmop">Open Anyway</b>". Allow it once and it'll be smooth afterwards (see FAQ below for details).</p></div>
+      </div>
+      <div class="step" data-page-node-id="mRlQYizREGodB2mH36zGJs">
+        <div class="n" data-page-node-id="SGQi9u305Ioa5pRYb8PaDi">3</div>
+        <div data-page-node-id="93HqA7zvCAcU1hmYT4c6wW"><h3 data-page-node-id="uJpXbisFCg1cJANd0X9mmn">Open DeskBud</h3><p data-page-node-id="UPLDRb1KAtlZwYomLRdFqk">On the very first launch, wait <b data-page-node-id="UVdaAABygLxD9Mnvo3ns84">1–3 seconds</b> before your pet appears. That's normal, not a freeze. Then it starts living its life on your desktop.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 How to play -->
+  <section data-page-node-id="VCUg8v2jeRE1mlljM56SE9">
+    <h2 data-page-node-id="ZIE1MWLaXfg8MN6h19hE7W"><span class="num" data-page-node-id="PDDyNj7MF0bVgUssW3OCJ8">3</span>How to play</h2>
+    <p class="lead" data-page-node-id="YroSkvjlawfS0lTo6pOI0D">Just a few gestures — the rest is up to your pet.</p>
+    <div class="grid2" data-page-node-id="SmNyzvdcZLwfd11TTTx066">
+      <div class="card play" data-page-node-id="JyZwFO2T3RdSnVoix6bIxk"><div class="ic" data-page-node-id="YxiBvtjhCXzzUGcmWtQbk6">🪂</div><h3 data-page-node-id="rB878wkpLyt1GoG7OgzDAL">Parachute<span class="gesture" data-page-node-id="Fnx22yIdxLEpdsJUhgvIs8">single click</span></h3><p data-page-node-id="2M83VfVW83zOcKOQTmhTD7">Click it lightly and it opens a parachute, drifting down slowly.</p></div>
+      <div class="card play" data-page-node-id="P8JVBigLYKCLEILqtDTyB0"><div class="ic" data-page-node-id="PURjtHkFgO4dvb3VgCsuQ3">🚀</div><h3 data-page-node-id="jh6NH7MpLovUE0ojCGEaZM">Shoot to the ceiling<span class="gesture" data-page-node-id="0mh4B0ORQnm4JX86myeLAn">press &amp; hold</span></h3><p data-page-node-id="ZzeGop9pCS1N9SODfFB6qX">Press and hold to charge up, then release — it rockets to the top of the screen and walks around upside down.</p></div>
+      <div class="card play" data-page-node-id="oea7RUOKh4EGmjImkdx8Mz"><div class="ic" data-page-node-id="iJ8D9885BvUtw9i6MlrTSW">🧶</div><h3 data-page-node-id="BUgtvTAeRekdMWwna5B4ml">Call it down<span class="gesture" data-page-node-id="pYetVGjljS8wkIQmUpHGKC">single click</span></h3><p data-page-node-id="K6EAbvHtYkCeAziLmCTWw4">While it's hanging from the ceiling, click it once and it lets go — with a little bounce on landing.</p></div>
+      <div class="card play" data-page-node-id="WgUkafz7lDrKOzjZqWCLHG"><div class="ic" data-page-node-id="8YRsS6d2hx7bviHRLp2WDG">💨</div><h3 data-page-node-id="orhuiZDc2yhXMZPAjxn7Yu">Fling it<span class="gesture" data-page-node-id="lu1C0OGIIYyxJYMgjBLQfX">quick fling</span></h3><p data-page-node-id="jgcxC1dDvbELw7osrynk1r">Drag and fling it quickly — it flies, and on hitting the screen edge it climbs up the wall.</p></div>
+      <div class="card play" data-page-node-id="fMd3TymvPeo6DH31ycHHhu"><div class="ic" data-page-node-id="Wy0KNEsZk9aFAriFBkGVkY">🤏</div><h3 data-page-node-id="QppUK13MIwfYkbgQhu61Et">Drag it around<span class="gesture" data-page-node-id="Tkhny4E99BToDhbE1slYna">press &amp; drag</span></h3><p data-page-node-id="ujsF6QJmdpnzyiaTuLcPRt">Hold and drag it anywhere. Hovering the pointer over it pauses it; move away and it resumes.</p></div>
+      <div class="card play" data-page-node-id="PX7u6401pVAheVBcTktqtO"><div class="ic" data-page-node-id="DTXH7NnkzGSxaDjTdgRLOE">📋</div><h3 data-page-node-id="2CGuFq2J92Q3416YbdnjpV">Menu<span class="gesture" data-page-node-id="lgpko4EOuaxCfekVh7VRhy">right-click it</span></h3><p data-page-node-id="Y8q9o0qzorBdhf4b10PhIf">Walk left / right (super fast), custom circle (drag a rectangle for it to walk around), resize, desktop pets, pet house, about &amp; quit. <b data-page-node-id="8kuTGblkAMwMoRCkEVwrIK">Trackpad users: two-finger click or Ctrl+click is right-click.</b></p></div>
+    </div>
+  </section>
+
+  <!-- 4 Pets -->
+  <section data-page-node-id="BrZAp0ZFiKczGVegfnjPmK">
+    <h2 data-page-node-id="ipd7LAIctySRCRLQTD8gDz"><span class="num" data-page-node-id="3lC5CJ7zSUmv74gn4iiJqO">4</span>Grow your pet crew</h2>
+    <p class="lead" data-page-node-id="WRFp9b9L8W1dAl61kRgQc2">Tick the ones you want — more pets are coming, and your crew can keep growing.</p>
+    <div class="card" data-page-node-id="Rol2VGLHzSPYSjHbw650D5">
+      <div class="step" data-page-node-id="mk6nKfmMGdKZFAYd2BUF8Y">
+        <div class="n" data-page-node-id="B9aef7MfhWp4AJY5DU9WjH">🐰</div>
+        <div data-page-node-id="bNoUbGbUttdnAyFY5PcvQF"><h3 data-page-node-id="ET9fm2yJ2KKva8XfoBKjpg">Tick to bring them up</h3><p data-page-node-id="6ALc0GeNS3woIzzkQ6Y2y4">Right-click menu → "Desktop pets" → tick the ones you want (the bunny and the panda for now). Untick to hide one — <b data-page-node-id="Ai0l8eflSAFPx2FmVjiYPX">at least one must stay</b>.</p></div>
+      <div class="step">
+        <div class="n">🐾</div>
+        <div><h3>More friends on the way</h3><p><b>More and more new pets are coming</b> &mdash; when they launch, just tick them in the menu and they will all play on your desktop together. Grow your crew as you like.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 FAQ -->
+  <section data-page-node-id="o2HDhICQCA9nJBWhknZwud">
+    <h2 data-page-node-id="2FNge19Q0M98tYsjRY8Djr"><span class="num" data-page-node-id="F1kIJ67eiCyBzvddflrn3j">5</span>FAQ</h2>
+    <p class="lead" data-page-node-id="dxE6ftB3shMr3kQFPmzhPL">Open a question for the answer — most issues take 10 seconds to fix.</p>
+
+    <details open data-page-node-id="yTUv7EtghA3tpcPvFK6nCf">
+      <summary data-page-node-id="faX7zdnhAUQl3ef3CN3oHg">"Can't verify the developer / can't be opened"?</summary>
+      <div class="a" data-page-node-id="c9lpB9SwXcXYCGtjpVkglb">Normal — the app isn't notarized. Either way works:<br data-page-node-id="sZmiqY5rmkVeQ8A8bYUuGJ">① In Finder, <b data-page-node-id="JT8HcVITNRVFUxVGcm7vwT">right-click DeskBud → "Open" → "Open" again</b> — right-click, not double-click;<br data-page-node-id="IaEUexgvsw1eRmk6UuwtVp">② Or open <b data-page-node-id="WJn1oLIaoprgrJklMWolRT">System Settings → Privacy &amp; Security</b> and click "<b data-page-node-id="HVaZgBufVu8TxURjAz2shg">Open Anyway</b>".<br data-page-node-id="DgYn4746CbADpacgKG5A6X">Allow it once and it opens normally afterwards.</div>
+    </details>
+    <details data-page-node-id="p4wkGWtWm9KtQSqFxbZmfG">
+      <summary data-page-node-id="PARclprALFHYXt65LEApcG">"Damaged and can't be opened"?</summary>
+      <div class="a" data-page-node-id="mHiEuKypCuztn5MOA7jvv2">macOS labels "not notarized" apps as damaged — the app itself is fine. Open <b data-page-node-id="2VUuV9qpudSbuBBbQURalQ">Terminal</b> (search "Terminal" in Launchpad), paste this line and press Enter:<br data-page-node-id="EPpeK2YZ3ASiJwwmSoFeJ8"><code data-page-node-id="i3e4tbE6nvFWEbKA3nOvGz">xattr -cr /Applications/DeskBud.app</code><br data-page-node-id="N8zVcqCx8MiX1TImqW6Jb9">(If DeskBud isn't in your Applications folder, replace the path with where it actually is.)</div>
+    </details>
+    <details data-page-node-id="VcBRRdH1F8RPxy6mR7hLne">
+      <summary data-page-node-id="CLyWIdvvRIEFR42Geb3RvM">Double-click does nothing / window flashes?</summary>
+      <div class="a" data-page-node-id="UiT9fzW0TD6bAMEaJrIbr2">First make sure you're not running it straight from the dmg / zip (drag it into Applications first). If it still won't start, check the launch log: every launch creates a <code data-page-node-id="Dpu426GgAkdgYgXLi3X4mp">.txt</code> log file <b data-page-node-id="IuuXp8m43GAeJKPbat47JG">right next to the program</b>. Send that file to the author for a quick diagnosis (contact via <a class="site-link" href="https://deskbud.xyz">deskbud.xyz</a>).</div>
+    </details>
+    <details data-page-node-id="HP7CrxwT8nAzczILLnBwls">
+      <summary data-page-node-id="rwKmGUuIeTrOkqgRJ4MiXS">It blocks my work?</summary>
+      <div class="a" data-page-node-id="GpfPNm3qOE0KEdQzb3wZbi">It always stays on top. Just <b data-page-node-id="cZFyfGm62wDZKmHfK8J46Z">drag it into a screen corner</b>, or right-click to pause / hide it.</div>
+    </details>
+    <details data-page-node-id="0dqIo4FlMZ8EP5hKlDkBIc">
+      <summary data-page-node-id="O4U3YX1ABsMjasBKSjDtG3">How do I know if it's the latest version?</summary>
+      <div class="a" data-page-node-id="TTrhMIAMMvRxqueNELiqEB">Right-click menu → "About" shows the version number and date. For a new version, grab it from where you got this one and install over it.</div>
+    </details>
+  </section>
+
+  <div class="tips" data-page-node-id="CW14SorLIlOEWeVJSbEh6K">
+    💡 <b data-page-node-id="Qq9cE6twYiqKYdKEeuqfJT">Tip:</b> Your pet can't be broken, no matter how you play with it. If it does something odd, that's not a bug — that's personality.
+  </div>
+
+  <footer data-page-node-id="YcjwXi6ytsP4PL0tZqabbN">
+    <span data-page-node-id="cZ1AYeAb8I3hY5zXDYwjHK"><a class="site-link" href="https://deskbud.xyz" data-page-node-id="4YeLIWWspDFMCM4zVBjLgn">DeskBud</a> Desktop Pet User Manual (Mac)</span>
+    <span data-page-node-id="vUh6iWEk04ZE89r0ORfgyK"><span>🌐 <a class="site-link" href="https://deskbud.xyz" data-page-node-id="HHtGczx6JDkgEH6OWolpLb">deskbud.xyz</a></span><span>© 2026 <a class="site-link" href="https://deskbud.xyz">DeskBud</a> · All rights reserved</span></span>
+  </footer>
+
+</div>
+</body>
+</html>

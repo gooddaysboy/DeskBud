@@ -1,6 +1,6 @@
 """DeskBud 本地预览服务（带 no-cache 头的静态服务器）。
 
-用法: python serve.py [端口]   默认 8080
+用法: python serve.py [端口]   默认 8081（2026-09-09 从 8080 迁移，避开旧自启残留占用）
 作用: 解决浏览器缓存旧页面的问题——所有响应都带
       Cache-Control: no-store，浏览器每次都拉最新文件。
 """
@@ -15,7 +15,7 @@ if sys.stdout is None:
 if sys.stderr is None:
     sys.stderr = open(os.devnull, "w", encoding="utf-8")
 
-PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
+PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8081
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 

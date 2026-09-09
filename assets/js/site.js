@@ -624,14 +624,51 @@ function initManualTabs() {
     document.querySelectorAll('.manual-panel').forEach(p => {
       p.classList.toggle('on', p.getAttribute('data-panel') === name);
     });
+    fitAllManualFrames();
   });
 }
+// 窗口缩放时重算可见手册 iframe 高度（防抖）
+let _manualRzT;
+window.addEventListener('resize', () => {
+  clearTimeout(_manualRzT);
+  _manualRzT = setTimeout(fitAllManualFrames, 150);
+});
 // 语言切换：.manual 内 [data-manual-lang] 只显示当前语言块（zh/en 双容器，长文不塞 i18n JSON）
 function syncManualLang() {
   const lang = (window.__lang === 'en') ? 'en' : 'zh';
   document.querySelectorAll('.manual [data-manual-lang]').forEach(el => {
     el.classList.toggle('on', el.getAttribute('data-manual-lang') === lang);
   });
+  fitAllManualFrames();
+}
+// 手册 iframe（原版手册整页嵌入）高度自适应：同源直读文档高度
+function fitManualFrame(f) {
+  try {
+    if (!f.offsetParent) return; // 面板/语言块隐藏时跳过
+    const doc = f.contentDocument;
+    if (!doc || !doc.body) return;
+    const h = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight);
+    if (h) f.style.height = h + 'px';
+  } catch (e) { /* 非 http 环境或跨域时静默 */ }
+}
+function fitAllManualFrames() {
+  document.querySelectorAll('.manual-frame').forEach(fitManualFrame);
+}
+function initManualFrames() {
+  document.querySelectorAll('.manual-frame').forEach(f => {
+    if (f.__fitBound) return; // 幂等：软导航回位不重复绑
+    f.__fitBound = true;
+    f.addEventListener('load', () => {
+      fitManualFrame(f);
+      try {
+        const doc = f.contentDocument;
+        doc.addEventListener('toggle', () => fitManualFrame(f), true);          // FAQ <details> 展开/收起
+        doc.addEventListener('click', () => setTimeout(() => fitManualFrame(f), 60), true); // 其他交互兜底
+      } catch (e) {}
+      setTimeout(() => fitManualFrame(f), 300); // 字体/图片加载后二次校准
+    });
+  });
+  fitAllManualFrames();
 }
 
 /* ---------- 伙伴之家卡片渲染（整页加载 / 软导航共用） ----------
@@ -911,7 +948,8 @@ SITE.pages = {
     document.getElementById('yr').textContent = new Date().getFullYear();
     initManualTabs();
     syncManualLang();
-    window.__rerender = () => { syncManualLang(); };
+    initManualFrames();
+    window.__rerender = () => { syncManualLang(); initManualFrames(); };
   },
   privacy: function () {},
   contact: function () {
