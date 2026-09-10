@@ -8,6 +8,12 @@
 
   function stored() { try { return localStorage.getItem('deskbud_lang'); } catch (e) { return null; } }
   function detect() {
+    // App WebView 内嵌（2026-09-10 kotlin 实测）：URL ?lang= 最高优先级（App 打开时带上），
+    // 读到即走 setLang 落 localStorage 记住；其次 localStorage，最后 navigator.language
+    try {
+      const q = new URLSearchParams(location.search).get('lang');
+      if (q && LV.includes(q)) return q;
+    } catch (e) { /* ignore */ }
     const s = stored();
     if (s && LV.includes(s)) return s;
     const nav = (navigator.language || 'zh').toLowerCase();
@@ -34,7 +40,7 @@
 
   // 语言包 URL 缓存击穿：每次切换语言强制刷新，避免旧版缓存导致 footer.download 等新 key 不生效
   // RES_VER 与下方 loadRes 同步；HTML 侧 i18n.js?v= 也要跟着升
-  window.I18N_RES_VER = 'v8';
+  window.I18N_RES_VER = 'v10';
 
   // 翻译函数占位（i18next ready 前用，缺 key 时回退到 HTML 原文字）
   let _t = function (k, fb) { return fb != null ? fb : k; };

@@ -236,6 +236,9 @@ class Creature {
     // enable mouse hover and drag interactions
     this.enablePetInteraction();
     this.enableDragInteraction();
+
+    // DeskBud 行为扩展（2026-09-10）：鼠标避让/输入框避让/专注模式/歪头跟随
+    this.initDeskBud();
   }
 
   // shuffle array for random action order
@@ -348,7 +351,7 @@ class Creature {
 
     if (distance === 0) { this.isJumping = false; return; }
 
-    const duration = distance / this.spriteConfig.jumpspeed; // time to reach
+    const duration = distance / (this.focusMode ? this.spriteConfig.jumpspeed * 2 : this.spriteConfig.jumpspeed); // 专注赶墙提速×2（2026-09-10 老曹反馈反应慢）
     const startTime = performance.now();
 
     // setup frame animation for jump
@@ -419,6 +422,12 @@ class Creature {
   // allowDrop=false(刚爬/跳到顶)时把"回落"并入悬挂, 不至于刚上来就掉
   topDecide(allowDrop) {
     if (this.isJumping || this.isFalling) return;
+    // 悬停暂停：到点的调度延迟重排（顶部倒走/挂顶时鼠标压住=暂停，移开恢复）
+    if (this._hoverPause) {
+      if (this.actionCompletionTimer) clearTimeout(this.actionCompletionTimer);
+      this.actionCompletionTimer = setTimeout(() => this.topDecide(allowDrop), 400);
+      return;
+    }
     if (this.currentEdge !== 'top') { this.setNextAction(); return; }
     const r = Math.random();
     if (r < 0.62) {                       // ~62% 继续/开始倒立行走 → 走得远
@@ -429,7 +438,7 @@ class Creature {
     // 离开行走 → 先停行走帧, 再转挂顶或回落
     if (this.frameTimer) { clearInterval(this.frameTimer); this.frameTimer = null; }
     if (r < 0.85) this.startAction('hangstillTop');   // ~23% 偶尔挂顶摆动
-    else if (allowDrop) this.fallToBottom();          // ~15% 偶尔回落地面(坐/想/蹦等日常)
+    else if (allowDrop && !this.focusMode) this.fallToBottom(); // ~15% 偶尔回落地面；专注模式不回落（行为锁三边）
     else this.startAction('hangstillTop');            // 刚抵达不落 → 并回悬挂
   }
 
@@ -447,6 +456,7 @@ class Creature {
     if(!this.spriteConfig.ALLOWANCES?.includes('pet') || !this.spriteConfig.ALLOWANCES?.includes('bottom')) return;
 
     this.container.addEventListener('mouseenter',()=> {
+        if(this.focusMode) return;   // DeskBud 专注模式：不摸头（否则松手后鼠标停在身上会定格"挂在鼠标上"，2026-09-10）
         if(this.isFalling||this.isPointerDown||this.isPetting||this.isJumping||this.currentEdge!=='bottom') return;
         this.isPetting=true;
         this.wasActionBeforePet=this.currentAction;
@@ -501,8 +511,9 @@ class Creature {
 
     // listen to pointer down to start drag
     this.container.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        this.startDrag(e.clientX, e.clientY);
+      if (e.button !== 0) return; // 仅左键拖拽——右键留给专注模式菜单（2026-09-10）
+      e.preventDefault();
+      this.startDrag(e.clientX, e.clientY);
     });
 
     this.container.addEventListener('touchstart', (e) => {
@@ -773,6 +784,8 @@ class Creature {
 
   // play fallen/trip animation after landing
   playTripAfterFall() {
+    // DeskBud 专注模式（2026-09-10）：落地跳过摔倒/起身动画，立即就近上墙（"落地就直接上墙"语义）
+    if (this.focusMode) { this.tripAfterFallActive = false; this.resumeAfterFallen(); return; }
     const tripConfig = this.spriteConfig.fallen;
     if (!tripConfig) {
         this.resumeAfterFallen();
@@ -825,16 +838,36 @@ class Creature {
         return;
     }
 
-    if (!this.isJumping && this.positionY >= window.innerHeight - this.containerHeight) {
-      if (Math.random() < this.spriteConfig.JUMP_CHANCE) { // decicion on wether to jump or not
+    // DeskBud 专注模式（2026-09-10）：行为锁三边——任意位置都可直接就近上墙（日常仍限贴地起跳）
+    const jumpChance = this.focusMode ? 1 : this.spriteConfig.JUMP_CHANCE;
+    if (!this.isJumping && (this.focusMode || this.positionY >= window.innerHeight - this.containerHeight)) {
+      if (Math.random() < jumpChance) { // 专注=必跳；日常=按配置概率
         const edges = ['top', 'left', 'right']
           .filter(e => this.spriteConfig.ALLOWANCES.includes(e));
 
         if (edges.length) {
-          const target = edges[Math.floor(Math.random() * edges.length)]; // random coordinate on edge
-          this.jumpToEdge(target);
-          return;
+          let target;
+          if (this.focusMode) {
+            // 就近上墙：left/right 按当前 x 就近者优先（top 兜底，仅当左右不在 ALLOWANCES）
+            const cx = this.positionX + this.containerWidth / 2;
+            const lr = edges.filter(e => e !== 'top')
+              .sort((a, b) => (a === 'left' ? cx : window.innerWidth - cx) - (b === 'left' ? cx : window.innerWidth - cx));
+            target = lr[0] || edges[0];
+          } else {
+            target = edges[Math.floor(Math.random() * edges.length)]; // random coordinate on edge
+          }
+          // DeskBud 专注卡死修复（2026-09-10 老曹真机）：jumpToEdge 被 petting/帧未就绪等 gate 静默
+          // return 时调度链断尾=宠物定格卡死。前置满足才 jump；不满足则落到常规调度，下轮再试上墙。
+          if (this.focusMode && this.isPetting) { this.isPetting = false; this.stopPetAnimation(); }
+          if (!this.isPetting && this.isActionReady('walk')) {
+            this.jumpToEdge(target);
+            return;
+          }
+          // 前置不满足 → 不 return，继续走下面的常规调度（专注行为锁下次 setNextAction 再试）
+        } else if (!this.focusMode) {
+          return; // 日常模式维持原语义：抽中跳墙但无边可跳 → 结束本轮
         }
+        // 专注且无边可跳（罕见）→ 同样落到常规调度
       }
     }
 
@@ -945,16 +978,236 @@ class Creature {
   emitAction(action, extra) {
     try {
       document.dispatchEvent(new CustomEvent('webmeji:action', {
-        detail: Object.assign({ action: action, edge: this.currentEdge, id: this.img.id }, extra || {})
+        detail: Object.assign({ action: action, edge: this.currentEdge, id: this.img.id, focus: this.focusMode }, extra || {})
       }));
     } catch (e) {}
   }
 
   // DeskBud: 交互气泡触发源（click 单击 / drag 拖拽松手），100% 触发、最高优先级
+  // 专注模式（2026-09-10）：不冒泡——点击/拖拽/自动气泡全抑制
   emitReact(kind) {
+    if (this.focusMode) return;
     try {
       document.dispatchEvent(new CustomEvent('webmeji:react', { detail: { kind: kind, id: this.img.id } }));
     } catch (e) {}
+  }
+
+  // ---------- DeskBud 行为扩展（2026-09-10 对齐 pyside6/kotlin）----------
+  // ①鼠标避让（常驻）：鼠标 <90px → 反向走开，3s 冷却防抖
+  // ②输入框避让（常驻）：页面输入框聚焦且宠物 <120px → 避开（网页版"打字不挡"等价物）
+  // ③专注模式（右键菜单开关，localStorage 持久化）：0.6x 缩小 + 不冒泡 + 行为锁三边（落地就近上墙）
+  // ④歪头跟随（零素材）：鼠标接近时容器 rotate ±15° 朝鼠标方位 + 翻面朝鼠标
+  initDeskBud() {
+    this.focusMode = false;
+    this.avoidUntil = 0;          // 避让冷却截止（含行走期间）
+    this.avoidTimer = null;       // 避让行走步进 timer
+    this._tilt = 0;               // 当前歪头角度
+    this._lastFacingAt = 0;       // 翻面节流
+    this._lastTiltAt = 0;
+    try { this.focusMode = localStorage.getItem('deskbud_focus') === '1'; } catch (e) {}
+    this.applyContainerTransform();
+
+    // 全局鼠标坐标 + 输入焦点矩形（类级共享一份监听，双宠不重复挂）
+    if (!Creature.mouse) {
+      Creature.mouse = { x: -9999, y: -9999 };
+      document.addEventListener('mousemove', (e) => {
+        Creature.mouse.x = e.clientX; Creature.mouse.y = e.clientY;
+        // 歪头跟随节流 100ms：驱动所有存活实例
+        const now = Date.now();
+        if (now - (Creature._lastTiltAt || 0) < 100) return;
+        Creature._lastTiltAt = now;
+        (window.__WM_CREATURES || []).forEach(c => { if (c && c.deskBudTilt) c.deskBudTilt(); });
+      }, { passive: true });
+      document.addEventListener('focusin', () => {
+        const el = document.activeElement;
+        if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) {
+          Creature.inputRect = el.getBoundingClientRect();
+        } else {
+          Creature.inputRect = null;
+        }
+      });
+      document.addEventListener('focusout', () => { Creature.inputRect = null; });
+    }
+
+    // 避让轮询（350ms 足够灵敏且省电）
+    this.avoidInterval = setInterval(() => this.deskBudAvoidTick(), 350);
+    // 歪头同步轮询（500ms）：宠物自主走动/跳跃/坠落时不依赖 mousemove 也能归零或跟踪
+    this.tiltInterval = setInterval(() => this.deskBudTilt(), 500);
+    // 悬停暂停（2026-09-10 对齐 pyside6）：鼠标压住宠物=定格，移开恢复；接触优先于避让
+    this._hoverPause = false;
+    this.container.addEventListener('mouseenter', () => { this._hoverPause = true; });
+    this.container.addEventListener('mouseleave', () => { this._hoverPause = false; });
+
+    // 右键菜单（专注模式入口）——stopPropagation 防止落到 site.js 全局 IMG 右键拦截
+    this.container.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      Creature.openDeskBudMenu(e.clientX, e.clientY);
+    });
+  }
+
+  // 容器 transform 统一出口：专注缩放(0.6) + 歪头 rotate（锚点贴地）
+  applyContainerTransform() {
+    const parts = [];
+    if (this.focusMode) parts.push('scale(0.6)');
+    if (this._tilt) parts.push(`rotate(${this._tilt}deg)`);
+    this.container.style.transformOrigin = '50% 100%';
+    this.container.style.transition = 'transform .3s ease';
+    this.container.style.transform = parts.length ? parts.join(' ') : 'none';
+  }
+
+  // 避让轮询：命中威胁 → 反向走开
+  deskBudAvoidTick() {
+    if (this.isDragging || this.isFalling || this.isJumping) return;
+    // 悬停暂停（pyside6 语义）：鼠标压在宠物身上=定格，不避让（靠近但未接触才走开）
+    if (this._hoverPause) return;
+    // 只在地面避让：挂边/挂顶时不瞬移下墙（等回落地面再说）
+    if (this.currentEdge !== 'bottom') return;
+    // 歪头同步不只靠 mousemove：宠物自主走动时也要归零/更新（否则 tilt 冻结在旧值）
+    this.deskBudTilt();
+    const now = Date.now();
+    if (now < this.avoidUntil) return;
+    // 避让优先级高于摸头：鼠标逼近时先停掉 petting（否则 hover 摸头会永远抑制避让）
+    if (this.isPetting) { this.isPetting = false; this.stopPetAnimation(); }
+    const cx = this.positionX + this.containerWidth / 2;
+    const cy = this.positionY + this.containerHeight / 2;
+    let threat = null;
+    const m = Creature.mouse;
+    if (m && Math.hypot(m.x - cx, m.y - cy) < 90) threat = { x: m.x, y: m.y };       // ①鼠标 90px
+    if (!threat && Creature.inputRect) {                                              // ②聚焦输入框 120px
+      const r = Creature.inputRect;
+      const nx = Math.max(r.left, Math.min(cx, r.right));
+      const ny = Math.max(r.top, Math.min(cy, r.bottom));
+      if (Math.hypot(nx - cx, ny - cy) < 120) threat = { x: nx, y: ny };
+    }
+    if (!threat) return;
+    // 反向单位矢量 → 让位到就近的墙边/屏边（2026-09-10 老曹反馈"避的不远"：原版只走 230px，
+    // 鼠标还压着时宠物停在圈边——现在直接走到反向的墙上，语义对齐 pyside6"让位到墙边/屏边"）
+    let dx = cx - threat.x, dy = cy - threat.y;
+    const len = Math.hypot(dx, dy) || 1; dx /= len; dy /= len;
+    const iW = window.innerWidth, iH = window.innerHeight;
+    let tx, ty;
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      tx = dx > 0 ? iW - this.containerWidth - 6 : 6;                       // 横向反向 → 对面墙
+      ty = Math.max(6, Math.min(cy + dy * 160, iH - this.containerHeight - 6));
+    } else {
+      ty = dy > 0 ? iH - this.containerHeight - 6 : 6;                      // 纵向反向 → 底/顶
+      tx = Math.max(6, Math.min(cx + dx * 160, iW - this.containerWidth - 6));
+    }
+    this.startAvoidWalk(tx, ty);
+  }
+
+  // 避让行走：中断当前动作 → walk 帧动画 + 直线步进到目标点 → 恢复行为调度
+  startAvoidWalk(tx, ty) {
+    this.avoidUntil = Date.now() + 3000;                    // 3s 冷却（防抖动）
+    if (this.avoidTimer) { clearInterval(this.avoidTimer); this.avoidTimer = null; }
+    this.resetAnimation();
+    if (this.animationFrameId) { cancelAnimationFrame(this.animationFrameId); this.animationFrameId = null; }
+    const walk = this.spriteConfig.walk;
+    if (!walk || !walk.frames || !this.isActionReady('walk')) { this.setNextAction(); return; }
+    this.currentAction = 'walk';
+    this.setFacingFromDelta(tx - this.positionX);           // 面朝移动方向
+    let f = 0;
+    this.frameTimer = setInterval(() => {
+      f = (f + 1) % walk.frames.length;
+      this.img.src = walk.frames[f];
+    }, walk.interval);
+    const sx = this.positionX, sy = this.positionY;
+    const steps = Math.max(1, Math.ceil(Math.hypot(tx - sx, ty - sy) / 4.6)); // ~280px/s（避让要干脆，2026-09-10 老曹反馈提速）
+    let i = 0;
+    this.avoidTimer = setInterval(() => {
+      i++;
+      const t = Math.min(i / steps, 1);
+      const k = 1 - (1 - t) * (1 - t);                      // ease-out
+      this.positionX = sx + (tx - sx) * k;
+      this.positionY = sy + (ty - sy) * k;
+      this.container.style.left = this.positionX + 'px';
+      this.container.style.top = this.positionY + 'px';
+      if (t >= 1) {
+        clearInterval(this.avoidTimer); this.avoidTimer = null;
+        clearInterval(this.frameTimer); this.frameTimer = null;
+        this.currentEdge = 'bottom';
+        this.updateEdgeClass();
+        this.setNextAction();
+      }
+    }, 16);
+  }
+
+  // 歪头跟随：鼠标 <150px → rotate ±15° 朝鼠标方位 + 翻面朝鼠标（节流在全局 mousemove）
+  deskBudTilt() {
+    if (this.isDragging || !Creature.mouse) return;
+    const cx = this.positionX + this.containerWidth / 2;
+    const cy = this.positionY + this.containerHeight / 2;
+    const dist = Math.hypot(Creature.mouse.x - cx, Creature.mouse.y - cy);
+    if (dist < 150) {
+      // 头顶朝鼠标：基准头顶朝上(-90°)，rotate = 方位角 + 90°（wrap 到 ±180）再 clamp ±15°
+      // 屏幕系 y 向下：鼠标正右 ang=0 → +15°（顺时针头朝右）✓；正上 → 0 ✓；正左 → -15° ✓
+      const ang = Math.atan2(Creature.mouse.y - cy, Creature.mouse.x - cx) * 180 / Math.PI;
+      let delta = (ang + 90 + 180) % 360; if (delta < 0) delta += 360;
+      delta -= 180;
+      const tilt = Math.max(-15, Math.min(15, delta));
+      if (tilt !== this._tilt) { this._tilt = tilt; this.applyContainerTransform(); }
+      // 翻面朝鼠标（节流 600ms，防绕圈时频闪）
+      const now = Date.now();
+      if (now - this._lastFacingAt > 600) {
+        this._lastFacingAt = now;
+        const want = Creature.mouse.x < cx ? 'left' : 'right';
+        if (want !== this.facing) { this.facing = want; this.updateImageDirection(); }
+      }
+    } else if (this._tilt !== 0) {
+      this._tilt = 0;
+      this.applyContainerTransform();
+    }
+  }
+
+  // 专注模式全局开关（多实例同步 + 持久化 + 广播给气泡层）
+  static setFocusMode(on) {
+    try { localStorage.setItem('deskbud_focus', on ? '1' : '0'); } catch (e) {}
+    (window.__WM_CREATURES || []).forEach(c => {
+      if (!c) return;
+      c.focusMode = on;
+      c.applyContainerTransform();
+      // 开启瞬间：在地面且不在拖拽/坠落 → 立即快速走向就近墙边（2026-09-10 老曹反馈"反应慢"：
+      // 原先 jumpToEdge 有动画节奏+状态 gate，改用避让式快速行走，所见即所得立刻动身）
+      if (on && c.currentEdge === 'bottom' && !c.isDragging && !c.isFalling && !c.isJumping) {
+        if (c.isPetting) { c.isPetting = false; c.stopPetAnimation(); }
+        const cx = c.positionX + c.containerWidth / 2;
+        const lr = ['left', 'right'].filter(e => c.spriteConfig.ALLOWANCES.includes(e))
+          .sort((a, b) => (a === 'left' ? cx : window.innerWidth - cx) - (b === 'left' ? cx : window.innerWidth - cx));
+        const side = lr[0] || (c.spriteConfig.ALLOWANCES.includes('top') ? 'top' : null);
+        if (side === 'left') c.startAvoidWalk(6, c.positionY);
+        else if (side === 'right') c.startAvoidWalk(window.innerWidth - c.containerWidth - 6, c.positionY);
+        else if (side) c.jumpToEdge(side);
+      }
+    });
+    try { document.dispatchEvent(new CustomEvent('webmeji:focus', { detail: { on: !!on } })); } catch (e) {}
+  }
+
+  // 右键菜单（全局单例）：专注模式开关
+  static openDeskBudMenu(x, y) {
+    let menu = document.getElementById('wm-deskbud-menu');
+    if (!menu) {
+      menu = document.createElement('div');
+      menu.id = 'wm-deskbud-menu';
+      menu.innerHTML = `<button type="button" role="menuitemcheckbox" aria-checked="false"><span class="wm-mi-check">✓</span>专注模式</button>`;
+      document.body.appendChild(menu);
+      menu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const btn = menu.querySelector('button');
+        const on = btn.getAttribute('aria-checked') !== 'true';
+        btn.setAttribute('aria-checked', on ? 'true' : 'false');
+        Creature.setFocusMode(on);
+        menu.style.display = 'none';
+      });
+      document.addEventListener('click', () => { menu.style.display = 'none'; });
+      document.addEventListener('scroll', () => { menu.style.display = 'none'; }, { passive: true });
+    }
+    const btn = menu.querySelector('button');
+    const on = (window.__WM_CREATURES || []).some(c => c && c.focusMode);
+    btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    menu.style.display = 'flex';
+    menu.style.left = Math.min(x, window.innerWidth - 160) + 'px';
+    menu.style.top = Math.min(y, window.innerHeight - 60) + 'px';
   }
 
   // DeskBud: 渐进式预载下，动作帧是否已转成 blob（未就绪则不能播，否则破图/空帧）
@@ -1184,6 +1437,11 @@ class Creature {
     // 后台标签 rAF 停摆，切回首帧 delta 可能是几十秒 → 钳到 50ms，防瞬移/朝向跳变
     if (delta > 0.05) delta = 0.05;
     if (this.isDragging || this.isFalling) {
+        this.animationFrameId = requestAnimationFrame(this.animate);
+        return;
+    }
+    // DeskBud 悬停暂停（2026-09-10 老曹：顶部倒走时鼠标放身上不暂停）——冻结一切位移，移开恢复
+    if (this._hoverPause) {
         this.animationFrameId = requestAnimationFrame(this.animate);
         return;
     }

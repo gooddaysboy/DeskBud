@@ -23,6 +23,7 @@ function chk(name, cond, extra) {
     animSrc: document.getElementById('buddyAnimImg').getAttribute('src'),
     name: document.getElementById('buddyName').textContent,
     buy: document.getElementById('buddyBuy').textContent.trim(),
+    buyHref: (document.querySelector('#buddyBuy .btn') || {}).getAttribute ? document.querySelector('#buddyBuy .btn').getAttribute('href') : '',
     buyBtn: !!document.querySelector('#buddyBuy .hd-soon'),
     video: document.querySelector('#buddyVideo video') ? document.querySelector('#buddyVideo video').getAttribute('src') : '',
     vtabs: [...document.querySelectorAll('#buddyVideoTabs .vtab')].map(e => e.textContent.trim()),
@@ -36,8 +37,8 @@ function chk(name, cond, extra) {
   chk('②姿态小窗用聚合动图', b.animSrc.includes('panda_all.webp'), b.animSrc);
   chk('②姿态窗是小的(≤240)', b.animW > 0 && b.animW <= 240, 'animW=' + b.animW);
   chk('②显示宠物名', b.name === '织熊猫', b.name);
-  chk('②购买占位(即将上线)', b.buyBtn && b.buy.includes('即将上线'), b.buy);
-  chk('③视频大窗高400', b.videoH >= 390 && b.videoH <= 410, 'videoH=' + b.videoH);
+  chk('②购买按钮(先下载桌宠→download)', b.buy.includes('先下载桌宠') && (b.buyHref === 'download.html'), b.buy + '|' + (b.buyHref||''));
+  chk('③视频大窗手机220px', b.videoH >= 215 && b.videoH <= 225, 'videoH=' + b.videoH); // 2026-09-10 手机降高
   chk('③win平台视频在播', (b.video || '').includes('.mp4'), b.video);
   chk('③三平台标签', JSON.stringify(b.vtabs) === JSON.stringify(['Windows', 'Android', 'macOS']), JSON.stringify(b.vtabs));
   chk('③无横向溢出', b.bodySW <= b.iw + 1, JSON.stringify({ s: b.bodySW, i: b.iw }));

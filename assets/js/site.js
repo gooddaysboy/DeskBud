@@ -26,7 +26,7 @@ const SITE = {
             ...(window.DESKBUD_PANDA_SPAWNING || []),
           ];
           const s = document.createElement('script');
-          s.src = this.base + 'webmeji.js?v=18';
+          s.src = this.base + 'webmeji.js?v=22';
           s.onload = () => {
             // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
             window.dispatchEvent(new Event('DOMContentLoaded'));
@@ -175,7 +175,13 @@ const SITE = {
         // 只给被交互的那只冒（找不到容器则退化为第一只）
         this._wmBubbleShow(container || this._wmContainers[0], text, this._BUBBLE_CFG.reactMs);
       });
+      document.addEventListener('webmeji:focus', (e) => {
+        // 专注模式广播：同步到各容器（抚摸气泡 gate 用）
+        const on = !!(e.detail && e.detail.on);
+        this._wmContainers.forEach(c => { c._wmFocus = on; });
+      });
       document.addEventListener('webmeji:action', (e) => {
+        if (e.detail && e.detail.focus) return; // 专注模式：自动气泡全抑制（2026-09-10）
         const key = this._WM_STATE_MAP[(e.detail && e.detail.action) || ''];
         if (!key) return;
         // 事件不带 id（外部测试派发/旧逻辑）时退化为第一只
@@ -204,6 +210,8 @@ const SITE = {
         if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
       });
       container.addEventListener('mouseenter', () => {
+        // 专注模式：抚摸气泡也抑制（webmeji:focus 广播同步状态）
+        if (container._wmFocus) return;
         hoverTimer = setTimeout(show, 900);   // 抚摸延迟冒泡
       });
       container.addEventListener('mouseleave', () => {
@@ -253,6 +261,25 @@ const SITE = {
     if (this.__cat) return this.__cat;
     this.__cat = fetch('data/catalog.json?cv=2', { cache: 'no-cache' }).then(r => r.json());
     return this.__cat;
+  },
+  // ---------- 购买收银台链路（2026-09-10 对齐 petpay，与 pyside6/kotlin 约定一致）----------
+  // device_id：URL ?device_id= 优先（读到即存 localStorage，客户端 WebView 首次带入），
+  // 无参时从 localStorage 恢复。格式校验 dsk+16hex（19 字符，pyside6/kotlin 同约定）。
+  PAY_CHECKOUT: 'https://pay.deskbud.xyz/checkout.html',
+  _DID_RE: /^dsk[0-9a-f]{16}$/i,
+  getDeviceId() {
+    try {
+      const q = new URLSearchParams(location.search).get('device_id');
+      if (q && this._DID_RE.test(q)) { localStorage.setItem('deskbud_device_id', q); return q; }
+      const s = localStorage.getItem('deskbud_device_id');
+      if (s && this._DID_RE.test(s)) return s;
+    } catch (e) { /* localStorage 不可用时按无设备号处理 */ }
+    return '';
+  },
+  // 收银台链接；device_id 为空返回 ''（调用方据此显示「请在客户端内购买」）
+  checkoutUrl(petId) {
+    const did = this.getDeviceId();
+    return did ? `${this.PAY_CHECKOUT}?device_id=${encodeURIComponent(did)}&pet_id=${encodeURIComponent(petId)}` : '';
   },
   // 仅返回已上线的作品（status 不为 "hidden"），隐藏的占位作品统一在此过滤
   onlineWorks() {
@@ -884,18 +911,19 @@ SITE.pages = {
       }
     }
 
-    // 购买入口：catalog.json buy 字段与首页同源（url 空 → 「即将上线」占位，全站无商业用词）
+    // 购买入口（2026-09-10 对齐 petpay 付费链路，与 pyside6/kotlin 约定一致）：
+    // 有 device_id（URL/localStorage）→ 拼收银台链接；无 → 「先下载桌宠」引导去下载页
+    // （2026-09-10 老曹三道防线第一道：没装客户端没有 device_id，订单绑不到设备——必须拦住，不能只提醒）
+    // getDeviceId/checkoutUrl 共享实现见 SITE（首页详情区同逻辑）。
     function renderBuy(w) {
       if (!buyEl) return;
       buyEl.innerHTML = '';
-      SITE.loadCatalog().then(cat => {
-        const pet = (cat.pets || []).find(x => x.id === w.id);
-        if (pet && pet.buy && pet.buy.url) {
-          buyEl.innerHTML = `<a class="btn" href="${pet.buy.url}" target="_blank" rel="noopener">🏠 ${window.pick(pet.buy.label || { zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
-        } else {
-          buyEl.innerHTML = `<span class="hd-soon">${window.pick({ zh: '即将上线', en: 'Coming soon' })}</span>`;
-        }
-      }).catch(() => {});
+      const url = SITE.checkoutUrl(w.id);
+      if (url) {
+        buyEl.innerHTML = `<a class="btn" href="${url}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+      } else {
+        buyEl.innerHTML = `<a class="btn" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
+      }
     }
 
     function paintWall() {
@@ -1068,19 +1096,20 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       if (hdDesc) hdDesc.textContent = window.pick(w.description) || '';
       if (hdBuy) {
         hdBuy.innerHTML = '';
+        // 2026-09-10 对齐 petpay 付费链路（与伙伴页一致）：有 device_id → 收银台链接；
+        // 无 → 「请在客户端内购买」（设备绑定授权模型，网页裸访客不直接售卖）
         SITE.loadCatalog().then(cat => {
-          const pet = (cat.pets || []).find(x => x.id === w.id);
           const chans = (cat.channelsVisible ? (cat.channels || []) : []).filter(c => c && c.label);
           const items = chans.map(c => {
             const name = window.pick(c.label);
             return c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${name}</a>` : name;
           }).join(' / ');
+          const payUrl = SITE.checkoutUrl(w.id);
           let main = '';
-          if (pet && pet.buy && pet.buy.url) {
-            main = `<a class="btn btn-primary" href="${pet.buy.url}" target="_blank" rel="noopener">🏠 ${window.pick(pet.buy.label || { zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+          if (payUrl) {
+            main = `<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
           } else {
-            // URL 未填前显示中性占位（全站不出现商业用词，2026-09-09 老曹要求）；填 catalog.json 即变跳转按钮
-            main = `<span class="hd-soon">${window.pick({ zh: '即将上线', en: 'Coming soon' })}</span>`;
+            main = `<a class="btn btn-primary" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
           }
           const tail = items ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` }) : '';
           if (!main && !tail) { hdBuy.innerHTML = ''; return; }
@@ -1226,18 +1255,20 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       buyHost.className = 'buy-block';
       el.appendChild(buyHost);
       SITE.loadCatalog().then(cat => {
-        const pet = (cat.pets || []).find(x => x.id === id);
         const chans = (cat.channelsVisible ? (cat.channels || []) : []).filter(c => c && c.label);
-        if (!pet && !chans.length) { buyHost.remove(); return; }
         const items = chans.map(c => {
           const name = window.pick(c.label);
           return c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${name}</a>` : name;
         }).join(' / ');
+        // 2026-09-10 对齐 petpay 付费链路（与首页/伙伴页一致）：有 device_id → 收银台链接；
+        // 无 → 「请在客户端内购买」（设备绑定授权模型）
+        const payUrl = SITE.checkoutUrl(id);
         let main = '';
-        if (pet && pet.buy && pet.buy.url) {
-          main = `<a class="btn btn-primary" href="${pet.buy.url}" target="_blank" rel="noopener">🏠 ${window.pick(pet.buy.label || { zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+        if (payUrl) {
+          main = `<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+        } else {
+          main = `<a class="btn btn-primary" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
         }
-        // 渠道未上线时不显示占位（2026-09-07）；主按钮与渠道提示都没有就移除整个区块（全站不出现商业用词，2026-09-09 老曹要求）
         const tail = items
           ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` })
           : '';
@@ -1260,6 +1291,67 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     window.__rerender = () => { syncManualLang(); initManualFrames(); };
   },
   privacy: function () {},
+
+  // 下载页（2026-09-10）：Windows/Android/macOS 三平台，付费鉴权后浏览器下载安装包。
+  // 流程：有 device_id（客户端 WebView 带入或 localStorage 恢复）→ 轮询 petpay entitlement →
+  // 已授权 → 显示对应平台安装包下载按钮；未授权 → 「购买解锁」跳收银台（付款后回本页自动变下载）。
+  // 无 device_id（纯浏览器访客）→ 提示在客户端内打开本页。
+  // ⚠️ APP_DOWNLOADS 为安装包直链占位：petpay COS 上传安装包后按此路径生效（files/ 目录）。
+  download: async function () {
+    const yr = document.getElementById('yr');
+    if (yr) yr.textContent = new Date().getFullYear();
+    const grid = document.getElementById('dlGrid');
+    if (!grid) return;
+
+    const APP_DOWNLOADS = {
+      win: 'https://pay.deskbud.xyz/files/deskbud-setup-win.exe',
+      android: 'https://pay.deskbud.xyz/files/deskbud-android.apk',
+      mac: 'https://pay.deskbud.xyz/files/deskbud-mac.dmg',
+    };
+    const PLATS = [
+      { id: 'win', icon: '🖥️', label: () => window.pick({ zh: 'Windows 版', en: 'Windows' }), desc: () => window.pick({ zh: '安装包 · 支持 Win10 及以上', en: 'Installer · Windows 10+' }) },
+      { id: 'android', icon: '🤖', label: () => window.pick({ zh: 'Android 版', en: 'Android' }), desc: () => window.pick({ zh: '安装包 · Android 8.0 及以上', en: 'APK · Android 8.0+' }) },
+      { id: 'mac', icon: '🍎', label: () => window.pick({ zh: 'macOS 版', en: 'macOS' }), desc: () => window.pick({ zh: '安装包 · 支持 Apple 芯片', en: 'DMG · Apple Silicon' }) },
+    ];
+    const did = SITE.getDeviceId();
+    let entitled = false; // 已授权（entitlement 包含 panda）
+
+    function render() {
+      grid.innerHTML = PLATS.map(pl => {
+        let action;
+        if (!did) {
+          action = `<span class="hd-soon">${window.pick({ zh: '请在客户端内打开本页', en: 'Open in the DeskBud app' })}</span>`;
+        } else if (entitled) {
+          action = `<a class="btn" href="${APP_DOWNLOADS[pl.id]}" target="_blank" rel="noopener">⬇ ${window.pick({ zh: '下载', en: 'Download' })}</a>`;
+        } else {
+          action = `<a class="btn" href="${SITE.checkoutUrl('panda')}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+        }
+        return `<div class="dl-card">
+          <div class="dl-icon">${pl.icon}</div>
+          <b class="dl-name">${pl.label()}</b>
+          <span class="dl-desc">${pl.desc()}</span>
+          <div class="dl-action">${action}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // 授权轮询：付款后回到本页，授权一到按钮自动变下载（有 device_id 才轮询）
+    async function pollAuth() {
+      if (!did) { render(); return; }
+      render();
+      setInterval(async () => {
+        if (entitled) return;
+        try {
+          const r = await fetch('https://pay.deskbud.xyz/api/entitlement?device_id=' + encodeURIComponent(did), { cache: 'no-cache' });
+          const d = await r.json();
+          if ((d.pets || []).includes('panda')) { entitled = true; render(); }
+        } catch (e) { /* 网络异常下轮再试 */ }
+      }, 6000);
+    }
+    await pollAuth();
+    window.__rerender = render;
+  },
+
   contact: function () {
     document.getElementById('yr').textContent = new Date().getFullYear();
     window.copyText = function (btn, text) {
@@ -1316,7 +1408,7 @@ SITE.isMobileUA = function () {
 // 极简页判定（2026-09-09 老曹拍板）：首页 + 许可与隐私页 + 伙伴页（2026-09-10 手机极简页）都隐藏搜索栏/走马灯
 function isMinimalPath() {
   const p = location.pathname.split('/').pop();
-  return isHomePath() || p === 'privacy.html' || p === 'buddies.html';
+  return isHomePath() || p === 'privacy.html' || p === 'buddies.html' || p === 'download.html';
 }
 // 首页极简同步：首页/隐私页隐藏搜索栏 + 移除公告/语录走马灯。
 // 这些块都在 #view 之外，软导航换 #view 带不动它们，故每次路由统一增删。
@@ -1348,6 +1440,7 @@ SITE.route = async function () {
   let fn;
   if (path === '' || path === 'index.html') fn = p.home;
   else if (path === 'buddies.html') fn = p.buddies;
+  else if (path === 'download.html') fn = p.download;
   else if (path === 'pets.html') fn = p.pets;
   else if (path === 'list.html') fn = p.list;
   else if (path === 'detail.html') fn = () => p.detail(params);
@@ -1420,6 +1513,9 @@ function wireSoftNav() {
 
 /* ---------- 启动：每页 <script>SITE.boot()</script> 触发（仅真首次加载跑一次） ---------- */
 function boot() {
+  // App 内嵌模式（2026-09-10 kotlin 实测）：?embed=1 隐藏顶栏/BGM/页脚等 chrome，只留内容
+  // （App 上方已有「伙伴商店」标题，网页自带顶栏/页脚会重复；class 挂 html 上软导航不丢）
+  try { if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embed-mode'); } catch (e) { /* ignore */ }
   injectChrome();      // 注入常驻 BGM 音频（#view 之外）
   SITE.initBgm();      // 绑定开关 + 跨页续播
   initSearch();        // 搜索框（常驻顶栏，仅一次）

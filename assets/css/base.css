@@ -290,20 +290,21 @@ img { -webkit-user-drag: none; user-drag: none; }
   content: ""; display: block; height: 2px; margin-top: 2px;
   background: var(--brand); border-radius: 2px;
 }
+/* 2026-09-10 老曹：EN 按钮去背景（纯文字，hover 变橙） */
 .lang-switch {
   flex: 0 0 auto;
   margin-left: 10px;
-  border: 1px solid var(--line);
-  background: var(--surface);
+  border: none;
+  background: transparent;
   color: var(--ink-soft);
   font-size: 13px;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 999px;
+  padding: 6px 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: border-color .15s, color .15s, background .15s;
+  transition: color .15s;
 }
-.lang-switch:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+.lang-switch:hover { color: var(--brand); }
 
 /* ---------- 通用区块 ---------- */
 .section { padding: 56px 0; }
@@ -443,7 +444,8 @@ img { -webkit-user-drag: none; user-drag: none; }
 .footer {
   border-top: 1px solid var(--line);
   background: transparent; /* 继承 body 暖米，与上下区色块连续 */
-  padding: 28px 0 32px;
+  /* 手机安全区：iOS/安卓浏览器底栏会压住最后一行（kotlin 实测"下部显示不全"），2026-09-10 */
+  padding: 28px 0 calc(32px + env(safe-area-inset-bottom));
   margin-top: 24px;
   color: var(--ink-soft);
   font-size: 14px;
@@ -477,7 +479,9 @@ img { -webkit-user-drag: none; user-drag: none; }
   .brand { font-size: 17px; }
   /* 导航允许换行 + 顶栏高度自适应：窄屏不再裁掉「使用说明/隐私说明/联系我们」 */
   .topbar .wrap { height: auto; min-height: 64px; padding: 8px 16px; flex-wrap: wrap; }
-  .nav { gap: 8px 13px; font-size: 13px; flex-wrap: wrap; justify-content: flex-end; }
+  /* 导航独立一行（2026-09-10 kotlin 手机实测：margin-left:auto 保持整行宽度溢出，
+     被 body overflow-x:hidden 裁掉只看到「首页」——flex:1 1 100% 换行自救，老曹临时页验证） */
+  .nav { flex: 1 1 100%; margin-left: 0; justify-content: flex-start; gap: 8px 13px; font-size: 13px; flex-wrap: wrap; }
   .top-search .site-search { flex: 1 1 auto; max-width: none; }
   .section { padding: 40px 0; }
   .section-title { font-size: 20px; }
@@ -788,7 +792,7 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .video-ph .vplay { font-size: 30px; opacity: .5; }
 .video-ph .vlabel { font-size: 14px; font-weight: 600; color: var(--ink); }
 .video-ph .vhint { font-size: 12px; }
-@media (max-width: 620px) { .video-wrap { height: 180px; } }
+@media (max-width: 620px) { .video-wrap { height: 180px; } .video-stage { height: 220px; } } /* 视频大窗手机降高（首页/伙伴页共用 .video-stage，kotlin 实测 400px 手机滚动过长） */
 
 /* ---------- 桌宠泡泡语录（向上飘的半透明气泡） ---------- */
 .card-bubbles {
@@ -1328,3 +1332,55 @@ body.privacy-warm { background: #efe5d0 fixed; }
   .buddy-anim-card { flex: 0 0 auto; }
 }
 
+
+/* ---------- App 内嵌模式（2026-09-10：buddies.html?embed=1，kotlin WebView 实测反馈） ---------- */
+/* App 上方已有「伙伴商店」标题，网页自带顶栏/搜索/BGM/页脚全隐藏，只留选择墙+购买+视频 */
+html.embed-mode .topbar, html.embed-mode .footer, html.embed-mode .top-search,
+html.embed-mode .announce-bar, html.embed-mode .quote-bar { display: none !important; }
+html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
+
+/* 导航下载入口改 ↓ 粗体图标（2026-09-10 老曹拍板：中英文通吃省地方，一眼可识） */
+.nav .nav-dl { display: flex; align-items: center; }
+.nav .nav-dl .ic { width: 17px; height: 17px; display: block; }
+.nav .nav-dl.active::after { display: none; } /* 图标不落下划线装饰，避免错位 */
+
+/* ---------- 宠物右键菜单（2026-09-10 专注模式入口） ---------- */
+#wm-deskbud-menu {
+  position: fixed; z-index: 99999; display: none; flex-direction: column;
+  background: #fff; border-radius: 12px; padding: 6px; min-width: 148px;
+  box-shadow: 0 10px 30px rgba(120, 80, 40, .18), 0 2px 8px rgba(120, 80, 40, .10);
+  border: 1px solid rgba(232, 114, 43, .18);
+}
+#wm-deskbud-menu button {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  border: none; background: transparent; padding: 9px 12px; border-radius: 8px;
+  font: inherit; font-size: 13.5px; color: var(--ink); cursor: pointer; text-align: left;
+}
+#wm-deskbud-menu button:hover { background: #fff3e8; color: var(--brand-ink); }
+#wm-deskbud-menu .wm-mi-check { visibility: hidden; color: var(--brand); font-weight: 700; }
+#wm-deskbud-menu button[aria-checked="true"] .wm-mi-check { visibility: visible; }
+
+/* ---------- 下载页 download.html（2026-09-10） ---------- */
+.dl-wrap { max-width: 900px; margin: 0 auto; padding: 48px 20px 60px; text-align: center; }
+.dl-title { font-size: 30px; margin: 0 0 8px; }
+.dl-sub { color: var(--ink-soft); font-size: 14.5px; margin: 0 0 32px; }
+.dl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 680px) { .dl-grid { grid-template-columns: minmax(0, 1fr); } }
+.dl-card {
+  background: linear-gradient(180deg, #fffef9 0%, #fbf2df 100%);
+  border-radius: 22px; padding: 28px 20px 22px;
+  box-shadow: 0 14px 34px rgba(190, 120, 60, .12), 0 4px 12px rgba(120, 80, 40, .06);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.dl-card:hover { transform: translateY(-4px); box-shadow: 0 20px 44px rgba(190, 120, 60, .18), 0 6px 16px rgba(120, 80, 40, .08); }
+.dl-icon { font-size: 40px; line-height: 1; }
+.dl-name { font-size: 17px; color: var(--ink); }
+.dl-desc { font-size: 12.5px; color: var(--ink-faint); }
+.dl-action { margin-top: 12px; min-height: 42px; display: flex; align-items: center; }
+.dl-action .btn { display: inline-block; padding: 11px 26px; border-radius: 999px; background: var(--brand); color: #fff; text-decoration: none; font-weight: 600; box-shadow: 0 6px 18px rgba(232, 114, 43, .28); }
+.dl-action .btn:hover { transform: translateY(-2px); }
+.dl-action .hd-soon { display: inline-block; padding: 10px 18px; border-radius: 999px; background: #fff; border: 1.5px dashed rgba(232, 114, 43, .45); color: var(--ink-soft); font-size: 13px; }
+/* 隐私声明结尾彩蛋句（2026-09-10 老曹定稿） */
+.pv-tip { margin-top: 14px; padding: 10px 14px; background: #fff3e8; border-radius: 10px;
+          color: var(--brand-ink); font-size: 13.5px; }
