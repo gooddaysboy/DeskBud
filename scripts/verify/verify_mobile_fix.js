@@ -47,12 +47,12 @@ function chk(name, cond, extra) {
   });
   chk('②首页导航四链接可见', n2 === 4, 'vis=' + n2);
 
-  /* ③ 伙伴页视频窗 220px */
+  /* ③ 伙伴页：视频已移除，断言墙+姿态窗仍在 */
   const p3 = await ctx.newPage();
   await p3.goto(BASE + '/buddies.html', { waitUntil: 'networkidle', timeout: 30000 });
   await p3.waitForTimeout(1500);
-  const v2 = await p3.evaluate(() => ({ h: Math.round(document.getElementById('buddyVideo').getBoundingClientRect().height) }));
-  chk('③伙伴页视频窗手机220px', v2.h >= 215 && v2.h <= 225, 'h=' + v2.h);
+  const v2 = await p3.evaluate(() => ({ wall: document.querySelectorAll('#buddyWall .buddy-tile').length, anim: !!document.getElementById('buddyAnimImg'), videoGone: !document.getElementById('buddyVideo') }));
+  chk('③伙伴页墙+姿态窗在、视频已移除', v2.wall === 2 && v2.anim && v2.videoGone, JSON.stringify(v2));
 
   /* ④ footer 安全区：computed padding-bottom ≥ 32px（无刘海环境 env=0 仍 32px） */
   const f1 = await p3.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.footer')).paddingBottom));

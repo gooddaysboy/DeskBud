@@ -25,9 +25,7 @@ function chk(name, cond, extra) {
     buy: document.getElementById('buddyBuy').textContent.trim(),
     buyHref: (document.querySelector('#buddyBuy .btn') || {}).getAttribute ? document.querySelector('#buddyBuy .btn').getAttribute('href') : '',
     buyBtn: !!document.querySelector('#buddyBuy .hd-soon'),
-    video: document.querySelector('#buddyVideo video') ? document.querySelector('#buddyVideo video').getAttribute('src') : '',
-    vtabs: [...document.querySelectorAll('#buddyVideoTabs .vtab')].map(e => e.textContent.trim()),
-    videoH: Math.round(document.getElementById('buddyVideo').getBoundingClientRect().height),
+    videoGone: !document.getElementById('buddyVideo'),
     animW: Math.round(document.querySelector('.buddy-anim-stage').getBoundingClientRect().width),
     bodySW: document.body.scrollWidth, iw: innerWidth,
   }));
@@ -38,9 +36,7 @@ function chk(name, cond, extra) {
   chk('②姿态窗是小的(≤240)', b.animW > 0 && b.animW <= 240, 'animW=' + b.animW);
   chk('②显示宠物名', b.name === '织熊猫', b.name);
   chk('②购买按钮(先下载桌宠→download)', b.buy.includes('先下载桌宠') && (b.buyHref === 'download.html'), b.buy + '|' + (b.buyHref||''));
-  chk('③视频大窗手机220px', b.videoH >= 215 && b.videoH <= 225, 'videoH=' + b.videoH); // 2026-09-10 手机降高
-  chk('③win平台视频在播', (b.video || '').includes('.mp4'), b.video);
-  chk('③三平台标签', JSON.stringify(b.vtabs) === JSON.stringify(['Windows', 'Android', 'macOS']), JSON.stringify(b.vtabs));
+  chk('③宣传视频已移除(2026-09-10 老曹拍板)', b.videoGone);
   chk('③无横向溢出', b.bodySW <= b.iw + 1, JSON.stringify({ s: b.bodySW, i: b.iw }));
 
   /* 切兔子：聚合图/视频占位/购买联动 */
@@ -50,23 +46,11 @@ function chk(name, cond, extra) {
     onIdx: [...document.querySelectorAll('#buddyWall .buddy-tile')].findIndex(e => e.classList.contains('on')),
     animSrc: document.getElementById('buddyAnimImg').getAttribute('src'),
     name: document.getElementById('buddyName').textContent,
-    videoPh: !!document.querySelector('#buddyVideo .video-ph'),
-    vtabOn: (document.querySelector('#buddyVideoTabs .vtab.on') || {}).textContent,
   }));
   chk('①b切兔子选中', b2.onIdx === 1);
   chk('②b聚合图切兔子', b2.animSrc.includes('rabbit_all.webp'), b2.animSrc);
   chk('②b名字切兔子', b2.name === '织兔子', b2.name);
-  chk('③b兔子无视频显示占位', b2.videoPh);
   await p.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v2_mobile.png', fullPage: true });
-
-  /* 视频平台标签切换 */
-  await p.evaluate(() => { document.querySelectorAll('#buddyVideoTabs .vtab')[1].click(); });
-  await p.waitForTimeout(600);
-  const b3 = await p.evaluate(() => ({
-    ph: !!document.querySelector('#buddyVideo .video-ph'),
-    on: (document.querySelector('#buddyVideoTabs .vtab.on') || {}).textContent,
-  }));
-  chk('③b切Android标签态', b3.on === 'Android' && b3.ph, JSON.stringify(b3));
 
   /* 桌面宽度：墙左竖排布局 */
   const dCtx = await browser.newContext({ viewport: { width: 1366, height: 900 } });
