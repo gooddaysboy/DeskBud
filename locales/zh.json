@@ -4,9 +4,10 @@
     "works": "作品",
     "pets": "伙伴之家",
     "usage": "用户手册",
-    "privacy": "许可与隐私",
+    "buddies": "伙伴",
+    "privacy": "关于",
     "contact": "联系我们",
-    "download": "客户端下载"
+    "download": "下载"
   },
   "brand": {
     "sub": "· 让桌面不再孤单"
@@ -72,6 +73,14 @@
     "sortHot": "热门",
     "viewAll": "查看全部",
     "empty": "暂无作品"
+  },
+  "buddies": {
+    "title": "伙伴",
+    "sub": "挑一只伙伴，看看它的一举一动。",
+    "badgeAnim": "姿态动画",
+    "badgeVideo": "宣传视频",
+    "videoSoon": "视频即将上线",
+    "idle": "待机"
   },
   "pets": {
     "title": "伙伴之家",

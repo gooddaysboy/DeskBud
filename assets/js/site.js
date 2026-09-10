@@ -801,8 +801,134 @@ SITE.pages = {
     window.__rerender = () => PetsView.paint();
   },
 
+  // 伙伴页（2026-09-10 二轮改版，老曹拍板）：①纯图选择墙（idle 动图）②聚合姿态动图小窗+购买入口
+  // ③宣传视频大窗（与首页详情窗口同款：win/android/mac 三标签，播完自动轮播）
+  buddies: async function () {
+    await SITE.load();
+    const yr = document.getElementById('yr');
+    if (yr) yr.textContent = new Date().getFullYear();
+    const works = SITE.onlineWorks();
+    if (!works.length) return;
+    let cur = 0, animTimer = null, frameIdx = 0, frames = [];
+
+    const wall = document.getElementById('buddyWall');
+    const animImg = document.getElementById('buddyAnimImg');
+    const nameEl = document.getElementById('buddyName');
+    const buyEl = document.getElementById('buddyBuy');
+    const videoStage = document.getElementById('buddyVideo');
+    const videoTabs = document.getElementById('buddyVideoTabs');
+
+    // 聚合/待机动图素材（tools/material 迁移产物，已拷入 works/*-anim/）；
+    // 未登记素材的宠物自动退回 states 帧轮播兜底
+    const ANIM = {
+      panda: { idle: 'works/panda-anim/panda_idle.webp', all: 'works/panda-anim/panda_all.webp' },
+      rabbit: { idle: 'works/rabbit-anim/rabbit_idle.webp', all: 'works/rabbit-anim/rabbit_all.webp' },
+    };
+    const poseList = w => (w.states && w.states.length ? w.states : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]);
+
+    function stopAnim() { if (animTimer) { clearInterval(animTimer); animTimer = null; } }
+
+    // 姿态小窗：优先聚合动图（img 直接播，循环），无素材退回 states 帧轮播
+    function startAnim(w) {
+      stopAnim();
+      if (!animImg) return;
+      const a = ANIM[w.id];
+      if (a && a.all) {
+        animTimer = null;
+        animImg.src = a.all;
+        return;
+      }
+      frames = poseList(w); frameIdx = 0;
+      const show = () => {
+        const s = frames[frameIdx];
+        if (!s) return;
+        animImg.src = s.src;
+        frameIdx = (frameIdx + 1) % frames.length;
+      };
+      show();
+      animTimer = setInterval(show, 800);
+    }
+
+    // 宣传视频大窗：与首页详情窗口同款（PLAT_ORDER 三标签 + ended 自动轮播，无手册同步）
+    const PLAT_ORDER = ['win', 'android', 'mac'];
+    function renderVideo(w) {
+      const byPlat = {};
+      (w.versions || []).forEach(v => { byPlat[v.platform] = v; });
+      const curPlat = renderVideo._plat && byPlat[renderVideo._plat] ? renderVideo._plat
+        : (PLAT_ORDER.find(p => byPlat[p] && byPlat[p].video) || 'win');
+      renderVideo._plat = curPlat;
+      if (videoTabs) {
+        videoTabs.innerHTML = PLAT_ORDER.map(p => {
+          const pv = byPlat[p];
+          const label = pv ? window.pick(pv.platformLabel) : p.toUpperCase();
+          return `<button type="button" class="vtab${p === curPlat ? ' on' : ''}" data-p="${p}">${label}</button>`;
+        }).join('');
+        videoTabs.querySelectorAll('.vtab').forEach(b => b.addEventListener('click', () => {
+          renderVideo._plat = b.dataset.p;
+          renderVideo(works[cur]);
+        }));
+      }
+      if (!videoStage) return;
+      const v = byPlat[curPlat];
+      if (v && v.video) {
+        videoStage.innerHTML = `<video src="${v.video}" controls muted loop playsinline preload="metadata"></video>`;
+        const el = videoStage.querySelector('video');
+        el.addEventListener('ended', () => {
+          const withVid = PLAT_ORDER.filter(p => byPlat[p] && byPlat[p].video);
+          if (withVid.length <= 1) { el.currentTime = 0; el.play().catch(() => {}); return; }
+          renderVideo._plat = withVid[(withVid.indexOf(renderVideo._plat) + 1) % withVid.length];
+          renderVideo(works[cur]);
+        });
+      } else {
+        videoStage.innerHTML = `<div class="video-ph"><span class="vplay">▶</span><span>${window.pick({ zh: '视频即将上线', en: 'Video coming soon' })}</span></div>`;
+      }
+    }
+
+    // 购买入口：catalog.json buy 字段与首页同源（url 空 → 「即将上线」占位，全站无商业用词）
+    function renderBuy(w) {
+      if (!buyEl) return;
+      buyEl.innerHTML = '';
+      SITE.loadCatalog().then(cat => {
+        const pet = (cat.pets || []).find(x => x.id === w.id);
+        if (pet && pet.buy && pet.buy.url) {
+          buyEl.innerHTML = `<a class="btn" href="${pet.buy.url}" target="_blank" rel="noopener">🏠 ${window.pick(pet.buy.label || { zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+        } else {
+          buyEl.innerHTML = `<span class="hd-soon">${window.pick({ zh: '即将上线', en: 'Coming soon' })}</span>`;
+        }
+      }).catch(() => {});
+    }
+
+    function paintWall() {
+      if (!wall) return;
+      wall.innerHTML = works.map((w, i) => {
+        const a = ANIM[w.id];
+        const src = (a && a.idle) || w.thumb || w.cover || (poseList(w)[0] || {}).src || '';
+        return `<button type="button" class="buddy-tile${i === cur ? ' on' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}" title="${window.pick(w.title)}">
+          <img src="${src}" alt="${window.pick(w.title)}" draggable="false" loading="lazy">
+        </button>`;
+      }).join('');
+      wall.querySelectorAll('.buddy-tile').forEach(b => {
+        b.addEventListener('click', () => {
+          const i = +b.dataset.i;
+          if (i === cur) return;
+          cur = i;
+          paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]);
+          if (nameEl) nameEl.textContent = window.pick(works[cur].title);
+        });
+      });
+    }
+
+    paintWall();
+    if (nameEl) nameEl.textContent = window.pick(works[0].title);
+    startAnim(works[0]); renderVideo(works[0]); renderBuy(works[0]);
+    SITE._cleanups.push(stopAnim); // 软导航离开时停帧轮播兜底
+    window.__rerender = () => { paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]); if (nameEl) nameEl.textContent = window.pick(works[cur].title); };
+  },
+
   // 首页（2026-09-09 改版）：左选择卡切换 ｜ 右大展示卡姿态轮播 ｜ 下部介绍+下载/购买 ｜ 宣传视频
   home: async function () {
+    // 移动设备首选伙伴页（2026-09-10 老曹拍板）：软导航/整页进入首页一律跳转（head 内联脚本已兜整页首载）
+    if (SITE.isMobileUA()) { location.replace('buddies.html'); return; }
     await SITE.load();
     document.getElementById('yr').textContent = new Date().getFullYear();
     const works = SITE.onlineWorks();
@@ -1183,9 +1309,14 @@ function isHomePath() {
   const p = location.pathname.split('/').pop();
   return p === '' || p === 'index.html';
 }
-// 极简页判定（2026-09-09 老曹拍板）：首页 + 许可与隐私页都隐藏搜索栏/走马灯
+// 移动设备判定（2026-09-10 老曹拍板）：手机端首选 buddies.html，首页 UA 检测自动跳转
+SITE.isMobileUA = function () {
+  return /Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(navigator.userAgent || '');
+};
+// 极简页判定（2026-09-09 老曹拍板）：首页 + 许可与隐私页 + 伙伴页（2026-09-10 手机极简页）都隐藏搜索栏/走马灯
 function isMinimalPath() {
-  return isHomePath() || location.pathname.split('/').pop() === 'privacy.html';
+  const p = location.pathname.split('/').pop();
+  return isHomePath() || p === 'privacy.html' || p === 'buddies.html';
 }
 // 首页极简同步：首页/隐私页隐藏搜索栏 + 移除公告/语录走马灯。
 // 这些块都在 #view 之外，软导航换 #view 带不动它们，故每次路由统一增删。
@@ -1216,6 +1347,7 @@ SITE.route = async function () {
   const p = SITE.pages;
   let fn;
   if (path === '' || path === 'index.html') fn = p.home;
+  else if (path === 'buddies.html') fn = p.buddies;
   else if (path === 'pets.html') fn = p.pets;
   else if (path === 'list.html') fn = p.list;
   else if (path === 'detail.html') fn = () => p.detail(params);

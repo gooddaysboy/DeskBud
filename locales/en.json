@@ -4,8 +4,9 @@
     "works": "Works",
     "pets": "Pet House",
     "usage": "User Manual",
+    "buddies": "Buddies",
     "download": "Download",
-    "privacy": "License & Privacy",
+    "privacy": "About",
     "contact": "Contact"
   },
   "brand": {
@@ -72,6 +73,14 @@
     "sortHot": "Popular",
     "viewAll": "View All",
     "empty": "No works yet"
+  },
+  "buddies": {
+    "title": "Buddies",
+    "sub": "Pick a buddy and watch it move.",
+    "badgeAnim": "Pose show",
+    "badgeVideo": "Promo video",
+    "videoSoon": "Video coming soon",
+    "idle": "Idle"
   },
   "pets": {
     "title": "Pet House",

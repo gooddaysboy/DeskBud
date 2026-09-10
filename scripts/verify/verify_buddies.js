@@ -1,0 +1,87 @@
+// 2026-09-10 伙伴页二轮改版验证：选择墙 / 聚合动图小窗 / 购买入口 / 视频大窗三平台
+const { chromeExe } = require('./_env.js');
+const { chromium } = require('playwright-core');
+
+const BASE = 'http://127.0.0.1:8081';
+let pass = 0, fail = 0;
+function chk(name, cond, extra) {
+  if (cond) { pass++; console.log('PASS', name); }
+  else { fail++; console.log('FAIL', name, extra || ''); }
+}
+
+(async () => {
+  const browser = await chromium.launch({ executablePath: chromeExe, headless: true,
+    args: ['--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] });
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const p = await ctx.newPage();
+  await p.goto(BASE + '/buddies.html', { waitUntil: 'networkidle', timeout: 30000 });
+  await p.waitForTimeout(2500);
+  const b = await p.evaluate(() => ({
+    tiles: document.querySelectorAll('#buddyWall .buddy-tile').length,
+    tileSrcs: [...document.querySelectorAll('#buddyWall .buddy-tile img')].map(i => i.getAttribute('src')),
+    onIdx: [...document.querySelectorAll('#buddyWall .buddy-tile')].findIndex(e => e.classList.contains('on')),
+    animSrc: document.getElementById('buddyAnimImg').getAttribute('src'),
+    name: document.getElementById('buddyName').textContent,
+    buy: document.getElementById('buddyBuy').textContent.trim(),
+    buyBtn: !!document.querySelector('#buddyBuy .hd-soon'),
+    video: document.querySelector('#buddyVideo video') ? document.querySelector('#buddyVideo video').getAttribute('src') : '',
+    vtabs: [...document.querySelectorAll('#buddyVideoTabs .vtab')].map(e => e.textContent.trim()),
+    videoH: Math.round(document.getElementById('buddyVideo').getBoundingClientRect().height),
+    animW: Math.round(document.querySelector('.buddy-anim-stage').getBoundingClientRect().width),
+    bodySW: document.body.scrollWidth, iw: innerWidth,
+  }));
+  chk('①选择墙方块数=2', b.tiles === 2, 'tiles=' + b.tiles);
+  chk('①方块用idle动图', b.tileSrcs.join(',').includes('panda-anim/panda_idle.webp') && b.tileSrcs.join(',').includes('rabbit-anim/rabbit_idle.webp'), b.tileSrcs.join(','));
+  chk('①默认选中第0个', b.onIdx === 0);
+  chk('②姿态小窗用聚合动图', b.animSrc.includes('panda_all.webp'), b.animSrc);
+  chk('②姿态窗是小的(≤240)', b.animW > 0 && b.animW <= 240, 'animW=' + b.animW);
+  chk('②显示宠物名', b.name === '织熊猫', b.name);
+  chk('②购买占位(即将上线)', b.buyBtn && b.buy.includes('即将上线'), b.buy);
+  chk('③视频大窗高400', b.videoH >= 390 && b.videoH <= 410, 'videoH=' + b.videoH);
+  chk('③win平台视频在播', (b.video || '').includes('.mp4'), b.video);
+  chk('③三平台标签', JSON.stringify(b.vtabs) === JSON.stringify(['Windows', 'Android', 'macOS']), JSON.stringify(b.vtabs));
+  chk('③无横向溢出', b.bodySW <= b.iw + 1, JSON.stringify({ s: b.bodySW, i: b.iw }));
+
+  /* 切兔子：聚合图/视频占位/购买联动 */
+  await p.evaluate(() => { document.querySelectorAll('#buddyWall .buddy-tile')[1].click(); });
+  await p.waitForTimeout(1000);
+  const b2 = await p.evaluate(() => ({
+    onIdx: [...document.querySelectorAll('#buddyWall .buddy-tile')].findIndex(e => e.classList.contains('on')),
+    animSrc: document.getElementById('buddyAnimImg').getAttribute('src'),
+    name: document.getElementById('buddyName').textContent,
+    videoPh: !!document.querySelector('#buddyVideo .video-ph'),
+    vtabOn: (document.querySelector('#buddyVideoTabs .vtab.on') || {}).textContent,
+  }));
+  chk('①b切兔子选中', b2.onIdx === 1);
+  chk('②b聚合图切兔子', b2.animSrc.includes('rabbit_all.webp'), b2.animSrc);
+  chk('②b名字切兔子', b2.name === '织兔子', b2.name);
+  chk('③b兔子无视频显示占位', b2.videoPh);
+  await p.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v2_mobile.png', fullPage: true });
+
+  /* 视频平台标签切换 */
+  await p.evaluate(() => { document.querySelectorAll('#buddyVideoTabs .vtab')[1].click(); });
+  await p.waitForTimeout(600);
+  const b3 = await p.evaluate(() => ({
+    ph: !!document.querySelector('#buddyVideo .video-ph'),
+    on: (document.querySelector('#buddyVideoTabs .vtab.on') || {}).textContent,
+  }));
+  chk('③b切Android标签态', b3.on === 'Android' && b3.ph, JSON.stringify(b3));
+
+  /* 桌面宽度：墙左竖排布局 */
+  const dCtx = await browser.newContext({ viewport: { width: 1366, height: 900 } });
+  const dp = await dCtx.newPage();
+  await dp.goto(BASE + '/buddies.html', { waitUntil: 'networkidle', timeout: 30000 });
+  await dp.waitForTimeout(2000);
+  const d = await dp.evaluate(() => {
+    const wall = document.querySelector('#buddyWall').getBoundingClientRect();
+    const anim = document.querySelector('.buddy-anim-card').getBoundingClientRect();
+    return { wallLeft: Math.round(wall.x), animX: Math.round(anim.x), sideBySide: anim.x > wall.x + wall.width - 1, bodySW: document.body.scrollWidth, iw: innerWidth };
+  });
+  chk('④桌面墙在左姿态窗在右', d.sideBySide, JSON.stringify(d));
+  chk('④桌面无溢出', d.bodySW <= d.iw + 1);
+  await dp.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v2_desktop.png', fullPage: true });
+
+  await browser.close();
+  console.log('\nRESULT: PASS=' + pass + ' FAIL=' + fail);
+  process.exit(fail ? 1 : 0);
+})().catch(e => { console.error('ERR', e); process.exit(1); });

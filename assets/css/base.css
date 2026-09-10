@@ -511,7 +511,8 @@ img { -webkit-user-drag: none; user-drag: none; }
 .home-detail-band { background: #efe5d0; }
 /* 隐私页整页独特色（与首页底部同色，老曹 2026-09-09 拍板统一上下色块） */
 body.privacy-warm { background: #efe5d0 fixed; }
-.hero-split { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: 48px; align-items: start; padding: 52px 0 64px; }
+/* 2026-09-10 老曹四轮视觉：导航下留白加大（52→76）、上下两段间距收紧（64→36） */
+.hero-split { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: 48px; align-items: start; padding: 76px 0 36px; }
 .hero-kicker { display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 2px; color: var(--ink-soft); margin-bottom: 18px; }
 .hero-kicker i { width: 26px; height: 2px; background: var(--brand); border-radius: 2px; }
 .hero-big { font-family: Georgia, "Songti SC", "STSong", "SimSun", serif; font-size: clamp(25px, 2.4vw, 32px); line-height: 1.65; margin: 0 0 16px; color: var(--ink); font-weight: 700; letter-spacing: .5px; }
@@ -522,7 +523,7 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .picker-head b { font-size: 15px; color: var(--ink); }
 .pet-picker { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 .pick-card {
-  display: flex; align-items: center; gap: 12px; text-align: left; overflow: hidden;
+  display: flex; align-items: center; gap: 12px; text-align: left; overflow: hidden; min-width: 0;
   background: #fff; border: 1.5px solid transparent; border-radius: 16px; padding: 12px 14px;
   cursor: pointer; font: inherit;
   box-shadow: 0 2px 10px rgba(120, 80, 40, .06);
@@ -536,9 +537,10 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .pick-txt small { display: block; font-size: 12px; color: var(--ink-faint); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pick-arrow { color: var(--brand); font-size: 18px; line-height: 1; flex: 0 0 auto; }
 /* 右侧大展示卡：立体感 = 双层投影 + 内虚线框 + 横滚姿态走马灯；色块弱化与 band 融（老曹 2026-09-09 六轮拍板） */
+/* 2026-09-10 四轮：纯白改暖白渐变，拉近与页面底色色差，整体协调柔和 */
 .showcase-card {
   position: relative;
-  background: #ffffff;
+  background: linear-gradient(180deg, #fffef9 0%, #fbf2df 100%);
   border-radius: 28px; padding: 24px 24px 18px;
   box-shadow: 0 18px 44px rgba(190, 120, 60, .14), 0 4px 14px rgba(120, 80, 40, .07);
 }
@@ -579,7 +581,7 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .sdot.on { width: 26px; background: linear-gradient(90deg, #e8722b, #cf5f1c); box-shadow: 0 2px 8px rgba(232, 114, 43, .45); }
 /* 下部详情区：左文字立体大卡（上文字·下领回家链接） ｜ 右视频大卡（轮播+三平台标签），结构与上部一致 */
 /* 下部详情区：左右两卡底边对齐（老曹 2026-09-09 拍板）+ 立体大卡风格 */
-.home-detail { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 44px; padding: 72px 0 64px; align-items: stretch; }
+.home-detail { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 44px; padding: 40px 0 56px; align-items: stretch; }
 .hd-left, .hd-right { display: flex; flex-direction: column; }
 .hd-left {
   position: relative;
@@ -613,10 +615,11 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .hd-video-card { display: flex; flex-direction: column; gap: 14px; }
 .video-stage {
   position: relative; z-index: 1; border-radius: 18px; overflow: hidden;
-  height: 400px; background: #fff;
+  height: 400px; background: linear-gradient(180deg, #fdf7ea 0%, #f7ecd6 100%);
   box-shadow: inset 0 0 0 1px rgba(232, 114, 43, .10), 0 10px 26px rgba(120, 80, 40, .10);
 }
-.video-stage video { width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; }
+/* 视频 letterbox 区跟随暖色（避免黑边/白边突兀），2026-09-10 四轮 */
+.video-stage video { width: 100%; height: 100%; object-fit: contain; display: block; background: transparent; }
 .video-ph {
   position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   color: var(--ink-faint); font-size: 12.5px; text-align: center; padding: 8px;
@@ -648,7 +651,9 @@ body.privacy-warm { background: #efe5d0 fixed; }
   .home-manual-card .manual-frame { min-height: 380px; max-height: 440px; height: 400px; }
 }
 @media (max-width: 960px) {
-  .hero-split, .home-detail { grid-template-columns: 1fr; gap: 28px; }
+  /* 2026-09-10 修复：1fr 下限是 auto，会被 pick-card 内 nowrap 文字的 min-content 撑爆
+     （手机端列宽被撑到 1800px、兔子卡挤出视口）——铁律①同款，必须 minmax(0, 1fr) */
+  .hero-split, .home-detail { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .showcase-imgwrap { height: 320px; }
   .home-detail { padding-top: 48px; }
 }
@@ -776,7 +781,9 @@ body.privacy-warm { background: #efe5d0 fixed; }
 /* 详情页演示视频窗口：视频缺失时不破图，保留窗口位置（预留 mp4 位） */
 .video-wrap { position: relative; width: 100%; height: 220px; background: #eef1ef; display: flex; }
 .video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.video-ph { display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--ink-faint); background: linear-gradient(135deg,#f3f6f4,#e9eeec); }
+/* 2026-09-10 修复：原来裸 .video-ph{display:none} 误伤首页 .video-stage / 伙伴页的无视频占位（窗口空白），
+   作用域收窄回 .video-wrap（列表卡片占位默认不显，仅 .no-video 显示） */
+.video-wrap .video-ph { display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--ink-faint); background: linear-gradient(135deg,#f3f6f4,#e9eeec); }
 .video-wrap.no-video .video-ph { display: flex; }
 .video-ph .vplay { font-size: 30px; opacity: .5; }
 .video-ph .vlabel { font-size: 14px; font-weight: 600; color: var(--ink); }
@@ -1282,3 +1289,42 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .pets-channels { margin-top: 10px; font-size: 13px; color: var(--ink-soft); text-align: center; }
 .pets-channels a { color: var(--brand); text-decoration: none; font-weight: 600; }
 .pets-channels a:hover { text-decoration: underline; }
+
+/* ---------- 伙伴页 buddies.html（2026-09-10 二轮改版：选择墙+姿态小窗+视频大窗，老曹拍板） ---------- */
+/* 布局：手机竖屏=选择墙在上→姿态小窗→视频大窗；≥641px=选择墙左竖排+姿态小窗右 */
+.buddies-wrap { max-width: 640px; margin: 0 auto; padding: 22px 14px 44px; display: flex; flex-direction: column; gap: 16px; }
+.buddy-top { display: flex; flex-direction: column; gap: 16px; }
+/* ① 宠物选择墙：纯图方块（idle 动图），横排自动换行——宠物多就多排几行，不铺长标签 */
+.buddy-wall { display: flex; flex-wrap: wrap; gap: 10px; }
+.buddy-tile {
+  width: 64px; height: 64px; padding: 6px; cursor: pointer; font: inherit;
+  display: flex; align-items: center; justify-content: center;
+  background: #fffdf8; border: 1.5px solid transparent; border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(120, 80, 40, .06);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.buddy-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232, 114, 43, .14); }
+.buddy-tile.on { border-color: var(--brand); box-shadow: 0 6px 18px rgba(232, 114, 43, .18); background: linear-gradient(180deg, #fff, #fff7ef); }
+.buddy-tile img { width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; user-select: none; }
+/* ② 姿态动画小窗：聚合姿态动图（素材库 all.webp）+ 名字 + 购买入口 */
+.buddy-card .showcase-badge { display: inline-flex; }
+.buddy-anim-card { display: flex; flex-direction: column; align-items: center; }
+.buddy-anim-stage { width: 200px; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; }
+.buddy-anim-stage img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-drag: none; user-select: none; }
+.buddy-anim-meta { text-align: center; margin-top: 6px; }
+.buddy-anim-meta b { display: block; font-size: 16px; color: var(--ink); }
+.buddy-buy { margin-top: 10px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+.buddy-buy .buy-chans { display: none; } /* 伙伴页保持极简，渠道尾巴只在首页详情区展示 */
+.buddy-buy .btn { display: inline-block; padding: 10px 22px; border-radius: 999px; background: var(--brand); color: #fff; text-decoration: none; font-weight: 600; box-shadow: 0 6px 18px rgba(232, 114, 43, .28); }
+.buddy-buy .btn:hover { transform: translateY(-2px); }
+.buddy-buy .hd-soon { display: inline-block; padding: 9px 20px; border-radius: 999px; background: #fff; border: 1.5px dashed rgba(232, 114, 43, .45); color: var(--ink-soft); font-size: 13.5px; }
+/* 视频窗与标签间距（卡片非 flex，需显式 margin） */
+.buddy-card .video-tabs { margin-top: 14px; }
+/* ③ 宣传视频大窗：复用首页 .video-stage（高 400，横竖屏视频都 contain 兼容）+ .video-tabs 三平台标签 */
+@media (min-width: 641px) {
+  /* 2026-09-10 四轮：选择墙 3 列网格（宠物多了成排铺），姿态卡收窄贴合内容不拉伸 */
+  .buddy-top { flex-direction: row; align-items: flex-start; }
+  .buddy-wall { display: grid; grid-template-columns: repeat(3, 64px); gap: 10px; flex: 0 0 auto; }
+  .buddy-anim-card { flex: 0 0 auto; }
+}
+

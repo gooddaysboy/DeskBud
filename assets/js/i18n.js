@@ -34,7 +34,7 @@
 
   // 语言包 URL 缓存击穿：每次切换语言强制刷新，避免旧版缓存导致 footer.download 等新 key 不生效
   // RES_VER 与下方 loadRes 同步；HTML 侧 i18n.js?v= 也要跟着升
-  window.I18N_RES_VER = 'v7';
+  window.I18N_RES_VER = 'v8';
 
   // 翻译函数占位（i18next ready 前用，缺 key 时回退到 HTML 原文字）
   let _t = function (k, fb) { return fb != null ? fb : k; };
