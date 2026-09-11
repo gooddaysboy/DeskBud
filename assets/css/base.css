@@ -527,7 +527,8 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .picker-head b { font-size: 15px; color: var(--ink); }
 .pet-picker { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 .pick-card {
-  display: flex; align-items: center; gap: 12px; text-align: left; overflow: hidden; min-width: 0;
+  position: relative;
+  display: flex; align-items: center; gap: 12px; text-align: left; min-width: 0;
   background: #fff; border: 1.5px solid transparent; border-radius: 16px; padding: 12px 14px;
   cursor: pointer; font: inherit;
   box-shadow: 0 2px 10px rgba(120, 80, 40, .06);
@@ -1384,3 +1385,75 @@ html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
 /* 隐私声明结尾彩蛋句（2026-09-10 老曹定稿） */
 .pv-tip { margin-top: 14px; padding: 10px 14px; background: #fff3e8; border-radius: 10px;
           color: var(--brand-ink); font-size: 13.5px; }
+
+/* 首页选择卡勾选框适配（09-11）：卡片是横排 flex，勾选框定位右上角；overflow 放开以免裁掉 */
+.pick-card .buddy-check { top: 8px; right: 10px; }
+.pick-card.owned { opacity: .82; }
+
+/* ---------- 伙伴页多选（2026-09-11）：方块勾选框 + 底部浮条 ---------- */
+.buddy-tile { position: relative; }
+.buddy-check {
+  position: absolute; top: 6px; right: 6px; z-index: 2;
+  min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px;
+  background: rgba(255,255,255,.92); border: 1.5px solid rgba(232,114,43,.5);
+  color: #e8722b; font-size: 12px; font-weight: 700; line-height: 17px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s, color .15s, transform .15s;
+}
+.buddy-check:hover { transform: scale(1.12); }
+.buddy-check.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+.buddy-tile.owned .buddy-check, .pick-card.owned .buddy-check {
+  background: rgba(240,240,238,.95); border-color: rgba(0,0,0,.08);
+  color: var(--ink-faint); font-weight: 500; cursor: default;
+}
+.buddy-tile.owned .buddy-check:hover { transform: none; }
+
+
+/* 已选数量小字提示（09-11：按钮紧贴姿态窗口/详情区，勾选≥2 时提示） */
+.buy-tip { flex-basis: 100%; display: block; font-size: 12.5px; color: var(--brand-ink); margin-bottom: 6px; text-align: center; }
+.buddy-buy { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; }
+
+/* 下载页提示行 + 下载按钮(button 与 a 同款)（09-11） */
+.dl-tip { min-height: 20px; margin: 14px 0 0; font-size: 13px; color: var(--brand-ink); }
+.dl-action .btn { border: none; cursor: pointer; font-family: inherit; font-size: 14.5px; }
+.dl-action .btn[disabled] { opacity: .6; cursor: default; transform: none; }
+
+/* 下载页：简介区 + 用户手册（09-11 老曹定稿文案） */
+.dl-intro { max-width: 760px; margin: 40px auto 0; text-align: left; }
+.dl-h2 { font-size: 20px; margin: 0 0 12px; text-align: center; }
+.dl-intro-p { font-size: 14.5px; line-height: 1.85; color: var(--ink-soft); margin: 0 0 14px; }
+.dl-feats { margin: 0; padding-left: 4px; list-style: none; display: grid; gap: 8px; }
+.dl-feats li { position: relative; padding-left: 22px; font-size: 14px; color: var(--ink); }
+.dl-feats li::before { content: "🐾"; position: absolute; left: 0; top: 0; font-size: 13px; }
+.dl-manual { max-width: 980px; margin: 44px auto 0; display: flex; flex-direction: column; gap: 14px; }
+.dl-manual .hm-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.dl-manual-frame { width: 100%; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; min-height: 420px; }
+@media (max-width: 680px) { .dl-manual-frame { min-height: 360px; } .dl-manual { margin-top: 32px; } }
+
+/* 全站宣传语条（09-11 老曹：照语录条 quote-bar 的观感——**一次屏上只有一条**、源源不断，滑完下一条接力）
+   双轨接力（同语录条做法，复用 quoteScroll 关键帧：右屏外 100vw → 左屏外 -100vw，8%/92% 淡入淡出）：
+   两条错开半周期 → 屏上任何时刻至多一条可见、且无空档。背景透明、hover 暂停。 */
+.slogan-bar {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  color: var(--brand);      /* 与导航 active / 诗句高亮同款亮橙 #e8722b（老曹 09-11：原先用 --brand-ink 偏暗） */
+  --slogan-dur: 28s;        /* 一条从右滑到左的周期（老曹：慢悠悠滑过去；16s 偏快） */
+  height: 31px;
+}
+.slogan-track { position: relative; height: 100%; }
+.slogan-item {
+  position: absolute;
+  left: 0; top: 0; height: 100%;
+  display: flex; align-items: center;
+  white-space: nowrap;
+  font-size: 13px;
+  letter-spacing: .3px;
+  animation: quoteScroll var(--slogan-dur) linear infinite;
+  will-change: transform, opacity;
+}
+.slogan-item:nth-of-type(1) { animation-delay: calc(var(--slogan-dur) * -0.15); }  /* 刷新即从右侧可见区起步，不等 */
+.slogan-item:nth-of-type(2) { animation-delay: calc(var(--slogan-dur) * -0.65); }  /* 错开半周期做接力 */
+.slogan-bar:hover .slogan-item { animation-play-state: paused; }
+html.embed-mode .slogan-bar { display: none !important; }
+@media (max-width: 680px) { .slogan-bar { height: 29px; } .slogan-item { font-size: 12px; } }

@@ -79,7 +79,7 @@ function chk(name, cond, extra) {
   chk('⑤顶栏隐藏', e1.topbarHidden);
   chk('⑤页脚隐藏', e1.footerHidden);
   chk('⑤内容仍在（选择墙）', e1.wallVisible);
-  chk('⑤embed收银台链接+device_id', e1.buyHref === `https://pay.deskbud.xyz/checkout.html?device_id=${DID}&pet_id=panda`, e1.buyHref);
+  chk('⑤embed收银台链接+device_id+embed透传', e1.buyHref === `https://pay.deskbud.xyz/checkout.html?device_id=${DID}&pet_id=panda&embed=1`, e1.buyHref);
   chk('⑤?lang=zh 中文生效', e1.navLang === 'zh-CN' && e1.title === '织熊猫', e1.navLang + '/' + e1.title);
   await pe.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/mobile_embed_mode.png', fullPage: true });
 

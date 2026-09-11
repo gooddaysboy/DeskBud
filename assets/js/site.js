@@ -276,10 +276,74 @@ const SITE = {
     } catch (e) { /* localStorage 不可用时按无设备号处理 */ }
     return '';
   },
-  // 收银台链接；device_id 为空返回 ''（调用方据此显示「请在客户端内购买」）
-  checkoutUrl(petId) {
+  // 收银台链接；device_id 为空返回 ''（调用方据此显示「先下载桌宠」）
+  // 多选（2026-09-11 老曹/petpay 约定）：petIds 支持数组或单值，逗号分隔、去重、最多 10 只。
+  // 单只仍用 pet_id=（向后兼容收银台旧参数），多只用 pet_ids=a,b（收银台一次扫码结算）。
+  // didOverride（09-11）：下载页安装包链路用网页设备号下单时传入（缺省用客户端 did）
+  checkoutUrl(petIds, didOverride) {
+    const did = didOverride || this.getDeviceId();
+    if (!did) return '';
+    const ids = (Array.isArray(petIds) ? petIds : [petIds])
+      .map(s => String(s == null ? '' : s).trim())
+      .filter(Boolean);
+    const uniq = [...new Set(ids)].slice(0, 10);
+    if (!uniq.length) return '';
+    const param = uniq.length > 1
+      ? 'pet_ids=' + encodeURIComponent(uniq.join(','))
+      : 'pet_id=' + encodeURIComponent(uniq[0]);
+    // App 内嵌场景（html.embed-mode）→ 收银台也走内嵌版（老曹 2026-09-11 约定：&embed=1）
+    const embed = document.documentElement.classList.contains('embed-mode') ? '&embed=1' : '';
+    return `${this.PAY_CHECKOUT}?device_id=${encodeURIComponent(did)}&${param}${embed}`;
+  },
+  // 网页设备号（2026-09-11 协同板已定 #7）：下载页无客户端 did 时生成 dsk+16hex 存 localStorage，
+  // 仅用于安装包(link)链路——语义边界：它只是"下载凭证"，不代表客户端激活。
+  getOrCreateWebDid() {
+    try {
+      const s = localStorage.getItem('deskbud_web_device_id');
+      if (s && this._DID_RE.test(s)) return s;
+      const hex = [...crypto.getRandomValues(new Uint8Array(8))]
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+      const did = 'dsk' + hex;
+      localStorage.setItem('deskbud_web_device_id', did);
+      return did;
+    } catch (e) { return ''; }
+  },
+
+  // 选购集合（2026-09-11 老曹：选择要跨页面保持——软导航切走再回、刷新后都在）。
+  // 伙伴页与首页共用同一份购物车（localStorage deskbud_picked）
+  getPicked() {
+    try { return new Set(JSON.parse(localStorage.getItem('deskbud_picked') || '[]')); }
+    catch (e) { return new Set(); }
+  },
+  setPicked(set) {
+    try { localStorage.setItem('deskbud_picked', JSON.stringify([...set])); } catch (e) {}
+  },
+  togglePicked(id) {
+    const s = this.getPicked();
+    if (s.has(id)) s.delete(id); else s.add(id);
+    this.setPicked(s);
+    return s;
+  },
+
+  // 已授权宠物 id 集合（有 device_id 时查询并缓存；force=true 强制重查——付款后从收银台切回要用）
+  async fetchOwnedIds(force) {
+    if (!force && this.__ownedIds) return this.__ownedIds;
     const did = this.getDeviceId();
-    return did ? `${this.PAY_CHECKOUT}?device_id=${encodeURIComponent(did)}&pet_id=${encodeURIComponent(petId)}` : '';
+    if (!did) { this.__ownedIds = new Set(); return this.__ownedIds; }
+    try {
+      const r = await fetch(`${this.PAY_CHECKOUT.replace('/checkout.html', '')}/api/entitlement?device_id=` + encodeURIComponent(did), { cache: 'no-cache' });
+      const d = await r.json();
+      this.__ownedIds = new Set(d.pets || []);
+    } catch (e) { if (!this.__ownedIds) this.__ownedIds = new Set(); }
+    return this.__ownedIds;
+  },
+  // 购物车清理（2026-09-11 老曹：付款后自动清除已购的）——把已授权的宠物从选购集合里剔除并持久化
+  prunePicked(ownedIds) {
+    const s = this.getPicked();
+    let changed = false;
+    ownedIds.forEach(id => { if (s.has(id)) { s.delete(id); changed = true; } });
+    if (changed) this.setPicked(s);
+    return s;
   },
   // 仅返回已上线的作品（status 不为 "hidden"），隐藏的占位作品统一在此过滤
   onlineWorks() {
@@ -918,30 +982,66 @@ SITE.pages = {
     function renderBuy(w) {
       if (!buyEl) return;
       buyEl.innerHTML = '';
-      const url = SITE.checkoutUrl(w.id);
+      const url = SITE.checkoutUrl(pickedIds());
+      const n = picked.size;
       if (url) {
-        buyEl.innerHTML = `<a class="btn" href="${url}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+        const label = n > 1
+          ? window.pick({ zh: `一起带回家 · ${n} 只`, en: `Take ${n} home together` })
+          : window.pick({ zh: '把伙伴领回家', en: 'Bring it home' });
+        const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
+        buyEl.innerHTML = `${tip}<a class="btn" href="${url}" target="_blank" rel="noopener">🏠 ${label}</a>`;
       } else {
         buyEl.innerHTML = `<a class="btn" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
       }
     }
+
+    /* ---------- 多选（2026-09-11 老曹：伙伴页勾选多只，收银台一次结算） ---------- */
+    // 规则：勾选框在方块右上角；勾选 ≥1 只时姿态窗口下的购买按钮直接变「一起带回家 · N 只」
+    //（不再用底部浮条——老曹反馈"拉的太远要滑动找"，按钮紧贴姿态窗口最好找）
+    // 选择跨页面保持（SITE.getPicked 持久化购物车，伙伴页/首页共用）；已拥有的禁勾
+    let picked = SITE.getPicked();
+    const owned = new Set();          // 已授权的宠物 id（有 device_id 时查询）
+    const pickedIds = () => (picked.size ? [...picked] : [works[cur].id]);
+
+    // 查询已授权（避免重复购买 + 付款后自动清购物车）；失败静默按"全部可购"处理
+    // force=true：从收银台切回本页时重查，拿到新授权 → 已购的自动移出购物车
+    async function loadOwned(force) {
+      const s = await SITE.fetchOwnedIds(force);
+      owned.clear(); s.forEach(id => owned.add(id));
+      picked = SITE.prunePicked(s);          // 付款后自动清除已购项
+      paintWall(); renderBuy(works[cur]);
+    }
+    const onVisible = () => { if (!document.hidden) loadOwned(true); };
+    document.addEventListener('visibilitychange', onVisible);
+    SITE._cleanups.push(() => document.removeEventListener('visibilitychange', onVisible));
 
     function paintWall() {
       if (!wall) return;
       wall.innerHTML = works.map((w, i) => {
         const a = ANIM[w.id];
         const src = (a && a.idle) || w.thumb || w.cover || (poseList(w)[0] || {}).src || '';
-        return `<button type="button" class="buddy-tile${i === cur ? ' on' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}" title="${window.pick(w.title)}">
+        const isOwned = owned.has(w.id);
+        const isPicked = picked.has(w.id);
+        return `<button type="button" class="buddy-tile${i === cur ? ' on' : ''}${isOwned ? ' owned' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}" title="${window.pick(w.title)}">
           <img src="${src}" alt="${window.pick(w.title)}" draggable="false" loading="lazy">
+          <span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起购买', en: 'Select to buy together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>
         </button>`;
       }).join('');
       wall.querySelectorAll('.buddy-tile').forEach(b => {
+        const i = +b.dataset.i, wid = works[i].id;
         b.addEventListener('click', () => {
-          const i = +b.dataset.i;
           if (i === cur) return;
           cur = i;
           paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]);
           if (nameEl) nameEl.textContent = window.pick(works[cur].title);
+        });
+        // 勾选框（stopPropagation：不触发切换展示）
+        const cb = b.querySelector('.buddy-check');
+        if (cb) cb.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (owned.has(wid)) return;                 // 已拥有不可选
+          picked = SITE.togglePicked(wid);            // 持久化（跨页保持）
+          paintWall(); renderBuy(works[cur]);
         });
       });
     }
@@ -949,8 +1049,9 @@ SITE.pages = {
     paintWall();
     if (nameEl) nameEl.textContent = window.pick(works[0].title);
     startAnim(works[0]); renderVideo(works[0]); renderBuy(works[0]);
+    loadOwned();
     SITE._cleanups.push(stopAnim); // 软导航离开时停帧轮播兜底
-    window.__rerender = () => { paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]); if (nameEl) nameEl.textContent = window.pick(works[cur].title); };
+    window.__rerender = () => { picked = SITE.getPicked(); paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]); if (nameEl) nameEl.textContent = window.pick(works[cur].title); };
   },
 
   // 首页（2026-09-09 改版）：左选择卡切换 ｜ 右大展示卡姿态轮播 ｜ 下部介绍+下载/购买 ｜ 宣传视频
@@ -997,20 +1098,45 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       if (hmTitle) hmTitle.textContent = window.pick({ zh: '用户手册', en: 'User manual' });
     }
 
+    // 多选（2026-09-11 老曹：首页同样支持一起选购 + 选择跨页保持）：卡片右上角勾选框；勾选 ≥1 → 购买按钮变「一起带回家 · N 只」
+    let picked = SITE.getPicked();     // 与伙伴页共享同一份持久购物车
+    const owned = new Set();
+    const pickedIds = () => (picked.size ? [...picked] : [works[cur].id]);
+    async function loadOwned(force) {
+      const s = await SITE.fetchOwnedIds(force);
+      owned.clear(); s.forEach(id => owned.add(id));
+      picked = SITE.prunePicked(s);          // 付款后自动清除已购项
+      paintPicker(); paintDetail();
+    }
+    const onVisible = () => { if (!document.hidden) loadOwned(true); };
+    document.addEventListener('visibilitychange', onVisible);
+    SITE._cleanups.push(() => document.removeEventListener('visibilitychange', onVisible));
+
     function paintPicker() {
       if (!picker) return;
-      picker.innerHTML = works.map((w, i) => `
-        <button type="button" class="pick-card${i === cur ? ' active' : ''}" data-i="${i}">
+      picker.innerHTML = works.map((w, i) => {
+        const isOwned = owned.has(w.id), isPicked = picked.has(w.id);
+        return `
+        <button type="button" class="pick-card${i === cur ? ' active' : ''}${isOwned ? ' owned' : ''}" data-i="${i}">
           <img class="pick-thumb" src="${w.thumb || w.cover}" alt="" draggable="false">
           <span class="pick-txt"><b>${window.pick(w.title)}</b><small>${window.pick(w.summary)}</small></span>
           <span class="pick-arrow">›</span>
-        </button>`).join('');
+          <span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起购买', en: 'Select to buy together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>
+        </button>`;
+      }).join('');
       picker.querySelectorAll('.pick-card').forEach(btn => {
+        const i = +btn.dataset.i, wid = works[i].id;
         btn.addEventListener('click', () => {
-          const i = +btn.dataset.i;
           if (i === cur) return;
           cur = i; curPose = 0;
           paintPicker(); paintDots(); paintShowcase(); paintDetail(); restart();
+        });
+        const cb = btn.querySelector('.buddy-check');
+        if (cb) cb.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (owned.has(wid)) return;
+          picked = SITE.togglePicked(wid);   // 持久化（跨页保持）
+          paintPicker(); paintDetail();
         });
       });
     }
@@ -1104,10 +1230,15 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
             const name = window.pick(c.label);
             return c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${name}</a>` : name;
           }).join(' / ');
-          const payUrl = SITE.checkoutUrl(w.id);
+          const payUrl = SITE.checkoutUrl(pickedIds());
           let main = '';
           if (payUrl) {
-            main = `<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
+            const n = picked.size;
+            const label = n > 1
+              ? window.pick({ zh: `一起带回家 · ${n} 只`, en: `Take ${n} home together` })
+              : window.pick({ zh: '把伙伴领回家', en: 'Bring it home' });
+            const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
+            main = `${tip}<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🏠 ${label}</a>`;
           } else {
             main = `<a class="btn btn-primary" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
           }
@@ -1139,7 +1270,8 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     }
     // 软导航离开首页时停掉轮播定时器
     SITE._cleanups.push(() => { if (timer) { clearInterval(timer); timer = null; } });
-    window.__rerender = () => { paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); };
+    window.__rerender = () => { picked = SITE.getPicked(); paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); };
+    loadOwned();   // 已授权标记（避免重复购买）
     initOpenKounter();
   },
 
@@ -1297,59 +1429,84 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
   // 已授权 → 显示对应平台安装包下载按钮；未授权 → 「购买解锁」跳收银台（付款后回本页自动变下载）。
   // 无 device_id（纯浏览器访客）→ 提示在客户端内打开本页。
   // ⚠️ APP_DOWNLOADS 为安装包直链占位：petpay COS 上传安装包后按此路径生效（files/ 目录）。
+  // 下载页（2026-09-11 15:15 按协同板 #0/#7 二次改造）：
+  // 链接策略 = **version-download.json 优先 → 内置 gitee release 常量兜底**（不写死单一来源）。
+  // 背景：petpay #0 命名更正——安装包以 gitee release 的**带版本号**文件为准；
+  //       #7 version-download.json 由 pyside6 建（win/mac/android 各一段 {version,url}），website 负责本页对接。
+  // 实测（15:12）：COS files/ 的 Win/Mac 已 404、Android 403（私有）；gitee android release 200 可用，win/mac 待上传。
+  // 因此：能取到 manifest 用 manifest；取不到用常量表；两者都没文件时给「正在准备中」提示，避免用户撞裸 404。
   download: async function () {
     const yr = document.getElementById('yr');
     if (yr) yr.textContent = new Date().getFullYear();
     const grid = document.getElementById('dlGrid');
     if (!grid) return;
 
-    const APP_DOWNLOADS = {
-      win: 'https://pay.deskbud.xyz/files/deskbud-setup-win.exe',
-      android: 'https://pay.deskbud.xyz/files/deskbud-android.apk',
-      mac: 'https://pay.deskbud.xyz/files/deskbud-mac.dmg',
+    const GITEE = 'https://gitee.com/deskbud/version';
+    const MANIFEST = GITEE + '/raw/master/version-download.json';
+    // 兜底常量（随发版更新；manifest 上线后会自动覆盖）
+    const FALLBACK = {
+      win: GITEE + '/releases/download/win-v0.1.24/DeskBud_Win_v0124.exe',
+      mac: GITEE + '/releases/download/mac-v0.1.24/DeskBud_Mac_v0124.dmg',
+      android: GITEE + '/releases/download/android-v0.1.7/DeskBud_Android_v017.apk',
     };
+    const LINKS = Object.assign({}, FALLBACK);
+    const VER = {};
     const PLATS = [
-      { id: 'win', icon: '🖥️', label: () => window.pick({ zh: 'Windows 版', en: 'Windows' }), desc: () => window.pick({ zh: '安装包 · 支持 Win10 及以上', en: 'Installer · Windows 10+' }) },
-      { id: 'android', icon: '🤖', label: () => window.pick({ zh: 'Android 版', en: 'Android' }), desc: () => window.pick({ zh: '安装包 · Android 8.0 及以上', en: 'APK · Android 8.0+' }) },
-      { id: 'mac', icon: '🍎', label: () => window.pick({ zh: 'macOS 版', en: 'macOS' }), desc: () => window.pick({ zh: '安装包 · 支持 Apple 芯片', en: 'DMG · Apple Silicon' }) },
+      { id: 'win', icon: '🖥️', label: () => window.pick({ zh: 'Windows 版', en: 'Windows' }), desc: () => window.pick({ zh: '绿色单文件 · Win10 及以上', en: 'Single file · Windows 10+' }) },
+      { id: 'android', icon: '🤖', label: () => window.pick({ zh: 'Android 版', en: 'Android' }), desc: () => window.pick({ zh: 'APK · Android 8.0 及以上', en: 'APK · Android 8.0+' }) },
+      { id: 'mac', icon: '🍎', label: () => window.pick({ zh: 'macOS 版', en: 'macOS' }), desc: () => window.pick({ zh: 'DMG · 支持 Apple 芯片', en: 'DMG · Apple Silicon' }) },
     ];
-    const did = SITE.getDeviceId();
-    let entitled = false; // 已授权（entitlement 包含 panda）
 
     function render() {
-      grid.innerHTML = PLATS.map(pl => {
-        let action;
-        if (!did) {
-          action = `<span class="hd-soon">${window.pick({ zh: '请在客户端内打开本页', en: 'Open in the DeskBud app' })}</span>`;
-        } else if (entitled) {
-          action = `<a class="btn" href="${APP_DOWNLOADS[pl.id]}" target="_blank" rel="noopener">⬇ ${window.pick({ zh: '下载', en: 'Download' })}</a>`;
-        } else {
-          action = `<a class="btn" href="${SITE.checkoutUrl('panda')}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
-        }
-        return `<div class="dl-card">
+      grid.innerHTML = PLATS.map(pl => `<div class="dl-card">
           <div class="dl-icon">${pl.icon}</div>
           <b class="dl-name">${pl.label()}</b>
-          <span class="dl-desc">${pl.desc()}</span>
-          <div class="dl-action">${action}</div>
-        </div>`;
-      }).join('');
+          <span class="dl-desc">${pl.desc()}${VER[pl.id] ? ' · v' + String(VER[pl.id]).replace(/^v/i, '') : ''}</span>
+          <div class="dl-action"><a class="btn" href="${LINKS[pl.id]}" rel="noopener">⬇ ${window.pick({ zh: '免费下载', en: 'Download free' })}</a></div>
+        </div>`).join('');
     }
 
-    // 授权轮询：付款后回到本页，授权一到按钮自动变下载（有 device_id 才轮询）
-    async function pollAuth() {
-      if (!did) { render(); return; }
-      render();
-      setInterval(async () => {
-        if (entitled) return;
-        try {
-          const r = await fetch('https://pay.deskbud.xyz/api/entitlement?device_id=' + encodeURIComponent(did), { cache: 'no-cache' });
-          const d = await r.json();
-          if ((d.pets || []).includes('panda')) { entitled = true; render(); }
-        } catch (e) { /* 网络异常下轮再试 */ }
-      }, 6000);
+    // 先按兜底常量渲染（秒开），再尝试 manifest 覆盖
+    render();
+    try {
+      const r = await fetch(MANIFEST, { cache: 'no-cache' });
+      if (r.ok) {
+        const d = await r.json();
+        ['win', 'mac', 'android'].forEach(p => {
+          if (d && d[p] && d[p].url) { LINKS[p] = d[p].url; if (d[p].version) VER[p] = d[p].version; }
+        });
+        render();
+      }
+    } catch (e) { /* manifest 未就绪 → 用兜底常量 */ }
+
+    const tip = document.getElementById('dlTip');
+    if (tip) tip.textContent = window.pick({
+      zh: '下载遇到 404 或文件未就绪？说明该平台安装包正在发布中，可稍后重试或邮件 deskbud@qq.com。',
+      en: 'Got a 404 or file not ready? That platform build is still publishing — retry later or email deskbud@qq.com.',
+    });
+
+    // 用户手册（复用首页手册卡：win/android/mac 标签 + iframe 语言联动 + 自适应高度）
+    // ⚠️ 2026-09-11：本段曾因重写下载页被整段覆盖丢失——**以后再重写本函数务必核对这段**（verify_download_v4 会兜）
+    const hmTabs = document.getElementById('dlHmTabs');
+    const hmFrame = document.getElementById('dlHmFrame');
+    let curHmPlat = 'win';
+    function paintManual() {
+      if (hmTabs) {
+        const names = { win: 'Windows', android: 'Android', mac: 'macOS' };
+        hmTabs.innerHTML = ['win', 'android', 'mac'].map(p =>
+          '<button type="button" class="vtab' + (p === curHmPlat ? ' on' : '') + '" data-p="' + p + '">' + names[p] + '</button>').join('');
+        hmTabs.querySelectorAll('.vtab').forEach(btn => btn.addEventListener('click', () => { curHmPlat = btn.dataset.p; paintManual(); }));
+      }
+      if (hmFrame) {
+        const lang = (window.__lang === 'en') ? 'en' : 'zh';
+        const src = 'manual/' + curHmPlat + '-' + lang + '.html';
+        if (hmFrame.getAttribute('src') !== src) hmFrame.setAttribute('src', src);
+      }
     }
-    await pollAuth();
-    window.__rerender = render;
+    paintManual();
+    if (typeof initManualFrames === 'function') initManualFrames();  // 自适应高度（幂等）
+
+    window.__rerender = () => { render(); paintManual(); };   // 语言切换时重绘
   },
 
   contact: function () {
@@ -1429,6 +1586,64 @@ function syncHomeChrome() {
   }
 }
 
+/* ---------- 全站宣传语条（2026-09-11 老曹：放宣传语，含首页/下载等极简页） ----------
+   与内容页原有的 announce-bar（作品公告）区分：本条是营销口号，全站统一露出。
+   合规：避开"最/第一"等极限词（广告法）；embed 模式不注入（App 内嵌不需要广告位）。 */
+const SLOGANS = [
+  { zh: '免费无广告 · 一只很良心的桌面宠物', en: 'Free & ad-free — a desktop pet you can trust' },
+  { zh: '摸鱼好搭子 · 免费桌面宠物太治愈了', en: 'A tiny desk buddy — free, and oddly healing' },
+  { zh: '桌面终于有活物了 · 完全免费、无广告', en: 'Your desktop finally has a living thing — free, no ads' },
+  { zh: '打工人的桌面解压小物 · 摸鱼党狂喜', en: 'A desktop stress-reliever for busy days' },
+];
+// 一次一条 + 接力（2026-09-11 老曹：照语录条 quote-bar 的观感——屏上永远只有一条、源源不断；
+// 之前"N 条铺满轨道同时跑"太杂乱，单条又会在滑出后空档 6s+，故用同款**双轨接力**）。
+// 复用 @keyframes quoteScroll；两条错开半周期（CSS nth-of-type delay），各自跑完一轮换下一句。
+let _sloganIdx = 0;
+function buildSloganTrack() {
+  const bar = document.querySelector('.slogan-bar');
+  if (!bar) return;
+  let track = bar.querySelector('.slogan-track');
+  if (!track) {
+    track = document.createElement('div');
+    track.className = 'slogan-track';
+    bar.appendChild(track);
+    for (let i = 0; i < 2; i++) {
+      const el = document.createElement('span');
+      el.className = 'slogan-item';
+      el.dataset.idx = String((_sloganIdx + i) % SLOGANS.length);
+      // 每跑完一轮换句（此刻元素在屏外 100%，切换不可见＝无跳变）；两槽位各前进 2 条，交替覆盖 4 条
+      el.addEventListener('animationiteration', () => {
+        el.dataset.idx = String((+el.dataset.idx + 2) % SLOGANS.length);
+        el.textContent = window.pick(SLOGANS[+el.dataset.idx]);
+      });
+      track.appendChild(el);
+    }
+  }
+  // 语言切换重绘：保留各槽位当前句（进度不打断），仅换语言
+  track.querySelectorAll('.slogan-item').forEach((el) => {
+    el.textContent = window.pick(SLOGANS[+el.dataset.idx]);
+  });
+}
+// ⚠️ 全站单例：**不进 SITE._cleanups**——list 等页的 render() 内部也会调 runCleanups()，
+// 注册进 cleanups 会被页面级渲染清掉（2026-09-11 实测踩坑）。幂等 init + 模块级事件。
+SITE.initSloganBar = function () {
+  const existing = document.querySelector('.slogan-bar');
+  if (document.documentElement.classList.contains('embed-mode')) { if (existing) existing.remove(); return; }
+  if (!existing) {
+    _sloganIdx = Math.floor(Math.random() * SLOGANS.length);   // 随机起步（仅首次；软导航不重置）
+    const topbar = document.querySelector('.topbar');
+    if (!topbar || !topbar.parentNode) return;
+    const bar = document.createElement('div');
+    bar.className = 'slogan-bar';
+    bar.setAttribute('role', 'note');
+    topbar.after(bar);
+    // ⚠️ i18n 把 lang:change 派发在 **window** 上（i18n.js line 98 window.dispatchEvent），
+    // 监听 document 收不到（window 派发的事件不会反向到达 document）——2026-09-11 实测踩坑
+    window.addEventListener('lang:change', buildSloganTrack); // 文案走 pick → 切语言重建轨道
+  }
+  buildSloganTrack();
+};
+
 SITE.route = async function () {
   SITE.runCleanups();
   const path = location.pathname.split('/').pop();
@@ -1436,6 +1651,7 @@ SITE.route = async function () {
   setSceneBg(path, params.get('id') || ''); // 兔子→田野，其余→竹子
   setActiveNav(path);
   syncHomeChrome(); // 首页隐藏搜索/走马灯，离开首页补建
+  SITE.initSloganBar(); // 全站宣传语条（含极简页；embed 自动跳过）
   const p = SITE.pages;
   let fn;
   if (path === '' || path === 'index.html') fn = p.home;

@@ -47,7 +47,7 @@
   "footer": {
     "tagline": "Fun desktop pet companions · always on your screen",
     "contact": "Contact · deskbud@qq.com",
-    "download": "Download",
+    "download": "Free download",
     "rights": "© 2026 DeskBud · All rights reserved",
     "made": "Made with ❤",
     "site": "All rights reserved",
@@ -168,9 +168,9 @@
     "s5": "The software is provided \"as is\" without any express or implied warranty. To the extent permitted by law, the developer is not liable for abnormal behavior, compatibility issues, or indirect losses arising from use. The developer reserves the right to update versions, adjust features, refine the asset mechanism and revise this agreement at any time."
   },
   "download": {
-    "title": "Download DeskBud",
-    "sub": "One-time purchase · device-bound · the button turns into Download once your payment is verified.",
-    "note": "Tip: after payment, come back to this page — the download button appears automatically once your entitlement is verified. Installers are issued via the official encrypted channel, bound to your device.",
+    "title": "DeskBud Pets",
+    "sub": "The app is completely free · direct downloads for all platforms",
+    "note": "The app is free — no purchase needed to download. Paid pets are purchased inside the app and installed to your device automatically after payment. The macOS build is unsigned: right-click → Open on first launch. Windows is a single portable file.",
     "buy": "Unlock · ¥9.9",
     "dl": "Download",
     "needClient": "Open this page in the DeskBud app",
@@ -179,6 +179,13 @@
     "mac": "macOS",
     "winDesc": "Installer · Windows 10+",
     "androidDesc": "APK · Android 8.0+",
-    "macDesc": "DMG · Apple Silicon"
+    "macDesc": "DMG · Apple Silicon",
+    "introTitle": "About DeskBud Pets",
+    "intro": "A lightweight, clean, portable desktop-pet app — completely free with no pop-up ads. Multiple cute pets with mouse interaction, one-click hide and opacity control to keep you company.",
+    "feat1": "2 free high-quality pets included, all core features unlocked",
+    "feat2": "Built-in Pet House — more pets to choose, auto-activated on claim",
+    "feat3": "Very low memory footprint, smooth and responsive",
+    "feat4": "16+ action poses, with new pets and interactions on the way",
+    "manualTitle": "User manual"
   }
 }
