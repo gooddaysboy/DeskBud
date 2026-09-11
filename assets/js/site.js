@@ -1433,7 +1433,8 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
   // 链接策略 = **version-download.json 优先 → 内置 gitee release 常量兜底**（不写死单一来源）。
   // 背景：petpay #0 命名更正——安装包以 gitee release 的**带版本号**文件为准；
   //       #7 version-download.json 由 pyside6 建（win/mac/android 各一段 {version,url}），website 负责本页对接。
-  // 实测（15:12）：COS files/ 的 Win/Mac 已 404、Android 403（私有）；gitee android release 200 可用，win/mac 待上传。
+  // 实测（15:12，已更新 20:05）：COS files/ 的 Win/Mac 已 404、Android 403（私有）；gitee release 现可用——
+  //   桌面端（win+mac 同一 release tag `v0.1.24`）、安卓独立 tag `android-v0.1.7`。兜底常量须与 manifest 的 tag 对齐（曾误写成 win-v0.1.24/mac-v0.1.24 导致 404）。
   // 因此：能取到 manifest 用 manifest；取不到用常量表；两者都没文件时给「正在准备中」提示，避免用户撞裸 404。
   download: async function () {
     const yr = document.getElementById('yr');
@@ -1445,8 +1446,8 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     const MANIFEST = GITEE + '/raw/master/version-download.json';
     // 兜底常量（随发版更新；manifest 上线后会自动覆盖）
     const FALLBACK = {
-      win: GITEE + '/releases/download/win-v0.1.24/DeskBud_Win_v0124.exe',
-      mac: GITEE + '/releases/download/mac-v0.1.24/DeskBud_Mac_v0124.dmg',
+      win: GITEE + '/releases/download/v0.1.24/DeskBud_Win_v0124.exe',
+      mac: GITEE + '/releases/download/v0.1.24/DeskBud_Mac_v0124.dmg',
       android: GITEE + '/releases/download/android-v0.1.7/DeskBud_Android_v017.apk',
     };
     const LINKS = Object.assign({}, FALLBACK);

@@ -1,537 +1,195 @@
 {
   "version": 6,
   "public": [
-    {
-      "zh": "今天天气怎么样呢",
-      "en": "Wonder what the weather's like today"
-    },
-    {
-      "zh": "主人吃饭了没有",
-      "en": "Has my human eaten yet?"
-    },
-    {
-      "zh": "摸鱼才是头等大事",
-      "en": "Slacking off is the top priority"
-    },
-    {
-      "zh": "发呆也是正经事哦",
-      "en": "Zoning out is a serious business too"
-    },
-    {
-      "zh": "累了就稍微歇一会吧",
-      "en": "If you're tired, take a little break"
-    },
-    {
-      "zh": "快乐才是最高准则",
-      "en": "Happiness is the highest rule"
-    },
-    {
-      "zh": "今天也要开开心心",
-      "en": "Stay happy today too"
-    },
-    {
-      "zh": "悄悄偷看主人在干嘛",
-      "en": "Secretly peeking at what my human's doing"
-    },
-    {
-      "zh": "要不要放松一小下",
-      "en": "How about a little relaxation?"
-    },
-    {
-      "zh": "生活嘛开心最重要",
-      "en": "Life is all about happiness"
-    },
-    {
-      "zh": "此刻适合放空大脑",
-      "en": "Now's a good time to empty the mind"
-    },
-    {
-      "zh": "烦恼暂时丢一边咯",
-      "en": "Toss worries aside for now"
-    },
-    {
-      "zh": "世间万物皆可可爱爱",
-      "en": "Everything in the world can be adorable"
-    },
-    {
-      "zh": "打工人也要善待自己",
-      "en": "Workers deserve to be kind to themselves"
-    },
-    {
-      "zh": "不知道接下来会发生啥",
-      "en": "No idea what's coming next"
-    },
-    {
-      "zh": "我就在桌面安安静静陪着你",
-      "en": "I'll just stay quietly on your desktop, keeping you company"
-    },
-    {
-      "zh": "累了就歇一歇，不用硬扛",
-      "en": "If you're tired, take a rest, no need to tough it out"
-    },
-    {
-      "zh": "慢慢来，一切都会变好的",
-      "en": "Take it slow, everything will turn out fine"
-    },
-    {
-      "zh": "你的烦恼，可以悄悄说给我听",
-      "en": "You can whisper your worries to me, quietly"
-    }
+    {"zh": "今天天气怎么样呢", "en": "Wonder what the weather's like today"},
+    {"zh": "主人吃饭了没有", "en": "Has my human eaten yet?"},
+    {"zh": "摸鱼才是头等大事", "en": "Slacking off is the top priority"},
+    {"zh": "发呆也是正经事哦", "en": "Zoning out is a serious business too"},
+    {"zh": "累了就稍微歇一会吧", "en": "If you're tired, take a little break"},
+    {"zh": "快乐才是最高准则", "en": "Happiness is the highest rule"},
+    {"zh": "今天也要开开心心", "en": "Stay happy today too"},
+    {"zh": "悄悄偷看主人在干嘛", "en": "Secretly peeking at what my human's doing"},
+    {"zh": "要不要放松一小下", "en": "How about a little relaxation?"},
+    {"zh": "生活嘛开心最重要", "en": "Life is all about happiness"},
+    {"zh": "此刻适合放空大脑", "en": "Now's a good time to empty the mind"},
+    {"zh": "烦恼暂时丢一边咯", "en": "Toss worries aside for now"},
+    {"zh": "世间万物皆可可爱爱", "en": "Everything in the world can be adorable"},
+    {"zh": "打工人也要善待自己", "en": "Workers deserve to be kind to themselves"},
+    {"zh": "不知道接下来会发生啥", "en": "No idea what's coming next"},
+    {"zh": "我就在桌面安安静静陪着你", "en": "I'll just stay quietly on your desktop, keeping you company"},
+    {"zh": "累了就歇一歇，不用硬扛", "en": "If you're tired, take a rest, no need to tough it out"},
+    {"zh": "慢慢来，一切都会变好的", "en": "Take it slow, everything will turn out fine"},
+    {"zh": "你的烦恼，可以悄悄说给我听", "en": "You can whisper your worries to me, quietly"}
   ],
   "pets": {
     "panda": [
-      {
-        "zh": "竹子什么时候上新货",
-        "en": "When's the new bamboo restock?"
-      },
-      {
-        "zh": "吃饱之后再睡一觉",
-        "en": "Eat well, then take a nap"
-      },
-      {
-        "zh": "国宝主打一个躺平",
-        "en": "A national treasure whose motto is lying flat"
-      },
-      {
-        "zh": "黑白配色永不落伍",
-        "en": "Black-and-white never goes out of style"
-      },
-      {
-        "zh": "啃竹子是人生乐趣",
-        "en": "Chewing bamboo is life's joy"
-      },
-      {
-        "zh": "不要打扰我午睡呀",
-        "en": "Don't disturb my afternoon nap"
-      },
-      {
-        "zh": "能吃能睡便是福气",
-        "en": "To eat and sleep well is a blessing"
-      },
-      {
-        "zh": "烦恼都被竹子吃掉了",
-        "en": "Bamboo ate all my worries away"
-      },
-      {
-        "zh": "本熊猫拒绝内卷",
-        "en": "This panda refuses to overcompete"
-      },
-      {
-        "zh": "圆滚滚才是本体",
-        "en": "Round and chubby is my true form"
-      },
-      {
-        "zh": "工作别卷啦，陪我躺一会儿🐼",
-        "en": "Work's not worth the grind, come lie down with me for a bit 🐼"
-      },
-      {
-        "zh": "人生苦短，睡觉为先，竹子其次",
-        "en": "Life's short, napping first, bamboo second"
-      },
-      {
-        "zh": "滚一滚，烦恼全部都滚走",
-        "en": "Roll around a bit, and all the worries roll away"
-      },
-      {
-        "zh": "努力太累，摆烂才是熊生真谛",
-        "en": "Trying too hard is exhausting, slacking is the true panda way"
-      },
-      {
-        "zh": "不想动，只想当一团毛茸茸团子",
-        "en": "Don't wanna move, just wanna be a fluffy little ball"
-      },
-      {
-        "zh": "再忙也要抽空打个哈欠😴",
-        "en": "No matter how busy, make time for a yawn 😴"
-      },
-      {
-        "zh": "哪里跌倒，就在哪里就地趴下",
-        "en": "Where you fall, just flop down right there"
-      },
-      {
-        "zh": "竹子呢？我的笋笋什么时候到！",
-        "en": "Where's the bamboo? When's my bamboo shoot coming?!"
-      },
-      {
-        "zh": "干饭不积极，思想有问题",
-        "en": "No enthusiasm for food? That's a problem"
-      },
-      {
-        "zh": "一口脆笋，治愈所有不开心",
-        "en": "One crunchy shoot heals all the unhappiness"
-      },
-      {
-        "zh": "吃饱喝足，万事不愁✨",
-        "en": "Full belly, easy mind ✨"
-      },
-      {
-        "zh": "世间万般美好，不如一口鲜竹",
-        "en": "All the beauty in the world can't beat a bite of fresh bamboo"
-      },
-      {
-        "zh": "别戳我圆圆的脸蛋！",
-        "en": "Don't poke my round little cheeks!"
-      },
-      {
-        "zh": "警告，不要疯狂点我脑袋",
-        "en": "Warning, do not furiously click my head"
-      },
-      {
-        "zh": "我只是胖，这叫毛茸茸可爱",
-        "en": "I'm not fat, this is fluffy cuteness"
-      },
-      {
-        "zh": "摸头可以，不许薅我毛毛",
-        "en": "Head pats are okay, but don't pull my fur"
-      },
-      {
-        "zh": "代码写累了，抬头看看我吧",
-        "en": "Tired of coding? Look up and see me"
-      },
-      {
-        "zh": "盯屏幕太久，记得休息眼睛",
-        "en": "Staring at the screen too long? Rest your eyes"
-      },
-      {
-        "zh": "任务好多，不要把自己压太紧",
-        "en": "So many tasks, don't press yourself too hard"
-      },
-      {
-        "zh": "喝口水，我们短暂摸鱼一下",
-        "en": "Take a sip of water, let's slack off for a bit"
-      },
-      {
-        "zh": "加油，你已经做得很棒了",
-        "en": "Keep going, you're already doing great"
-      }
+      {"zh": "竹子什么时候上新货", "en": "When's the new bamboo restock?"},
+      {"zh": "吃饱之后再睡一觉", "en": "Eat well, then take a nap"},
+      {"zh": "国宝主打一个躺平", "en": "A national treasure whose motto is lying flat"},
+      {"zh": "黑白配色永不落伍", "en": "Black-and-white never goes out of style"},
+      {"zh": "啃竹子是人生乐趣", "en": "Chewing bamboo is life's joy"},
+      {"zh": "不要打扰我午睡呀", "en": "Don't disturb my afternoon nap"},
+      {"zh": "能吃能睡便是福气", "en": "To eat and sleep well is a blessing"},
+      {"zh": "烦恼都被竹子吃掉了", "en": "Bamboo ate all my worries away"},
+      {"zh": "本熊猫拒绝内卷", "en": "This panda refuses to overcompete"},
+      {"zh": "圆滚滚才是本体", "en": "Round and chubby is my true form"},
+      {"zh": "工作别卷啦，陪我躺一会儿🐼", "en": "Work's not worth the grind, come lie down with me for a bit 🐼"},
+      {"zh": "人生苦短，睡觉为先，竹子其次", "en": "Life's short, napping first, bamboo second"},
+      {"zh": "滚一滚，烦恼全部都滚走", "en": "Roll around a bit, and all the worries roll away"},
+      {"zh": "努力太累，摆烂才是熊生真谛", "en": "Trying too hard is exhausting, slacking is the true panda way"},
+      {"zh": "不想动，只想当一团毛茸茸团子", "en": "Don't wanna move, just wanna be a fluffy little ball"},
+      {"zh": "再忙也要抽空打个哈欠😴", "en": "No matter how busy, make time for a yawn 😴"},
+      {"zh": "哪里跌倒，就在哪里就地趴下", "en": "Where you fall, just flop down right there"},
+      {"zh": "竹子呢？我的笋笋什么时候到！", "en": "Where's the bamboo? When's my bamboo shoot coming?!"},
+      {"zh": "干饭不积极，思想有问题", "en": "No enthusiasm for food? That's a problem"},
+      {"zh": "一口脆笋，治愈所有不开心", "en": "One crunchy shoot heals all the unhappiness"},
+      {"zh": "吃饱喝足，万事不愁✨", "en": "Full belly, easy mind ✨"},
+      {"zh": "世间万般美好，不如一口鲜竹", "en": "All the beauty in the world can't beat a bite of fresh bamboo"},
+      {"zh": "别戳我圆圆的脸蛋！", "en": "Don't poke my round little cheeks!"},
+      {"zh": "警告，不要疯狂点我脑袋", "en": "Warning, do not furiously click my head"},
+      {"zh": "我只是胖，这叫毛茸茸可爱", "en": "I'm not fat, this is fluffy cuteness"},
+      {"zh": "摸头可以，不许薅我毛毛", "en": "Head pats are okay, but don't pull my fur"},
+      {"zh": "代码写累了，抬头看看我吧", "en": "Tired of coding? Look up and see me"},
+      {"zh": "盯屏幕太久，记得休息眼睛", "en": "Staring at the screen too long? Rest your eyes"},
+      {"zh": "任务好多，不要把自己压太紧", "en": "So many tasks, don't press yourself too hard"},
+      {"zh": "喝口水，我们短暂摸鱼一下", "en": "Take a sip of water, let's slack off for a bit"},
+      {"zh": "加油，你已经做得很棒了", "en": "Keep going, you're already doing great"}
     ],
     "cat": [
-      {
-        "zh": "小鱼干什么时候安排",
-        "en": "When are the dried fish snacks coming?"
-      },
-      {
-        "zh": "人类又在敲键盘啦",
-        "en": "Human's typing on the keyboard again"
-      },
-      {
-        "zh": "快过来摸摸我的脑袋",
-        "en": "Come pet my head right now"
-      },
-      {
-        "zh": "猫的事情你少管哦",
-        "en": "Mind your own business, human"
-      },
-      {
-        "zh": "阳光晒着好舒服",
-        "en": "Sunbathing feels so good"
-      },
-      {
-        "zh": "尾巴有自己的想法",
-        "en": "My tail has a mind of its own"
-      },
-      {
-        "zh": "高冷只是伪装外表",
-        "en": "Aloofness is just a disguise"
-      },
-      {
-        "zh": "哪里来的小毛毛",
-        "en": "Where did this little fuzz come from?"
-      },
-      {
-        "zh": "半夜准备开演唱会",
-        "en": "Getting ready for a midnight concert"
-      },
-      {
-        "zh": "纸箱才是终极乐园",
-        "en": "A cardboard box is the ultimate paradise"
-      }
+      {"zh": "小鱼干什么时候安排", "en": "When are the dried fish snacks coming?"},
+      {"zh": "人类又在敲键盘啦", "en": "Human's typing on the keyboard again"},
+      {"zh": "快过来摸摸我的脑袋", "en": "Come pet my head right now"},
+      {"zh": "猫的事情你少管哦", "en": "Mind your own business, human"},
+      {"zh": "阳光晒着好舒服", "en": "Sunbathing feels so good"},
+      {"zh": "尾巴有自己的想法", "en": "My tail has a mind of its own"},
+      {"zh": "高冷只是伪装外表", "en": "Aloofness is just a disguise"},
+      {"zh": "哪里来的小毛毛", "en": "Where did this little fuzz come from?"},
+      {"zh": "半夜准备开演唱会", "en": "Getting ready for a midnight concert"},
+      {"zh": "纸箱才是终极乐园", "en": "A cardboard box is the ultimate paradise"}
     ],
     "dog": [
-      {
-        "zh": "什么时候出门遛弯呀",
-        "en": "When are we going for a walk?"
-      },
-      {
-        "zh": "摇摇尾巴向你报到",
-        "en": "Wagging my tail to say hello"
-      },
-      {
-        "zh": "有好吃的记得分我",
-        "en": "Save me some tasty treats"
-      },
-      {
-        "zh": "我的眼里只有主人",
-        "en": "My eyes are only on my human"
-      },
-      {
-        "zh": "闻到零食的味道了！",
-        "en": "I smell snacks!"
-      },
-      {
-        "zh": "快乐就是跑来跑去",
-        "en": "Happiness is running around"
-      },
-      {
-        "zh": "汪汪！快来陪我玩耍",
-        "en": "Woof! Come play with me"
-      },
-      {
-        "zh": "一根骨头可以乐半天",
-        "en": "A bone keeps me happy for hours"
-      },
-      {
-        "zh": "探头观察四周动静",
-        "en": "Poking my head out to watch around"
-      },
-      {
-        "zh": "全世界最忠实的搭子",
-        "en": "The world's most loyal buddy"
-      }
+      {"zh": "什么时候出门遛弯呀", "en": "When are we going for a walk?"},
+      {"zh": "摇摇尾巴向你报到", "en": "Wagging my tail to say hello"},
+      {"zh": "有好吃的记得分我", "en": "Save me some tasty treats"},
+      {"zh": "我的眼里只有主人", "en": "My eyes are only on my human"},
+      {"zh": "闻到零食的味道了！", "en": "I smell snacks!"},
+      {"zh": "快乐就是跑来跑去", "en": "Happiness is running around"},
+      {"zh": "汪汪！快来陪我玩耍", "en": "Woof! Come play with me"},
+      {"zh": "一根骨头可以乐半天", "en": "A bone keeps me happy for hours"},
+      {"zh": "探头观察四周动静", "en": "Poking my head out to watch around"},
+      {"zh": "全世界最忠实的搭子", "en": "The world's most loyal buddy"}
     ],
     "plant": [
-      {
-        "zh": "多给我浇一点点水吧",
-        "en": "Water me just a little more"
-      },
-      {
-        "zh": "晒晒太阳努力生长",
-        "en": "Soak up the sun and grow strong"
-      },
-      {
-        "zh": "安静发呆也是成长",
-        "en": "Quietly zoning out is growth too"
-      },
-      {
-        "zh": "风来了我轻轻摇晃",
-        "en": "I sway gently when the wind comes"
-      },
-      {
-        "zh": "慢慢长大不要着急",
-        "en": "Grow slowly, no rush"
-      },
-      {
-        "zh": "吸收阳光积攒能量",
-        "en": "Absorb sunlight, store energy"
-      },
-      {
-        "zh": "静静陪伴就很好呀",
-        "en": "Just staying by your side is nice"
-      },
-      {
-        "zh": "愿日子慢慢枝繁叶茂",
-        "en": "May days slowly grow lush"
-      },
-      {
-        "zh": "努力冒出新的小嫩芽",
-        "en": "Striving to sprout new buds"
-      },
-      {
-        "zh": "安安静静不吵不闹",
-        "en": "Calm and quiet, never noisy"
-      }
+      {"zh": "多给我浇一点点水吧", "en": "Water me just a little more"},
+      {"zh": "晒晒太阳努力生长", "en": "Soak up the sun and grow strong"},
+      {"zh": "安静发呆也是成长", "en": "Quietly zoning out is growth too"},
+      {"zh": "风来了我轻轻摇晃", "en": "I sway gently when the wind comes"},
+      {"zh": "慢慢长大不要着急", "en": "Grow slowly, no rush"},
+      {"zh": "吸收阳光积攒能量", "en": "Absorb sunlight, store energy"},
+      {"zh": "静静陪伴就很好呀", "en": "Just staying by your side is nice"},
+      {"zh": "愿日子慢慢枝繁叶茂", "en": "May days slowly grow lush"},
+      {"zh": "努力冒出新的小嫩芽", "en": "Striving to sprout new buds"},
+      {"zh": "安安静静不吵不闹", "en": "Calm and quiet, never noisy"}
     ],
     "rabbit": [
-      {
-        "zh": "长耳耷拉脸蛋圆，门牙两颗露一点",
-        "en": "Long ears, round face, two front teeth peeking out"
-      },
-      {
-        "zh": "不求貌美惹人怜，主打快乐傻憨憨",
-        "en": "Not chasing looks, just happy and silly"
-      },
-      {
-        "zh": "小兔门牙往外翘，人间烦恼全忘掉",
-        "en": "Bunny's teeth stick out, world's worries forgotten"
-      },
-      {
-        "zh": "嘴巴关不住牙齿，快乐藏不住的挂件小兔",
-        "en": "Mouth can't hide the teeth — a little bunny charm of uncontainable joy"
-      },
-      {
-        "zh": "耳长脸圆粉腮红，两颗门牙往外冲。人间多少烦心事，看它一眼就放空",
-        "en": "Long ears, round face, pink cheeks, two teeth out front. However many worries you have, one look and they're gone"
-      },
-      {
-        "zh": "兔界显眼包，门牙是专属",
-        "en": "The bunny world's show-off, with signature teeth"
-      },
-      {
-        "zh": "牙齿过载，嘴巴装不下的快乐小兔",
-        "en": "Teeth overload, a happy bunny the mouth can't contain"
-      },
-      {
-        "zh": "拒绝颜值内卷，靠两颗门牙出圈的挂件",
-        "en": "Rejecting looks-competition, famous for two teeth"
-      },
-      {
-        "zh": "耳朵软乎乎，门牙藏不住。挂包随风舞，憨态解千苦",
-        "en": "Soft ears, teeth can't hide. Swaying on a bag in the wind, silliness soothes all woes"
-      },
-      {
-        "zh": "兔界显眼包，门牙是专属。颜值不在乎，快乐打不住",
-        "en": "Bunny show-off with signature teeth. Cares not for looks, joy won't stop"
-      },
-      {
-        "zh": "耳朵竖高高，来看看你在干嘛",
-        "en": "Ears perked up high, come to see what you're up to"
-      },
-      {
-        "zh": "哒哒哒，蹦到你的桌面来啦",
-        "en": "Tap-tap-tap, hopping onto your desktop"
-      },
-      {
-        "zh": "摸摸耳朵，会变开心哦🥕",
-        "en": "Pet my ears and you'll feel happier 🥕"
-      },
-      {
-        "zh": "我小小的，但是很治愈",
-        "en": "I'm small, but I'm healing"
-      },
-      {
-        "zh": "蹲在这里，默默守护你",
-        "en": "Sitting here, quietly watching over you"
-      },
-      {
-        "zh": "有胡萝卜吗？给我来一口！",
-        "en": "Got a carrot? Gimme a bite!"
-      },
-      {
-        "zh": "啃一口青菜，元气满满",
-        "en": "A bite of greens, full of energy"
-      },
-      {
-        "zh": "肚子咕咕叫，想吃小零食",
-        "en": "Tummy's rumbling, want a little snack"
-      },
-      {
-        "zh": "蹦来蹦去，扰乱你的思路😜",
-        "en": "Hopping around, messing with your train of thought 😜"
-      },
-      {
-        "zh": "别抓我耳朵，会害羞的！",
-        "en": "Don't grab my ears, I'll get shy!"
-      },
-      {
-        "zh": "溜啦溜啦，我去桌面角落躲猫猫",
-        "en": "Zoom, off I go to hide in the desktop corner"
-      },
-      {
-        "zh": "咻！从屏幕这边跳到那边",
-        "en": "Whoosh, jumping from this side of the screen to that"
-      },
-      {
-        "zh": "代码写累了，抬头看看我吧",
-        "en": "Tired of coding? Look up and see me"
-      },
-      {
-        "zh": "盯屏幕太久，记得休息眼睛",
-        "en": "Staring at the screen too long? Rest your eyes"
-      },
-      {
-        "zh": "任务好多，不要把自己压太紧",
-        "en": "So many tasks, don't press yourself too hard"
-      },
-      {
-        "zh": "喝口水，我们短暂摸鱼一下",
-        "en": "Take a sip of water, let's slack off for a bit"
-      },
-      {
-        "zh": "加油，你已经做得很棒了",
-        "en": "Keep going, you're already doing great"
-      }
+      {"zh": "长耳耷拉脸蛋圆，门牙两颗露一点", "en": "Long ears, round face, two front teeth peeking out"},
+      {"zh": "不求貌美惹人怜，主打快乐傻憨憨", "en": "Not chasing looks, just happy and silly"},
+      {"zh": "小兔门牙往外翘，人间烦恼全忘掉", "en": "Bunny's teeth stick out, world's worries forgotten"},
+      {"zh": "嘴巴关不住牙齿，快乐藏不住的挂件小兔", "en": "Mouth can't hide the teeth — a little bunny charm of uncontainable joy"},
+      {"zh": "耳长脸圆粉腮红，两颗门牙往外冲。人间多少烦心事，看它一眼就放空", "en": "Long ears, round face, pink cheeks, two teeth out front. However many worries you have, one look and they're gone"},
+      {"zh": "兔界显眼包，门牙是专属", "en": "The bunny world's show-off, with signature teeth"},
+      {"zh": "牙齿过载，嘴巴装不下的快乐小兔", "en": "Teeth overload, a happy bunny the mouth can't contain"},
+      {"zh": "拒绝颜值内卷，靠两颗门牙出圈的挂件", "en": "Rejecting looks-competition, famous for two teeth"},
+      {"zh": "耳朵软乎乎，门牙藏不住。挂包随风舞，憨态解千苦", "en": "Soft ears, teeth can't hide. Swaying on a bag in the wind, silliness soothes all woes"},
+      {"zh": "兔界显眼包，门牙是专属。颜值不在乎，快乐打不住", "en": "Bunny show-off with signature teeth. Cares not for looks, joy won't stop"},
+      {"zh": "耳朵竖高高，来看看你在干嘛", "en": "Ears perked up high, come to see what you're up to"},
+      {"zh": "哒哒哒，蹦到你的桌面来啦", "en": "Tap-tap-tap, hopping onto your desktop"},
+      {"zh": "摸摸耳朵，会变开心哦🥕", "en": "Pet my ears and you'll feel happier 🥕"},
+      {"zh": "我小小的，但是很治愈", "en": "I'm small, but I'm healing"},
+      {"zh": "蹲在这里，默默守护你", "en": "Sitting here, quietly watching over you"},
+      {"zh": "有胡萝卜吗？给我来一口！", "en": "Got a carrot? Gimme a bite!"},
+      {"zh": "啃一口青菜，元气满满", "en": "A bite of greens, full of energy"},
+      {"zh": "肚子咕咕叫，想吃小零食", "en": "Tummy's rumbling, want a little snack"},
+      {"zh": "蹦来蹦去，扰乱你的思路😜", "en": "Hopping around, messing with your train of thought 😜"},
+      {"zh": "别抓我耳朵，会害羞的！", "en": "Don't grab my ears, I'll get shy!"},
+      {"zh": "溜啦溜啦，我去桌面角落躲猫猫", "en": "Zoom, off I go to hide in the desktop corner"},
+      {"zh": "咻！从屏幕这边跳到那边", "en": "Whoosh, jumping from this side of the screen to that"},
+      {"zh": "代码写累了，抬头看看我吧", "en": "Tired of coding? Look up and see me"},
+      {"zh": "盯屏幕太久，记得休息眼睛", "en": "Staring at the screen too long? Rest your eyes"},
+      {"zh": "任务好多，不要把自己压太紧", "en": "So many tasks, don't press yourself too hard"},
+      {"zh": "喝口水，我们短暂摸鱼一下", "en": "Take a sip of water, let's slack off for a bit"},
+      {"zh": "加油，你已经做得很棒了", "en": "Keep going, you're already doing great"}
+    ],
+    "linekit": [
+      {"zh": "我只有几根线条，但够陪你啦", "en": "Just a few lines, but enough to keep you company"},
+      {"zh": "简简单单一条线，画出小日子", "en": "A simple line, sketching out little days"},
+      {"zh": "主人敲键盘，我就在旁边简笔画自己", "en": "You type, I doodle myself in the corner"},
+      {"zh": "别嫌我线条少，少才显瘦哦", "en": "Don't mind my few lines — less is what keeps me slim"},
+      {"zh": "阳光斜斜照过来，我把自己摊成一条线", "en": "Slanted sunlight, I stretch myself into one line"},
+      {"zh": "高冷是画风，黏人是本性", "en": "Aloof is the art style, clingy is the nature"},
+      {"zh": "小鱼干没有，画一条安慰自己", "en": "No dried fish? I'll draw one to comfort myself"},
+      {"zh": "尾巴只一笔，甩起来也挺带感", "en": "My tail's just one stroke, but it swings with flair"},
+      {"zh": "今天也是安静的一笔一画", "en": "Another quiet stroke-by-stroke kind of day"},
+      {"zh": "摸摸头，线条会发光哦", "en": "Pet my head, the lines will glow"},
+      {"zh": "我没什么立体感，但陪你的心意是满的", "en": "I'm not 3D, but my heart for you is full"},
+      {"zh": "主人发呆时，我替你留白", "en": "When you zone out, I hold the whitespace for you"},
+      {"zh": "一杯茶的工夫，我就能画完整个下午", "en": "In one cup of tea, I sketch the whole afternoon"},
+      {"zh": "别催，线条要慢慢描才好看", "en": "Don't rush, lines look best drawn slowly"},
+      {"zh": "不开心就看看我，我可是极简治愈系", "en": "Feeling down? I'm minimalist healing"},
+      {"zh": "我兜里没装啥，只装了点陪伴", "en": "My pockets hold nothing but a bit of company"},
+      {"zh": "风一吹，我的线条轻轻晃", "en": "A breeze, and my lines sway gently"},
+      {"zh": "困了，把自己卷成一只线团", "en": "Sleepy, I curl into a ball of lines"},
+      {"zh": "你的桌面有点空，我来做那抹简笔", "en": "Your desktop feels empty, let me be that simple stroke"},
+      {"zh": "慢一点，线条和日子都要从容", "en": "Slow down, lines and days alike deserve ease"}
     ]
   },
   "reactions": {
     "click": {
       "public": [
-        {
-          "zh": "呀！",
-          "en": "Oof!"
-        },
-        {
-          "zh": "别戳我～",
-          "en": "Stop poking me~"
-        },
-        {
-          "zh": "干嘛～",
-          "en": "Hey~"
-        },
-        {
-          "zh": "嘿嘿，起飞！",
-          "en": "Wheee!"
-        },
-        {
-          "zh": "吓我一跳",
-          "en": "You startled me"
-        }
+        {"zh": "呀！", "en": "Oof!"},
+        {"zh": "别戳我～", "en": "Stop poking me~"},
+        {"zh": "干嘛～", "en": "Hey~"},
+        {"zh": "嘿嘿，起飞！", "en": "Wheee!"},
+        {"zh": "吓我一跳", "en": "You startled me"}
       ],
       "pets": {
         "rabbit": [
-          {
-            "zh": "耳朵被戳到啦！",
-            "en": "You poked my ears!"
-          },
-          {
-            "zh": "蹦一下给你看",
-            "en": "Watch me hop"
-          }
+          {"zh": "耳朵被戳到啦！", "en": "You poked my ears!"},
+          {"zh": "蹦一下给你看", "en": "Watch me hop"}
         ],
         "panda": [
-          {
-            "zh": "圆滚滚被戳",
-            "en": "Someone poked this chubby ball"
-          },
-          {
-            "zh": "别闹，我在发呆",
-            "en": "Stop it, I'm zoning out"
-          }
+          {"zh": "圆滚滚被戳", "en": "Someone poked this chubby ball"},
+          {"zh": "别闹，我在发呆", "en": "Stop it, I'm zoning out"}
+        ],
+        "linekit": [
+          {"zh": "线条被戳到啦！", "en": "You poked my lines!"},
+          {"zh": "轻轻一笔，弹起来", "en": "A light flick, bouncing up"},
+          {"zh": "喂，别乱点我的轮廓", "en": "Hey, don't tap my outline"},
+          {"zh": "我可是易碎的简笔画", "en": "I'm a fragile little sketch"}
         ]
       }
     },
     "drag": {
       "public": [
-        {
-          "zh": "哎呀，放我下来！",
-          "en": "Put me down!"
-        },
-        {
-          "zh": "轻点轻点～",
-          "en": "Gently please~"
-        },
-        {
-          "zh": "要被拎走了",
-          "en": "Being carried away"
-        },
-        {
-          "zh": "呜哇——",
-          "en": "Whoa—"
-        },
-        {
-          "zh": "稳住稳住！",
-          "en": "Hold steady!"
-        }
+        {"zh": "哎呀，放我下来！", "en": "Put me down!"},
+        {"zh": "轻点轻点～", "en": "Gently please~"},
+        {"zh": "要被拎走了", "en": "Being carried away"},
+        {"zh": "呜哇——", "en": "Whoa—"},
+        {"zh": "稳住稳住！", "en": "Hold steady!"}
       ],
       "pets": {
         "rabbit": [
-          {
-            "zh": "抓腿腿是不对的！",
-            "en": "Grabbing my legs is rude!"
-          },
-          {
-            "zh": "飞起来啦～",
-            "en": "I'm flying~"
-          }
+          {"zh": "抓腿腿是不对的！", "en": "Grabbing my legs is rude!"},
+          {"zh": "飞起来啦～", "en": "I'm flying~"}
         ],
         "panda": [
-          {
-            "zh": "抱不动啦，太重",
-            "en": "Too heavy to carry"
-          },
-          {
-            "zh": "慢点晃，晕了",
-            "en": "Slow down, I'm dizzy"
-          }
+          {"zh": "抱不动啦，太重", "en": "Too heavy to carry"},
+          {"zh": "慢点晃，晕了", "en": "Slow down, I'm dizzy"}
+        ],
+        "linekit": [
+          {"zh": "线条被拎起来咯", "en": "My lines are being lifted"},
+          {"zh": "轻点轻点，我会散架", "en": "Gently, I might fall apart"},
+          {"zh": "飘起来了～", "en": "Floating up~"}
         ]
       }
     }
@@ -539,488 +197,251 @@
   "states": {
     "climb": {
       "public": [
-        {
-          "zh": "咻，努力向上爬✨",
-          "en": "Wheee, climbing with all my might ✨"
-        },
-        {
-          "zh": "抓牢，往高处进发",
-          "en": "Holding tight, heading up high"
-        },
-        {
-          "zh": "一点点往上挪",
-          "en": "Inching up bit by bit"
-        },
-        {
-          "zh": "登高探险开始！",
-          "en": "The climb begins!"
-        },
-        {
-          "zh": "扒住边框绝不松手",
-          "en": "Gripping the edge, never letting go"
-        }
+        {"zh": "咻，努力向上爬✨", "en": "Wheee, climbing with all my might ✨"},
+        {"zh": "抓牢，往高处进发", "en": "Holding tight, heading up high"},
+        {"zh": "一点点往上挪", "en": "Inching up bit by bit"},
+        {"zh": "登高探险开始！", "en": "The climb begins!"},
+        {"zh": "扒住边框绝不松手", "en": "Gripping the edge, never letting go"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "胖滚滚奋力扒墙",
-            "en": "Round and chubby, clawing up the wall"
-          },
-          {
-            "zh": "小短爪使劲蹬呀蹬",
-            "en": "Little paws kicking hard"
-          },
-          {
-            "zh": "身子笨重也要往上爬",
-            "en": "Heavy body, still climbing"
-          }
+          {"zh": "胖滚滚奋力扒墙", "en": "Round and chubby, clawing up the wall"},
+          {"zh": "小短爪使劲蹬呀蹬", "en": "Little paws kicking hard"},
+          {"zh": "身子笨重也要往上爬", "en": "Heavy body, still climbing"}
         ],
         "rabbit": [
-          {
-            "zh": "蹬蹬后腿向上冲",
-            "en": "Kicking with my back legs, up I go"
-          },
-          {
-            "zh": "长耳朵晃来晃去攀岩",
-            "en": "Long ears swaying as I climb"
-          },
-          {
-            "zh": "小兔探险家上线",
-            "en": "Bunny explorer is online"
-          }
+          {"zh": "蹬蹬后腿向上冲", "en": "Kicking with my back legs, up I go"},
+          {"zh": "长耳朵晃来晃去攀岩", "en": "Long ears swaying as I climb"},
+          {"zh": "小兔探险家上线", "en": "Bunny explorer is online"}
+        ],
+        "linekit": [
+          {"zh": "扒住边框，一笔一笔往上挪", "en": "Gripping the edge, inching up stroke by stroke"},
+          {"zh": "线条攀岩中，慢慢爬", "en": "Line-rock-climbing, slowly upward"}
         ]
       }
     },
     "hang": {
       "public": [
-        {
-          "zh": "挂在这里偷偷看你😯",
-          "en": "Hanging here, peeking at you 😯"
-        },
-        {
-          "zh": "晃晃悠悠悬在空中",
-          "en": "Dangling in the air, swaying"
-        },
-        {
-          "zh": "爪子死死扒住",
-          "en": "Paws gripping on for dear life"
-        },
-        {
-          "zh": "吊在边上吹吹风",
-          "en": "Hanging by the edge, enjoying the breeze"
-        }
+        {"zh": "挂在这里偷偷看你😯", "en": "Hanging here, peeking at you 😯"},
+        {"zh": "晃晃悠悠悬在空中", "en": "Dangling in the air, swaying"},
+        {"zh": "爪子死死扒住", "en": "Paws gripping on for dear life"},
+        {"zh": "吊在边上吹吹风", "en": "Hanging by the edge, enjoying the breeze"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "圆乎乎挂住，晃晃荡荡",
-            "en": "Round and round, hanging and swaying"
-          },
-          {
-            "zh": "体重有点大，快抓不住",
-            "en": "A bit heavy, losing my grip"
-          }
+          {"zh": "圆乎乎挂住，晃晃荡荡", "en": "Round and round, hanging and swaying"},
+          {"zh": "体重有点大，快抓不住", "en": "A bit heavy, losing my grip"}
         ],
         "rabbit": [
-          {
-            "zh": "吊住耳朵可不行！",
-            "en": "Don't hang me by my ears!"
-          },
-          {
-            "zh": "扒住边缘探头张望",
-            "en": "Holding the edge, peeking around"
-          }
+          {"zh": "吊住耳朵可不行！", "en": "Don't hang me by my ears!"},
+          {"zh": "扒住边缘探头张望", "en": "Holding the edge, peeking around"}
+        ],
+        "linekit": [
+          {"zh": "吊在边上，线条轻轻晃", "en": "Hanging by the edge, lines swaying"},
+          {"zh": "单线悬空，晃晃悠悠", "en": "A single line suspended, swaying"}
         ]
       }
     },
     "slip": {
       "public": [
-        {
-          "zh": "糟了，脚脚打滑！",
-          "en": "Oh no, my paws are slipping!"
-        },
-        {
-          "zh": "快要抓不住啦🫨",
-          "en": "Can't hold on much longer 🫨"
-        },
-        {
-          "zh": "稳住，别滑下去！",
-          "en": "Steady, don't slip!"
-        },
-        {
-          "zh": "岌岌可危中…",
-          "en": "Hanging by a thread…"
-        }
+        {"zh": "糟了，脚脚打滑！", "en": "Oh no, my paws are slipping!"},
+        {"zh": "快要抓不住啦🫨", "en": "Can't hold on much longer 🫨"},
+        {"zh": "稳住，别滑下去！", "en": "Steady, don't slip!"},
+        {"zh": "岌岌可危中…", "en": "Hanging by a thread…"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "肉肉太重，往下溜了",
-            "en": "Too much fluff, sliding down"
-          },
-          {
-            "zh": "哎呀体重拖后腿",
-            "en": "Oops, my weight let me down"
-          }
+          {"zh": "肉肉太重，往下溜了", "en": "Too much fluff, sliding down"},
+          {"zh": "哎呀体重拖后腿", "en": "Oops, my weight let me down"}
         ],
         "rabbit": [
-          {
-            "zh": "脚底打滑，要溜咯",
-            "en": "Paws slipping, here I go"
-          }
+          {"zh": "脚底打滑，要溜咯", "en": "Paws slipping, here I go"}
+        ],
+        "linekit": [
+          {"zh": "脚脚打滑，线条要溜了", "en": "Paws slipping, the line's about to slide"},
+          {"zh": "抓不住，一笔滑下去", "en": "Can't hold on, sliding down in one stroke"}
         ]
       }
     },
     "fall": {
       "public": [
-        {
-          "zh": "啊 —— 掉下去咯！",
-          "en": "Ahh—falling!"
-        },
-        {
-          "zh": "失重下坠！",
-          "en": "Free fall!"
-        },
-        {
-          "zh": "咻～自由落体",
-          "en": "Whoosh~ free falling"
-        },
-        {
-          "zh": "完了完了！",
-          "en": "Here we go!"
-        }
+        {"zh": "啊 —— 掉下去咯！", "en": "Ahh—falling!"},
+        {"zh": "失重下坠！", "en": "Free fall!"},
+        {"zh": "咻～自由落体", "en": "Whoosh~ free falling"},
+        {"zh": "完了完了！", "en": "Here we go!"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "笨重下坠，挡不住啦",
-            "en": "Falling clumsily, can't stop"
-          },
-          {
-            "zh": "圆滚滚飞下去",
-            "en": "Round and rolling down"
-          }
+          {"zh": "笨重下坠，挡不住啦", "en": "Falling clumsily, can't stop"},
+          {"zh": "圆滚滚飞下去", "en": "Round and rolling down"}
         ],
         "rabbit": [
-          {
-            "zh": "小兔失控坠落！",
-            "en": "Bunny falling out of control!"
-          }
+          {"zh": "小兔失控坠落！", "en": "Bunny falling out of control!"}
+        ],
+        "linekit": [
+          {"zh": "啊——线条自由落体", "en": "Ah—line free-falling"},
+          {"zh": "简笔失控下坠！", "en": "Sketch out of control, plummeting!"}
         ]
       }
     },
     "land": {
       "public": [
-        {
-          "zh": "嘭！安全落地",
-          "en": "Thud! Safe landing"
-        },
-        {
-          "zh": "哎哟，摔懵了",
-          "en": "Ouch, that dazed me"
-        },
-        {
-          "zh": "拍拍灰，没事没事",
-          "en": "Dusting off, I'm fine"
-        },
-        {
-          "zh": "屁股墩着地！",
-          "en": "Landed right on my butt!"
-        },
-        {
-          "zh": "安全着陆～",
-          "en": "Safe landing~"
-        },
-        {
-          "zh": "还好没摔疼",
-          "en": "Good thing it did not hurt"
-        }
+        {"zh": "嘭！安全落地", "en": "Thud! Safe landing"},
+        {"zh": "哎哟，摔懵了", "en": "Ouch, that dazed me"},
+        {"zh": "拍拍灰，没事没事", "en": "Dusting off, I'm fine"},
+        {"zh": "屁股墩着地！", "en": "Landed right on my butt!"},
+        {"zh": "安全着陆～", "en": "Safe landing~"},
+        {"zh": "还好没摔疼", "en": "Good thing it did not hurt"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "咚！肉肉缓冲伤害",
-            "en": "Boom! The fluff cushioned it"
-          },
-          {
-            "zh": "摔得滚了一圈",
-            "en": "Tumbled a full roll"
-          }
+          {"zh": "咚！肉肉缓冲伤害", "en": "Boom! The fluff cushioned it"},
+          {"zh": "摔得滚了一圈", "en": "Tumbled a full roll"}
         ],
         "rabbit": [
-          {
-            "zh": "啪嗒，摔个兔屁股",
-            "en": "Splat, landed on my bunny butt"
-          },
-          {
-            "zh": "抖抖耳朵恢复状态",
-            "en": "Shaking my ears, back in shape"
-          }
+          {"zh": "啪嗒，摔个兔屁股", "en": "Splat, landed on my bunny butt"},
+          {"zh": "抖抖耳朵恢复状态", "en": "Shaking my ears, back in shape"}
+        ],
+        "linekit": [
+          {"zh": "嘭！线条安全着陆", "en": "Thud! Lines landed safe"},
+          {"zh": "拍拍灰，继续简笔人生", "en": "Dusting off, back to my sketched life"}
         ]
       }
     },
     "walk": {
       "public": [
-        {
-          "zh": "桌面巡街中🚶",
-          "en": "Patrolling the desktop 🚶"
-        },
-        {
-          "zh": "随便走走逛逛",
-          "en": "Just wandering around"
-        },
-        {
-          "zh": "这里瞧瞧，那里看看",
-          "en": "A look here, a peek there"
-        },
-        {
-          "zh": "悠闲溜达 ing",
-          "en": "Strolling around, carefree"
-        }
+        {"zh": "桌面巡街中🚶", "en": "Patrolling the desktop 🚶"},
+        {"zh": "随便走走逛逛", "en": "Just wandering around"},
+        {"zh": "这里瞧瞧，那里看看", "en": "A look here, a peek there"},
+        {"zh": "悠闲溜达 ing", "en": "Strolling around, carefree"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "慢悠悠晃着散步",
-            "en": "Waddling slowly along"
-          },
-          {
-            "zh": "胖团子巡逻桌面",
-            "en": "Chubby ball on patrol"
-          }
+          {"zh": "慢悠悠晃着散步", "en": "Waddling slowly along"},
+          {"zh": "胖团子巡逻桌面", "en": "Chubby ball on patrol"}
         ],
         "rabbit": [
-          {
-            "zh": "小碎步蹦来蹦去",
-            "en": "Hopping about with tiny steps"
-          },
-          {
-            "zh": "蹦跳着四处溜达",
-            "en": "Bouncing around the place"
-          }
+          {"zh": "小碎步蹦来蹦去", "en": "Hopping about with tiny steps"},
+          {"zh": "蹦跳着四处溜达", "en": "Bouncing around the place"}
+        ],
+        "linekit": [
+          {"zh": "桌面巡街，一笔一画晃悠", "en": "Patrolling the desktop, swaying stroke by stroke"},
+          {"zh": "小碎步，慢慢描过去", "en": "Tiny steps, slowly drawn"}
         ]
       }
     },
     "idle_stare": {
       "public": [
-        {
-          "zh": "发呆放空中…",
-          "en": "Zoning out…"
-        },
-        {
-          "zh": "什么都不想干",
-          "en": "Don't feel like doing anything"
-        },
-        {
-          "zh": "就这样静静待着",
-          "en": "Just staying quiet like this"
-        },
-        {
-          "zh": "看看窗外",
-          "en": "Looking out the window"
-        }
+        {"zh": "发呆放空中…", "en": "Zoning out…"},
+        {"zh": "什么都不想干", "en": "Don't feel like doing anything"},
+        {"zh": "就这样静静待着", "en": "Just staying quiet like this"},
+        {"zh": "看看窗外", "en": "Looking out the window"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "瘫住，脑子空空",
-            "en": "Flopped down, mind empty"
-          },
-          {
-            "zh": "摆烂小熊猫",
-            "en": "A little panda giving up"
-          }
+          {"zh": "瘫住，脑子空空", "en": "Flopped down, mind empty"},
+          {"zh": "摆烂小熊猫", "en": "A little panda giving up"}
         ],
         "rabbit": [
-          {
-            "zh": "支棱耳朵发呆",
-            "en": "Ears up, spacing out"
-          },
-          {
-            "zh": "愣在原地思考兔生",
-            "en": "Standing still, pondering bunny life"
-          }
+          {"zh": "支棱耳朵发呆", "en": "Ears up, spacing out"},
+          {"zh": "愣在原地思考兔生", "en": "Standing still, pondering bunny life"}
+        ],
+        "linekit": [
+          {"zh": "线条放空，什么都不想画", "en": "Lines blanking out, nothing to draw"},
+          {"zh": "就这样静静待着，留白也挺好", "en": "Just staying still, whitespace is nice too"}
         ]
       }
     },
     "sleep": {
       "public": [
-        {
-          "zh": "好困，眯一会💤",
-          "en": "So sleepy, nap time 💤"
-        },
-        {
-          "zh": "呼呼睡觉啦",
-          "en": "Off to dreamland"
-        },
-        {
-          "zh": "就地打盹",
-          "en": "Napping right here"
-        },
-        {
-          "zh": "晚安，桌面世界",
-          "en": "Good night, desktop world"
-        }
+        {"zh": "好困，眯一会💤", "en": "So sleepy, nap time 💤"},
+        {"zh": "呼呼睡觉啦", "en": "Off to dreamland"},
+        {"zh": "就地打盹", "en": "Napping right here"},
+        {"zh": "晚安，桌面世界", "en": "Good night, desktop world"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "蜷成一团呼呼大睡",
-            "en": "Curled up, fast asleep"
-          },
-          {
-            "zh": "胖团子开启休眠",
-            "en": "Chubby ball entering sleep mode"
-          }
+          {"zh": "蜷成一团呼呼大睡", "en": "Curled up, fast asleep"},
+          {"zh": "胖团子开启休眠", "en": "Chubby ball entering sleep mode"}
         ],
         "rabbit": [
-          {
-            "zh": "团成毛毛小球睡觉",
-            "en": "Curled into a fluffy ball"
-          },
-          {
-            "zh": "耳朵耷拉下来睡咯",
-            "en": "Ears drooping, time to sleep"
-          }
+          {"zh": "团成毛毛小球睡觉", "en": "Curled into a fluffy ball"},
+          {"zh": "耳朵耷拉下来睡咯", "en": "Ears drooping, time to sleep"}
+        ],
+        "linekit": [
+          {"zh": "线条打卷，进入休眠模式", "en": "Lines curling up, entering sleep mode"},
+          {"zh": "蜷成一只线团睡觉", "en": "Curled into a ball of lines, asleep"}
         ]
       }
     },
     "coquetry": {
       "public": [
-        {
-          "zh": "过来陪我玩嘛🥺",
-          "en": "Come play with me 🥺"
-        },
-        {
-          "zh": "摸摸我好不好",
-          "en": "Will you pet me?"
-        },
-        {
-          "zh": "贴贴屏幕～",
-          "en": "Snuggling up to the screen~"
-        }
+        {"zh": "过来陪我玩嘛🥺", "en": "Come play with me 🥺"},
+        {"zh": "摸摸我好不好", "en": "Will you pet me?"},
+        {"zh": "贴贴屏幕～", "en": "Snuggling up to the screen~"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "蹭蹭求摸摸",
-            "en": "Nuzzling for pets"
-          },
-          {
-            "zh": "圆滚滚求陪伴",
-            "en": "Round and round, wanting company"
-          }
+          {"zh": "蹭蹭求摸摸", "en": "Nuzzling for pets"},
+          {"zh": "圆滚滚求陪伴", "en": "Round and round, wanting company"}
         ],
         "rabbit": [
-          {
-            "zh": "脑袋蹭一蹭",
-            "en": "Rubbing my head on you"
-          },
-          {
-            "zh": "歪头撒娇",
-            "en": "Head tilt, being cute"
-          }
+          {"zh": "脑袋蹭一蹭", "en": "Rubbing my head on you"},
+          {"zh": "歪头撒娇", "en": "Head tilt, being cute"}
+        ],
+        "linekit": [
+          {"zh": "过来陪我画嘛🥺", "en": "Come draw with me 🥺"},
+          {"zh": "摸摸我，线条会发光", "en": "Pet me, the lines will glow"}
         ]
       }
     },
     "naughty": {
       "public": [
-        {
-          "zh": "嘿嘿，挡住你的屏幕",
-          "en": "Hehe, blocking your screen"
-        },
-        {
-          "zh": "悄悄捣乱一下",
-          "en": "A little mischief, quietly"
-        },
-        {
-          "zh": "这里我占下啦",
-          "en": "This spot is mine now"
-        }
+        {"zh": "嘿嘿，挡住你的屏幕", "en": "Hehe, blocking your screen"},
+        {"zh": "悄悄捣乱一下", "en": "A little mischief, quietly"},
+        {"zh": "这里我占下啦", "en": "This spot is mine now"}
       ],
       "pets": {
         "panda": [
-          {
-            "zh": "胖身子霸占桌面位置",
-            "en": "My chubby body claims this spot"
-          },
-          {
-            "zh": "随便拱一拱图标",
-            "en": "Nudging your icons around"
-          }
+          {"zh": "胖身子霸占桌面位置", "en": "My chubby body claims this spot"},
+          {"zh": "随便拱一拱图标", "en": "Nudging your icons around"}
         ],
         "rabbit": [
-          {
-            "zh": "蹦来蹦去到处捣乱",
-            "en": "Hopping around, causing chaos"
-          },
-          {
-            "zh": "蹦到图标上面玩耍",
-            "en": "Hopping onto your icons to play"
-          }
+          {"zh": "蹦来蹦去到处捣乱", "en": "Hopping around, causing chaos"},
+          {"zh": "蹦到图标上面玩耍", "en": "Hopping onto your icons to play"}
+        ],
+        "linekit": [
+          {"zh": "嘿嘿，挡住你的屏幕一角", "en": "Hehe, blocking a corner of your screen"},
+          {"zh": "悄悄在线条上捣乱", "en": "Quietly causing mischief on the lines"}
         ]
       }
     }
   },
   "greetings": {
     "public": [
-      {
-        "zh": "我来啦～",
-        "en": "I'm here~"
-      },
-      {
-        "zh": "报到！",
-        "en": "Reporting in!"
-      },
-      {
-        "zh": "嗨～",
-        "en": "Hi there~"
-      }
+      {"zh": "我来啦～", "en": "I'm here~"},
+      {"zh": "报到！", "en": "Reporting in!"},
+      {"zh": "嗨～", "en": "Hi there~"}
     ],
     "pets": {
       "rabbit": [
-        {
-          "zh": "我回来啦！今天也要元气满满",
-          "en": "I'm back! Full energy today!"
-        },
-        {
-          "zh": "主人主人，我落地啦～",
-          "en": "Boss, I've landed~"
-        },
-        {
-          "zh": "嗨！想我了没有？",
-          "en": "Hey! Missed me?"
-        },
-        {
-          "zh": "兔子报到！桌面我来守护",
-          "en": "Bunny on duty! Desktop secured"
-        },
-        {
-          "zh": "嘿嘿，又见面啦",
-          "en": "Hehe, here we go again"
-        }
+        {"zh": "我回来啦！今天也要元气满满", "en": "I'm back! Full energy today!"},
+        {"zh": "主人主人，我落地啦～", "en": "Boss, I've landed~"},
+        {"zh": "嗨！想我了没有？", "en": "Hey! Missed me?"},
+        {"zh": "兔子报到！桌面我来守护", "en": "Bunny on duty! Desktop secured"},
+        {"zh": "嘿嘿，又见面啦", "en": "Hehe, here we go again"}
       ],
       "panda": [
-        {
-          "zh": "咚！熊猫驾到",
-          "en": "Thud! Panda has arrived"
-        },
-        {
-          "zh": "圆滚滚已就位",
-          "en": "Roundness in position"
-        },
-        {
-          "zh": "嗯……今天吃啥",
-          "en": "Hmm... what's for lunch"
-        },
-        {
-          "zh": "打了个滚，报到！",
-          "en": "Did a roll, reporting!"
-        },
-        {
-          "zh": "慢慢来，我先趴会",
-          "en": "No rush, napping first"
-        }
+        {"zh": "咚！熊猫驾到", "en": "Thud! Panda has arrived"},
+        {"zh": "圆滚滚已就位", "en": "Roundness in position"},
+        {"zh": "嗯……今天吃啥", "en": "Hmm... what's for lunch"},
+        {"zh": "打了个滚，报到！", "en": "Did a roll, reporting!"},
+        {"zh": "慢慢来，我先趴会", "en": "No rush, napping first"}
+      ],
+      "linekit": [
+        {"zh": "我是一笔就能画出来的小猫～", "en": "I'm a cat you can draw in one stroke~"},
+        {"zh": "主人主人，我来陪你啦", "en": "Boss, I'm here to keep you company"},
+        {"zh": "简简单单，报到！", "en": "Simple and plain, reporting in!"}
       ]
     }
   }

@@ -183,9 +183,10 @@
     "introTitle": "About DeskBud Pets",
     "intro": "A lightweight, clean, portable desktop-pet app — completely free with no pop-up ads. Multiple cute pets with mouse interaction, one-click hide and opacity control to keep you company.",
     "feat1": "2 free high-quality pets included, all core features unlocked",
-    "feat2": "Built-in Pet House — more pets to choose, auto-activated on claim",
-    "feat3": "Very low memory footprint, smooth and responsive",
-    "feat4": "16+ action poses, with new pets and interactions on the way",
+    "feat2": "Extremely low resource usage, runs smoothly without lag",
+    "feat3": "No ads, no pop-ups — a clean, pure experience",
+    "feat4": "Cross-platform compatible, synced across devices",
+    "feat5": "16+ action poses, with new pets and interactions always on the way",
     "manualTitle": "User manual"
   }
 }

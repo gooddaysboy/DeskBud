@@ -2,7 +2,7 @@
 // 网页端策略：打开拉一次 -> 内存循环滚动 -> 页面生命周期内不再请求网络
 // 容错：拿不到 json 或 json 损坏 -> 用内置备用文案，页面不报错不白屏
 // 视觉：可爱对话气泡，带宠物头像 + 柔和随机配色 + 缓慢上升 + 轻微摇摆
-const PET_EMOJI = { panda: '🐼', cat: '🐱', dog: '🐶', plant: '🌱', rabbit: '🐰', public: '💭' };
+const PET_EMOJI = { panda: '🐼', cat: '🐱', dog: '🐶', plant: '🌱', rabbit: '🐰', linekit: '🐈', public: '💭' };
 const CUTE = ['#ffd9e8', '#d8f3e6', '#fff1ca', '#d8ecff', '#e9ddff', '#ffe2d1'];
 
 // v6 交互/状态气泡内置兜底（与桌宠 pet_window_v2.py 的 _REACT_CLICK/_REACT_DRAG 一致）

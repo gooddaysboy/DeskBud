@@ -1341,9 +1341,25 @@ html.embed-mode .announce-bar, html.embed-mode .quote-bar { display: none !impor
 html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
 
 /* 导航下载入口改 ↓ 粗体图标（2026-09-10 老曹拍板：中英文通吃省地方，一眼可识） */
-.nav .nav-dl { display: flex; align-items: center; }
-.nav .nav-dl .ic { width: 17px; height: 17px; display: block; }
-.nav .nav-dl.active::after { display: none; } /* 图标不落下划线装饰，避免错位 */
+/* 2026-09-11 老曹：导航「下载」加文字并突出为 CTA 胶囊 */
+.nav .nav-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 13px;
+  margin-left: 2px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(232,114,43,.28);
+  transition: transform .12s ease, box-shadow .15s, background .15s;
+}
+.nav .nav-dl .nav-dl-txt { line-height: 1; }
+.nav .nav-dl .ic { width: 16px; height: 16px; display: block; }
+.nav .nav-dl:hover { color: #fff; background: var(--brand-ink); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(232,114,43,.36); }
+.nav .nav-dl.active { color: #fff; background: var(--brand-ink); }
+.nav .nav-dl.active::after { display: none; } /* 胶囊不落下划线装饰，避免错位 */
 
 /* ---------- 宠物右键菜单（2026-09-10 专注模式入口） ---------- */
 #wm-deskbud-menu {
