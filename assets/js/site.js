@@ -26,7 +26,7 @@ const SITE = {
             ...(window.DESKBUD_PANDA_SPAWNING || []),
           ];
           const s = document.createElement('script');
-          s.src = this.base + 'webmeji.js?v=22';
+          s.src = this.base + 'webmeji.js?v=23';
           s.onload = () => {
             // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
             window.dispatchEvent(new Event('DOMContentLoaded'));
@@ -345,6 +345,15 @@ const SITE = {
     if (changed) this.setPicked(s);
     return s;
   },
+  // 购物车清洗（2026-09-12 老曹：点线咪却显示"已选 2 只"）：内置宠物（开箱即用）与已下线作品都不该留在车里。
+  // ⚠️ 只在内存里过滤没用——localStorage 里那份脏数据会被下一次 getPicked() 原样读回来，所以必须写回。
+  sanitizePicked() {
+    const s = this.getPicked();
+    const works = (this.data && this.data.works) || [];
+    const clean = new Set([...s].filter(id => { const w = works.find(x => x.id === id); return w && !w.builtin; }));
+    if (clean.size !== s.size) this.setPicked(clean);
+    return clean;
+  },
   // 仅返回已上线的作品（status 不为 "hidden"），隐藏的占位作品统一在此过滤
   onlineWorks() {
     if (!this.data) return [];
@@ -504,103 +513,6 @@ function initAnnounce() {
     .catch(() => {});
 }
 
-// 语录接力走马灯：注入到「搜索栏(.top-search)」之前 = 作品走马灯与搜索之间。
-// 双轨接力：两条语录（错开半个周期）都从右淡入、向左匀速走到左缘淡出；
-// 一条走到左边将结束时，另一条已从右侧出现，全程无空档（详见 quoteScroll keyframes + nth-of-type 延迟）。
-// 速度恒定像素速度、按浏览器宽度自适应时长（宽屏更久、窄屏更短，观感一致）；窗口缩放自动重算。
-// 幂等：lang:change 与软导航都会触发，故先清再插。
-let _quoteEl = null;
-function _quoteDuration() {
-  const SPEED = 110; // px/s 恒定像素速度
-  const w = window.innerWidth || document.documentElement.clientWidth || 1280;
-  return Math.max(8, Math.round((2 * w) / SPEED));
-}
-function _applyQuoteDuration() {
-  if (_quoteEl) _quoteEl.style.setProperty('--quote-dur', _quoteDuration() + 's');
-}
-// 兜底语录：fetch 拉取前先用，避免空白；拿到真实语录后仅替换数组，不闪屏。双语（切 EN 后兜底也走英文）
-const _QUOTE_FALLBACK = {
-  zh: ['今天也要开开心心~', '陪你摸鱼每一刻', '桌面因你而热闹', '小小的伙伴，暖暖的陪伴'],
-  en: ['Stay happy today~', 'I will keep you company', 'My desktop is livelier with you', 'A tiny pal, warm company']
-};
-
-// 洗牌（Fisher-Yates）：每次刷新开场的第一条语录随机，而不是固定取数组第一句
-function _shuffle(arr) {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const t = a[i]; a[i] = a[j]; a[j] = t;
-  }
-  return a;
-}
-
-function initQuoteMarquee() {
-  // 首页极简：不注入语录走马灯（软导航离开首页时由 syncHomeChrome 补建）
-  if (typeof isHomePath === 'function' && isMinimalPath()) {
-    document.querySelectorAll('.quote-bar').forEach(b => b.remove());
-    _quoteEl = null;
-    return;
-  }
-  // 立即插入走马灯 DOM，动画即刻启动（不等 fetch；首条由负 animation-delay 从右侧可见区起步）
-  document.querySelectorAll('.quote-bar').forEach(b => b.remove()); // 幂等：先清旧 bar
-  const bar = document.createElement('div');
-  bar.className = 'quote-bar quote-marquee';
-  bar.innerHTML = '<span class="q"></span><span class="q"></span>'; // 双轨接力
-  // 始终插到「搜索栏(.top-search)」之前 = 作品走马灯与搜索之间。
-  // .top-search 是静态 HTML 加载即存在，不受 initAnnounce 异步时序影响。
-  const search = document.querySelector('.top-search') || document.getElementById('siteSearch');
-  if (search && search.parentNode) search.parentNode.insertBefore(bar, search);
-  else { const tb = document.querySelector('.topbar'); if (tb) tb.after(bar); }
-  const qs = bar.querySelectorAll('.q');
-  _quoteEl = bar; // 时长变量设在容器上，两条 .q 通过继承共用同一 --quote-dur
-  // 按当前语言取句（zh / en）；lang:change 会重建整个走马灯并重新取句
-  const lang = (window.__lang === 'en') ? 'en' : 'zh';
-  const qlines = src => (src || []).map(x => {
-    if (x && typeof x === 'object') return (x[lang] || x.zh || '').trim();
-    return String(x == null ? '' : x);
-  }).filter(Boolean);
-  // 先用兜底语录填字，避免空白；fetch 拿到真实语录后仅替换数组，不闪屏
-  let lines = _QUOTE_FALLBACK[lang].slice();
-  let pool = _shuffle(lines);   // 当前这一轮已洗好牌的队列
-  let pos = 0;
-  let last = null;
-  const next = () => {
-    if (pos >= pool.length) {            // 一轮取完，重洗下一轮
-      pool = _shuffle(lines);
-      // 语录多于 1 条时，避免新一轮首句与上一条重复（衔接处不撞句）
-      if (pool.length > 1 && last !== null && pool[0] === last) {
-        const k = 1 + Math.floor(Math.random() * (pool.length - 1));
-        const t = pool[0]; pool[0] = pool[k]; pool[k] = t;
-      }
-      pos = 0;
-    }
-    last = pool[pos++];
-    return last;
-  };
-  // 两条轨道各自在自己的 animationiteration 时取下一条；共享计数器保证不重复、不串行
-  qs.forEach(el => {
-    el.textContent = next();
-    el.addEventListener('animationiteration', () => { el.textContent = next(); });
-  });
-  _applyQuoteDuration(); // 按当前视口宽设定时长变量（覆盖 CSS 默认 22s）
-  // 异步拉取真实语录，仅更新数据数组（当前显示不闪）
-  fetch('data/bubble.json', { cache: 'no-cache' })
-    .then(r => (r.ok ? r.json() : null))
-    .then(d => {
-      const pub = (d && d.public) || [];
-      const got = qlines(pub);
-      // 换用真实语录：当前显示的两条不动（不闪），从下一条起走新池
-      if (got.length) { lines = got; pool = _shuffle(lines); pos = 0; }
-    })
-    .catch(() => {});
-  // 窗口缩放：时长随宽度重算（防抖），只绑一次
-  if (!window.__quoteResizeBound) {
-    window.__quoteResizeBound = true;
-    let t;
-    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(_applyQuoteDuration, 150); });
-  }
-}
-
 // 全站搜索：顶部搜索框，匹配作品名称/描述/作者/分类，结果下拉点击跳详情页
 function initSearch() {
   const form = document.getElementById('siteSearch');
@@ -652,7 +564,6 @@ function initSearch() {
 // 语言切换时：公告重渲染 + 动态内容（卡片/列表/详情）由页面注册的 __rerender 重渲染
 window.addEventListener('lang:change', () => {
   initAnnounce();
-  initQuoteMarquee();
   if (typeof window.__rerender === 'function') window.__rerender();
 });
 
@@ -911,9 +822,12 @@ SITE.pages = {
 
     // 聚合/待机动图素材（tools/material 迁移产物，已拷入 works/*-anim/）；
     // 未登记素材的宠物自动退回 states 帧轮播兜底
+    // lite = 方块墙专用轻量待机动图（160px，tools/material/make_lite_anim.py 产出、无水印）
+    // 方块屏显只有 50px，吃 240px 原动画纯浪费（279~557KB → 43~93KB 一只）
     const ANIM = {
-      panda: { idle: 'works/panda-anim/panda_idle.webp', all: 'works/panda-anim/panda_all.webp' },
-      rabbit: { idle: 'works/rabbit-anim/rabbit_idle.webp', all: 'works/rabbit-anim/rabbit_all.webp' },
+      panda: { idle: 'works/panda-anim/panda_idle.webp', lite: 'works/panda-lite/idle.webp', all: 'works/panda-anim/panda_all.webp' },
+      rabbit: { idle: 'works/rabbit-anim/rabbit_idle.webp', lite: 'works/rabbit-lite/idle.webp', all: 'works/rabbit-anim/rabbit_all.webp' },
+      linekit: { idle: 'works/linekit-anim/linekit_idle.webp', lite: 'works/linekit-lite/linekit_idle.webp', all: 'works/linekit-anim/linekit_all.webp' },
     };
     const poseList = w => (w.states && w.states.length ? w.states : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]);
 
@@ -987,6 +901,11 @@ SITE.pages = {
       const n = picked.size;
       // 选中反馈独立于 device_id（B 方案）：选了就显示数量，无设备号时按钮退回下载引导
       const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
+      // 内置宠物（织熊猫/织兔子）：开箱即用，无购买入口；文案引导去下载客户端（2026-09-12 老曹：点击连接到下载）
+      if (w.builtin && n === 0) {
+        buyEl.innerHTML = `<a class="buy-builtin" href="download.html">🎁 ${window.pick({ zh: '已内置 · 开箱即用，下载客户端使用', en: 'Built-in · ready to use — download the app' })}</a>`;
+        return;
+      }
       if (url) {
         const label = n > 1
           ? window.pick({ zh: `一起带回家 · ${n} 只`, en: `Take ${n} home together` })
@@ -1001,9 +920,13 @@ SITE.pages = {
     // 规则：勾选框在方块右上角；勾选 ≥1 只时姿态窗口下的购买按钮直接变「一起带回家 · N 只」
     //（不再用底部浮条——老曹反馈"拉的太远要滑动找"，按钮紧贴姿态窗口最好找）
     // 选择跨页面保持（SITE.getPicked 持久化购物车，伙伴页/首页共用）；已拥有的禁勾
-    let picked = SITE.getPicked();
+    // sanitizePicked 而非 getPicked：内置宠物的历史残留会被清掉并写回 localStorage（2026-09-12 修"点线咪显示已选 2 只"）
+    let picked = SITE.sanitizePicked();
     const owned = new Set();          // 已授权的宠物 id（有 device_id 时查询）
-    const pickedIds = () => (picked.size ? [...picked] : [works[cur].id]);
+    const pickedIds = () => {
+      const ids = picked.size ? [...picked] : [works[cur].id];
+      return ids.filter(id => { const w = works.find(x => x.id === id); return w && !w.builtin; });
+    };
 
     // 查询已授权（避免重复购买 + 付款后自动清购物车）；失败静默按"全部可购"处理
     // force=true：从收银台切回本页时重查，拿到新授权 → 已购的自动移出购物车
@@ -1011,6 +934,7 @@ SITE.pages = {
       const s = await SITE.fetchOwnedIds(force);
       owned.clear(); s.forEach(id => owned.add(id));
       picked = SITE.prunePicked(s);          // 付款后自动清除已购项
+      picked = SITE.sanitizePicked();        // 清掉内置/下线的历史购物车残留（并写回 localStorage）
       paintWall(); renderBuy(works[cur]);
     }
     const onVisible = () => { if (!document.hidden) loadOwned(true); };
@@ -1019,16 +943,25 @@ SITE.pages = {
 
     function paintWall() {
       if (!wall) return;
-      wall.innerHTML = works.map((w, i) => {
+      // 内置宠物（织熊猫/织兔子）单独一排（2026-09-12 老曹：不与新宠物混排）
+      // 内置宠物（开箱即用）不放勾选框——2026-09-12 老曹：方块只有 50px，文字徽标会把图标压住
+      // （英文 "Built-in" 更宽，整个方块糊死）；含义改由下方 .wall-break 一行小字承担，方块保持纯图
+      const tile = (w, i) => {
         const a = ANIM[w.id];
-        const src = (a && a.idle) || w.thumb || w.cover || (poseList(w)[0] || {}).src || '';
+        const src = (a && (a.lite || a.idle)) || w.thumb || w.cover || (poseList(w)[0] || {}).src || '';
         const isOwned = owned.has(w.id);
         const isPicked = picked.has(w.id);
-        return `<button type="button" class="buddy-tile${i === cur ? ' on' : ''}${isOwned ? ' owned' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}" title="${window.pick(w.title)}">
+        const isBuiltin = !!w.builtin;
+        const chip = isBuiltin ? '' : `<span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起购买', en: 'Select to buy together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>`;
+        const tip = isBuiltin ? `${window.pick(w.title)} · ${window.pick({ zh: '已内置，开箱即用', en: 'built-in, ready to use' })}` : window.pick(w.title);
+        return `<button type="button" class="buddy-tile${i === cur ? ' on' : ''}${isOwned ? ' owned' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}" title="${tip}">
           <img src="${src}" alt="${window.pick(w.title)}" draggable="false" loading="lazy">
-          <span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起购买', en: 'Select to buy together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>
+          ${chip}
         </button>`;
-      }).join('');
+      };
+      const main = [], builtin = [];
+      works.forEach((w, i) => (w.builtin ? builtin : main).push(tile(w, i)));
+      wall.innerHTML = main.join('') + (builtin.length ? `<div class="wall-break">${window.pick({ zh: '内置 · 开箱即用', en: 'Built-in · ready to use' })}</div>` + builtin.join('') : '');
       wall.querySelectorAll('.buddy-tile').forEach(b => {
         const i = +b.dataset.i, wid = works[i].id;
         b.addEventListener('click', () => {
@@ -1041,7 +974,7 @@ SITE.pages = {
         const cb = b.querySelector('.buddy-check');
         if (cb) cb.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (owned.has(wid)) return;                 // 已拥有不可选
+          if (owned.has(wid) || works[i].builtin) return;   // 已拥有 / 内置不可选
           picked = SITE.togglePicked(wid);            // 持久化（跨页保持）
           paintWall(); renderBuy(works[cur]);
         });
@@ -1053,7 +986,7 @@ SITE.pages = {
     startAnim(works[0]); renderVideo(works[0]); renderBuy(works[0]);
     loadOwned();
     SITE._cleanups.push(stopAnim); // 软导航离开时停帧轮播兜底
-    window.__rerender = () => { picked = SITE.getPicked(); paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]); if (nameEl) nameEl.textContent = window.pick(works[cur].title); };
+    window.__rerender = () => { picked = SITE.sanitizePicked(); paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]); if (nameEl) nameEl.textContent = window.pick(works[cur].title); };
   },
 
   // 首页（2026-09-09 改版）：左选择卡切换 ｜ 右大展示卡姿态轮播 ｜ 下部介绍+下载/购买 ｜ 宣传视频
@@ -1075,14 +1008,18 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           hdGetLabel = $('hdGetLabel'),
           hdBuy = $('hdBuy'),
           vdBadge = $('vdBadge'), vdStage = $('vdStage'), vdTabs = $('vdTabs'),
-          hmTitle = $('hmTitle'), hmTabs = $('hmTabs'), hmFrame = $('hmFrame');
+          posesBadge = $('posesBadge'), posesTitle = $('posesTitle'),
+          posesGrid = $('posesGrid');
     // 视频轮播：固定顺序 Windows → Android → macOS（老曹拍板），三标签常驻可切换；
     // 手册卡与视频窗口平台双向同步（点任一侧标签，另一侧跟着切）
     const PLAT_ORDER = ['win', 'android', 'mac'];
-    let curPlat = 'win', lastPetId = null, curManualSrc = '';
+    let curPlat = 'win', lastPetId = null;
 
     const poses = w => (w.states && w.states.length ? w.states : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]);
     const poseName = s => window.pick(s.caption || { zh: '', en: '' }) || '';
+    // 走马灯走【轻量动画套】works/<pet>-lite/（2026-09-12 老曹 A 方案）：
+    // 原动画 240~384px、单张 280~700KB → 首页 25s 下载 5.6MB（比视频还大）；轻量套 160px+抽帧 ≈ 原 1/5
+    const liteSrc = (w, src) => 'works/' + w.id + '-lite/' + String(src).split('/').pop();
 
     function paintHero() {
       if (heroKickerText) heroKickerText.textContent = window.pick({ zh: '桌面伙伴 · 与你同欢', en: 'DESK BUDDIES · JOY TOGETHER' });
@@ -1097,17 +1034,20 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       });
       if (pickerTitle) pickerTitle.textContent = window.pick({ zh: '选择伙伴', en: 'Choose a buddy' });
       if (hdGetLabel) hdGetLabel.textContent = window.pick({ zh: '把伙伴领回家', en: 'Bring it home' });
-      if (hmTitle) hmTitle.textContent = window.pick({ zh: '用户手册', en: 'User manual' });
     }
 
     // 多选（2026-09-11 老曹：首页同样支持一起选购 + 选择跨页保持）：卡片右上角勾选框；勾选 ≥1 → 购买按钮变「一起带回家 · N 只」
-    let picked = SITE.getPicked();     // 与伙伴页共享同一份持久购物车
+    let picked = SITE.sanitizePicked();     // 与伙伴页共享同一份持久购物车（sanitize：清内置残留并写回）
     const owned = new Set();
-    const pickedIds = () => (picked.size ? [...picked] : [works[cur].id]);
+    const pickedIds = () => {
+      const ids = picked.size ? [...picked] : [works[cur].id];
+      return ids.filter(id => { const w = works.find(x => x.id === id); return w && !w.builtin; });
+    };
     async function loadOwned(force) {
       const s = await SITE.fetchOwnedIds(force);
       owned.clear(); s.forEach(id => owned.add(id));
       picked = SITE.prunePicked(s);          // 付款后自动清除已购项
+      picked = SITE.sanitizePicked();        // 清掉内置/下线的历史购物车残留（并写回 localStorage）
       paintPicker(); paintDetail();
     }
     const onVisible = () => { if (!document.hidden) loadOwned(true); };
@@ -1116,27 +1056,34 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
 
     function paintPicker() {
       if (!picker) return;
-      picker.innerHTML = works.map((w, i) => {
+      // 内置宠物（织熊猫/织兔子）单独一排（2026-09-12 老曹：不与新宠物混排）；同样不放勾选框，
+      // 含义交给 .picker-break 行标（勾选框压住卡片右上角文字，英文 "Built-in" 尤其挤）
+      const card = (w, i) => {
         const isOwned = owned.has(w.id), isPicked = picked.has(w.id);
+        const isBuiltin = !!w.builtin;
+        const chip = isBuiltin ? '' : `<span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起购买', en: 'Select to buy together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>`;
         return `
         <button type="button" class="pick-card${i === cur ? ' active' : ''}${isOwned ? ' owned' : ''}" data-i="${i}">
-          <img class="pick-thumb" src="${w.thumb || w.cover}" alt="" draggable="false">
+          <img class="pick-thumb" src="${w.thumb ? liteSrc(w, w.thumb) : (w.cover || '')}" alt="" draggable="false">
           <span class="pick-txt"><b>${window.pick(w.title)}</b><small>${window.pick(w.summary)}</small></span>
           <span class="pick-arrow">›</span>
-          <span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起购买', en: 'Select to buy together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>
+          ${chip}
         </button>`;
-      }).join('');
+      };
+      const main = [], builtin = [];
+      works.forEach((w, i) => (w.builtin ? builtin : main).push(card(w, i)));
+      picker.innerHTML = main.join('') + (builtin.length ? `<div class="picker-break">${window.pick({ zh: '内置 · 开箱即用', en: 'Built-in · ready to use' })}</div>` + builtin.join('') : '');
       picker.querySelectorAll('.pick-card').forEach(btn => {
         const i = +btn.dataset.i, wid = works[i].id;
         btn.addEventListener('click', () => {
           if (i === cur) return;
           cur = i; curPose = 0;
-          paintPicker(); paintDots(); paintShowcase(); paintDetail(); restart();
+          paintPicker(); paintDots(); paintShowcase(); paintDetail(); paintPoses(); restart();
         });
         const cb = btn.querySelector('.buddy-check');
         if (cb) cb.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (owned.has(wid)) return;
+          if (owned.has(wid) || works[i].builtin) return;   // 已拥有 / 内置不可选
           picked = SITE.togglePicked(wid);   // 持久化（跨页保持）
           paintPicker(); paintDetail();
         });
@@ -1152,7 +1099,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     function paintShowcase() {
       if (!track || !badge) return;
       const w = works[cur], list = poses(w);
-      const items = list.map(s => `<figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="${s.src}" alt="${poseName(s) || window.pick(w.title)}" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>`).join('');
+      const items = list.map(s => `<figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="${liteSrc(w, s.src)}" alt="${poseName(s) || window.pick(w.title)}" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>`).join('');
       // 复制一份做无缝循环
       track.innerHTML = items + items;
       // 徽标显示第一帧（走马灯自身循环播放，无需人为切换）
@@ -1174,10 +1121,9 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           return `<button type="button" class="vtab${p === curPlat ? ' on' : ''}" data-p="${p}">${label}</button>`;
         }).join('');
         vdTabs.querySelectorAll('.vtab').forEach(b => b.addEventListener('click', () => {
-          if (b.dataset.p === curPlat && b.dataset.p === curManualPlat) return;
-          curPlat = b.dataset.p; curManualPlat = b.dataset.p; // 双向同步：视频标签带动手册
+          if (b.dataset.p === curPlat) return;
+          curPlat = b.dataset.p;
           renderVideo(works[cur]);
-          setManualPlat();
         }));
       }
       if (!vdStage) return;
@@ -1195,29 +1141,22 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       }
     }
 
-    // 手册大卡：三平台标签 + 原版手册 iframe（懒加载：仅平台/语言变化时重设 src，HTTP 缓存复用，单份仅十几 KB）
-    let curManualPlat = 'win';
-    function setManualPlat() {
-      if (!hmTabs) return;
-      const names = { win: 'Windows', android: 'Android', mac: 'macOS' };
-      hmTabs.innerHTML = PLAT_ORDER.map(p =>
-        `<button type="button" class="vtab${p === curManualPlat ? ' on' : ''}" data-p="${p}">${names[p]}</button>`).join('');
-      hmTabs.querySelectorAll('.vtab').forEach(b => b.addEventListener('click', () => {
-        if (b.dataset.p === curManualPlat && b.dataset.p === curPlat) return;
-        curManualPlat = b.dataset.p; curPlat = b.dataset.p; // 双向同步：手册标签带动视频
-        renderVideo(works[cur]);
-        setManualPlat();
-      }));
-      if (hmFrame) {
-        const lang = (window.__lang === 'en') ? 'en' : 'zh';
-        const src = `manual/${curManualPlat}-${lang}.html`;
-        if (curManualSrc !== src) { curManualSrc = src; hmFrame.setAttribute('src', src); }
-      }
+    // 姿态速览宫格（2026-09-12 老曹）：展示当前伙伴的"全部姿态"，用轻量静态缩略图
+    // （数据源 works.json 的 poses；图片为 make_pose_thumbs.py 从动画首帧抽取的 200px 静态 webp）
+    function paintPoses() {
+      if (!posesGrid) return;
+      const w = works[cur];
+      const list = (w.poses && w.poses.length) ? w.poses : [];
+      if (posesBadge) posesBadge.textContent = window.pick({ zh: '姿态速览', en: 'Poses' });
+      if (posesTitle) posesTitle.textContent = window.pick(w.title) + ' · ' + window.pick({ zh: '全部姿态', en: 'all poses' });
+      // 「共 N 个姿态」计数行已删（2026-09-12 老曹：宫格自己会说话，不用报数）
+      posesGrid.innerHTML = list.map(p =>
+        `<figure class="pose-card"><div class="pose-img"><img src="${p.src}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`).join('');
     }
 
     function paintDetail() {
       const w = works[cur];
-      if (lastPetId !== w.id) { curPlat = 'win'; curManualPlat = 'win'; lastPetId = w.id; }
+      if (lastPetId !== w.id) { curPlat = 'win'; lastPetId = w.id; }
       if (hdBadge) hdBadge.textContent = window.pick({ zh: '伙伴档案', en: 'Profile' });
       if (hdTitle) hdTitle.textContent = window.pick(w.title);
       if (hdSummary) hdSummary.textContent = window.pick(w.summary);
@@ -1236,6 +1175,12 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           const n = picked.size;
           // 2026-09-12 老曹 B 方案：选中反馈独立于 device_id（选了就显示数量），无设备号按钮退回下载引导
           const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
+          // 内置宠物（织熊猫/织兔子）：开箱即用，无购买入口；文案引导去下载客户端（2026-09-12 老曹：点击连接到下载）
+          const isBuiltin = !!w.builtin;
+          if (isBuiltin && n === 0) {
+            hdBuy.innerHTML = `<div class="buy-row"><a class="buy-builtin" href="download.html">🎁 ${window.pick({ zh: '已内置 · 开箱即用，下载客户端使用', en: 'Built-in · ready to use — download the app' })}</a></div>`;
+            renderVideo(w); return;
+          }
           let main = '';
           if (payUrl) {
             const label = n > 1
@@ -1251,7 +1196,6 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
         }).catch(() => {});
       }
       renderVideo(w);
-      setManualPlat();
     }
 
     function restart() {
@@ -1263,9 +1207,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       }, 3200);
     }
 
-    paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); restart();
-    // 首页手册大卡 iframe 高度固定（CSS min/max 兜底），不走内容自适应——避免 usage.html 的 fitManualFrame 把它压成 520
-    if (hmFrame) { hmFrame.style.height = '760px'; hmFrame.style.minHeight = '660px'; }
+    paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); paintPoses(); restart();
     // 悬停大卡暂停轮播，移开恢复
     if (card) {
       card.addEventListener('mouseenter', () => { if (timer) { clearInterval(timer); timer = null; } });
@@ -1273,7 +1215,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     }
     // 软导航离开首页时停掉轮播定时器
     SITE._cleanups.push(() => { if (timer) { clearInterval(timer); timer = null; } });
-    window.__rerender = () => { picked = SITE.getPicked(); paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); };
+    window.__rerender = () => { picked = SITE.sanitizePicked(); paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); paintPoses(); };
     loadOwned();   // 已授权标记（避免重复购买）
     initOpenKounter();
   },
@@ -1397,9 +1339,14 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
         }).join(' / ');
         // 2026-09-10 对齐 petpay 付费链路（与首页/伙伴页一致）：有 device_id → 收银台链接；
         // 无 → 「请在客户端内购买」（设备绑定授权模型）
+        // 2026-09-12 补：内置宠物（织熊猫/织兔子）开箱即用、免费 → 绝不能挂收银台（原来漏了这条，
+        // 详情页还在给免费内置宠物卖单），改引导去下载客户端，与伙伴页/首页文案一致
         const payUrl = SITE.checkoutUrl(id);
+        const isBi = !!w.builtin;
         let main = '';
-        if (payUrl) {
+        if (isBi) {
+          main = `<a class="buy-builtin" href="download.html">🎁 ${window.pick({ zh: '已内置 · 开箱即用，下载客户端使用', en: 'Built-in · ready to use — download the app' })}</a>`;
+        } else if (payUrl) {
           main = `<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🏠 ${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}</a>`;
         } else {
           main = `<a class="btn btn-primary" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
@@ -1407,9 +1354,11 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
         const tail = items
           ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` })
           : '';
+        const headLabel = isBi ? window.pick({ zh: '开箱即用', en: 'Ready out of the box' }) : window.pick({ zh: '把伙伴领回家', en: 'Bring it home' });
+        const headHint = isBi ? window.pick({ zh: '内置免费，下载客户端即可使用', en: 'Free & built in — just download the app' }) : window.pick({ zh: '解锁更多动作、表情与皮肤', en: 'Unlock more actions, moods & skins' });
         if (!main && !tail) { buyHost.remove(); return; }
         buyHost.innerHTML = `
-          <div class="block-label">${window.pick({ zh: '把伙伴领回家', en: 'Bring it home' })}<span class="hint">${window.pick({ zh: '解锁更多动作、表情与皮肤', en: 'Unlock more actions, moods & skins' })}</span></div>
+          <div class="block-label">${headLabel}<span class="hint">${headHint}</span></div>
           <div class="buy-row">${main}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
       }).catch(() => { buyHost.remove(); });
       initOpenKounter();
@@ -1571,9 +1520,10 @@ function isMinimalPath() {
   const p = location.pathname.split('/').pop();
   return isHomePath() || p === 'privacy.html' || p === 'buddies.html' || p === 'download.html';
 }
-// 首页极简同步：首页/隐私页隐藏搜索栏 + 移除公告/语录走马灯。
+// 首页极简同步：首页/隐私页隐藏搜索栏 + 移除公告走马灯。
 // 这些块都在 #view 之外，软导航换 #view 带不动它们，故每次路由统一增删。
-// initAnnounce / initQuoteMarquee 均幂等（先清再插 / 极简页守卫），重复调用安全。
+// initAnnounce 幂等（先清再插 / 极简页守卫），重复调用安全。
+// 语录已并入顶部宣传语条（2026-09-12 老曹"广告+语录合到一起"），不再有独立语录条。
 function syncHomeChrome() {
   const minimal = isMinimalPath();
   const search = document.querySelector('.top-search');
@@ -1582,11 +1532,9 @@ function syncHomeChrome() {
   const isPrivacy = location.pathname.split('/').pop() === 'privacy.html';
   document.body.classList.toggle('privacy-warm', isPrivacy);
   if (minimal) {
-    document.querySelectorAll('.announce-bar, .quote-bar').forEach(b => b.remove());
-    _quoteEl = null;
+    document.querySelectorAll('.announce-bar').forEach(b => b.remove());
   } else if (!document.querySelector('.announce-bar')) {
     initAnnounce();
-    initQuoteMarquee();
   }
 }
 
@@ -1599,14 +1547,49 @@ const SLOGANS = [
   { zh: '桌面终于有活物了 · 完全免费、无广告', en: 'Your desktop finally has a living thing — free, no ads' },
   { zh: '打工人的桌面解压小物 · 摸鱼党狂喜', en: 'A desktop stress-reliever for busy days' },
 ];
-// 一次一条 + 接力（2026-09-11 老曹：照语录条 quote-bar 的观感——屏上永远只有一条、源源不断；
-// 之前"N 条铺满轨道同时跑"太杂乱，单条又会在滑出后空档 6s+，故用同款**双轨接力**）。
-// 复用 @keyframes quoteScroll；两条错开半周期（CSS nth-of-type delay），各自跑完一轮换下一句。
+// 2026-09-12 老曹："上面只有广告、没有语录，应该合到一起" → 语录并入同一条顶部走马灯（广告+语录混排），
+// 独立语录条（.quote-bar）已移除。池 = 4 条广告均匀穿插在语录中（先兜底，随后 fetch bubble.json 公共语录补全）。
+const TOP_QUOTES_FALLBACK = [
+  { zh: '今天也要开开心心~', en: 'Stay happy today~' },
+  { zh: '陪你摸鱼每一刻', en: 'Here with you every moment' },
+  { zh: '桌面因你而热闹', en: 'My desktop is livelier with you' },
+  { zh: '小小的伙伴，暖暖的陪伴', en: 'A tiny pal, warm company' },
+];
+// 把 4 条广告均匀铺进语录池（每 stride 条语录插一条广告，尾部补余）
+function _mergeTopPool(quotes) {
+  const out = [];
+  const stride = Math.max(1, Math.round(quotes.length / SLOGANS.length));
+  let si = 0;
+  quotes.forEach((it, i) => {
+    if (i > 0 && i % stride === 0 && si < SLOGANS.length) out.push(SLOGANS[si++]);
+    out.push(it);
+  });
+  while (si < SLOGANS.length) out.push(SLOGANS[si++]);
+  return out;
+}
+let _topPool = _mergeTopPool(TOP_QUOTES_FALLBACK);
+let _topQuotesLoaded = false;
+function _loadTopQuotes() {
+  if (_topQuotesLoaded) return;
+  _topQuotesLoaded = true;
+  fetch('data/bubble.json', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.json() : null))
+    .then(d => {
+      const pub = (d && d.public) || [];
+      const qs = pub.map(x => (x && typeof x === 'object')
+        ? { zh: x.zh || '', en: x.en || '' }
+        : { zh: String(x == null ? '' : x), en: String(x == null ? '' : x) })
+        .filter(o => o.zh || o.en);
+      if (qs.length) _topPool = _mergeTopPool(qs);
+    })
+    .catch(() => {});
+}
 let _sloganIdx = 0;
 function buildSloganTrack() {
   const bar = document.querySelector('.slogan-bar');
   if (!bar) return;
   let track = bar.querySelector('.slogan-track');
+  const N = _topPool.length;
   if (!track) {
     track = document.createElement('div');
     track.className = 'slogan-track';
@@ -1614,18 +1597,21 @@ function buildSloganTrack() {
     for (let i = 0; i < 2; i++) {
       const el = document.createElement('span');
       el.className = 'slogan-item';
-      el.dataset.idx = String((_sloganIdx + i) % SLOGANS.length);
-      // 每跑完一轮换句（此刻元素在屏外 100%，切换不可见＝无跳变）；两槽位各前进 2 条，交替覆盖 4 条
+      el.dataset.idx = String((_sloganIdx + i) % N);
+      // 每跑完一轮换句（此刻元素在屏外 100%，切换不可见＝无跳变）；两槽位各前进 2 条，交替覆盖全池
       el.addEventListener('animationiteration', () => {
-        el.dataset.idx = String((+el.dataset.idx + 2) % SLOGANS.length);
-        el.textContent = window.pick(SLOGANS[+el.dataset.idx]);
+        const n = _topPool.length;
+        el.dataset.idx = String((+el.dataset.idx + 2) % n);
+        el.textContent = window.pick(_topPool[+el.dataset.idx]);
       });
       track.appendChild(el);
     }
   }
-  // 语言切换重绘：保留各槽位当前句（进度不打断），仅换语言
+  // 语言切换 / 池变更重绘：保留各槽位当前句（进度不打断），仅换语言；越界回绕
   track.querySelectorAll('.slogan-item').forEach((el) => {
-    el.textContent = window.pick(SLOGANS[+el.dataset.idx]);
+    const n = _topPool.length;
+    if (+el.dataset.idx >= n) el.dataset.idx = String(+el.dataset.idx % n);
+    el.textContent = window.pick(_topPool[+el.dataset.idx]);
   });
 }
 // ⚠️ 全站单例：**不进 SITE._cleanups**——list 等页的 render() 内部也会调 runCleanups()，
@@ -1645,6 +1631,7 @@ SITE.initSloganBar = function () {
     // 监听 document 收不到（window 派发的事件不会反向到达 document）——2026-09-11 实测踩坑
     window.addEventListener('lang:change', buildSloganTrack); // 文案走 pick → 切语言重建轨道
   }
+  _loadTopQuotes();   // 合并语录池（首次；异步补全后下一轮 animationiteration 生效）
   buildSloganTrack();
 };
 
@@ -1740,7 +1727,6 @@ function boot() {
   SITE.initBgm();      // 绑定开关 + 跨页续播
   initSearch();        // 搜索框（常驻顶栏，仅一次）
   initAnnounce();      // 公告栏（常驻，仅一次）
-  initQuoteMarquee();   // 语录连续走马灯（作品走马灯与搜索之间）
   wireSoftNav();       // 链接拦截 + popstate
   // 图片右键菜单拦截：右键落在 <img> 上直接阻止（防「图片另存为」）；落在外层链接（如走马灯封面，pointer-events:none）则由链接接管，不拦
   if (!window.__imgCtxGuard) {

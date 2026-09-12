@@ -1,5 +1,5 @@
 // 2026-09-10 DeskBud 网页版行为扩展验证：
-// ①鼠标避让 ②输入框避让 ③专注模式(右键菜单/缩放/气泡抑制/行为锁) ④歪头跟随
+// ①鼠标驱赶【2026-09-12 已取消】②输入框避让 ③专注模式(右键菜单/缩放/气泡抑制/行为锁) ④歪头跟随
 const { chromeExe } = require('./_env.js');
 const { chromium } = require('playwright-core');
 const BASE = 'http://127.0.0.1:8081';
@@ -26,21 +26,20 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
       transform: c.container.style.transform, currentEdge: c.currentEdge };
   });
 
-  /* ① 鼠标避让：鼠标压到宠物中心 → 宠物应反向移动出 90px 圈 */
+  /* ① 鼠标驱赶已取消（2026-09-12 老曹）：光标靠近宠物(非接触) 不应触发避让(startAvoidWalk) */
   const before = await pet();
   if (!before) { console.log('FAIL 宠物未出生'); process.exit(1); }
   const cx0 = before.x + before.w / 2, cy0 = before.y + before.h / 2;
-  // 鼠标放在宠物 65px 旁（避让圈内但未接触）→ 应走开；接触（压身上）→ 悬停暂停不避让
-  for (let i = 0; i < 10; i++) { await p.mouse.move(cx0 + 65 + (i % 3) * 4, cy0 + (i % 2) * 4); await sleep(200); }
-  // 轮询监测 4s 内最大距离（宠物自主走动可能又回到鼠标旁——避让是反复驱离，断言"曾经走开"）
-  let maxD = 0;
-  for (let i = 0; i < 18; i++) {
-    await sleep(500);
-    const s = await pet();
-    maxD = Math.max(maxD, Math.hypot(s.x + s.w / 2 - cx0, s.y + s.h / 2 - cy0));
-    if (maxD > 120) break; // 宠物在长动作（forcethink/sit 3~6s）中会晚响应，窗口放宽到 9s
+  // 光标停在宠物 65px 旁（旧避让圈内），持续 ~6s；期间采样 avoidUntil，若曾被推到未来即说明仍在驱赶
+  let avoidTriggered = false, maxAhead = 0;
+  for (let i = 0; i < 24; i++) {
+    await p.mouse.move(cx0 + 65 + (i % 3) * 4, cy0 + (i % 2) * 4);
+    await sleep(250);
+    const au = await p.evaluate(() => { const c = window.__WM_CREATURES[0]; return c ? c.avoidUntil : 0; });
+    maxAhead = Math.max(maxAhead, au - Date.now());
+    if (au - Date.now() > 200) avoidTriggered = true;
   }
-  chk('①鼠标避让走开(曾>90px)', maxD > 90, `maxDist=${Math.round(maxD)}`);
+  chk('①鼠标驱赶已取消(avoidUntil未推未来)', !avoidTriggered, `maxAhead=${Math.round(maxAhead)}`);
 
   /* ①b 悬停暂停（pyside6 语义）：鼠标压在宠物身上 → 定格不走（避让让位）；移开 → 恢复 */
   const now1 = await pet();

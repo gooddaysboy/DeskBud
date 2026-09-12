@@ -29,25 +29,27 @@ function chk(name, cond, extra) {
     animW: Math.round(document.querySelector('.buddy-anim-stage').getBoundingClientRect().width),
     bodySW: document.body.scrollWidth, iw: innerWidth,
   }));
-  chk('①选择墙方块数=2', b.tiles === 2, 'tiles=' + b.tiles);
-  chk('①方块用idle动图', b.tileSrcs.join(',').includes('panda-anim/panda_idle.webp') && b.tileSrcs.join(',').includes('rabbit-anim/rabbit_idle.webp'), b.tileSrcs.join(','));
+  chk('①选择墙方块数=3', b.tiles === 3, 'tiles=' + b.tiles);
+  // 2026-09-12 晚：方块改吃轻量待机动图（160px，-lite/，屏显只有 50px 不必吃 240px 原动画）
+  chk('①方块用轻量idle动图', b.tileSrcs.join(',').includes('panda-lite/idle.webp') && b.tileSrcs.join(',').includes('rabbit-lite/idle.webp') && b.tileSrcs.join(',').includes('linekit-lite/linekit_idle.webp'), b.tileSrcs.join(','));
   chk('①默认选中第0个', b.onIdx === 0);
-  chk('②姿态小窗用聚合动图', b.animSrc.includes('panda_all.webp'), b.animSrc);
+  chk('②姿态小窗用聚合动图(线咪)', b.animSrc.includes('linekit_all.webp'), b.animSrc);
   chk('②姿态窗是小的(≤240)', b.animW > 0 && b.animW <= 240, 'animW=' + b.animW);
-  chk('②显示宠物名', b.name === '织熊猫', b.name);
+  chk('②显示宠物名', b.name === '线咪', b.name);
   chk('②购买按钮(先下载桌宠→download)', b.buy.includes('先下载桌宠') && (b.buyHref === 'download.html'), b.buy + '|' + (b.buyHref||''));
   chk('③宣传视频已移除(2026-09-10 老曹拍板)', b.videoGone);
   chk('③无横向溢出', b.bodySW <= b.iw + 1, JSON.stringify({ s: b.bodySW, i: b.iw }));
 
   /* 切兔子：聚合图/视频占位/购买联动 */
-  await p.evaluate(() => { document.querySelectorAll('#buddyWall .buddy-tile')[1].click(); });
+  await p.evaluate(() => { const t=[...document.querySelectorAll('#buddyWall .buddy-tile')].find(x=>/织兔子/.test(x.getAttribute('title')||'')); if(t) t.click(); });
   await p.waitForTimeout(1000);
   const b2 = await p.evaluate(() => ({
     onIdx: [...document.querySelectorAll('#buddyWall .buddy-tile')].findIndex(e => e.classList.contains('on')),
+    onTitle: (document.querySelector('#buddyWall .buddy-tile.on') || {}).getAttribute ? document.querySelector('#buddyWall .buddy-tile.on').getAttribute('title') : '',
     animSrc: document.getElementById('buddyAnimImg').getAttribute('src'),
     name: document.getElementById('buddyName').textContent,
   }));
-  chk('①b切兔子选中', b2.onIdx === 1);
+  chk('①b切兔子选中', /织兔子/.test(b2.onTitle || ''), b2.onTitle);
   chk('②b聚合图切兔子', b2.animSrc.includes('rabbit_all.webp'), b2.animSrc);
   chk('②b名字切兔子', b2.name === '织兔子', b2.name);
   await p.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v2_mobile.png', fullPage: true });

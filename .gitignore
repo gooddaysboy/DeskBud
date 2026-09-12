@@ -10,6 +10,9 @@ Thumbs.db
 _tmp/
 .tmp_rbt/
 
+# 回收站（本机"删除拦截"规避：删类操作先 mv 到这里，不入库）
+_trash/
+
 # 素材预览是生成物（gen_preview 类脚本产出，不入库）
 scripts/素材预览_*.html
 

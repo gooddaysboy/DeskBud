@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updated": "2026-09-04",
+  "updated": "2026-09-12",
   "note": "伙伴之家数据源：加角色/换渠道只改这个文件，页面零改动。url 留空则按钮显示「即将上线」占位；buy 是角色包购买渠道（爱发电/小红书等），download 是主程序下载。channels 是全站兜底渠道（伙伴之家底部+详情页小字展示），url 留空显示纯文字；channelsVisible=false 时整行不渲染，渠道谈妥后改 true 即上线。",
   "channelsVisible": false,
   "channels": [
@@ -119,18 +119,19 @@
       }
     },
     {
-      "id": "cat",
-      "status": "hidden",
+      "id": "linekit",
+      "status": "online",
       "title": {
-        "zh": "织猫咪",
-        "en": "Knitted Cat"
+        "zh": "线咪",
+        "en": "LineKit"
       },
-      "emoji": "🐱",
+      "emoji": "🐈",
+      "cover": "works/linekit-anim/linekit_idle.webp",
       "tagline": {
-        "zh": "正在织…一只傲娇的小猫，敬请期待。",
-        "en": "On the knitting needles — a proud little cat, stay tuned."
+        "zh": "一只线条风格的小猫，会在屏幕上攀爬、倒挂、眨眼卖萌。",
+        "en": "A line-art kitten that climbs, hangs and blinks on your screen."
       },
-      "detail": "",
+      "detail": "detail.html?id=linekit",
       "download": {
         "label": {
           "zh": "下载 Windows 版",

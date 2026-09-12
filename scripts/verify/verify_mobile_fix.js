@@ -47,12 +47,12 @@ function chk(name, cond, extra) {
   });
   chk('②首页导航四链接可见', n2 === 4, 'vis=' + n2);
 
-  /* ③ 伙伴页：视频已移除，断言墙+姿态窗仍在 */
+  /* ③ 伙伴页：视频已移除，断言墙+姿态窗仍在（方块数不再写死：线咪上线后 = 3） */
   const p3 = await ctx.newPage();
   await p3.goto(BASE + '/buddies.html', { waitUntil: 'networkidle', timeout: 30000 });
   await p3.waitForTimeout(1500);
   const v2 = await p3.evaluate(() => ({ wall: document.querySelectorAll('#buddyWall .buddy-tile').length, anim: !!document.getElementById('buddyAnimImg'), videoGone: !document.getElementById('buddyVideo') }));
-  chk('③伙伴页墙+姿态窗在、视频已移除', v2.wall === 2 && v2.anim && v2.videoGone, JSON.stringify(v2));
+  chk('③伙伴页墙+姿态窗在、视频已移除', v2.wall >= 3 && v2.anim && v2.videoGone, JSON.stringify(v2));
 
   /* ④ footer 安全区：computed padding-bottom ≥ 32px（无刘海环境 env=0 仍 32px） */
   const f1 = await p3.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.footer')).paddingBottom));
@@ -70,7 +70,7 @@ function chk(name, cond, extra) {
     htmlCls: document.documentElement.classList.contains('embed-mode'),
     topbarHidden: getComputedStyle(document.querySelector('.topbar')).display === 'none',
     footerHidden: getComputedStyle(document.querySelector('.footer')).display === 'none',
-    wallVisible: document.querySelectorAll('#buddyWall .buddy-tile').length === 2,
+    wallVisible: document.querySelectorAll('#buddyWall .buddy-tile').length >= 3,
     buyHref: (document.querySelector('#buddyBuy .btn') || {}).href || '',
     navLang: document.documentElement.lang,
     title: document.getElementById('buddyName') ? document.getElementById('buddyName').textContent : '',
@@ -79,8 +79,9 @@ function chk(name, cond, extra) {
   chk('⑤顶栏隐藏', e1.topbarHidden);
   chk('⑤页脚隐藏', e1.footerHidden);
   chk('⑤内容仍在（选择墙）', e1.wallVisible);
-  chk('⑤embed收银台链接+device_id+embed透传', e1.buyHref === `https://pay.deskbud.xyz/checkout.html?device_id=${DID}&pet_id=panda&embed=1`, e1.buyHref);
-  chk('⑤?lang=zh 中文生效', e1.navLang === 'zh-CN' && e1.title === '织熊猫', e1.navLang + '/' + e1.title);
+  // 宠物 id / 名字不再写死（首位已从织熊猫换成线咪；内置在末排）
+  chk('⑤embed收银台链接+device_id+embed透传', new RegExp(`^https://pay\\.deskbud\\.xyz/checkout\\.html\\?device_id=${DID}&pet_id=[a-z_]+&embed=1$`).test(e1.buyHref), e1.buyHref);
+  chk('⑤?lang=zh 中文生效', e1.navLang === 'zh-CN' && e1.title.length > 0 && /[\u4e00-\u9fa5]/.test(e1.title), e1.navLang + '/' + e1.title);
   await pe.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/mobile_embed_mode.png', fullPage: true });
 
   /* ⑥ lang 记忆：embed 页读过 ?lang=zh 后，无参页仍中文（localStorage 记住） */

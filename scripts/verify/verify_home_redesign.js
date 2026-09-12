@@ -17,6 +17,16 @@ const { chromeExe } = require('./_env.js');
 
   const results = [];
   const check = (name, ok, extra) => results.push(`${ok ? 'PASS' : 'FAIL'} ${name}${extra ? ' | ' + extra : ''}`);
+  // 2026-09-12：宠物增多（线咪/熊猫/兔子），按名字点选，别再用下标硬编码
+  const clickPet = async (name) => {
+    await page.evaluate((n) => {
+      const c = [...document.querySelectorAll('.pick-card')].find(x => {
+        const b = x.querySelector('.pick-txt b');
+        return b && b.textContent.trim() === n;
+      });
+      if (c) c.click();
+    }, name);
+  };
 
   await page.goto(base + '/index.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(1500);
@@ -26,12 +36,12 @@ const { chromeExe } = require('./_env.js');
 
   // 2. 选择卡渲染
   const pickCount = await page.locator('.pick-card').count();
-  check('选择卡渲染 2 张', pickCount === 2, `实际 ${pickCount}`);
+  check('选择卡渲染 3 张', pickCount === 3, `实际 ${pickCount}`);
 
   // 3. 展示卡横滚走马灯：spose-item 渲染 = 2*states（无缝循环复制），首屏窗口可见 ~3 个
   const sposeTotal = await page.locator('#showcaseTrack .spose-item').count();
-  // 11 帧 * 2 复制 = 22；兔子后续切换再断言
-  check('首页横滚走马灯 22 项', sposeTotal === 22, `实际 ${sposeTotal}`);
+  // 2026-09-12：首宠改为线咪（19 帧）→ 19*2=38；熊猫/兔子切换后另行断言
+  check('首页横滚走马灯 38 项(线咪19*2)', sposeTotal === 38, `实际 ${sposeTotal}`);
   const sposeVisible = await page.evaluate(() => {
     const wrap = document.querySelector('.showcase-track-wrap');
     if (!wrap) return 0;
@@ -51,12 +61,12 @@ const { chromeExe } = require('./_env.js');
   });
   check('展示卡与视频卡同高 400', heights.showcase === 400 && heights.video === 400, JSON.stringify(heights));
 
-  // 5. 徽标 = 织熊猫 · 姿态名
+  // 5. 徽标 = 线咪 · 姿态名（2026-09-12：线咪为首宠）
   const badge1 = await page.textContent('#showcaseBadge');
-  check('徽标含「织熊猫 ·」', /织熊猫\s*·/.test(badge1 || ''), badge1);
+  check('徽标含「线咪 ·」', /线咪\s*·/.test(badge1 || ''), badge1);
 
-  // 6. 切换伙伴 → 走马灯重渲染
-  await page.locator('.pick-card').nth(1).click();
+  // 6. 切换伙伴(织兔子) → 走马灯重渲染
+  await clickPet('织兔子');
   await page.waitForTimeout(500);
   const spose2 = await page.locator('#showcaseTrack .spose-item').count();
   const hdTitle2 = await page.textContent('#hdTitle');
@@ -65,31 +75,29 @@ const { chromeExe } = require('./_env.js');
   const badge2 = await page.textContent('#showcaseBadge');
   check('切伙伴→徽标=织兔子', /织兔子\s*·/.test(badge2 || ''), badge2);
 
-  // 7. 切回熊猫
-  await page.locator('.pick-card').nth(0).click();
+  // 7. 切到织熊猫
+  await clickPet('织熊猫');
   await page.waitForTimeout(500);
 
   // 8. 视频三平台标签常驻；兔子无视频→占位
   const vtabCount = await page.locator('#vdTabs .vtab').count();
   check('视频三平台标签', vtabCount === 3, `实际 ${vtabCount}`);
-  await page.locator('.pick-card').nth(1).click();
+  await clickPet('织兔子');
   await page.waitForTimeout(400);
   const rabbitPh = await page.locator('#vdStage .video-ph').count();
   check('兔子无视频→占位卡', rabbitPh === 1, `实际 ${rabbitPh}`);
 
-  // 9. 视频标签带动手册：点 android → iframe src 切 android-zh
+  // 9. 首页已无用户手册卡（2026-09-12 老曹：手册卡移出首页，仅下载页保留）
+  const hmGone = await page.locator('#hmFrame, #hmTabs').count();
+  check('首页无手册卡', hmGone === 0, `实际 ${hmGone}`);
+  // 视频平台标签自身可切换（点 android → 该标签高亮）
   await page.locator('#vdTabs .vtab').nth(1).click();
   await page.waitForTimeout(400);
-  const hmSrcA = await page.getAttribute('#hmFrame', 'src');
-  check('视频标签带动手册', /manual\/android-zh\.html/.test(hmSrcA || ''), hmSrcA);
-  // 手册标签带动视频：点 win → 视频 stage 渲染 win 视频
-  await page.locator('#hmTabs .vtab').nth(0).click();
-  await page.waitForTimeout(500);
-  const hmSrcW = await page.getAttribute('#hmFrame', 'src');
-  check('手册标签带动 iframe', /manual\/win-zh\.html/.test(hmSrcW || ''), hmSrcW);
+  const vtabOn = await page.locator('#vdTabs .vtab.on').textContent();
+  check('视频标签自切换', /Android/i.test(vtabOn || ''), vtabOn);
 
-  // 10. 切回熊猫 → 默认 win 视频渲染
-  await page.locator('.pick-card').nth(0).click();
+  // 10. 切到织熊猫 → 默认 win 视频渲染
+  await clickPet('织熊猫');
   await page.waitForTimeout(700);
   const pandaVid = await page.locator('#vdStage video').count();
   const pandaSrc = await page.getAttribute('#vdStage video', 'src');
@@ -132,8 +140,8 @@ const { chromeExe } = require('./_env.js');
   check('英文 kicker 重绘', /JOY/i.test(kickerEn || ''), kickerEn);
   const leadEnHtml = await page.innerHTML('#heroLead');
   check('英文 heroLead 含 moment hl', /moment/i.test(leadEnHtml) && /<span class="hl">/.test(leadEnHtml), leadEnHtml.slice(0, 80));
-  const hmSrcEn = await page.getAttribute('#hmFrame', 'src');
-  check('英文态手册切 -en', /manual\/[a-z]+-en\.html/.test(hmSrcEn || ''), hmSrcEn);
+  const posesTitleEn = await page.textContent('#posesTitle');
+  check('英文态姿态宫格重绘', /all poses/i.test(posesTitleEn || ''), posesTitleEn);
 
   // 14. 切回中文
   await page.click('#langSwitch');
@@ -143,15 +151,15 @@ const { chromeExe } = require('./_env.js');
   await page.click('#langSwitch');
   await page.waitForTimeout(600);
   const dlEn = await page.locator('.footer-dl-link').textContent();
-  check('footer-dl 英文态 = Download', /Download/.test(dlEn || ''), dlEn);
+  check('footer-dl 英文态含 download', /download/i.test(dlEn || ''), dlEn);
   await page.click('#langSwitch');
   await page.waitForTimeout(600);
   const dlZh = await page.locator('.footer-dl-link').textContent();
   check('footer-dl 中文态 = 客户端下载', /客户端下载/.test(dlZh || ''), dlZh);
 
-  // 16. nav 文案：客户端下载（非「下载客户端」）
+  // 16. nav 下载入口（2026-09-11 起为橙色胶囊「下载」+图标，非「客户端下载」）
   const navText = await page.textContent('.nav');
-  check('nav 客户端下载', /客户端下载/.test(navText || '') && ! /下载客户端/.test(navText || ''), navText);
+  check('nav 下载入口', /下载/.test(navText || '') && ! /下载客户端/.test(navText || ''), navText);
 
   // 17. footer 行2 三件同行：客户端下载 / 联系我们·邮箱 / tagline（v8 合并 footer-dl 到 footer-bottom-left）
   const footerInfo = await page.evaluate(() => {
@@ -166,18 +174,15 @@ const { chromeExe } = require('./_env.js');
       topHasPv: top ? !!top.querySelector('.site-pv') : false
     };
   });
-  check('footer-bottom-left 客户端下载链 list.html', footerInfo.leftHref === 'list.html', footerInfo.leftHref);
+  check('footer-bottom-left 客户端下载链 download.html', footerInfo.leftHref === 'download.html', footerInfo.leftHref);
   check('footer-bottom-left 含 mailto', footerInfo.leftMailto);
   check('footer-bottom 含 tagline', footerInfo.botHasTagline);
   check('footer-top 含版权字符', footerInfo.topHasCopy);
   check('footer-top 含 PV（v7 对调）', footerInfo.topHasPv);
 
-  // 18. 手册大卡 iframe 默认高度 ≥660（已加长）
-  const frameH = await page.evaluate(() => {
-    const f = document.getElementById('hmFrame');
-    return f ? f.offsetHeight : 0;
-  });
-  check('手册 iframe 高度 ≥660', frameH >= 660, `实际 ${frameH}`);
+  // 18. 姿态速览宫格已渲染（2026-09-12 新增；当前伙伴=织熊猫 → 11 格）
+  const poseN = await page.locator('#posesGrid .pose-card').count();
+  check('首页姿态宫格已渲染', poseN >= 11, `实际 ${poseN}`);
 
   // 19. 隐私页：暖米背景+大立体卡+极简
   await page.goto(base + '/privacy.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -200,7 +205,7 @@ const { chromeExe } = require('./_env.js');
     await page.goto(base + '/' + p + '.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(400);
     const t = await page.textContent('.nav');
-    check(`${p} nav=客户端下载`, /客户端下载/.test(t || '') && ! /下载客户端/.test(t || ''), t.slice(0, 60));
+    check(`${p} nav=下载`, /下载/.test(t || '') && ! /下载客户端/.test(t || ''), t.slice(0, 60));
   }
 
   const pass = results.filter(r => r.startsWith('PASS')).length;

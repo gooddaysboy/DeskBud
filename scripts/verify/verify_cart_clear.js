@@ -16,7 +16,7 @@ const chk = (n, c, x) => { c ? (pass++, console.log('PASS', n)) : (fail++, conso
   await sleep(2200);
 
   // ① 选 1 只 → 显示「已选 1 只」
-  await p.evaluate(() => { document.querySelectorAll('#buddyWall .buddy-tile')[1].querySelector('.buddy-check').click(); });
+  await p.evaluate(() => { [...document.querySelectorAll('#buddyWall .buddy-check')][1]?.click(); });
   await sleep(600);
   const s1 = await p.evaluate(() => document.getElementById('buddyBuy').textContent.replace(/\s+/g, ' ').trim());
   chk('①选1只也显示提示', s1.includes('已选 1 只'), s1);
@@ -35,7 +35,7 @@ const chk = (n, c, x) => { c ? (pass++, console.log('PASS', n)) : (fail++, conso
   chk('②已购标记「已拥有」', s2.owned === 1, JSON.stringify(s2));
 
   // ③ 未购的另一只仍可勾选，提示正常
-  await p.evaluate(() => { document.querySelectorAll('#buddyWall .buddy-tile')[0].querySelector('.buddy-check').click(); });
+  await p.evaluate(() => { [...document.querySelectorAll('#buddyWall .buddy-check')][0]?.click(); });
   await sleep(600);
   const s3 = await p.evaluate(() => ({ tip: document.getElementById('buddyBuy').textContent.replace(/\s+/g, ' ').trim(), checked: document.querySelectorAll('#buddyWall .buddy-check.on').length }));
   chk('③未购仍可勾选+提示', s3.checked === 1 && s3.tip.includes('已选 1 只'), JSON.stringify(s3));

@@ -1,4 +1,5 @@
-// 2026-09-10 导航 ↓ 图标验证：桌面中文/英文态 + 手机宽度
+// 2026-09-10 导航下载入口验证 → 2026-09-12 晚更新：入口已从「↓ 图标」改成「下载」文字 + 橙色胶囊 CTA
+// 断言：①桌面中文态 = 文字「下载」+ 胶囊（有底色）②英文态 aria/title=Download ③手机宽度可见不溢出
 const { chromeExe } = require('./_env.js');
 const { chromium } = require('playwright-core');
 const BASE = 'http://127.0.0.1:8081';
@@ -16,10 +17,13 @@ function chk(name, cond, extra) {
   await p.waitForTimeout(1500);
   const c1 = await p.evaluate(() => {
     const a = document.querySelector('.nav .nav-dl');
-    return { txt: a.textContent.trim(), weight: getComputedStyle(a).fontWeight,
-      aria: a.getAttribute('aria-label'), title: a.getAttribute('title'), visible: a.getBoundingClientRect().right <= innerWidth };
+    const cs = getComputedStyle(a);
+    return { txt: a.textContent.trim(), weight: cs.fontWeight, radius: cs.borderRadius,
+      bg: cs.backgroundColor, aria: a.getAttribute('aria-label'), title: a.getAttribute('title'),
+      visible: a.getBoundingClientRect().right <= innerWidth };
   });
-  chk('①中文态 ↓ 粗体', c1.txt === '↓' && +c1.weight >= 700, JSON.stringify(c1));
+  const pill = c1.bg && c1.bg !== 'rgba(0, 0, 0, 0)' && c1.bg !== 'transparent';
+  chk('①中文态=「下载」文字+胶囊底色', c1.txt === '下载' && pill, JSON.stringify(c1));
   chk('①aria/title=下载', c1.aria === '下载' && c1.title === '下载');
   chk('①桌面可见', c1.visible);
   // 英文态
@@ -37,9 +41,10 @@ function chk(name, cond, extra) {
   const c3 = await mp.evaluate(() => {
     const a = document.querySelector('.nav .nav-dl');
     const r = a.getBoundingClientRect();
-    return { txt: a.textContent.trim(), inView: r.right <= innerWidth + 1 && r.width > 0 };
+    return { txt: a.textContent.trim(), inView: r.right <= innerWidth + 1 && r.width > 0,
+      bodySW: document.body.scrollWidth, iw: innerWidth };
   });
-  chk('③手机 ↓ 可见省地方', c3.txt === '↓' && c3.inView, JSON.stringify(c3));
+  chk('③手机下载可见、无横向溢出', c3.inView && c3.txt.length > 0 && c3.bodySW <= c3.iw + 1, JSON.stringify(c3));
   await mp.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/nav_dl_mobile.png', clip: { x: 0, y: 0, width: 390, height: 140 } });
   await browser.close();
   console.log('\nRESULT: PASS=' + pass + ' FAIL=' + fail);

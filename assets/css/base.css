@@ -511,6 +511,25 @@ img { -webkit-user-drag: none; user-drag: none; }
    ============================================================ */
 /* 背景分层（2026-09-09 七轮拍板：整页只分上下两段——上部暖米独特色、下部与 footer 一体色；许可与隐私页=上部独特色） */
 .home-hero-band { background: linear-gradient(180deg, #f1e9d4 0%, #ede2c9 100%); }
+/* 姿态速览宫格（2026-09-12 老曹：hero 与详情之间插入"全部姿态"缩略图，纯静态轻量图） */
+.home-poses-band { background: linear-gradient(180deg, #ede2c9 0%, #efe5d0 100%); }
+.home-poses { padding: 8px 0 44px; }
+.poses-head { text-align: center; margin-bottom: 24px; }
+.poses-title { font-size: 25px; margin: 12px 0 6px; color: var(--ink); font-weight: 700; }
+/* .poses-sub 已删除（2026-09-12 老曹：首页去掉「共 24 个姿态」计数行） */
+.poses-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.pose-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; transition: transform .18s ease, box-shadow .18s ease; }
+.pose-card:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(232, 114, 43, .14); }
+.pose-img { height: 92px; display: flex; align-items: center; justify-content: center; }
+.pose-img img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-drag: none; }
+.pose-card figcaption { font-size: 12px; color: var(--ink-soft); margin-top: 7px; }
+@media (max-width: 980px) { .poses-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 680px) {
+  .home-poses { padding: 4px 0 32px; }
+  .poses-title { font-size: 20px; }
+  .poses-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .pose-img { height: 72px; }
+}
 /* 下部区域与 footer 同色 #efe5d0（消除手册卡与页脚色差，老曹 2026-09-09 拍板） */
 .home-detail-band { background: #efe5d0; }
 /* 隐私页整页独特色（与首页底部同色，老曹 2026-09-09 拍板统一上下色块） */
@@ -526,6 +545,18 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .picker-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
 .picker-head b { font-size: 15px; color: var(--ink); }
 .pet-picker { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+/* 内置宠物单独一排（2026-09-12 老曹：内置熊猫/兔子不与新宠物混排）
+   区隔行 = 一行小字说明（同时服务伙伴页 .wall-break）：方块/卡片里的图标只有 46~50px，
+   文字徽标压上去会把图标糊住（英文 "Built-in" 更宽），所以徽标改为「行标」形式 */
+.pet-picker .picker-break, .buddy-wall .wall-break {
+  grid-column: 1 / -1; flex-basis: 100%;
+  display: flex; align-items: center; gap: 7px;
+  height: auto; margin: 2px 0 0;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .2px; color: #b08d6e;
+}
+.pet-picker .picker-break::before, .buddy-wall .wall-break::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%; background: #d9b79a; flex: 0 0 auto;
+}
 .pick-card {
   position: relative;
   display: flex; align-items: center; gap: 12px; text-align: left; min-width: 0;
@@ -601,6 +632,9 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .hd-tagline { color: var(--brand); font-weight: 600; margin: 0 0 12px; line-height: 1.7; }
 .hd-desc { color: var(--ink-soft); line-height: 1.95; margin: 0 0 22px; font-size: 14.5px; }
 .hd-buy .buy-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.buy-builtin { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--brand-ink); background: rgba(232,114,43,.1); border: 1px solid rgba(232,114,43,.3); border-radius: 999px; padding: 9px 18px; font-weight: 600; }
+a.buy-builtin { text-decoration: none; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.16); box-shadow: 0 6px 16px rgba(232,114,43,.18); }
 .hd-soon { font-size: 13px; color: var(--ink-faint); border: 1px dashed var(--ink-faint); border-radius: 999px; padding: 7px 14px; transition: color .18s, border-color .18s; }
 .hd-soon:hover { color: var(--brand); border-color: var(--brand); }
 .hd-buy .buy-chans { font-size: 13px; color: var(--ink-soft); }
@@ -644,17 +678,7 @@ body.privacy-warm { background: #efe5d0 fixed; }
 }
 .vtab:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(232, 114, 43, .18); }
 .vtab.on { border-color: var(--brand); color: var(--brand); background: linear-gradient(180deg, #fff, #fff7ef); box-shadow: 0 4px 14px rgba(232, 114, 43, .22); }
-/* 手册大立体卡（下部色带内，与展示卡/视频卡同风格）：三平台标签 + 原版手册 iframe（限高卡内滚动） */
-.home-manual-wrap { padding: 8px 0 64px; }
-.home-manual-card { display: flex; flex-direction: column; gap: 14px; }
 .hm-head { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
-.home-manual-card .manual-frame {
-  position: relative; z-index: 1; min-height: 480px; max-height: 560px; height: 520px;
-  border-radius: 16px; background: #fffdf9;
-}
-@media (max-width: 960px) {
-  .home-manual-card .manual-frame { min-height: 380px; max-height: 440px; height: 400px; }
-}
 @media (max-width: 960px) {
   /* 2026-09-10 修复：1fr 下限是 auto，会被 pick-card 内 nowrap 文字的 min-content 撑爆
      （手机端列宽被撑到 1800px、兔子卡挤出视口）——铁律①同款，必须 minmax(0, 1fr) */
@@ -1301,6 +1325,7 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .buddy-top { display: flex; flex-direction: column; gap: 16px; }
 /* ① 宠物选择墙：纯图方块（idle 动图），横排自动换行——宠物多就多排几行，不铺长标签 */
 .buddy-wall { display: flex; flex-wrap: wrap; gap: 10px; }
+/* .wall-break 样式见上文「内置宠物单独一排」（与 .picker-break 共用一条规则） */
 .buddy-tile {
   width: 64px; height: 64px; padding: 6px; cursor: pointer; font: inherit;
   display: flex; align-items: center; justify-content: center;
@@ -1418,6 +1443,7 @@ html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
 }
 .buddy-check:hover { transform: scale(1.12); }
 .buddy-check.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+/* .buddy-check.builtin 已删除（2026-09-12）：内置宠物不再用文字徽标，改行标 .picker-break/.wall-break */
 .buddy-tile.owned .buddy-check, .pick-card.owned .buddy-check {
   background: rgba(240,240,238,.95); border-color: rgba(0,0,0,.08);
   color: var(--ink-faint); font-weight: 500; cursor: default;

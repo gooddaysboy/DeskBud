@@ -92,6 +92,395 @@
   ],
   "works": [
     {
+      "id": "linekit",
+      "status": "online",
+      "title": {
+        "zh": "线咪",
+        "en": "LineKit"
+      },
+      "category": "cat",
+      "author": {
+        "zh": "gooddaysboy",
+        "en": "gooddaysboy"
+      },
+      "cover": "works/linekit-anim/linekit_idle.webp",
+      "thumb": "works/linekit-anim/linekit_idle.webp",
+      "summary": {
+        "zh": "一只线条风格的小猫，会在屏幕上攀爬、倒挂、眨眼卖萌的透明桌宠，常驻桌面不打扰。",
+        "en": "A line-art kitten — a transparent desktop pet that climbs, hangs and blinks, always there, never in the way."
+      },
+      "description": {
+        "zh": "线咪是一只住在你屏幕上的线条小猫。它会自己走来走去、攀爬、倒挂，无聊了眨眨眼、伸个懒腰、喝口水；你点一下它就开心地挥手跳起来。它不抢注意力，只是安静地陪着你。",
+        "en": "LineKit is a little line-art cat on your screen. It wanders, climbs and hangs on its own; when bored it blinks, stretches, takes a sip. Tap it and it waves and jumps happily — quiet company, never in the way."
+      },
+      "states": [
+        {
+          "src": "works/linekit-anim/linekit_idle.webp",
+          "caption": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_blink.webp",
+          "caption": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_sit.webp",
+          "caption": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_sit_look_up.webp",
+          "caption": {
+            "zh": "抬头望",
+            "en": "Look up"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_sit_dangle.webp",
+          "caption": {
+            "zh": "垂腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_sleep.webp",
+          "caption": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_eat.webp",
+          "caption": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_drink.webp",
+          "caption": {
+            "zh": "喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_stretch.webp",
+          "caption": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_yawn.webp",
+          "caption": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_scratch.webp",
+          "caption": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_wave.webp",
+          "caption": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_jumphappy.webp",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_run.webp",
+          "caption": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_climb.webp",
+          "caption": {
+            "zh": "攀爬",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_hang.webp",
+          "caption": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_fall.webp",
+          "caption": {
+            "zh": "落地",
+            "en": "Land"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_eye_exercise.webp",
+          "caption": {
+            "zh": "护眼操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/linekit-anim/linekit_celebrate1.webp",
+          "caption": {
+            "zh": "庆祝",
+            "en": "Celebrate"
+          }
+        }
+      ],
+      "poses": [
+        {
+          "src": "works/linekit-poses/linekit_idle-a.webp",
+          "name": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_run-a.webp",
+          "name": {
+            "zh": "奔跑",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_climb-a.webp",
+          "name": {
+            "zh": "爬墙",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_hang-a.webp",
+          "name": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_fall-a.webp",
+          "name": {
+            "zh": "坠落",
+            "en": "Fall"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sit-a.webp",
+          "name": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_wave-a.webp",
+          "name": {
+            "zh": "打招呼",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_blink-a.webp",
+          "name": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_yawn-a.webp",
+          "name": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_stretch-a.webp",
+          "name": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_scratch-a.webp",
+          "name": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eat-a.webp",
+          "name": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sleep-a.webp",
+          "name": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_type-a.webp",
+          "name": {
+            "zh": "站着打字",
+            "en": "Typing (stand)"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_type2-a.webp",
+          "name": {
+            "zh": "坐着打字",
+            "en": "Typing (sit)"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_drink-a.webp",
+          "name": {
+            "zh": "捧杯喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eye_exercise-a.webp",
+          "name": {
+            "zh": "眼保健操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate1-a.webp",
+          "name": {
+            "zh": "庆祝①",
+            "en": "Celebrate 1"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate2-a.webp",
+          "name": {
+            "zh": "庆祝②",
+            "en": "Celebrate 2"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate3-a.webp",
+          "name": {
+            "zh": "庆祝③",
+            "en": "Celebrate 3"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate4-a.webp",
+          "name": {
+            "zh": "庆祝④",
+            "en": "Celebrate 4"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sit_dangle-a.webp",
+          "name": {
+            "zh": "晃腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sit_look_up-a.webp",
+          "name": {
+            "zh": "抬头坐",
+            "en": "Look up"
+          }
+        }
+      ],
+      "versions": [
+        {
+          "platform": "win",
+          "platformLabel": {
+            "zh": "Windows",
+            "en": "Windows"
+          },
+          "video": "",
+          "download": {
+            "label": {
+              "zh": "下载 Windows 版",
+              "en": "Download for Windows"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "下载 exe 后双击即可运行，无需安装环境；若系统提示风险，选择「仍要运行」即可。",
+            "en": "Double-click the exe to run — no setup needed. If warned by the system, choose “Run anyway”."
+          }
+        },
+        {
+          "platform": "mac",
+          "platformLabel": {
+            "zh": "macOS",
+            "en": "macOS"
+          },
+          "video": "",
+          "download": {
+            "label": {
+              "zh": "下载 macOS 版",
+              "en": "Download for macOS"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "即将上线",
+            "en": "Coming soon"
+          }
+        },
+        {
+          "platform": "android",
+          "platformLabel": {
+            "zh": "Android",
+            "en": "Android"
+          },
+          "video": "",
+          "download": {
+            "label": {
+              "zh": "下载 Android 版",
+              "en": "Download for Android"
+            },
+            "url": ""
+          },
+          "install": {
+            "zh": "下载 apk 后，在「设置 - 安全」中允许本次安装，按提示完成即可。",
+            "en": "After downloading the apk, allow this install in Settings › Security, then follow the prompts."
+          }
+        }
+      ],
+      "date": "2026-09-12",
+      "featured": true
+    },
+    {
       "id": "panda",
       "status": "online",
       "title": {
@@ -192,6 +581,85 @@
           }
         }
       ],
+      "poses": [
+        {
+          "src": "works/panda-poses/panda_idle-a.webp",
+          "name": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_idle_left-a.webp",
+          "name": {
+            "zh": "左望",
+            "en": "Look left"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_idle_right-a.webp",
+          "name": {
+            "zh": "右望",
+            "en": "Look right"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_run_left-a.webp",
+          "name": {
+            "zh": "走动",
+            "en": "Walk"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_blink-a.webp",
+          "name": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_yawn-a.webp",
+          "name": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_stretch-a.webp",
+          "name": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_scratch-a.webp",
+          "name": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_eat-a.webp",
+          "name": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_fall-a.webp",
+          "name": {
+            "zh": "降落",
+            "en": "Parachute"
+          }
+        }
+      ],
       "versions": [
         {
           "platform": "win",
@@ -252,7 +720,8 @@
         }
       ],
       "date": "2026-08-20",
-      "featured": true
+      "featured": true,
+      "builtin": true
     },
     {
       "id": "rabbit",
@@ -355,6 +824,85 @@
           }
         }
       ],
+      "poses": [
+        {
+          "src": "works/rabbit-poses/rabbit_idle-a.webp",
+          "name": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_blink-a.webp",
+          "name": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_yawn-a.webp",
+          "name": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_stretch-a.webp",
+          "name": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_scratch-a.webp",
+          "name": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_eat-a.webp",
+          "name": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_wave-a.webp",
+          "name": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_run-a.webp",
+          "name": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_sleep-a.webp",
+          "name": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_fall-a.webp",
+          "name": {
+            "zh": "降落",
+            "en": "Parachute"
+          }
+        }
+      ],
       "versions": [
         {
           "platform": "win",
@@ -415,7 +963,8 @@
         }
       ],
       "date": "2026-09-02",
-      "featured": true
+      "featured": true,
+      "builtin": true
     },
     {
       "id": "cat-nap",

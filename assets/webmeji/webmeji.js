@@ -993,7 +993,7 @@ class Creature {
   }
 
   // ---------- DeskBud 行为扩展（2026-09-10 对齐 pyside6/kotlin）----------
-  // ①鼠标避让（常驻）：鼠标 <90px → 反向走开，3s 冷却防抖
+  // ①鼠标驱赶【2026-09-12 老曹取消：光标靠近宠物会驱离，导致悬停暂停/右键菜单不好用】——保留②输入框避让
   // ②输入框避让（常驻）：页面输入框聚焦且宠物 <120px → 避开（网页版"打字不挡"等价物）
   // ③专注模式（右键菜单开关，localStorage 持久化）：0.6x 缩小 + 不冒泡 + 行为锁三边（落地就近上墙）
   // ④歪头跟随（零素材）：鼠标接近时容器 rotate ±15° 朝鼠标方位 + 翻面朝鼠标
@@ -1056,10 +1056,10 @@ class Creature {
     this.container.style.transform = parts.length ? parts.join(' ') : 'none';
   }
 
-  // 避让轮询：命中威胁 → 反向走开
+  // 避让轮询：仅保留②输入框避让（光标驱赶 2026-09-12 已取消，避免影响悬停暂停/右键菜单）
   deskBudAvoidTick() {
     if (this.isDragging || this.isFalling || this.isJumping) return;
-    // 悬停暂停（pyside6 语义）：鼠标压在宠物身上=定格，不避让（靠近但未接触才走开）
+    // 悬停暂停（pyside6 语义）：鼠标压在宠物身上=定格；不再因光标接近而避让
     if (this._hoverPause) return;
     // 只在地面避让：挂边/挂顶时不瞬移下墙（等回落地面再说）
     if (this.currentEdge !== 'bottom') return;
@@ -1067,14 +1067,12 @@ class Creature {
     this.deskBudTilt();
     const now = Date.now();
     if (now < this.avoidUntil) return;
-    // 避让优先级高于摸头：鼠标逼近时先停掉 petting（否则 hover 摸头会永远抑制避让）
+    // 避让优先级高于摸头：靠近输入框时先停掉 petting
     if (this.isPetting) { this.isPetting = false; this.stopPetAnimation(); }
     const cx = this.positionX + this.containerWidth / 2;
     const cy = this.positionY + this.containerHeight / 2;
     let threat = null;
-    const m = Creature.mouse;
-    if (m && Math.hypot(m.x - cx, m.y - cy) < 90) threat = { x: m.x, y: m.y };       // ①鼠标 90px
-    if (!threat && Creature.inputRect) {                                              // ②聚焦输入框 120px
+    if (Creature.inputRect) {                                                         // ②聚焦输入框 120px（打字不挡）
       const r = Creature.inputRect;
       const nx = Math.max(r.left, Math.min(cx, r.right));
       const ny = Math.max(r.top, Math.min(cy, r.bottom));
