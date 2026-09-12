@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>桌宠语录分类总览 · DeskBud</title>
+  <meta name="description" content="DeskBud 桌宠语录全量分类总览：公共、宠物专属、问候、交互反应、状态、久坐提醒、时段问候、节日，与桌宠程序共用同一份数据源。">
+  <link rel="stylesheet" href="assets/css/base.css?v=102">
+  <style>
+    .pv-controls{position:sticky;top:0;z-index:20;background:rgba(255,250,243,.96);backdrop-filter:blur(6px);
+      padding:12px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #f0e6d8;margin-bottom:6px}
+    .pv-search{flex:1;min-width:200px;padding:9px 14px;border:1px solid #e7d8c4;border-radius:20px;font-size:14px;outline:none}
+    .pv-search:focus{border-color:var(--brand,#ff8a3d)}
+    .pv-toggle{display:flex;align-items:center;gap:6px;font-size:13px;color:#7a6a55;cursor:pointer;white-space:nowrap}
+    .pv-btn{padding:7px 14px;border:1px solid #e7d8c4;background:#fff;border-radius:18px;font-size:13px;cursor:pointer;color:#7a6a55;white-space:nowrap}
+    .pv-btn:hover{border-color:var(--brand,#ff8a3d);color:var(--brand,#ff8a3d)}
+    .pv-sec{margin:22px 0}
+    .pv-sec-head{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;padding:6px 0;border-bottom:2px solid #ffe1c4;margin-bottom:12px}
+    .pv-sec-head h2{font-size:19px;margin:0;color:#4a3b2a}
+    .pv-sec-icon{font-size:22px}
+    .pv-count{margin-left:auto;font-size:13px;color:#a08a6f;background:#fff3e6;padding:2px 10px;border-radius:12px}
+    .pv-sec.collapsed .pv-groups{display:none}
+    .pv-groups{margin-left:4px}
+    .pv-group{margin:10px 0 18px}
+    .pv-group-head{font-size:14px;font-weight:600;color:#6b5740;margin:8px 0;display:flex;align-items:center;gap:8px}
+    .pv-gcount{font-size:12px;color:#a08a6f;background:#f6efe4;padding:1px 8px;border-radius:10px}
+    .pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+    .pv-item{background:#fff;border:1px solid #f0e6d8;border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .pv-zh{font-size:15px;color:#3a2e1f;line-height:1.5}
+    .pv-en{font-size:12px;color:#a89684;margin-top:5px;line-height:1.4}
+    .pv-empty{color:#bba890;font-size:13px;padding:8px 2px}
+    .pv-err{padding:24px;color:#c0392b;font-size:15px}
+    .hidden{display:none!important}
+    body.hide-en .pv-en{display:none}
+    #stat{font-size:14px;color:#7a6a55}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html"><span class="dot"></span>DeskBud</a>
+      <nav class="nav">
+        <a href="index.html">首页</a>
+        <a href="list.html">作品</a>
+        <a href="bubble.html">泡泡墙</a>
+        <a href="bubble_preview.html" class="active">分类总览</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero wrap">
+    <h1>桌宠语录分类总览</h1>
+    <p class="slogan">与桌宠程序共用同一份数据源 · 全量语录按类别整理</p>
+    <p class="sub" id="stat">加载中…</p>
+  </section>
+
+  <div class="wrap">
+    <div class="pv-controls">
+      <input class="pv-search" id="search" type="text" placeholder="搜索语录（中/英文均可，实时过滤）">
+      <label class="pv-toggle"><input type="checkbox" id="hideEn"> 隐藏英文对照</label>
+      <button class="pv-btn" id="foldAll">折叠全部</button>
+      <button class="pv-btn" id="expandAll">展开全部</button>
+    </div>
+  </div>
+
+  <main class="wrap" id="content">
+    <p class="pv-empty">正在加载语录数据…</p>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>© <span id="yr"></span> DeskBud · 陪伴你的桌面宠物伙伴</div>
+      <div><a href="bubble.html">泡泡墙</a> · <a href="editor.html">语录录入</a> · <a href="list.html">浏览作品</a></div>
+    </div>
+  </footer>
+
+  <script>
+  // 分类总览：读取 data/bubble.json，按类别分组展示（中英对照 + 搜索 + 折叠）
+  const PET   = { panda:'熊猫', cat:'猫咪', dog:'狗狗', plant:'植物', rabbit:'豁牙小兔', linekit:'线咪' };
+  const EMOJI = { panda:'🐼', cat:'🐱', dog:'🐶', plant:'🌱', rabbit:'🐰', linekit:'🐈', public:'💭' };
+  const STATE = { climb:'攀爬', hang:'倒挂', slip:'打滑', fall:'坠落', land:'落地', walk:'行走', idle_stare:'发呆', sleep:'睡觉', coquetry:'撒娇', naughty:'调皮' };
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+  // 双层结构 {public:[], pets:{pet:[]}} -> 分组数组
+  function layerGroups(obj){
+    const g = [];
+    if (obj.public && obj.public.length) g.push({ name:'公共', items: obj.public });
+    Object.entries(obj.pets || {}).forEach(([p, a]) => g.push({ name: PET[p] || p, icon: EMOJI[p], items: a }));
+    return g;
+  }
+  function merge(o){ // {public:[], pets:{...}} -> 一组合并文案
+    return (o.public || []).concat(...Object.values(o.pets || {}));
+  }
+
+  function renderItem(it){
+    const zh = (it && it.zh) || '', en = (it && it.en) || '';
+    return '<div class="pv-item" data-zh="'+esc(zh).toLowerCase()+'" data-en="'+esc(en).toLowerCase()+'">'
+      + '<div class="pv-zh">'+esc(zh)+'</div>'
+      + (en ? '<div class="pv-en">'+esc(en)+'</div>' : '') + '</div>';
+  }
+  function renderGroup(g){
+    if (!g.items || !g.items.length) return '';
+    return '<div class="pv-group">'
+      + '<div class="pv-group-head">'+(g.icon?('<span>'+g.icon+'</span>'):'')+esc(g.name)
+      + '<span class="pv-gcount">'+g.items.length+'</span></div>'
+      + '<div class="pv-grid">'+g.items.map(renderItem).join('')+'</div></div>';
+  }
+  function renderSection(sec){
+    const total = sec.groups.reduce((a,g)=>a+((g.items&&g.items.length)||0),0);
+    return '<section class="pv-sec" data-sec="'+sec.id+'">'
+      + '<div class="pv-sec-head"><span class="pv-sec-icon">'+sec.icon+'</span><h2>'+esc(sec.title)+'</h2>'
+      + '<span class="pv-count">'+total+' 条</span></div>'
+      + '<div class="pv-groups">'+sec.groups.map(renderGroup).join('')+'</div></section>';
+  }
+
+  async function main(){
+    let data;
+    try{
+      const r = await fetch('data/bubble.json', { cache:'no-cache' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      data = await r.json();
+    }catch(e){
+      document.getElementById('content').innerHTML = '<p class="pv-err">语录加载失败：'+esc(e.message)+'（请通过本地服务器打开，勿直接用 file://）</p>';
+      return;
+    }
+
+    const sections = [];
+    // 1. 全站公共
+    sections.push({ id:'public', icon:'💭', title:'全站公共语录', groups:[{ name:'公共', items: data.public || [] }] });
+    // 2. 宠物专属
+    sections.push({ id:'pets', icon:'🐾', title:'宠物专属语录',
+      groups: Object.entries(data.pets || {}).map(([p,a]) => ({ name: PET[p] || p, icon: EMOJI[p], items: a })) });
+    // 3. 问候语
+    sections.push({ id:'greetings', icon:'👋', title:'问候语', groups: layerGroups(data.greetings || {}) });
+    // 4. 交互反应
+    const rg = [];
+    ['click','drag'].forEach(k => {
+      const g = (data.reactions || {})[k] || {};
+      rg.push({ name: (k==='click'?'点击反应':'拖拽反应'), items: merge(g) });
+    });
+    sections.push({ id:'reactions', icon:'💥', title:'交互反应气泡', groups: rg });
+    // 5. 状态气泡
+    const sg = Object.entries(data.states || {}).map(([k,v]) => ({ name: (STATE[k]||k), items: merge(v) }));
+    sections.push({ id:'states', icon:'🌀', title:'状态气泡', groups: sg });
+    // 6. 久坐提醒
+    const rm = data.reminders || {};
+    const rmg = [{ name:'久坐提醒·公共', items: rm.public || [] }];
+    Object.entries(rm.actions || {}).forEach(([a, arr]) => {
+      const n = a==='drink' ? '喝水提醒' : a==='eye_exercise' ? '护眼操' : ('动作·'+a);
+      rmg.push({ name: n, items: arr });
+    });
+    sections.push({ id:'reminders', icon:'⏰', title:'久坐提醒', groups: rmg });
+    // 7. 时段问候
+    const tg = Object.entries((data.time_greetings && data.time_greetings.hours) || {}).map(([h,a]) => ({ name: h+' 点', items: a }));
+    sections.push({ id:'time', icon:'🕐', title:'时段问候', groups: tg });
+    // 8. 节日语录
+    const f = data.festivals || {};
+    const fg = Object.entries(f.by_name || {}).map(([n,a]) => ({ name:'🎉 '+n, items: a }));
+    if (f.terms){
+      Object.entries(f.terms.special || {}).forEach(([n,a]) => fg.push({ name:'🌿 '+n, items: a }));
+      if (f.terms.common) fg.push({ name:'🌿 节气·通用', items: f.terms.common });
+    }
+    sections.push({ id:'festivals', icon:'🎊', title:'节日语录', groups: fg });
+
+    const total = sections.reduce((s,sec)=>s+sec.groups.reduce((a,g)=>a+((g.items&&g.items.length)||0),0),0);
+    document.getElementById('stat').textContent = '共 ' + sections.length + ' 大类 · ' + total + ' 条语录（v' + (data.version||'?') + '）';
+    document.getElementById('content').innerHTML = sections.map(renderSection).join('');
+    bindControls();
+  }
+
+  function bindControls(){
+    const search   = document.getElementById('search');
+    const hideEn   = document.getElementById('hideEn');
+    const foldAll  = document.getElementById('foldAll');
+    const expandAll= document.getElementById('expandAll');
+
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      document.querySelectorAll('.pv-item').forEach(it => {
+        const hay = (it.dataset.zh || '') + ' ' + (it.dataset.en || '');
+        it.classList.toggle('hidden', !!q && hay.indexOf(q) < 0);
+      });
+      // 隐藏空 group / 空 section
+      document.querySelectorAll('.pv-group').forEach(g => {
+        const items = g.querySelectorAll('.pv-item');
+        const vis = Array.from(items).some(i => !i.classList.contains('hidden'));
+        g.classList.toggle('hidden', !vis);
+      });
+      document.querySelectorAll('.pv-sec').forEach(s => {
+        const groups = s.querySelectorAll('.pv-group');
+        const vis = Array.from(groups).some(g => !g.classList.contains('hidden'));
+        s.classList.toggle('hidden', !vis);
+      });
+    });
+
+    hideEn.addEventListener('change', () => document.body.classList.toggle('hide-en', hideEn.checked));
+
+    foldAll.addEventListener('click',  () => document.querySelectorAll('.pv-sec').forEach(s => s.classList.add('collapsed')));
+    expandAll.addEventListener('click',() => document.querySelectorAll('.pv-sec').forEach(s => s.classList.remove('collapsed')));
+    document.querySelectorAll('.pv-sec-head').forEach(h => h.addEventListener('click', () => h.parentElement.classList.toggle('collapsed')));
+  }
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  main();
+  </script>
+</body>
+</html>
