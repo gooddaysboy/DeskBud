@@ -979,19 +979,21 @@ SITE.pages = {
     // 有 device_id（URL/localStorage）→ 拼收银台链接；无 → 「先下载桌宠」引导去下载页
     // （2026-09-10 老曹三道防线第一道：没装客户端没有 device_id，订单绑不到设备——必须拦住，不能只提醒）
     // getDeviceId/checkoutUrl 共享实现见 SITE（首页详情区同逻辑）。
+    // 2026-09-12 老曹 B 方案：无 device_id 也显示"已选 N 只"反馈，按钮仍引导下载
     function renderBuy(w) {
       if (!buyEl) return;
       buyEl.innerHTML = '';
       const url = SITE.checkoutUrl(pickedIds());
       const n = picked.size;
+      // 选中反馈独立于 device_id（B 方案）：选了就显示数量，无设备号时按钮退回下载引导
+      const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
       if (url) {
         const label = n > 1
           ? window.pick({ zh: `一起带回家 · ${n} 只`, en: `Take ${n} home together` })
           : window.pick({ zh: '把伙伴领回家', en: 'Bring it home' });
-        const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
         buyEl.innerHTML = `${tip}<a class="btn" href="${url}" target="_blank" rel="noopener">🏠 ${label}</a>`;
       } else {
-        buyEl.innerHTML = `<a class="btn" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
+        buyEl.innerHTML = `${tip}<a class="btn" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a><span class="buy-hint">${window.pick({ zh: '安装后可在客户端内直接访问', en: 'After install, open this page in the app' })}</span>`;
       }
     }
 
@@ -1231,16 +1233,17 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
             return c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${name}</a>` : name;
           }).join(' / ');
           const payUrl = SITE.checkoutUrl(pickedIds());
+          const n = picked.size;
+          // 2026-09-12 老曹 B 方案：选中反馈独立于 device_id（选了就显示数量），无设备号按钮退回下载引导
+          const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
           let main = '';
           if (payUrl) {
-            const n = picked.size;
             const label = n > 1
               ? window.pick({ zh: `一起带回家 · ${n} 只`, en: `Take ${n} home together` })
               : window.pick({ zh: '把伙伴领回家', en: 'Bring it home' });
-            const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
             main = `${tip}<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🏠 ${label}</a>`;
           } else {
-            main = `<a class="btn btn-primary" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a>`;
+            main = `${tip}<a class="btn btn-primary" href="download.html">🐾 ${window.pick({ zh: '先下载桌宠', en: 'Get DeskBud first' })}</a><span class="buy-hint">${window.pick({ zh: '安装后可在客户端内直接访问', en: 'After install, open this page in the app' })}</span>`;
           }
           const tail = items ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` }) : '';
           if (!main && !tail) { hdBuy.innerHTML = ''; return; }

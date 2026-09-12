@@ -506,7 +506,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* ============================================================
    首页改版（2026-09-09 老曹拍板，布局语言借鉴 pet.aisuper.win）：
    首屏 = 左侧文案+伙伴选择卡 ｜ 右侧大展示卡（姿态轮播）；
-   下部 = 左侧介绍+下载/购买 ｜ 右侧宣传视频。
+   下部 = 左侧介绍+下载/解锁 ｜ 右侧宣传视频。
    首页隐藏搜索栏/公告/语录走马灯（syncHomeChrome 控制）。
    ============================================================ */
 /* 背景分层（2026-09-09 七轮拍板：整页只分上下两段——上部暖米独特色、下部与 footer 一体色；许可与隐私页=上部独特色） */
@@ -1427,6 +1427,7 @@ html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
 
 /* 已选数量小字提示（09-11：按钮紧贴姿态窗口/详情区，勾选≥2 时提示） */
 .buy-tip { flex-basis: 100%; display: block; font-size: 12.5px; color: var(--brand-ink); margin-bottom: 6px; text-align: center; }
+.buy-hint { flex-basis: 100%; display: block; font-size: 11.5px; color: var(--muted, #9a9a9a); margin-top: 7px; text-align: center; line-height: 1.4; }
 .buddy-buy { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; }
 
 /* 下载页提示行 + 下载按钮(button 与 a 同款)（09-11） */
