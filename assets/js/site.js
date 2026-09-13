@@ -1012,7 +1012,9 @@ SITE.pages = {
   // 首页（2026-09-09 改版）：左选择卡切换 ｜ 右大展示卡姿态轮播 ｜ 下部介绍+下载/购买 ｜ 宣传视频
   home: async function () {
     // 移动设备首选伙伴页（2026-09-10 老曹拍板）：软导航/整页进入首页一律跳转（head 内联脚本已兜整页首载）
-    if (SITE.isMobileUA()) { location.replace('buddies.html'); return; }
+    // 2026-09-14 修：**必须带住 query/hash**，否则 App 内（?embed=1 / ?device_id=）软导航回首页时
+    //   会把内嵌模式与设备号一起丢掉 → 顶栏露出 + 皮肤退回访客版（kotlin 报的同类症状）
+    if (SITE.isMobileUA()) { location.replace('buddies.html' + location.search + location.hash); return; }
     await SITE.load();
     document.getElementById('yr').textContent = new Date().getFullYear();
     const works = SITE.onlineWorks();

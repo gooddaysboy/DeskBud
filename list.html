@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <script data-embed-boot>/* App 内嵌根治（09-14 kotlin 报）：?embed=1 时**立即**给 <html> 打 embed-mode，不等 site.js（99KB）下载执行 —— 否则慢网络下 HTML 先到、JS 未到，顶栏/页脚/「下载」会整段露出（kotlin 实测 1.98KB/s，冷缓存 50s+）。说明写进 JS 注释，便于离线快照产线整块剥离。*/try{if(new URLSearchParams(location.search).get('embed')==='1')document.documentElement.classList.add('embed-mode')}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>作品列表 · DeskBud</title>
   <meta name="description" content="DeskBud 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
@@ -68,7 +69,7 @@
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
   <script src="assets/js/i18n.js?v=19"></script>
-  <script src="assets/js/site.js?v=110"></script>
+  <script src="assets/js/site.js?v=111"></script>
   <script src="assets/js/bubble.js?v=21"></script>
   <script>SITE.boot();</script>
 </body>

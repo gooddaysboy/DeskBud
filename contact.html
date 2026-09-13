@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>联系我们 · DeskBud</title>
   <meta name="description" content="DeskBud 反馈与交流：电子邮件">
-  <!-- 联系我们已并入「许可与隐私」页（章四），本页保留仅为旧链接兼容，自动跳转 -->
-  <meta http-equiv="refresh" content="0; url=privacy.html#contact">
+  <!-- 联系我们已并入「许可与隐私」页（章四），本页保留仅为旧链接兼容，自动跳转。
+       2026-09-14：去掉 <meta refresh>（静态 meta 没法带 query）→ 改由脚本跳转并带住 query/hash。 -->
   <link rel="canonical" href="privacy.html">
   <style>
     body { font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; color: #2b2b2d; }
@@ -15,6 +15,6 @@
 </head>
 <body>
   <noscript><p>联系页面已迁移，<a href="privacy.html#contact">点此前往</a>。</p></noscript>
-  <script>location.replace('privacy.html#contact');</script>
+  <script>location.replace('privacy.html' + location.search + '#contact');</script>
 </body>
 </html>
