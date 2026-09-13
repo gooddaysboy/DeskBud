@@ -20,7 +20,9 @@ const chk = (n, c, x) => { c ? (pass++, console.log('PASS', n)) : (fail++, conso
   let src = await frameSrc();
   let txt = await frameText();
   chk('①默认加载 Win 中文手册', src === 'manual/win-zh.html', src);
-  chk('①内容是新版(免费口径)', txt.includes('免费') && txt.length > 400, 'len=' + txt.length);
+  // 2026-09-14 改：手册新口径 = 不带价格/商业用语（老曹 00:08 定），
+  // 原断言找「免费」已失效（pyside6 23:35 把「内置小兔熊猫免费」一并删了）
+  chk('①win 中文手册=新口径(更多伙伴陆续赶来·无价格)', txt.includes('更多伙伴陆续赶来') && !/\d+\s*元|一次买断|收银台/.test(txt), 'len=' + txt.length);
 
   // ② 切 Android
   await p.evaluate(() => [...document.querySelectorAll('#dlHmTabs .vtab')].find(b => b.textContent === 'Android').click());
@@ -52,9 +54,19 @@ const chk = (n, c, x) => { c ? (pass++, console.log('PASS', n)) : (fail++, conso
   }
   chk('⑤六件套齐全(200)', allOk, bad.join(','));
 
+  // ⑥ 六件套正文：零价格 / 零商业用语（老曹 2026-09-14 00:08 口径）
+  //    覆盖本轮清掉的：android 手册「会打开一个收银台…付完自动回来」+「一次多挑几只更划算（2 只 9 折、3 只 8 折）」
+  const dirty = [];
+  for (const n of need) {
+    const t = await (await p.request.get(`http://127.0.0.1:8081/manual/${n}.html`)).text();
+    const m = t.match(/(\d+\s*元|\d+\s*折|收银台|付完|购买|付费|定价|折扣|一次买断|永久使用|解锁新伙伴|checkout|\d+% off)/);
+    if (m) dirty.push(n + ':' + m[0]);
+  }
+  chk('⑥六件套零价格/零商业用语', dirty.length === 0, dirty.join(','));
+
   await p.evaluate(() => document.getElementById('langSwitch').click());
   await sleep(1500);
-  await p.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/manual_v2.png', fullPage: false });
+  await p.screenshot({ path: __dirname + '/../../outputs/manual_v2.png', fullPage: false });
   await b.close();
   console.log('RESULT: PASS=' + pass + ' FAIL=' + fail);
   process.exit(fail ? 1 : 0);

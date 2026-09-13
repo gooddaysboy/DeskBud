@@ -2,7 +2,7 @@
 // ①内置宠物（熊猫/兔子）在伙伴墙/首页选择卡里单独一排，不与新宠物（线咪）混排
 //   识别方式：DOM 顺序在 .wall-break / .picker-break 之后 = 内置（2026-09-12 晚改版：
 //   方块只有 50px，文字徽标会压住图标 → 内置方块/卡片不再有勾选框徽标，含义交给行标）
-// ②内置的「下载客户端使用」出口 = 点内置方块后 #buddyBuy 里的 <a class="buy-builtin" href="download.html">
+// ②下载引导出口 = 点方块后 #buddyBuy 里的 <a class="lead-dl" href="download.html">（2026-09-13 起所有伙伴同一出口）
 // ③顶部只有一条合并走马灯（广告+语录），不再有独立 .quote-bar
 // ④行标文案「内置 · 开箱即用」；内置方块/卡片必须没有勾选框
 const { chromeExe } = require('./_env.js');
@@ -47,17 +47,17 @@ const COLLECT = (wallSel, itemSel) => `
   chk('伙伴墙: 内置在下一排(top>主排bottom)', wBiTop >= wMainBottom, `biTop=${Math.round(wBiTop)} mainBottom=${Math.round(wMainBottom)}`);
   chk('伙伴墙: 行标文案=内置 · 开箱即用', w.brkText === '内置 · 开箱即用', w.brkText);
   chk('伙伴墙: 内置方块无勾选框(不压图标)', wBi.every(t => !t.chip), JSON.stringify(wBi.map(t => t.chip)));
-  chk('伙伴墙: 可购方块仍有勾选框', wMain.every(t => t.chip), JSON.stringify(wMain.map(t => t.chip)));
+  chk('伙伴墙: 方块已无勾选框(2026-09-13 网站不再下单)', wMain.every(t => !t.chip), JSON.stringify(wMain.map(t => t.chip)));
 
   /* ② 伙伴页点内置 → 购买区是 <a href=download.html> 且文案含「下载客户端使用」 */
   await p1.evaluate(() => { const t = document.querySelector('#buddyWall .wall-break ~ .buddy-tile'); if (t) t.click(); });
   await p1.waitForTimeout(1000);
   const buddyBadge = await p1.evaluate(() => {
-    const a = document.querySelector('#buddyBuy a.buy-builtin');
+    const a = document.querySelector('#buddyBuy a.lead-dl');
     return a ? { href: a.getAttribute('href'), text: a.textContent.trim() } : null;
   });
-  chk('伙伴页: 内置徽标为下载链接', !!buddyBadge && buddyBadge.href === 'download.html', JSON.stringify(buddyBadge));
-  chk('伙伴页: 徽标文案含「下载客户端使用」', !!buddyBadge && /下载客户端使用/.test(buddyBadge.text), buddyBadge && buddyBadge.text);
+  chk('伙伴页: 下载引导按钮→download.html', !!buddyBadge && buddyBadge.href === 'download.html', JSON.stringify(buddyBadge));
+  chk('伙伴页: 文案明确「下载客户端」', !!buddyBadge && /下载客户端/.test(buddyBadge.text), buddyBadge && buddyBadge.text);
 
   /* ③ 顶部：仅 1 条 slogan-bar，0 条 quote-bar */
   const bars1 = await p1.evaluate(() => ({ slogan: document.querySelectorAll('.slogan-bar').length, quote: document.querySelectorAll('.quote-bar').length }));

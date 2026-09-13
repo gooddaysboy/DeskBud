@@ -10,7 +10,7 @@ const { chromium } = require('playwright-core');
   const dp = await d.newPage();
   await dp.goto('http://127.0.0.1:8081/index.html', { waitUntil: 'networkidle', timeout: 30000 });
   await dp.waitForTimeout(1500);
-  await dp.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/home_v4_desktop.png' });
+  await dp.screenshot({ path: __dirname + '/../../outputs/home_v4_desktop.png' });
   // 伙伴页桌面
   const dp2 = await d.newPage();
   await dp2.goto('http://127.0.0.1:8081/buddies.html', { waitUntil: 'networkidle', timeout: 30000 });
@@ -23,13 +23,13 @@ const { chromium } = require('playwright-core');
       bodySW: document.body.scrollWidth, iw: innerWidth };
   });
   console.log('buddies desktop:', JSON.stringify(g));
-  await dp2.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v4_desktop.png', fullPage: true });
+  await dp2.screenshot({ path: __dirname + '/../../outputs/buddies_v4_desktop.png', fullPage: true });
   // 伙伴页手机
   const m = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const mp = await m.newPage();
   await mp.goto('http://127.0.0.1:8081/buddies.html', { waitUntil: 'networkidle', timeout: 30000 });
   await mp.waitForTimeout(2000);
-  await mp.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v4_mobile.png', fullPage: true });
+  await mp.screenshot({ path: __dirname + '/../../outputs/buddies_v4_mobile.png', fullPage: true });
   await browser.close();
   console.log('OK screenshots');
 })().catch(e => { console.error('ERR', e); process.exit(1); });

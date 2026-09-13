@@ -70,7 +70,7 @@ const { chromeExe } = require('./_env.js');
   await page.waitForTimeout(500);
   const spose2 = await page.locator('#showcaseTrack .spose-item').count();
   const hdTitle2 = await page.textContent('#hdTitle');
-  check('切伙伴后走马灯重建 22', spose2 === 22, `实际 ${spose2}`);
+  check('切伙伴后走马灯重建 32(兔16*2)', spose2 === 32, `实际 ${spose2}`);
   check('切伙伴→详情标题=织兔子', /织兔子/.test(hdTitle2 || ''), hdTitle2);
   const badge2 = await page.textContent('#showcaseBadge');
   check('切伙伴→徽标=织兔子', /织兔子\s*·/.test(badge2 || ''), badge2);
@@ -150,11 +150,11 @@ const { chromeExe } = require('./_env.js');
   // 14b. footer 切英文后再切回中文，验证 footer.download 双向可替换
   await page.click('#langSwitch');
   await page.waitForTimeout(600);
-  const dlEn = await page.locator('.footer-dl-link').textContent();
+  const dlEn = await page.locator('[data-i18n="footer.download"]').textContent();
   check('footer-dl 英文态含 download', /download/i.test(dlEn || ''), dlEn);
   await page.click('#langSwitch');
   await page.waitForTimeout(600);
-  const dlZh = await page.locator('.footer-dl-link').textContent();
+  const dlZh = await page.locator('[data-i18n="footer.download"]').textContent();
   check('footer-dl 中文态 = 客户端下载', /客户端下载/.test(dlZh || ''), dlZh);
 
   // 16. nav 下载入口（2026-09-11 起为橙色胶囊「下载」+图标，非「客户端下载」）
@@ -180,9 +180,9 @@ const { chromeExe } = require('./_env.js');
   check('footer-top 含版权字符', footerInfo.topHasCopy);
   check('footer-top 含 PV（v7 对调）', footerInfo.topHasPv);
 
-  // 18. 姿态速览宫格已渲染（2026-09-12 新增；当前伙伴=织熊猫 → 11 格）
+  // 18. 姿态速览宫格已渲染（2026-09-12 新增；2026-09-13 起 panda/rabbit 补到 16 格）
   const poseN = await page.locator('#posesGrid .pose-card').count();
-  check('首页姿态宫格已渲染', poseN >= 11, `实际 ${poseN}`);
+  check('首页姿态宫格已渲染', poseN >= 16, `实际 ${poseN}`);
 
   // 19. 隐私页：暖米背景+大立体卡+极简
   await page.goto(base + '/privacy.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -198,7 +198,11 @@ const { chromeExe } = require('./_env.js');
   check('隐私页大立体卡', pv.card);
   check('隐私页无搜索栏', pv.searchHidden);
   check('隐私页无走马灯', pv.bars === 0, `实际 ${pv.bars}`);
-  check('隐私页 footer 含客户端下载链', await page.locator('.footer-bottom-left a.footer-dl-link').count() === 1);
+  // 2026-09-13：页脚 footer-dl-link 现有两个（免费客户端下载 + 用户手册→下载页手册段）
+  check('隐私页 footer 含下载链与用户手册', await page.evaluate(() => {
+    const keys = [...document.querySelectorAll('.footer-bottom-left a.footer-dl-link')].map(a => a.getAttribute('data-i18n'));
+    return keys.includes('footer.download') && keys.includes('footer.manual');
+  }));
 
   // 20. 6 页 nav 文案统一（list/detail/usage/privacy 抽检）
   for (const p of ['list', 'detail', 'usage', 'privacy']) {

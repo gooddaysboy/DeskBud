@@ -30,7 +30,7 @@ const chk = (n, c, x) => { c ? (pass++, console.log('PASS', n)) : (fail++, conso
   chk('②副标题去掉"按需选购/买断"', !s.sub.includes('选购') && !s.sub.includes('买断') && s.sub.includes('免费'), s.sub);
   chk('③旧 note 已删除', s.noteGone);
   chk('④简介标题+正文', s.introTitle.includes('简介') && s.intro.includes('轻量纯净') && s.intro.includes('无任何弹窗广告'), s.introTitle);
-  chk('⑤四条卖点', s.feats.length === 4 && s.feats[0].includes('2 款免费') && s.feats[3].includes('16+'), JSON.stringify(s.feats));
+  chk('⑤五条卖点', s.feats.length === 5 && s.feats[0].includes('2 款免费') && s.feats[4].includes('24+'), JSON.stringify(s.feats));
   chk('⑥手册三平台标签', JSON.stringify(s.manualTabs) === JSON.stringify(['Windows', 'Android', 'macOS']), JSON.stringify(s.manualTabs));
   chk('⑦手册 iframe 已加载且有高度', s.manualSrc === 'manual/win-zh.html' && s.manualH > 300, `${s.manualSrc} h=${s.manualH}`);
   chk('⑧footer=免费客户端下载', s.footer.trim() === '免费客户端下载', s.footer);
@@ -50,7 +50,7 @@ const chk = (n, c, x) => { c ? (pass++, console.log('PASS', n)) : (fail++, conso
   }));
   chk('⑩英文模式：标题/按钮/手册联动', s3.src === 'manual/mac-en.html' && s3.title === 'DeskBud Pets' && s3.btn.includes('Download free'), JSON.stringify(s3));
 
-  await p.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/download_v4.png', fullPage: true });
+  await p.screenshot({ path: __dirname + '/../../outputs/download_v4.png', fullPage: true });
   await b.close();
   console.log('RESULT: PASS=' + pass + ' FAIL=' + fail);
   process.exit(fail ? 1 : 0);

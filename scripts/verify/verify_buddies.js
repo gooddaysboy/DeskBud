@@ -36,7 +36,7 @@ function chk(name, cond, extra) {
   chk('②姿态小窗用聚合动图(线咪)', b.animSrc.includes('linekit_all.webp'), b.animSrc);
   chk('②姿态窗是小的(≤240)', b.animW > 0 && b.animW <= 240, 'animW=' + b.animW);
   chk('②显示宠物名', b.name === '线咪', b.name);
-  chk('②购买按钮(先下载桌宠→download)', b.buy.includes('先下载桌宠') && (b.buyHref === 'download.html'), b.buy + '|' + (b.buyHref||''));
+  chk('②下载引导按钮→download(2026-09-13 统一口径)', b.buy.includes('下载客户端') && (b.buyHref === 'download.html'), b.buy + '|' + (b.buyHref||''));
   chk('③宣传视频已移除(2026-09-10 老曹拍板)', b.videoGone);
   chk('③无横向溢出', b.bodySW <= b.iw + 1, JSON.stringify({ s: b.bodySW, i: b.iw }));
 
@@ -52,7 +52,7 @@ function chk(name, cond, extra) {
   chk('①b切兔子选中', /织兔子/.test(b2.onTitle || ''), b2.onTitle);
   chk('②b聚合图切兔子', b2.animSrc.includes('rabbit_all.webp'), b2.animSrc);
   chk('②b名字切兔子', b2.name === '织兔子', b2.name);
-  await p.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v2_mobile.png', fullPage: true });
+  await p.screenshot({ path: __dirname + '/../../outputs/buddies_v2_mobile.png', fullPage: true });
 
   /* 桌面宽度：墙左竖排布局 */
   const dCtx = await browser.newContext({ viewport: { width: 1366, height: 900 } });
@@ -66,7 +66,7 @@ function chk(name, cond, extra) {
   });
   chk('④桌面墙在左姿态窗在右', d.sideBySide, JSON.stringify(d));
   chk('④桌面无溢出', d.bodySW <= d.iw + 1);
-  await dp.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/buddies_v2_desktop.png', fullPage: true });
+  await dp.screenshot({ path: __dirname + '/../../outputs/buddies_v2_desktop.png', fullPage: true });
 
   await browser.close();
   console.log('\nRESULT: PASS=' + pass + ' FAIL=' + fail);

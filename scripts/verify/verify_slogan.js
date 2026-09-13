@@ -125,7 +125,7 @@ const chk = (n, c, x) => { c ? (pass++, console.log('PASS', n)) : (fail++, conso
   const all4 = await p5.evaluate(() => document.body.innerText);
   chk('⑥文案无极限词（最/第一/国家级）', !/最良心|第一|国家级|最优/.test(all4));
 
-  await p5.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/slogan_bar.png', clip: { x: 0, y: 0, width: 1280, height: 240 } });
+  await p5.screenshot({ path: __dirname + '/../../outputs/slogan_bar.png', clip: { x: 0, y: 0, width: 1280, height: 240 } });
   await b.close();
   console.log('RESULT: PASS=' + pass + ' FAIL=' + fail);
   process.exit(fail ? 1 : 0);

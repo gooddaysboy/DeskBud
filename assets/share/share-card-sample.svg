@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <!--
+    DeskBud 三端分享卡片 —— 版式基准 v1（2026-09-13 website 定稿）
+    三端实现：Android 原生 Canvas / 桌面 Pillow / 网页 Canvas 2D
+    目标 = 风格一致，不追求像素级一致。
+
+    画布          1080 x 1440 px（3:4 竖版，微信/小红书友好）
+    卡底          #FFF1E6  (--brand-soft)
+    顶部装饰条    0,0 1080x14  #E8722B  (--brand，可选，不加也成立)
+    宠物区        x190 y150 w700 h620，contain 居中；取 idle 首帧（不要动作中间帧 / 拖拽缩放态）
+    人设句        居中 x540，两行基线 y900/y976（单行 y938），字号 56，行高 76，最多 2 行，色 #222，可用宽 860（左右各留 110）
+                 文案来源 personas[role].zh ；「」包裹（英文用 “”）
+    角色 emoji    居中 x540，基线 y1068，字号 58
+    分隔线        x110 -> 970，y1140，粗 2，色 #EFE2CF  (--line)
+    品牌字标      x110，基线 y1225，"DeskBud"，字号 46 粗体，色 #E8722B
+    官网域名      x110，基线 y1280，"deskbud.xyz"，字号 28，色 #9A8874
+    二维码        x810 y1150，180x180；内容固定 https://deskbud.xyz/get.html（换版本不换码）
+                 素材 = assets/share/qr.png（二维码必须 PNG：Android Canvas 不引库画不了 SVG）
+    安全边距      四边 >= 90
+    字体          系统 sans（PingFang SC / Microsoft YaHei / Noto Sans CJK），不内嵌字体文件
+
+    两条硬约束：
+      1) 不放"免费下载"之类引导字样 —— 走漏靠二维码，保持分享的纯净感
+      2) 不放 App 图标（小尺寸辨识度差，占版面）
+
+    方版备选 1080x1080：宠物区 y110 h520、人设句基线 y760、emoji y880、分隔线 y950、
+                        字标 y1030 / 域名 y1075、二维码 x810 y830 180x180
+  -->
+
+  <!-- 卡底 -->
+  <rect width="1080" height="1440" fill="#FFF1E6"/>
+  <!-- 顶部品牌装饰条 -->
+  <rect width="1080" height="14" fill="#E8722B"/>
+
+  <!-- 宠物主图区（占位示意：实际填 idle 首帧，contain 居中） -->
+  <rect x="190" y="150" width="700" height="620" rx="28" fill="#FFFFFF" opacity="0.55"
+        stroke="#E8722B" stroke-opacity="0.35" stroke-width="3" stroke-dasharray="14 12"/>
+  <text x="540" y="450" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif"
+        font-size="30" fill="#B0551A" opacity="0.85">宠物主图 · idle 首帧</text>
+  <text x="540" y="500" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif"
+        font-size="24" fill="#9A8874">x190 y150 w700 h620 · contain 居中</text>
+
+  <!-- 人设句（来源 personas[role].zh，最多 2 行） -->
+  <text x="540" y="900" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif"
+        font-size="56" fill="#222222">「长耳耷拉脸蛋圆，</text>
+  <text x="540" y="976" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif"
+        font-size="56" fill="#222222">门牙两颗露一点」</text>
+
+  <!-- 角色 emoji -->
+  <text x="540" y="1068" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif"
+        font-size="58" fill="#222222">🐰</text>
+
+  <!-- 分隔线 -->
+  <rect x="110" y="1139" width="860" height="2" fill="#EFE2CF"/>
+
+  <!-- 品牌字标 + 官网域名 -->
+  <text x="110" y="1225" font-family="PingFang SC, Microsoft YaHei, sans-serif"
+        font-size="46" font-weight="700" fill="#E8722B">DeskBud</text>
+  <text x="110" y="1280" font-family="PingFang SC, Microsoft YaHei, sans-serif"
+        font-size="28" fill="#9A8874">deskbud.xyz</text>
+
+  <!-- 二维码（固定目标 https://deskbud.xyz/get.html） -->
+  <image x="810" y="1150" width="180" height="180" xlink:href="qr.png" href="qr.png"/>
+</svg>

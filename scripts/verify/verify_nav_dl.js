@@ -32,7 +32,7 @@ function chk(name, cond, extra) {
   const c2 = await p.evaluate(() => ({ aria: document.querySelector('.nav .nav-dl').getAttribute('aria-label'),
     title: document.querySelector('.nav .nav-dl').getAttribute('title') }));
   chk('②英文态 aria/title=Download', c2.aria === 'Download' && c2.title === 'Download', JSON.stringify(c2));
-  await p.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/nav_dl_desktop.png', clip: { x: 0, y: 0, width: 1366, height: 200 } });
+  await p.screenshot({ path: __dirname + '/../../outputs/nav_dl_desktop.png', clip: { x: 0, y: 0, width: 1366, height: 200 } });
   // 手机宽度
   const m = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const mp = await m.newPage();
@@ -45,7 +45,7 @@ function chk(name, cond, extra) {
       bodySW: document.body.scrollWidth, iw: innerWidth };
   });
   chk('③手机下载可见、无横向溢出', c3.inView && c3.txt.length > 0 && c3.bodySW <= c3.iw + 1, JSON.stringify(c3));
-  await mp.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/nav_dl_mobile.png', clip: { x: 0, y: 0, width: 390, height: 140 } });
+  await mp.screenshot({ path: __dirname + '/../../outputs/nav_dl_mobile.png', clip: { x: 0, y: 0, width: 390, height: 140 } });
   await browser.close();
   console.log('\nRESULT: PASS=' + pass + ' FAIL=' + fail);
   process.exit(fail ? 1 : 0);

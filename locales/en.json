@@ -52,7 +52,8 @@
     "made": "Made with ❤",
     "site": "All rights reserved",
     "visits": "Total visits",
-    "legal": "License & Privacy"
+    "legal": "License & Privacy",
+    "manual": "User Manual"
   },
   "detail": {
     "sub": "Desktop pet preview & download",
@@ -170,9 +171,8 @@
   },
   "download": {
     "title": "DeskBud Pets",
-    "sub": "The app is completely free · direct downloads for all platforms",
+    "sub": "Free download · all pets live in the app — one tap to adopt",
     "note": "The app is free — no unlock needed to download. Premium pets are unlocked inside the app and installed to your device automatically after unlocking. The macOS build is unsigned: right-click → Open on first launch. Windows is a single portable file.",
-    "buy": "Unlock · ¥9.9",
     "dl": "Download",
     "needClient": "Open this page in the DeskBud app",
     "win": "Windows",
@@ -188,6 +188,7 @@
     "feat3": "No ads, no pop-ups — a clean, pure experience",
     "feat4": "Cross-platform compatible, synced across devices",
     "feat5": "24+ action poses, with new pets and interactions always on the way",
-    "manualTitle": "User manual"
+    "manualTitle": "User manual",
+    "manualOpen": "Open full manual"
   }
 }

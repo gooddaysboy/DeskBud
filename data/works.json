@@ -502,7 +502,7 @@
         "zh": "织熊猫是一只住在你屏幕上的小宠物。它会自己走来走去，无聊了眨眨眼、打打哈欠、伸个懒腰；你点一下它就开心地跳起来，拖一拖它就跟着你跑。它不抢注意力，只是安静地陪着你——工作累了抬头看一眼，就被治愈了。",
         "en": "Knitted Panda is a little pet living on your screen. It wanders on its own, blinks and yawns when bored, stretches now and then; tap it and it jumps happily, drag it and it follows you. It never steals your attention — just keeps you company quietly, a small comfort whenever you look up from work."
       },
-      "states": [
+            "states": [
         {
           "src": "works/panda/idle.webp",
           "caption": {
@@ -511,24 +511,52 @@
           }
         },
         {
-          "src": "works/panda/idle_left.webp",
+          "src": "works/panda/run.webp",
           "caption": {
-            "zh": "左望",
-            "en": "Look left"
+            "zh": "奔跑",
+            "en": "Run"
           }
         },
         {
-          "src": "works/panda/idle_right.webp",
+          "src": "works/panda/climb.webp",
           "caption": {
-            "zh": "右望",
-            "en": "Look right"
+            "zh": "爬墙",
+            "en": "Climb"
           }
         },
         {
-          "src": "works/panda/run_left.webp",
+          "src": "works/panda/hang.webp",
           "caption": {
-            "zh": "走动",
-            "en": "Walk"
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/panda/fall.webp",
+          "caption": {
+            "zh": "坠落",
+            "en": "Fall"
+          }
+        },
+        {
+          "src": "works/panda/sit.webp",
+          "caption": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/panda/wave.webp",
+          "caption": {
+            "zh": "打招呼",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/panda/jumphappy.webp",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
           }
         },
         {
@@ -567,21 +595,28 @@
           }
         },
         {
-          "src": "works/panda/jumphappy.webp",
+          "src": "works/panda/sleep.webp",
           "caption": {
-            "zh": "开心跳",
-            "en": "Happy jump"
+            "zh": "睡觉",
+            "en": "Sleep"
           }
         },
         {
-          "src": "works/panda/fall.webp",
+          "src": "works/panda/sit_dangle.webp",
           "caption": {
-            "zh": "降落",
-            "en": "Parachute"
+            "zh": "晃腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/panda/sit_look_up.webp",
+          "caption": {
+            "zh": "抬头坐",
+            "en": "Look up"
           }
         }
       ],
-      "poses": [
+            "poses": [
         {
           "src": "works/panda-poses/panda_idle-a.webp",
           "name": {
@@ -590,24 +625,52 @@
           }
         },
         {
-          "src": "works/panda-poses/panda_idle_left-a.webp",
+          "src": "works/panda-poses/panda_run-a.webp",
           "name": {
-            "zh": "左望",
-            "en": "Look left"
+            "zh": "奔跑",
+            "en": "Run"
           }
         },
         {
-          "src": "works/panda-poses/panda_idle_right-a.webp",
+          "src": "works/panda-poses/panda_climb-a.webp",
           "name": {
-            "zh": "右望",
-            "en": "Look right"
+            "zh": "爬墙",
+            "en": "Climb"
           }
         },
         {
-          "src": "works/panda-poses/panda_run_left-a.webp",
+          "src": "works/panda-poses/panda_hang-a.webp",
           "name": {
-            "zh": "走动",
-            "en": "Walk"
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_fall-a.webp",
+          "name": {
+            "zh": "坠落",
+            "en": "Fall"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_sit-a.webp",
+          "name": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_wave-a.webp",
+          "name": {
+            "zh": "打招呼",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
           }
         },
         {
@@ -646,17 +709,24 @@
           }
         },
         {
-          "src": "works/panda-poses/panda_jumphappy-a.webp",
+          "src": "works/panda-poses/panda_sleep-a.webp",
           "name": {
-            "zh": "开心跳",
-            "en": "Happy jump"
+            "zh": "睡觉",
+            "en": "Sleep"
           }
         },
         {
-          "src": "works/panda-poses/panda_fall-a.webp",
+          "src": "works/panda-poses/panda_sit_dangle-a.webp",
           "name": {
-            "zh": "降落",
-            "en": "Parachute"
+            "zh": "晃腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_sit_look_up-a.webp",
+          "name": {
+            "zh": "抬头坐",
+            "en": "Look up"
           }
         }
       ],
@@ -745,12 +815,61 @@
         "zh": "织兔子是一只住在你屏幕上的小毛球。它自己蹦蹦跳跳，无聊了眨眨眼、打打哈欠、伸个懒腰；你点一下它就开心地蹦起来，拖一拖它就跟着你跑。它不抢注意力，只是安静地陪着你——工作累了抬头看一眼，就被治愈了。",
         "en": "Knitted Rabbit is a little furball living on your screen. It hops on its own, blinks and yawns when bored, stretches now and then; tap it and it jumps happily, drag it and it follows you. It never steals your attention — just keeps you company quietly, a small comfort whenever you look up from work."
       },
-      "states": [
+            "states": [
         {
           "src": "works/rabbit/idle.webp",
           "caption": {
             "zh": "待机",
             "en": "Idle"
+          }
+        },
+        {
+          "src": "works/rabbit/run.webp",
+          "caption": {
+            "zh": "奔跑",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/rabbit/climb.webp",
+          "caption": {
+            "zh": "爬墙",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/rabbit/hang.webp",
+          "caption": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/rabbit/fall.webp",
+          "caption": {
+            "zh": "坠落",
+            "en": "Fall"
+          }
+        },
+        {
+          "src": "works/rabbit/sit.webp",
+          "caption": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/rabbit/wave.webp",
+          "caption": {
+            "zh": "打招呼",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/rabbit/jumphappy.webp",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
           }
         },
         {
@@ -789,27 +908,6 @@
           }
         },
         {
-          "src": "works/rabbit/wave.webp",
-          "caption": {
-            "zh": "挥手",
-            "en": "Wave"
-          }
-        },
-        {
-          "src": "works/rabbit/jumphappy.webp",
-          "caption": {
-            "zh": "开心跳",
-            "en": "Happy jump"
-          }
-        },
-        {
-          "src": "works/rabbit/run.webp",
-          "caption": {
-            "zh": "跑动",
-            "en": "Run"
-          }
-        },
-        {
           "src": "works/rabbit/sleep.webp",
           "caption": {
             "zh": "睡觉",
@@ -817,19 +915,75 @@
           }
         },
         {
-          "src": "works/rabbit/fall.webp",
+          "src": "works/rabbit/sit_dangle.webp",
           "caption": {
-            "zh": "降落",
-            "en": "Parachute"
+            "zh": "晃腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/rabbit/sit_look_up.webp",
+          "caption": {
+            "zh": "抬头坐",
+            "en": "Look up"
           }
         }
       ],
-      "poses": [
+            "poses": [
         {
           "src": "works/rabbit-poses/rabbit_idle-a.webp",
           "name": {
             "zh": "待机",
             "en": "Idle"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_run-a.webp",
+          "name": {
+            "zh": "奔跑",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_climb-a.webp",
+          "name": {
+            "zh": "爬墙",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_hang-a.webp",
+          "name": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_fall-a.webp",
+          "name": {
+            "zh": "坠落",
+            "en": "Fall"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_sit-a.webp",
+          "name": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_wave-a.webp",
+          "name": {
+            "zh": "打招呼",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
           }
         },
         {
@@ -868,27 +1022,6 @@
           }
         },
         {
-          "src": "works/rabbit-poses/rabbit_wave-a.webp",
-          "name": {
-            "zh": "挥手",
-            "en": "Wave"
-          }
-        },
-        {
-          "src": "works/rabbit-poses/rabbit_jumphappy-a.webp",
-          "name": {
-            "zh": "开心跳",
-            "en": "Happy jump"
-          }
-        },
-        {
-          "src": "works/rabbit-poses/rabbit_run-a.webp",
-          "name": {
-            "zh": "跑动",
-            "en": "Run"
-          }
-        },
-        {
           "src": "works/rabbit-poses/rabbit_sleep-a.webp",
           "name": {
             "zh": "睡觉",
@@ -896,10 +1029,17 @@
           }
         },
         {
-          "src": "works/rabbit-poses/rabbit_fall-a.webp",
+          "src": "works/rabbit-poses/rabbit_sit_dangle-a.webp",
           "name": {
-            "zh": "降落",
-            "en": "Parachute"
+            "zh": "晃腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_sit_look_up-a.webp",
+          "name": {
+            "zh": "抬头坐",
+            "en": "Look up"
           }
         }
       ],

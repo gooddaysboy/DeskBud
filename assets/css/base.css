@@ -1429,11 +1429,14 @@ html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
 .pv-tip { margin-top: 14px; padding: 10px 14px; background: #fff3e8; border-radius: 10px;
           color: var(--brand-ink); font-size: 13.5px; }
 
-/* 首页选择卡勾选框适配（09-11）：卡片是横排 flex，勾选框定位右上角；overflow 放开以免裁掉 */
+/* 首页选择卡勾选框/角标适配（09-11）：卡片是横排 flex，勾选框定位右上角；overflow 放开以免裁掉 */
 .pick-card .buddy-check { top: 8px; right: 10px; }
+.pick-card .buddy-owned { top: 8px; right: 10px; }
 .pick-card.owned { opacity: .82; }
 
-/* ---------- 伙伴页多选（2026-09-11）：方块勾选框 + 底部浮条 ---------- */
+/* ---------- 伙伴页多选勾选框（2026-09-11）----------
+   ⚠️ 2026-09-13 22:45 恢复：只在「App 内皮肤」（有 device_id 且嵌在 App 里打开）才渲染，
+   网站访客看到的是只读角标 .buddy-owned，不是这个 */
 .buddy-tile { position: relative; }
 .buddy-check {
   position: absolute; top: 6px; right: 6px; z-index: 2;
@@ -1452,8 +1455,19 @@ html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
 }
 .buddy-tile.owned .buddy-check:hover { transform: none; }
 
+/* ---------- 「已拥有」只读角标（2026-09-13：网站上不再是勾选框，只留徽章） ---------- */
+.buddy-owned {
+  position: absolute; top: 6px; right: 6px; z-index: 2;
+  height: 18px; padding: 0 7px; border-radius: 999px;
+  background: rgba(240,240,238,.95); border: 1px solid rgba(0,0,0,.08);
+  color: var(--ink-faint); font-size: 11px; font-weight: 500; line-height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
 
-/* 已选数量小字提示（09-11：按钮紧贴姿态窗口/详情区，勾选≥2 时提示） */
+/* 下载引导小字（2026-09-13 网站定位整改：所有「购买」入口 → 「下载客户端领养」） */
+.lead-hint { flex-basis: 100%; display: block; font-size: 12.5px; color: var(--ink-soft); margin-top: 7px; text-align: center; line-height: 1.45; }
+/* 已选数量小字提示（09-11：勾选 ≥1 只时显示；仅在 App 内皮肤出现） */
 .buy-tip { flex-basis: 100%; display: block; font-size: 12.5px; color: var(--brand-ink); margin-bottom: 6px; text-align: center; }
 .buy-hint { flex-basis: 100%; display: block; font-size: 11.5px; color: var(--muted, #9a9a9a); margin-top: 7px; text-align: center; line-height: 1.4; }
 .buddy-buy { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; }
@@ -1471,7 +1485,18 @@ html.embed-mode .buddies-wrap { padding: 12px 14px 24px; }
 .dl-feats li { position: relative; padding-left: 22px; font-size: 14px; color: var(--ink); }
 .dl-feats li::before { content: "🐾"; position: absolute; left: 0; top: 0; font-size: 13px; }
 .dl-manual { max-width: 980px; margin: 44px auto 0; display: flex; flex-direction: column; gap: 14px; }
+/* 锚点落位给粘性顶栏留位（2026-09-13 老曹反馈：页脚「用户手册」跳到下载页只停在页顶，很困惑）
+   —— 软导航用 scrollIntoView，会把 #manual 顶到 top:0，被 64px 顶栏整个盖住 */
+#manual { scroll-margin-top: 82px; }
+html.embed-mode #manual { scroll-margin-top: 14px; }   /* App 内嵌没有顶栏，别留空 */
 .dl-manual .hm-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.dl-manual-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.dl-manual-open { font-size: 13px; color: var(--brand-ink); text-decoration: none; border-bottom: 1px dashed rgba(232, 114, 43, .45); padding-bottom: 1px; }
+.dl-manual-open:hover { color: var(--brand); border-bottom-color: var(--brand); }
+.dl-qr { display: flex; flex-direction: column; align-items: center; gap: 7px; margin-top: 12px; }
+.dl-qr img { width: 110px; height: 110px; border-radius: 10px; background: #fff; padding: 6px; box-shadow: 0 3px 12px rgba(120, 80, 40, .12); }
+.dl-qr span { font-size: 12px; color: var(--ink-faint); }
+.dl-qr .dl-qr-open { font-size: 12px; color: var(--brand-ink); text-decoration: none; border-bottom: 1px dashed rgba(232, 114, 43, .45); }
 .dl-manual-frame { width: 100%; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; min-height: 420px; }
 @media (max-width: 680px) { .dl-manual-frame { min-height: 360px; } .dl-manual { margin-top: 32px; } }
 

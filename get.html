@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>DeskBud 客户端下载</title>
+  <meta name="description" content="DeskBud 客户端下载引导：电脑上直接下载 Windows / macOS 版，手机上扫码装安卓版，微信内如何用浏览器打开。">
+  <style>
+    :root {
+      --brand: #e8722b; --brand-ink: #b0551a; --ink: #3a2b1e; --ink-soft: #6b5a48;
+      --ink-faint: #9a8874; --bg: #fdf8f0; --line: #efe2cf;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 26px 18px; color: var(--ink); background: radial-gradient(120% 90% at 50% 0%, #fff9ef 0%, var(--bg) 62%);
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+    .card {
+      width: 100%; max-width: 430px; background: #fff; border: 1px solid var(--line); border-radius: 20px;
+      padding: 30px 24px 26px; text-align: center; box-shadow: 0 18px 44px rgba(190, 120, 60, .14);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 18px; }
+    .brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--brand); }
+    .icon { font-size: 44px; line-height: 1; margin-bottom: 12px; }
+    h1 { font-size: 19px; margin: 0 0 10px; line-height: 1.5; }
+    p { font-size: 14px; line-height: 1.8; color: var(--ink-soft); margin: 0 0 6px; }
+    .btn {
+      display: inline-block; margin-top: 16px; padding: 13px 30px; border-radius: 999px; background: var(--brand);
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 15px; border: none; cursor: pointer;
+      box-shadow: 0 8px 22px rgba(232, 114, 43, .30); font-family: inherit;
+    }
+    .hintbox {
+      margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: #fff6ec;
+      border: 1px dashed rgba(232, 114, 43, .40); font-size: 13px; color: var(--brand-ink);
+      line-height: 1.8; text-align: left;
+    }
+    .qr { width: 168px; height: 168px; margin: 16px auto 10px; display: block; background: #fff; border-radius: 14px; padding: 8px; box-shadow: 0 6px 18px rgba(120, 80, 40, .12); }
+    .dlrow { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+    .dlrow .btn { margin-top: 0; }
+    .btn-ghost { background: #fff; color: var(--brand-ink); border: 1.5px solid rgba(232, 114, 43, .45); box-shadow: none; }
+    .qrwrap { margin-top: 20px; padding-top: 18px; border-top: 1px dashed var(--line); }
+    .qrtip { font-size: 13px; color: var(--ink-faint); margin: 0; }
+    .qr { margin-top: 12px; }
+    .steps { text-align: left; margin: 14px 0 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--ink-soft); }
+    .steps li { position: relative; padding-left: 25px; margin-bottom: 8px; line-height: 1.7; }
+    .steps li::before {
+      content: attr(data-n); position: absolute; left: 0; top: 1px; width: 17px; height: 17px; border-radius: 50%;
+      background: var(--brand); color: #fff; font-size: 11px; line-height: 17px; text-align: center; font-weight: 700;
+    }
+    .foot { margin-top: 20px; font-size: 12.5px; color: var(--ink-faint); }
+    .foot a { color: var(--brand-ink); }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+<main class="card">
+  <div class="brand"><span class="dot"></span>DeskBud</div>
+
+  <!-- ① 微信内置浏览器 -->
+  <section id="v-wechat" hidden>
+    <div class="icon">↗️</div>
+    <h1 data-t="wechatTitle"></h1>
+    <p data-t="wechatBody"></p>
+    <div class="hintbox" data-t="wechatHint"></div>
+  </section>
+
+  <!-- ② 安卓浏览器：自动开始下载 -->
+  <section id="v-android" hidden>
+    <div class="icon">🤖</div>
+    <h1 data-t="androidTitle"></h1>
+    <p data-t="androidBody"></p>
+    <a class="btn" id="dlBtn" href="#" rel="noopener">⬇ <span data-t="androidBtn"></span></a>
+    <div class="hintbox" data-t="androidHint"></div>
+  </section>
+
+  <!-- ③ iOS -->
+  <section id="v-ios" hidden>
+    <div class="icon">📱</div>
+    <h1 data-t="iosTitle"></h1>
+    <p data-t="iosBody"></p>
+    <a class="btn" href="download.html" data-t="iosBtn"></a>
+  </section>
+
+  <!-- ④ 桌面：本机直接下载（Win/Mac）+ 二维码（装到手机） -->
+  <section id="v-desktop" hidden>
+    <div class="icon">🚀</div>
+    <h1 data-t="deskTitle"></h1>
+    <p data-t="deskBody"></p>
+    <div class="dlrow" id="dlDeskRow">
+      <a class="btn" id="dlWin" href="#" rel="noopener">⬇ <span data-t="deskWin"></span></a>
+      <a class="btn btn-ghost" id="dlMac" href="#" rel="noopener"><span data-t="deskMac"></span></a>
+    </div>
+    <div class="qrwrap">
+      <p class="qrtip" data-t="deskQrTip"></p>
+      <img class="qr" src="assets/img/qr-android.svg?v=28" alt="DeskBud 安卓版下载二维码" width="168" height="168">
+      <ul class="steps">
+        <li data-n="1" data-t="deskStep1"></li>
+        <li data-n="2" data-t="deskStep2"></li>
+        <li data-n="3" data-t="deskStep3"></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="foot"><a href="download.html" data-t="footLink"></a></div>
+</main>
+
+<script>
+(function () {
+  var GITEE = 'https://gitee.com/deskbud/version';
+  // 兜底（最后一道防线；与 assets/js/site.js 的 FALLBACK.android 保持一致）
+  var FALLBACK = GITEE + '/releases/download/android-v0.1.8/DeskBud_Android_v018.apk';
+
+  var L = {
+    zh: {
+      wechatTitle: '请在浏览器中打开',
+      wechatBody: '微信内置浏览器会拦截应用安装包，换到手机自带浏览器才能下载。',
+      wechatHint: '点右上角「⋯」→ 选「在浏览器中打开」，就会自动开始下载。',
+      androidTitle: '正在开始下载…',
+      androidBody: 'DeskBud 安卓客户端完全免费。装好打开，织熊猫和织兔子就在桌面上等你了，不用做任何设置。',
+      androidBtn: '手动下载安装包',
+      androidHint: '没自动开始就点上面的按钮。若系统提示「未知来源 / 风险应用」，选择「继续安装」即可 —— DeskBud 无广告、无弹窗，请放心。',
+      iosTitle: 'iOS 版暂未提供',
+      iosBody: 'DeskBud 目前有 Windows、macOS、Android 三个平台，iOS 版还在准备中。',
+      iosBtn: '看看其他平台',
+      deskTitle: '下载 DeskBud 客户端',
+      deskBody: '客户端免费，装好打开就能领养宠物 —— 宠物都在客户端里，一键领养，全自动。',
+      deskWin: 'Windows 版',
+      deskMac: 'macOS 版',
+      deskQrTip: '想装到手机上？让手机扫下面的二维码',
+      deskStep1: '用手机相机或微信「扫一扫」扫上面的二维码',
+      deskStep2: '在手机浏览器里打开后会自动下载',
+      deskStep3: '若在微信里打开，点右上角「⋯」→「在浏览器中打开」',
+      footLink: '返回下载页 · Windows / macOS 版'
+    },
+    en: {
+      wechatTitle: 'Open in your browser',
+      wechatBody: 'The in-app browser of WeChat blocks app installers. Switch to your phone browser to download.',
+      wechatHint: 'Tap “⋯” at the top right → “Open in browser”, and the download starts automatically.',
+      androidTitle: 'Starting download…',
+      androidBody: 'The DeskBud Android client is completely free. Install it and your pets are on screen — no setup needed.',
+      androidBtn: 'Download the APK manually',
+      androidHint: 'Nothing started? Tap the button above. If the system warns about “unknown sources”, choose “Install anyway” — DeskBud is ad-free.',
+      iosTitle: 'iOS is not available yet',
+      iosBody: 'DeskBud currently ships for Windows, macOS and Android. The iOS build is still in progress.',
+      iosBtn: 'See other platforms',
+      deskTitle: 'Download the DeskBud app',
+      deskBody: 'Free. Install it and adopt your pets inside the app — one tap, all automatic.',
+      deskWin: 'Windows',
+      deskMac: 'macOS',
+      deskQrTip: 'Want it on your phone? Scan the code below',
+      deskStep1: 'Scan the QR code with your phone camera or WeChat',
+      deskStep2: 'It opens in your phone browser and starts downloading',
+      deskStep3: 'If it opens inside WeChat, tap “⋯” → “Open in browser”',
+      footLink: 'Back to downloads · Windows / macOS'
+    }
+  };
+
+  var lang = (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  var T = L[lang];
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.title = lang === 'zh' ? 'DeskBud 客户端下载' : 'Download DeskBud';
+  var nodes = document.querySelectorAll('[data-t]');
+  for (var i = 0; i < nodes.length; i++) {
+    var v = T[nodes[i].getAttribute('data-t')];
+    if (v) nodes[i].textContent = v;
+  }
+
+  var UA = navigator.userAgent || '';
+  var isWeChat = /MicroMessenger/i.test(UA);
+  var isAndroid = /Android/i.test(UA);
+  var isIOS = /iPhone|iPad|iPod/i.test(UA);
+  var isMobile = isAndroid || isIOS || /Mobile/i.test(UA);
+
+  function show(id) { document.getElementById(id).hidden = false; }
+
+  // 取最新安卓直链：同源副本优先（gitee 跨源必被 CORS 拦，留作次选只为将来解禁）
+  function apkUrl() {
+    var sources = ['data/download-latest.json', GITEE + '/raw/master/version-android.json'];
+    var chain = Promise.resolve(FALLBACK);
+    sources.forEach(function (src) {
+      chain = chain.then(function (cur) {
+        if (cur !== FALLBACK) return cur;
+        return fetch(src, { cache: 'no-cache' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (d) {
+            if (!d) return cur;
+            if (d.android && d.android.url) return d.android.url;
+            if (d.url && d.versionCode) return d.url;
+            return cur;
+          })
+          .catch(function () { return cur; });
+      });
+    });
+    return chain;
+  }
+
+  if (isWeChat) { show('v-wechat'); return; }          // 微信优先判定（微信里有 iOS/Android 两种）
+  if (isAndroid) {
+    show('v-android');
+    apkUrl().then(function (url) {
+      var btn = document.getElementById('dlBtn');
+      btn.setAttribute('href', url);
+      btn.setAttribute('download', '');
+      setTimeout(function () { try { window.location.href = url; } catch (e) { /* 被拦就靠按钮 */ } }, 400);
+    });
+    return;
+  }
+  if (isIOS) { show('v-ios'); return; }
+  // 桌面（含其他 UA）：能本机下载就直接给按钮，同时保留二维码给「装到手机」用
+  show('v-desktop');
+  if (isMobile) {
+    document.getElementById('dlDeskRow').hidden = true;   // 手机 UA 不给电脑安装包
+  } else {
+    fetch('data/download-latest.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        [['win', 'dlWin'], ['mac', 'dlMac']].forEach(function (pair) {
+          var el = document.getElementById(pair[1]);
+          var u = d && d[pair[0]] && d[pair[0]].url;
+          if (u) { el.setAttribute('href', u); } else { el.hidden = true; }
+        });
+      })
+      .catch(function () {});
+  }
+})();
+</script>
+</body>
+</html>

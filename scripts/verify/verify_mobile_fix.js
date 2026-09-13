@@ -59,8 +59,8 @@ function chk(name, cond, extra) {
   chk('④footer含安全区padding', f1 >= 32, 'pb=' + f1);
 
   /* 截图 */
-  await p3.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/mobile_fix_buddies.png', fullPage: true });
-  await p2.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/mobile_fix_home.png', fullPage: false });
+  await p3.screenshot({ path: __dirname + '/../../outputs/mobile_fix_buddies.png', fullPage: true });
+  await p2.screenshot({ path: __dirname + '/../../outputs/mobile_fix_home.png', fullPage: false });
 
   /* ⑤ embed 模式：?embed=1 隐藏顶栏/页脚，只留内容 */
   const pe = await ctx.newPage();
@@ -80,9 +80,26 @@ function chk(name, cond, extra) {
   chk('⑤页脚隐藏', e1.footerHidden);
   chk('⑤内容仍在（选择墙）', e1.wallVisible);
   // 宠物 id / 名字不再写死（首位已从织熊猫换成线咪；内置在末排）
-  chk('⑤embed收银台链接+device_id+embed透传', new RegExp(`^https://pay\\.deskbud\\.xyz/checkout\\.html\\?device_id=${DID}&pet_id=[a-z_]+&embed=1$`).test(e1.buyHref), e1.buyHref);
+  // 2026-09-13：收银台链路已撤 —— embed 内也不再出现任何下单链接，只有下载引导
+  // 2026-09-13 22:45 分流整改（老曹拍板）：embed **且带 device_id** = App 内皮肤 → 恢复收银台（一律带 embed=1）；
+  //   但**纯浏览器访客**（无 did）仍旧只有下载引导 —— 这半边与 20:40 一致，不能丢
+  chk('⑤embed(App内)·恢复收银台链接', /pay\.deskbud\.xyz\/checkout\.html\?device_id=/.test(e1.buyHref || ''), e1.buyHref);
+  chk('⑤embed(App内)·收银台一律带 embed=1', /[?&]embed=1/.test(e1.buyHref || ''), e1.buyHref);
+  // 独立 context（localStorage 干净）验证访客侧：带 embed 但没有 did → 必须仍是下载引导
+  const ctxV = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
+    userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Mobile Safari/537.36' });
+  const pv = await ctxV.newPage();
+  await pv.goto(BASE + '/buddies.html?embed=1&lang=zh', { waitUntil: 'networkidle', timeout: 30000 });
+  await pv.waitForTimeout(1800);
+  const ev = await pv.evaluate(() => ({
+    buyHref: (document.querySelector('#buddyBuy .btn') || {}).href || '',
+    checks: document.querySelectorAll('#buddyWall .buddy-check').length,
+  }));
+  chk('⑤embed(访客)·无收银台链接，只有下载引导', /download\.html$/.test(ev.buyHref) && !/checkout/.test(ev.buyHref), ev.buyHref);
+  chk('⑤embed(访客)·无勾选框', ev.checks === 0, JSON.stringify(ev));
+  await ctxV.close();
   chk('⑤?lang=zh 中文生效', e1.navLang === 'zh-CN' && e1.title.length > 0 && /[\u4e00-\u9fa5]/.test(e1.title), e1.navLang + '/' + e1.title);
-  await pe.screenshot({ path: 'D:/360Downloads/deskbud/website/outputs/mobile_embed_mode.png', fullPage: true });
+  await pe.screenshot({ path: __dirname + '/../../outputs/mobile_embed_mode.png', fullPage: true });
 
   /* ⑥ lang 记忆：embed 页读过 ?lang=zh 后，无参页仍中文（localStorage 记住） */
   const pe2 = await ctx.newPage();

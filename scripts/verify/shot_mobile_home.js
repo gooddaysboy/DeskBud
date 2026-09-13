@@ -3,8 +3,8 @@ const { chromeExe } = require('./_env.js');
 const { spawnSync } = require('child_process');
 const fs = require('fs');
 
-const out = 'D:/360Downloads/deskbud/website/outputs/mobile_home_check.png';
-const tmp = 'D:/360Downloads/deskbud/website/outputs/_mobile_home_tmp.png';
+const out = __dirname + '/../../outputs/mobile_home_check.png';
+const tmp = __dirname + '/../../outputs/_mobile_home_tmp.png';
 const args = [
   '--headless=new', '--disable-gpu', '--no-sandbox',
   '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows',
