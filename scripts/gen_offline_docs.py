@@ -16,7 +16,8 @@ gen_offline_docs.py  --  离线快照产线（website 侧）
 输出（website/docs/）：
   privacy_zh.html / privacy_en.html   转换分支：内联全部 data-i18n 文案 + 删除 5 个 <script>
                                       + 删顶栏/搜索/页脚 + base.css 与 3 张装饰图全内联
-  manual_zh.html  / manual_en.html    透传分支：manual/android-{zh,en}.html 原样拷入（内容零改动）
+  manual_zh.html  / manual_en.html    透传分支：manual/android-{zh,en}.html 内容零改动拷入
+                                      （仅行尾统一为 LF —— 与 git 提交后 / 线上一致）
 
 🔴 跨仓铁律（kotlin / pyside6 的快照生成器同样依赖）：
    privacy.html 的 data-i18n 属性与 locales 键名 = **跨仓契约**。
@@ -60,14 +61,20 @@ LANGS = [('zh', 'zh-CN'), ('en', 'en')]
 
 # ---------------------------------------------------------------- 工具
 def read_text(path):
+    """读文本，行尾一律按 LF 处理。
+
+    ⚠️ 本机 `core.autocrlf=true`：git 提交会把 CRLF 规范化成 LF ⇒ **线上永远是 LF 版**。
+    产线产物也必须写 LF，否则本地/线上 sha256 对不上（客户端下载校验必失败）。
+    """
     with open(path, 'r', encoding='utf-8', newline='') as f:
-        return f.read()
+        return f.read().replace('\r\n', '\n')
 
 
 def write_text(path, text):
+    """写文本，行尾一律 LF（与 git 提交后 / 线上一致）。"""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8', newline='') as f:
-        f.write(text)
+        f.write(text.replace('\r\n', '\n'))
 
 
 def flatten(d, prefix=''):
@@ -212,8 +219,9 @@ def collect(loc_by_lang):
         src = os.path.join(MANUAL_DIR, 'android-%s.html' % lang)
         if not os.path.isfile(src):
             raise SystemExit('缺少手册真源：%s' % src)
-        out['manual_%s.html' % lang] = read_text(src)
-        stats['manual_%s' % lang] = (os.path.getsize(src), [])
+        text = read_text(src)          # 已归一为 LF
+        out['manual_%s.html' % lang] = text
+        stats['manual_%s' % lang] = (len(text.encode('utf-8')), [])
 
     return out, stats, css_kb
 

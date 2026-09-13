@@ -1,12 +1,12 @@
 {
-  "generated": "2026-09-13T14:08:58+08:00",
+  "generated": "2026-09-13T14:22:50+08:00",
   "base": "https://deskbud.xyz/",
   "items": {
     "bubbles": {
       "ver": 1,
       "url": "https://deskbud.xyz/data/bubble.json",
-      "sha256": "d77a43871e1fb574c675c3d57cc04713ef92e7e2165101be2d16fa2948891d79",
-      "bytes": 34078
+      "sha256": "bdaa9e9a0601519da9523b801d0212aef66f5a73aaf90c3e70c0bb19f60b6ad0",
+      "bytes": 33490
     },
     "privacy_zh": {
       "ver": 1,
@@ -25,14 +25,14 @@
     "manual_zh": {
       "ver": 1,
       "url": "https://deskbud.xyz/docs/manual_zh.html",
-      "sha256": "25fd24344271a3c12417139e4f74cbd94f758a5f208ba4b854e97a2cf3d2fae7",
-      "bytes": 11490
+      "sha256": "1fc6173f4479efdfa50c8db8e84544433e8f738460d478b547d95acdfe422c02",
+      "bytes": 11310
     },
     "manual_en": {
       "ver": 1,
       "url": "https://deskbud.xyz/docs/manual_en.html",
-      "sha256": "9b07cef5878aca45fac2390a4d97865ba14352f59dfb4fdc951f18f3e3bf5f80",
-      "bytes": 11490
+      "sha256": "dae4af761e796c54e1ce98691fabfc560fee88f80ed3cc48c1976299f5e54a26",
+      "bytes": 11310
     }
   }
 }

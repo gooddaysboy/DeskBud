@@ -49,8 +49,15 @@ ITEMS = [
 
 
 def read_bytes(p):
+    """读资源字节，并做行尾归一（CRLF → LF）。
+
+    ⚠️ 本机 `core.autocrlf=true` 且无 `.gitattributes`：git 提交会把 CRLF 规范化成 LF
+    ⇒ **线上拿到的永远是 LF 版**。若按工作区（可能 CRLF）算 sha256/bytes，客户端下载校验
+    必然失败（实测：bubble.json 工作区 34078B vs 线上 33490B；manual 11490B vs 11310B）。
+    本清单 5 项均为**文本资源**，故统一归一；将来若加入二进制资源，须为它单独走真实字节。
+    """
     with open(p, 'rb') as f:
-        return f.read()
+        return f.read().replace(b'\r\n', b'\n')
 
 
 def flatten(d, prefix=''):
@@ -64,9 +71,31 @@ def flatten(d, prefix=''):
     return out
 
 
+def check_remote(items):
+    """拉线上文件比对 sha256/bytes —— 用来实证「清单与线上真的一致」（需联网）。"""
+    import urllib.request
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    ok = True
+    for key, it in items.items():
+        try:
+            data = opener.open(it['url'], timeout=30).read().replace(b'\r\n', b'\n')
+            sha = hashlib.sha256(data).hexdigest()
+            same = (sha == it['sha256'] and len(data) == it['bytes'])
+            note = 'OK'
+        except Exception as e:
+            same, data = False, b''
+            note = 'ERR %s' % e
+        ok = ok and same
+        print('  %-11s %s  %d B（清单 %d B）  %s'
+              % (key, '✅' if same else '❌', len(data), it['bytes'], note))
+    return ok
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--print', dest='dry', action='store_true', help='只打印不写盘')
+    ap.add_argument('--check-remote', dest='remote', action='store_true',
+                    help='生成后拉线上比对 sha256（需联网；刚推送时注意 EdgeOne 约 3 分钟延迟）')
     args = ap.parse_args()
 
     old = {}
@@ -135,6 +164,10 @@ def main():
     with open(OUT, 'w', encoding='utf-8', newline='\n') as f:
         f.write(text)
     print('  已写出 → data/sync.json （%d B）' % len(text.encode('utf-8')))
+
+    if args.remote:
+        print('  线上比对（%s）：' % BASE)
+        return 0 if check_remote(items) else 1
     return 0
 
 
