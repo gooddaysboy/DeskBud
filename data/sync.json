@@ -1,0 +1,38 @@
+{
+  "generated": "2026-09-13T14:08:58+08:00",
+  "base": "https://deskbud.xyz/",
+  "items": {
+    "bubbles": {
+      "ver": 1,
+      "url": "https://deskbud.xyz/data/bubble.json",
+      "sha256": "d77a43871e1fb574c675c3d57cc04713ef92e7e2165101be2d16fa2948891d79",
+      "bytes": 34078
+    },
+    "privacy_zh": {
+      "ver": 1,
+      "url": "https://deskbud.xyz/docs/privacy_zh.html",
+      "sha256": "b2068140fc16fa26417c7d6ed5e162588c66487158192c05400ac67b4389b25b",
+      "bytes": 129698,
+      "effective": "生效日期：2026-09-11"
+    },
+    "privacy_en": {
+      "ver": 1,
+      "url": "https://deskbud.xyz/docs/privacy_en.html",
+      "sha256": "4bda0341b51b708cb8c813ed20d5e7ce381e54ce9aa1d94fe70a15e6e2fa6f95",
+      "bytes": 130185,
+      "effective": "Effective: 2026-09-11"
+    },
+    "manual_zh": {
+      "ver": 1,
+      "url": "https://deskbud.xyz/docs/manual_zh.html",
+      "sha256": "25fd24344271a3c12417139e4f74cbd94f758a5f208ba4b854e97a2cf3d2fae7",
+      "bytes": 11490
+    },
+    "manual_en": {
+      "ver": 1,
+      "url": "https://deskbud.xyz/docs/manual_en.html",
+      "sha256": "9b07cef5878aca45fac2390a4d97865ba14352f59dfb4fdc951f18f3e3bf5f80",
+      "bytes": 11490
+    }
+  }
+}

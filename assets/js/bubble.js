@@ -135,7 +135,10 @@ const BUBBLE = {
   spawnBubble(container, category, dur, animDelay, dir) {
     const lines = this.linesFor(category);
     if (!lines.length) return;
-    const text = window.pick(this.pickBag('marquee:' + category, lines) || lines[0]);
+    const raw = this.pickBag('marquee:' + category, lines) || lines[0];
+    // i18n 可缺省（如本页未引 i18n.js）：无 window.pick 时退回原文，不抛错（09-13 修线上 TypeError）
+    const text = window.pick ? window.pick(raw)
+      : (typeof raw === 'string' ? raw : (raw && (raw.zh || raw.en)) || '');
     if (dur == null) dur = 14000 + Math.random() * 8000;   // 默认 14~22s（缓慢）
     const DIRS = ['rise', 'fall', 'lr', 'rl', 'd1', 'd2'];
     if (!dir || DIRS.indexOf(dir) < 0) dir = DIRS[Math.floor(Math.random() * DIRS.length)];

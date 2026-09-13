@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeskBud Pet · Android User Guide</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff6ec; color: #4a3a2e; line-height: 1.75; padding-bottom: 60px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  .hero { background: linear-gradient(160deg, #ffd9b8 0%, #ffe9d6 55%, #fff6ec 100%);
+    text-align: center; padding: 52px 20px 44px; border-radius: 0 0 32px 32px; }
+  .hero .pets { font-size: 64px; letter-spacing: 8px; animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: 30px; margin-top: 14px; color: #b35410; }
+  .hero p { margin-top: 10px; font-size: 16px; color: #8a6a50; }
+  .hero .tag { display: inline-block; margin-top: 16px; padding: 6px 18px;
+    background: #e8722b; color: #fff; border-radius: 999px; font-size: 14px; }
+  section { margin-top: 44px; }
+  h2 { font-size: 22px; color: #b35410; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  h2 .num { width: 34px; height: 34px; flex: none; background: #e8722b; color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+  .lead { color: #8a6a50; font-size: 15px; margin-bottom: 18px; padding-left: 44px; }
+  .card { background: #fff; border-radius: 20px; padding: 22px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10); margin-bottom: 14px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+  .intro .ic, .play .ic { font-size: 32px; }
+  .intro h3, .play h3 { font-size: 17px; margin: 8px 0 4px; color: #7a4a1e; }
+  .intro p, .play p { font-size: 14.5px; color: #6b5847; }
+  .play h3 .gesture { font-size: 12.5px; font-weight: normal; color: #e8722b;
+    background: #ffeeda; border-radius: 999px; padding: 2px 10px; margin-left: 6px; white-space: nowrap; }
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step + .step { margin-top: 18px; padding-top: 18px; border-top: 1px dashed #f0dcc4; }
+  .step .n { width: 42px; height: 42px; flex: none; border-radius: 14px; background: #ffe3c8;
+    color: #b35410; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
+  .step h3 { font-size: 16.5px; color: #7a4a1e; }
+  .step p { font-size: 14.5px; color: #6b5847; margin-top: 2px; }
+  .step b, details .a b, .tips b, .console b { color: #b35410; }
+  details { background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 12px; overflow: hidden; }
+  summary { cursor: pointer; padding: 16px 20px; font-size: 15.5px; font-weight: 600;
+    color: #7a4a1e; list-style: none; display: flex; align-items: center; gap: 10px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "🐰"; font-size: 18px; }
+  details[open] summary { border-bottom: 1px dashed #f0dcc4; }
+  details .a { padding: 14px 20px 16px; font-size: 14.5px; color: #6b5847; }
+  .tips { margin-top: 36px; background: #fff2df; border-radius: 20px; padding: 20px 22px;
+    font-size: 14px; color: #8a6a50; }
+  footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    gap: 6px 16px; margin-top: 30px; font-size: 13px; color: #bda58d; }
+  @media (max-width: 480px) { footer { flex-direction: column; } }
+  .site-link { color: inherit; text-decoration: none; border-bottom: 1px solid #d9b893; }
+  .site-link:hover { color: #e8722b; border-bottom-color: #e8722b; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="pets">🐰 🐼</div>
+  <h1><a class="site-link" href="https://deskbud.xyz">DeskBud</a> Pets</h1>
+  <p>Little friends that live on your phone screen</p>
+  <span class="tag">Arrives on its own · Walks, jumps, climbs · Talks in bubbles</span>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2><span class="num">1</span>It's already there</h2>
+    <p class="lead">Install, open the app, and your pet shows up by itself — no button to press.</p>
+    <div class="card">
+      <div class="step">
+        <div class="n">1</div>
+        <div><h3>Install</h3><p>Open the package and install. If your phone warns about unknown apps, allow it once.</p></div>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <div><h3>Grant one permission</h3><p>On first launch you'll be asked to allow <b>Display over other apps</b> (called "Show floating windows" on Xiaomi). This is the key that lets your pet stay on the home screen — please allow it.</p></div>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <div><h3>It appears by itself</h3><p>Go back to your home screen — your little friend is already waiting.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>The console has four things</h2>
+    <p class="lead">Top to bottom, that's all there is on the app screen.</p>
+    <div class="grid2">
+      <div class="card intro"><div class="ic">🧩</div><h3>Pet wall (tap to toggle)</h3><p>Up to 10 pets per screen (5 per row, 2 rows). Tap a pet to send it out or call it home; swipe sideways when you have more than 10.</p></div>
+      <div class="card intro"><div class="ic">▶️</div><h3>Start / Stop</h3><p>Usually you can ignore it. Tap Stop to let them rest; tap Start to bring them back.</p></div>
+      <div class="card intro"><div class="ic">🎚️</div><h3>Do-not-disturb lever</h3><p>Each tap cycles: <b>Off</b> → <b>Focus mode</b> (smaller, stays to the side, quiet) → <b>Typing guard</b> (moves out of the way when the keyboard shows). Default is Off.</p></div>
+      <div class="card intro"><div class="ic">↻ ⓘ ⏻ EN</div><h3>Four small buttons, top right</h3><p>Update, About, Quit — plus one-tap Chinese/English switch.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>How to play</h2>
+    <p class="lead">Four gestures — it handles the rest itself.</p>
+    <div class="grid2">
+      <div class="card play"><div class="ic">🤏</div><h3>Drag it around<span class="gesture">press &amp; drag</span></h3><p>Drag it anywhere; let go and it drops with a little bounce.</p></div>
+      <div class="card play"><div class="ic">💨</div><h3>Fling it<span class="gesture">quick flick</span></h3><p>Flick it hard and it flies; hit a screen edge and it climbs the wall.</p></div>
+      <div class="card play"><div class="ic">🪂</div><h3>Parachute<span class="gesture">single tap</span></h3><p>Tap it once and it opens a chute and drifts down.</p></div>
+      <div class="card play"><div class="ic">🚀</div><h3>Rocket to the ceiling<span class="gesture">press &amp; hold</span></h3><p>Hold to charge, release, and it shoots to the top and walks around upside down.</p></div>
+      <div class="card play"><div class="ic">🧶</div><h3>Call it down<span class="gesture">single tap</span></h3><p>When it's hanging on the ceiling, one tap makes it let go.</p></div>
+      <div class="card play"><div class="ic">🏠</div><h3>Keep several<span class="gesture">pick in the console</span></h3><p>Tap pets on the wall to switch them in and out — keep as many as you like.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>Bring home a new buddy</h2>
+    <p class="lead">The "Buddy home" section at the bottom of the app is where new friends join your family.</p>
+    <div class="card">
+      <div class="step">
+        <div class="n">1</div>
+        <div><h3>Pick one</h3><p>Choose your favourite in Buddy home and tap "Bring this buddy home".</p></div>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <div><h3>Follow the prompt</h3><p>A checkout page opens (WeChat Pay or Alipay), and you come back automatically when it's done.</p></div>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <div><h3>It appears on the wall</h3><p>No install, no restart — a new tile shows up on the pet wall; tap it to let the pet out.</p></div>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#8a6a50">Bringing home several at once costs less (10% off for 2, 20% off for 3+).</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>Updating</h2>
+    <p class="lead">Tap "Update" in the top-right corner — it does the rest.</p>
+    <div class="card">
+      <p style="font-size:14.5px;color:#6b5847">When a new version exists, it downloads inside the app and asks you to install — no browser, no hunting for the file.</p>
+      <p style="font-size:14.5px;color:#6b5847;margin-top:8px">If it says "You're on the latest version", you already are.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">6</span>FAQ</h2>
+    <p class="lead">Tap a question; most issues are solved in 10 seconds.</p>
+
+    <details open>
+      <summary>I opened the app but can't see my pet</summary>
+      <div class="a">Almost always the <b>"Display over other apps" permission</b> is missing. Go to <b>Settings → Apps → DeskBud</b> and turn it on (Xiaomi lists it under "Other permissions" as "Show floating windows"), then reopen the app.</div>
+    </details>
+    <details>
+      <summary>Will it block my taps?</summary>
+      <div class="a">No. If it's in the way, <b>press and drag it aside</b>; if it's too busy, switch the lever to Focus mode or Typing guard.</div>
+    </details>
+    <details>
+      <summary>Update does nothing / install fails</summary>
+      <div class="a">The first in-app install asks whether DeskBud may install apps — <b>choose Allow</b>. If the screen is off, the confirmation is cancelled, so <b>unlock first, then tap Install</b>. Still stuck? Grab the latest from the <a class="site-link" href="https://deskbud.xyz/download.html">download page</a>.</div>
+    </details>
+    <details>
+      <summary>My pet disappeared after a while</summary>
+      <div class="a">Usually the system cleaned up background apps. Just open DeskBud again and it comes back; to keep it alive, <b>lock it</b> in your recent-apps list.</div>
+    </details>
+    <details>
+      <summary>Where do the pets go after I tap Quit?</summary>
+      <div class="a">Quit sends them home and closes everything, like closing a desktop program. Open the app again to bring them back.</div>
+    </details>
+    <details>
+      <summary>Does it drain the battery?</summary>
+      <div class="a">Very little — a full day is usually unnoticeable. If you care, tap Stop or Quit when you don't need it.</div>
+    </details>
+  </section>
+
+  <div class="tips">
+    💡 <b>Tip:</b> Your pet can't be dropped or broken — play rough. If it does something odd, that's not a bug, that's personality.
+  </div>
+
+  <footer><span><a class="site-link" href="https://deskbud.xyz">DeskBud</a> Pets · User Guide</span><span>© 2026 <a class="site-link" href="https://deskbud.xyz">DeskBud</a> · All rights reserved</span></footer>
+
+</div>
+</body>
+</html>

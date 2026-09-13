@@ -3,11 +3,14 @@ rem ============================================================
 rem  DeskBud local preview server  ->  http://127.0.0.1:8081/
 rem  Double-click to start. Close the window to stop the server.
 rem  2026-09-12: single-instance guard (fast).
+rem  2026-09-13: dropped "chcp 65001" (this file is pure ASCII, the
+rem  codepage switch is pure overhead) and dropped the 1.1s
+rem  "ping -n 2" wait in the already-running branch. Double-click
+rem  now returns in well under 1 second.
 rem  !! NEVER use "tasklist /v" for this -- it takes ~26s on this
 rem  machine and makes the launcher look frozen. The guard is ONE
 rem  python call (socket connect + FindWindowW), measured ~0.4s.
 rem ============================================================
-chcp 65001 >nul
 cd /d "%~dp0"
 
 set "WINTITLE=DeskBud Preview 8081"
@@ -34,8 +37,6 @@ if defined ALIVE (
   echo [serve] Preview is already running - no new window opened.
   echo [serve] Opening browser at http://127.0.0.1:8081/ ...
   start "" "http://127.0.0.1:8081/index.html"
-  echo [serve] This launcher closes in 1 second.
-  ping -n 2 127.0.0.1 >nul
   exit /b 0
 )
 

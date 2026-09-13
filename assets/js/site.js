@@ -1,7 +1,12 @@
 // DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计、webmeji 加载器
 const SITE = {
   data: null,
-  _assetVer: 25, // 与 css/js ?v= 同步，图片缓存破除用
+  _assetVer: 26, // 图片缓存破除用（EdgeOne 缓存键含 query：换图后升这个号即可，不必换文件名）
+
+  // 图片 URL 统一加版本号：09-13 取证 ?v=26 命中 Age:0、同路径无参 Age:33590 → query 参与缓存键
+  assetUrl(s) { return s + (s.includes('?') ? '&' : '?') + 'v=' + this._assetVer; },
+  // 展示素材轻量套 works/<pet>-lite/<basename>（三只宠物 states[].src 的 basename 均与 -lite/ 内文件名一致，09-13 实测）
+  liteSrc(w, src) { return this.assetUrl('works/' + w.id + '-lite/' + String(src).split('/').pop()); },
 
   // ====== webmeji 网页宠物加载器（全站统一开关） ======
   // 引擎基于 webmeji (Lars de Rooij, 2026)，详见 assets/webmeji/webmeji.js 头部注释
@@ -840,14 +845,14 @@ SITE.pages = {
       const a = ANIM[w.id];
       if (a && a.all) {
         animTimer = null;
-        animImg.src = a.all;
+        animImg.src = SITE.assetUrl(a.all);
         return;
       }
       frames = poseList(w); frameIdx = 0;
       const show = () => {
         const s = frames[frameIdx];
         if (!s) return;
-        animImg.src = s.src;
+        animImg.src = SITE.liteSrc(w, s.src);
         frameIdx = (frameIdx + 1) % frames.length;
       };
       show();
@@ -948,7 +953,8 @@ SITE.pages = {
       // （英文 "Built-in" 更宽，整个方块糊死）；含义改由下方 .wall-break 一行小字承担，方块保持纯图
       const tile = (w, i) => {
         const a = ANIM[w.id];
-        const src = (a && (a.lite || a.idle)) || w.thumb || w.cover || (poseList(w)[0] || {}).src || '';
+        const raw = (a && (a.lite || a.idle)) || w.thumb || w.cover || (poseList(w)[0] || {}).src || '';
+        const src = raw ? SITE.assetUrl(raw) : '';
         const isOwned = owned.has(w.id);
         const isPicked = picked.has(w.id);
         const isBuiltin = !!w.builtin;
@@ -1019,7 +1025,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     const poseName = s => window.pick(s.caption || { zh: '', en: '' }) || '';
     // 走马灯走【轻量动画套】works/<pet>-lite/（2026-09-12 老曹 A 方案）：
     // 原动画 240~384px、单张 280~700KB → 首页 25s 下载 5.6MB（比视频还大）；轻量套 160px+抽帧 ≈ 原 1/5
-    const liteSrc = (w, src) => 'works/' + w.id + '-lite/' + String(src).split('/').pop();
+    const liteSrc = (w, src) => SITE.liteSrc(w, src);   // 统一走 SITE.liteSrc（含 ?v= 破缓存）
 
     function paintHero() {
       if (heroKickerText) heroKickerText.textContent = window.pick({ zh: '桌面伙伴 · 与你同欢', en: 'DESK BUDDIES · JOY TOGETHER' });
@@ -1141,8 +1147,8 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       }
     }
 
-    // 姿态速览宫格（2026-09-12 老曹）：展示当前伙伴的"全部姿态"，用轻量静态缩略图
-    // （数据源 works.json 的 poses；图片为 make_pose_thumbs.py 从动画首帧抽取的 200px 静态 webp）
+    // 姿态速览宫格（2026-09-12 老曹）：展示当前伙伴的"全部姿态"，用轻量动图
+    // （数据源 works.json 的 poses；图片为 make_lite_anim.py 产出的 128px 轻量动图，带角标水印）
     function paintPoses() {
       if (!posesGrid) return;
       const w = works[cur];
@@ -1151,7 +1157,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       if (posesTitle) posesTitle.textContent = window.pick(w.title) + ' · ' + window.pick({ zh: '全部姿态', en: 'all poses' });
       // 「共 N 个姿态」计数行已删（2026-09-12 老曹：宫格自己会说话，不用报数）
       posesGrid.innerHTML = list.map(p =>
-        `<figure class="pose-card"><div class="pose-img"><img src="${p.src}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`).join('');
+        `<figure class="pose-card"><div class="pose-img"><img src="${SITE.assetUrl(p.src)}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`).join('');
     }
 
     function paintDetail() {
@@ -1290,10 +1296,12 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       document.title = window.pick(w.title) + ' · DeskBud';
       const icon = SITE.catIcon(w.category);
       const catName = SITE.catName(w.category);
+      // 姿态走马灯走轻量套（2026-09-13 老曹）：三只宠物 basename 均与 -lite/ 内文件名一致；
+      // 原来吃原图 → 线咪一页 19 张 ≈4.5MB，改后约 1/6
       const onePose = (w.states || []).map(s => `
         <figure class="pose-item">
           <div class="pose-guard" oncontextmenu="return false"></div>
-          <img src="${s.src}" alt="" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;">
+          <img src="${SITE.liteSrc(w, s.src)}" alt="" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;">
         </figure>`).join('');
       const states = onePose + onePose; // 复制一份，保证 -50% 平移无缝循环
       const vers = (w.versions || []).map(v => {

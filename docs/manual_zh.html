@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeskBud 桌宠 · 使用手册</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff6ec; color: #4a3a2e; line-height: 1.75; padding-bottom: 60px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  .hero { background: linear-gradient(160deg, #ffd9b8 0%, #ffe9d6 55%, #fff6ec 100%);
+    text-align: center; padding: 52px 20px 44px; border-radius: 0 0 32px 32px; }
+  .hero .pets { font-size: 64px; letter-spacing: 8px; animation: bounce 2.2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: 30px; margin-top: 14px; color: #b35410; }
+  .hero p { margin-top: 10px; font-size: 16px; color: #8a6a50; }
+  .hero .tag { display: inline-block; margin-top: 16px; padding: 6px 18px;
+    background: #e8722b; color: #fff; border-radius: 999px; font-size: 14px; }
+  section { margin-top: 44px; }
+  h2 { font-size: 22px; color: #b35410; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  h2 .num { width: 34px; height: 34px; flex: none; background: #e8722b; color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+  .lead { color: #8a6a50; font-size: 15px; margin-bottom: 18px; padding-left: 44px; }
+  .card { background: #fff; border-radius: 20px; padding: 22px;
+    box-shadow: 0 4px 16px rgba(200, 120, 40, .10); margin-bottom: 14px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+  .intro .ic, .play .ic { font-size: 32px; }
+  .intro h3, .play h3 { font-size: 17px; margin: 8px 0 4px; color: #7a4a1e; }
+  .intro p, .play p { font-size: 14.5px; color: #6b5847; }
+  .play h3 .gesture { font-size: 12.5px; font-weight: normal; color: #e8722b;
+    background: #ffeeda; border-radius: 999px; padding: 2px 10px; margin-left: 6px; white-space: nowrap; }
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step + .step { margin-top: 18px; padding-top: 18px; border-top: 1px dashed #f0dcc4; }
+  .step .n { width: 42px; height: 42px; flex: none; border-radius: 14px; background: #ffe3c8;
+    color: #b35410; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
+  .step h3 { font-size: 16.5px; color: #7a4a1e; }
+  .step p { font-size: 14.5px; color: #6b5847; margin-top: 2px; }
+  .step b, details .a b, .tips b, .console b { color: #b35410; }
+  details { background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(200, 120, 40, .10);
+    margin-bottom: 12px; overflow: hidden; }
+  summary { cursor: pointer; padding: 16px 20px; font-size: 15.5px; font-weight: 600;
+    color: #7a4a1e; list-style: none; display: flex; align-items: center; gap: 10px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "🐰"; font-size: 18px; }
+  details[open] summary { border-bottom: 1px dashed #f0dcc4; }
+  details .a { padding: 14px 20px 16px; font-size: 14.5px; color: #6b5847; }
+  .tips { margin-top: 36px; background: #fff2df; border-radius: 20px; padding: 20px 22px;
+    font-size: 14px; color: #8a6a50; }
+  footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    gap: 6px 16px; margin-top: 30px; font-size: 13px; color: #bda58d; }
+  @media (max-width: 480px) { footer { flex-direction: column; } }
+  .site-link { color: inherit; text-decoration: none; border-bottom: 1px solid #d9b893; }
+  .site-link:hover { color: #e8722b; border-bottom-color: #e8722b; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="pets">🐰 🐼</div>
+  <h1><a class="site-link" href="https://deskbud.xyz">DeskBud</a> 桌宠</h1>
+  <p>住在手机屏幕上的小伙伴</p>
+  <span class="tag">打开就有 · 会走会跳会爬墙 · 会说话</span>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2><span class="num">1</span>打开就有</h2>
+    <p class="lead">装好后打开 App，小家伙自己就落屏了——不用点任何按钮。</p>
+    <div class="card">
+      <div class="step">
+        <div class="n">1</div>
+        <div><h3>安装</h3><p>点开安装包，按提示装上。手机若提示"不允许安装未知应用"，允许一次即可。</p></div>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <div><h3>给一个权限</h3><p>首次打开会请你允许 <b>显示在其他应用上层</b>（小米叫"显示悬浮窗"）。这是它能待在桌面上的钥匙，必须给。</p></div>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <div><h3>它自己出来了</h3><p>授权后回到桌面看看，小家伙已经在等你了。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>控制台就四样东西</h2>
+    <p class="lead">打开 App 看到的那一屏，从上到下依次是这些。</p>
+    <div class="grid2">
+      <div class="card intro"><div class="ic">🧩</div><h3>宠物墙（点一下切换）</h3><p>一屏最多放 10 只（每行 5 只、上下 2 行）。点某个伙伴 = 请它上场或让它回窝；超过 10 只左右滑一下就能翻页。</p></div>
+      <div class="card intro"><div class="ic">▶️</div><h3>启动 / 停止</h3><p>平时不用管它。想让它们先休息一会儿，按"停止"；想再请出来，按"启动"。</p></div>
+      <div class="card intro"><div class="ic">🎚️</div><h3>打扰档位</h3><p>点一下切一档：<b>关</b> → <b>专心模式</b>（缩小、靠边、安静）→ <b>打字避让</b>（键盘弹出时它主动让开）。默认是"关"。</p></div>
+      <div class="card intro"><div class="ic">↻ ⓘ ⏻ EN</div><h3>右上角四个小按键</h3><p>更新版本、看"关于"、退出，以及一键切换中英文。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>怎么玩</h2>
+    <p class="lead">就四个手势，剩下的交给它自己发挥。</p>
+    <div class="grid2">
+      <div class="card play"><div class="ic">🤏</div><h3>拖着走<span class="gesture">按住拖动</span></h3><p>按住它满屏拖，松手会掉下来，还带个小弹跳。</p></div>
+      <div class="card play"><div class="ic">💨</div><h3>甩出去<span class="gesture">快速一甩</span></h3><p>拖住快速甩出去它会飞，撞到屏幕边还会顺着墙往上爬。</p></div>
+      <div class="card play"><div class="ic">🪂</div><h3>跳伞<span class="gesture">轻点一下</span></h3><p>轻点它一下，它就地开伞缓缓飘落。</p></div>
+      <div class="card play"><div class="ic">🚀</div><h3>冲上天花板<span class="gesture">按住不放</span></h3><p>按住攒一下劲再松手，它直冲屏幕顶，倒挂着走来走去。</p></div>
+      <div class="card play"><div class="ic">🧶</div><h3>叫它下来<span class="gesture">点一下</span></h3><p>它挂在天花板时，点一下它就松手掉下来。</p></div>
+      <div class="card play"><div class="ic">🏠</div><h3>多养几只<span class="gesture">控制台里选</span></h3><p>点宠物墙上的伙伴就能来回切换，想养几只养几只。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>领新伙伴</h2>
+    <p class="lead">App 下面那一栏"伙伴之家"，就是给家里添新成员的地方。</p>
+    <div class="card">
+      <div class="step">
+        <div class="n">1</div>
+        <div><h3>挑一只</h3><p>在伙伴之家里挑喜欢的，点"把伙伴领回家"。</p></div>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <div><h3>跟着提示走</h3><p>会打开一个收银台（用微信或支付宝都行），付完自动回来。</p></div>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <div><h3>它会自己出现在墙上</h3><p>领回家后不用装、不用重启，宠物墙上就多了一个格子，点一下就能上场。</p></div>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#8a6a50">一次多挑几只更划算（2 只 9 折、3 只 8 折）。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>升级到新版</h2>
+    <p class="lead">点右上角的"更新"，剩下的它自己办。</p>
+    <div class="card">
+      <p style="font-size:14.5px;color:#6b5847">有新版本时，它会在 App 里直接下载，下完弹出安装，点"安装"就完成了——不用去浏览器，也不用自己找安装包。</p>
+      <p style="font-size:14.5px;color:#6b5847;margin-top:8px">若提示"已是最新版本"，说明你就是最新版。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">6</span>常见问题</h2>
+    <p class="lead">点开问题看答案，多数小状况 10 秒解决。</p>
+
+    <details open>
+      <summary>打开 App 后看不到宠物？</summary>
+      <div class="a">十有八九是 <b>"显示在其他应用上层"权限没给</b>。去 <b>设置 → 应用管理 → DeskBud</b>，打开这个开关（小米在"其他权限"里，叫"显示悬浮窗"），再回到 App 即可。</div>
+    </details>
+    <details>
+      <summary>它会不会挡着我点别的东西？</summary>
+      <div class="a">不会。挡到哪儿就 <b>按住拖走</b>；嫌它闹腾就点一下打扰档位切到"专心模式"或"打字避让"。</div>
+    </details>
+    <details>
+      <summary>点"更新"没反应 / 装不上？</summary>
+      <div class="a">第一次应用内安装，系统会先问一次是否允许 DeskBud 安装应用，<b>选允许</b>即可；若手机息屏会取消安装确认，<b>先解锁屏幕再点安装</b>。实在不行，去官网 <a class="site-link" href="https://deskbud.xyz/download.html">下载页</a> 手动下一版装上。</div>
+    </details>
+    <details>
+      <summary>宠物用着用着不见了？</summary>
+      <div class="a">多半是被手机清理后台时"顺手"关掉了。打开 App 就会重新放出来；想让它常驻，可以在最近任务里把 DeskBud <b>锁定/加白名单</b>。</div>
+    </details>
+    <details>
+      <summary>按了"退出"之后，宠物去哪了？</summary>
+      <div class="a">退出会把宠物一起收回家（和关掉一个电脑程序一样）。想再见到它们，重新打开 App 就行。</div>
+    </details>
+    <details>
+      <summary>耗电吗？</summary>
+      <div class="a">占用很小，正常用一整天几乎无感。特别在意的话，不用时按"停止"或"退出"，下次想它了再开。</div>
+    </details>
+  </section>
+
+  <div class="tips">
+    💡 <b>小提示：</b>小家伙摔不坏、玩不坏，随便折腾。发现它有奇怪的小动作，那不是 bug，是性格。
+  </div>
+
+  <footer><span><a class="site-link" href="https://deskbud.xyz">DeskBud</a> 桌宠 · 使用手册</span><span>© 2026 <a class="site-link" href="https://deskbud.xyz">DeskBud</a> · 保留所有权利</span></footer>
+
+</div>
+</body>
+</html>
