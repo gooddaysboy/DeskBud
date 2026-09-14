@@ -89,7 +89,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const withTimeout = (p, ms) => Promise.race([
     p, new Promise(r => setTimeout(() => { console.warn('[webmeji] 核心帧超时，先出宠物'); r(); }, ms))
   ]);
-  const CORE_TIMEOUT = 8000;
+  // 2026-09-14 老曹报「线上没有宠物在跑」：原 8s 太久 —— 线上跨境 RTT 高（配置脚本实测 2.9s），
+  // 等核心帧（walk 13~28 帧）往往吃满 8s 才兜底生成 ⇒ 约 10~13s 才见到宠物，用户以为没有。
+  // 降到 2.5s：帧没就绪时 Creature 先「静帧站立」出场（见下方注释），就绪后自动补动，观感无损。
+  const CORE_TIMEOUT = 2500;
 
   // 生成逻辑（按缺补生）：核心帧就绪 / 8s 兜底 / 切回前台补生，共用。
   // 谁没出生补谁——config 晚到（注入竞态）或单只构造失败不再永远少一只

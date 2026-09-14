@@ -12,41 +12,51 @@ const SITE = {
   // 引擎基于 webmeji (Lars de Rooij, 2026)，详见 assets/webmeji/webmeji.js 头部注释
   webmeji: {
     base: 'assets/webmeji/',
-    enabledPaths: ['/', '/index.html', '/pets.html'],  // 当前启用页：首页 + 伙伴之家
+    // 2026-09-14 老曹定：**除下列页外全站启用**（桌面端）。
+    //   原为白名单 enabledPaths ['/','/index.html','/pets.html'] ⇒ 只有「从首页/伙伴之家进来」才挂宠物，
+    //   直接打开或刷新子页（list/detail/download…）没有；而宠物容器挂在 body、软导航只换 #view，
+    //   挂上后就全站跟随 ⇒ 老曹实测「站内随便切页宠物都在跑」。改成排除式补齐「直接开子页」这个边界。
+    //   排除项 = App 内嵌伙伴页（避免与 App 自身宠物打架）+ 后台/预览/引导页（自带独立脚本，不挂公共 chrome）。
+    disabledPaths: ['buddies.html', 'editor.html', 'bubble.html', 'bubble_preview.html', 'get.html', 'beian-pending.html'],
     init() {
+      // 仅桌面端启用（2026-09-14 老曹定）：手机屏幕小，宠物易挡按钮/干扰阅读
+      if (SITE.isMobileUA()) return;
       const path = location.pathname;
-      const enabled = this.enabledPaths.some(p => path === p || path.endsWith(p));
-      if (!enabled) return;
+      const base = path.split('/').pop() || 'index.html';   // 精确匹配文件名，避免 endsWith 误伤
+      if (this.disabledPaths.indexOf(base) >= 0) return;
       // 1. 注入 css
       const css = document.createElement('link');
       css.rel = 'stylesheet';
       css.href = this.base + 'webmeji.css?v=2';
       document.head.appendChild(css);
-      // 2. 注入 config（先于 webmeji.js；多宠物 = 多个 config 脚本，全部加载完拼接 SPAWNING）
+      // 2. 注入 config（先于 webmeji.js；多宠物 = 多个 config 脚本，**并行**加载，全部到位后拼 SPAWNING）
+      //    2026-09-14 老曹报「线上没有宠物在跑」：原为串行（rabbit → panda → 引擎），
+      //    线上 rabbit.config.js 实测 2.9s ⇒ 串行白等 2.9s，叠加引擎 8s 兜底 → 10~13s 才见宠物。改并行。
       const configFiles = ['rabbit.config.js?v=7', 'panda.config.js?v=2'];
-      const loadCfg = (i) => {
-        if (i >= configFiles.length) {
-          window.SPAWNING = [
-            ...(window.DESKBUD_RABBIT_SPAWNING || []),
-            ...(window.DESKBUD_PANDA_SPAWNING || []),
-          ];
-          const s = document.createElement('script');
-          s.src = this.base + 'webmeji.js?v=23';
-          s.onload = () => {
-            // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
-            window.dispatchEvent(new Event('DOMContentLoaded'));
-            // 5. 引擎异步预载图片后才 new Creature 创建 .webmeji-container，用观察器兜底绑冒泡
-            this.bindSpeechBubble();
-          };
-          document.head.appendChild(s);
-          return;
-        }
-        const cfg = document.createElement('script');
-        cfg.src = this.base + configFiles[i];
-        cfg.onload = () => loadCfg(i + 1);
-        document.head.appendChild(cfg);
+      const startEngine = () => {
+        window.SPAWNING = [
+          ...(window.DESKBUD_RABBIT_SPAWNING || []),
+          ...(window.DESKBUD_PANDA_SPAWNING || []),
+        ];
+        const s = document.createElement('script');
+        s.src = this.base + 'webmeji.js?v=24';
+        s.onload = () => {
+          // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
+          window.dispatchEvent(new Event('DOMContentLoaded'));
+          // 5. 引擎异步预载图片后才 new Creature 创建 .webmeji-container，用观察器兜底绑冒泡
+          this.bindSpeechBubble();
+        };
+        document.head.appendChild(s);
       };
-      loadCfg(0);
+      let cfgLeft = configFiles.length;
+      const cfgDone = () => { if (--cfgLeft <= 0) startEngine(); };
+      configFiles.forEach((f) => {
+        const cfg = document.createElement('script');
+        cfg.src = this.base + f;
+        cfg.onload = cfgDone;
+        cfg.onerror = cfgDone;   // 单个配置加载失败也不卡死引擎
+        document.head.appendChild(cfg);
+      });
     },
 
     // 取一句 deskbud 语录（复用 bubble.js 的 window.BUBBLE 池，按宠物物种取池，失败兜底）
@@ -288,21 +298,19 @@ const SITE = {
   },
 
   // 是否走「购买皮肤」（2026-09-13 22:45 老曹定，**一层保险**）：
-  //   条件 = 有 device_id ∧（本次载入就嵌在别处（?embed=1）∨ 当前 URL 直接带了 device_id）
+  //   条件 = 有 device_id ∧ 本次是 **App 内嵌**（?embed=1 → <html>.embed-mode）。
   // 🔴 老曹原话：「网站用户不管有没有设备号都不进入购买页面」—— did 会写进 localStorage，
   //    只用 getDeviceId() 判会让"在 App 里开过一次"的浏览器访客也看到购买 UI ⇒ 这里**额外要求**
-  //    本次是 App 带进来的（embed=1 或 URL 带 did），纯 localStorage 残留**不足以**触发购买皮肤。
-  //    两个条件都留着是因为：万一 kotlin storeUrl() 没带 embed=1，靠 URL 带 did 也能进购买皮肤（不锁死 App）。
-  // 🔴 2026-09-14 修（老曹公网实测看到「🐾 领养」）：原实现把「URL 带 did」**记忆化**（_urlDidAtLoad
-  //    只算一次）⇒ 曾带 did 载入后，站内软导航把 query 丢了、缓存值却留着 → 地址栏无参、按钮仍购买皮肤。
-  //    改法：① 这里**去记忆化**，按**当前** URL 实时判；② softNav 不继承 device_id（见 _inheritModeQuery）。
-  //    于是公网访客点一下导航即复位下载皮肤；App 内嵌靠常驻 .embed-mode 不受影响。
+  //    本次是 App 带进来的（embed=1），纯 localStorage 残留**不足以**触发购买皮肤。
+  // 🔴 2026-09-14 二次修（老曹：桌面客户端打开 buddies.html?device_id=xxx **但没带 embed**，仍出「🐾 领养」）：
+  //    上一版留了「URL 带 did」当第二信号（怕 kotlin 没带 embed）⇒ 结果**任何带 did 的 URL 都出购买皮肤**，
+  //    公网/桌面客户端统统误触发。老曹拍板「**网站不做购买**」⇒ **彻底删去「URL 带 did」信号**：
+  //    购买皮肤**只认 .embed-mode**（?embed=1 时由 <head> 内联脚本立刻挂上、软导航不丢）。
+  //    设备号仍从 URL/localStorage 读写，但**只**用于收银台 URL，不再决定皮肤。
+  //    ⇒ 客户端要购买皮肤**必须带 embed=1**；只带 did（或不带参数）一律按公网访客处理（下载引导）。
   isBuySkin() {
     if (!this.getDeviceId()) return false;
-    if (document.documentElement.classList.contains('embed-mode')) return true;
-    let q = '';
-    try { q = new URLSearchParams(location.search).get('device_id') || ''; } catch (e) { /* ignore */ }
-    return this._DID_RE.test(q);
+    return document.documentElement.classList.contains('embed-mode');
   },
 
   // 收银台链接；device_id 为空返回 ''（调用方据此退回下载引导）
@@ -1022,9 +1030,13 @@ SITE.pages = {
           ${chip}
         </button>`;
       };
+      // 顺序（2026-09-14 老曹定）：**内置（开箱即用）在上、可领养新伙伴在下**，行标置于内置组之前；
+      // 两组间用 .wall-gap 强制换行（桌面 3 列网格下否则新宠会与内置挤同一排）。
+      // ⚠ 必须与 buddies.html 首屏内联种子同序（seed 数量一致时只补强不重建，顺序以 HTML 为准）。
       const main = [], builtin = [];
       works.forEach((w, i) => (w.builtin ? builtin : main).push(tile(w, i)));
-      wall.innerHTML = main.join('') + (builtin.length ? `<div class="wall-break">${window.pick({ zh: '内置 · 开箱即用', en: 'Built-in · ready to use' })}</div>` + builtin.join('') : '');
+      const gap = (builtin.length && main.length) ? '<div class="wall-gap" aria-hidden="true"></div>' : '';
+      wall.innerHTML = (builtin.length ? `<div class="wall-break">${window.pick({ zh: '内置 · 开箱即用', en: 'Built-in · ready to use' })}</div>` + builtin.join('') : '') + gap + main.join('');
       // 事件改由 #buddyWall 容器委托统一处理（见上方 buddies 初始化处），此处不再逐 tile 绑定
     }
 

@@ -10,7 +10,7 @@
   <link rel="preload" as="image" href="works/panda-lite/idle.webp?v=28">
   <link rel="preload" as="image" href="works/rabbit-lite/idle.webp?v=28">
   <meta name="description" content="DeskBud 伙伴：挑一只喜欢的针织桌宠伙伴，看它的一举一动与宣传视频。">
-  <link rel="stylesheet" href="assets/css/base.css?v=110">
+  <link rel="stylesheet" href="assets/css/base.css?v=112">
   <!-- 伙伴页（2026-09-10 手机优先极简页）：页内样式已进 base.css v80（软导航只换 #view，页内 style 不生效） -->
 </head>
 <body>
@@ -35,17 +35,19 @@
            JS 到后只补强 owned/选中角标 + 绑事件，不重建 DOM）。⚠ 后端增减在线宠物时必须同步此块
            （数量不符时 JS 会自动走重建分支渲染全量）。 -->
       <div class="buddy-wall" id="buddyWall" role="tablist" aria-label="选择伙伴">
-        <button type="button" class="buddy-tile on" role="tab" aria-selected="true" data-i="0" data-seed title="线咪">
-          <img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪" draggable="false">
-        </button>
-        <!-- ⚠ 顺序必须与 site.js 重建分支一致：可领养宠 → .wall-break 行标 → 内置宠。
-             行标放在内置宠之前（flex-basis:100% 会强制换行），否则内置宠会与新宠混在同一排、行标掉到最后。 -->
+        <!-- ⚠ 顺序必须与 site.js paintWall 重建分支一致（09-14 老曹定）：**「内置 · 开箱即用」行标 + 内置宠在前、
+             可领养新伙伴在后**。行标 flex-basis:100% 会强制换行，否则内置宠/新宠会混排、行标掉到最后。 -->
         <div class="wall-break">内置 · 开箱即用</div>
         <button type="button" class="buddy-tile" role="tab" aria-selected="false" data-i="1" data-seed title="织熊猫 · 已内置，开箱即用">
           <img src="works/panda-lite/idle.webp?v=28" alt="织熊猫" draggable="false">
         </button>
         <button type="button" class="buddy-tile" role="tab" aria-selected="false" data-i="2" data-seed title="织兔子 · 已内置，开箱即用">
           <img src="works/rabbit-lite/idle.webp?v=28" alt="织兔子" draggable="false">
+        </button>
+        <!-- 分组换行：内置组在上、新宠组在下（老曹 09-14：内置开箱 2 只上移、新宠物在下面） -->
+        <div class="wall-gap" aria-hidden="true"></div>
+        <button type="button" class="buddy-tile on" role="tab" aria-selected="true" data-i="0" data-seed title="线咪">
+          <img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪" draggable="false">
         </button>
       </div>
 
@@ -75,7 +77,7 @@
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
   <script src="assets/js/i18n.js?v=19"></script>
-  <script src="assets/js/site.js?v=113"></script>
+  <script src="assets/js/site.js?v=116"></script>
   <script src="assets/js/bubble.js?v=21"></script>
   <script>SITE.boot();</script>
 </body>

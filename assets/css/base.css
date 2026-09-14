@@ -1328,6 +1328,8 @@ a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.
 /* ① 宠物选择墙：纯图方块（idle 动图），横排自动换行——宠物多就多排几行，不铺长标签 */
 .buddy-wall { display: flex; flex-wrap: wrap; gap: 10px; }
 /* .wall-break 样式见上文「内置宠物单独一排」（与 .picker-break 共用一条规则） */
+/* 内置组 / 新宠组分排（2026-09-14 老曹：内置在上、新宠在下）—— 仅强制换行；零高、无圆点/无文字 */
+.buddy-wall .wall-gap { grid-column: 1 / -1; flex-basis: 100%; height: 0; margin: 0; }
 .buddy-tile {
   width: 64px; height: 64px; padding: 6px; cursor: pointer; font: inherit;
   display: flex; align-items: center; justify-content: center;
@@ -1357,7 +1359,12 @@ a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.
   /* 2026-09-10 四轮：选择墙 3 列网格（宠物多了成排铺），姿态卡收窄贴合内容不拉伸 */
   .buddy-top { flex-direction: row; align-items: flex-start; }
   .buddy-wall { display: grid; grid-template-columns: repeat(3, 64px); gap: 10px; flex: 0 0 auto; }
-  .buddy-anim-card { flex: 0 0 auto; }
+  /* 卡片宽度归一（2026-09-14 老曹：新宠物的「播放窗」比内置大）：
+     .buddy-buy 里 .lead-hint 是 flex-basis:100%，其 max-content 会撑大整卡 —— 不同宠物
+     引导文案长短不一（线咪 444 / 内置 384）⇒ 卡片宽度跟着变（线咪 492 / 内置 432），
+     线咪那张还溢出 .buddies-wrap 被裁右边框。定宽 384px：= 3×64 墙(212) + 16 间距 + 384 = 612
+     = .buddy-top 内容宽 ⇒ 三只宠物卡片等宽、且整行正好贴合 wrap 不再溢出（原内置 432 也溢出 34px）。 */
+  .buddy-anim-card { flex: 0 0 384px; width: 384px; max-width: 100%; }
 }
 
 

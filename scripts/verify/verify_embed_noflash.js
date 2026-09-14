@@ -9,6 +9,8 @@
 //   ④ 首页购买区静态文案已清空（JS 未到时不再闪访客版文案）
 //   ⑤ 正常加载（JS 到齐）回归：embed 隐藏 + 访客/App 双皮肤未受影响
 //   ⑥ 公网访客「曾带 did 载入 → 站内软导航」皮肤须复位（09-14 修 isBuySkin 记忆化 + softNav 丢 query）
+//   ⑦ 带 did 但**无 embed**（桌面客户端 / 公网分享链接）不得出购买皮肤（09-14 二次修：isBuySkin 只认 .embed-mode）
+//   ⑧ 伙伴墙顺序：内置（开箱即用）在前、可领养新宠在后
 const path = require('path');
 const fs = require('fs');
 const { chromeExe } = require('./_env.js');
@@ -188,6 +190,27 @@ const probeFirstPaint = () => {
   }));
   chk('⑥访客·曾带did载入→软导航伙伴：皮肤复位（无🐾 购买按钮）', !sNav.paw && sNav.leadDl, JSON.stringify(sNav));
   chk('⑥访客·软导航后 URL 不带 device_id', !/device_id=/.test(sNav.href), sNav.href);
+  await ctx.close();
+
+  /* ---------- ⑦ 带 did 但**无 embed**（桌面客户端 / 公网分享链接）不得出购买皮肤 ---------- */
+  //   09-14 老曹实测：桌面客户端打开 buddies.html?device_id=xxx（不带 embed）仍出「🐾 领养」。
+  //   修：isBuySkin 只认 .embed-mode。⚠ did 必须合法 dsk+16hex，否则 getDeviceId() 返回 '' 会假阳性。
+  ctx = await b.newContext({ viewport: { width: 1280, height: 900 }, userAgent: UA_DESKTOP });
+  p = await ctx.newPage();
+  await p.goto(BASE + '/buddies.html?device_id=dsk0123456789abcdef', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await sleep(1800);
+  const noEmbed = await p.evaluate(() => ({
+    paw: /🐾/.test(document.body.innerText || ''),
+    leadDl: !!document.querySelector('#buddyBuy a.lead-dl'),
+  }));
+  chk('⑦访客·带did但无embed → 不出购买皮肤（无🐾）、显下载引导', !noEmbed.paw && noEmbed.leadDl, JSON.stringify(noEmbed));
+  // ⑧ 伙伴墙顺序（09-14 老曹定：内置在前、新宠在后）：行标在首位；本站唯一非内置 linekit(data-i=0) 排最后
+  const wallOrder = await p.evaluate(() => {
+    const w = document.getElementById('buddyWall'); const kids = [...w.children];
+    return { first: (kids[0] || {}).className || '', order: kids.filter(e => e.classList.contains('buddy-tile')).map(e => +e.dataset.i) };
+  });
+  chk('⑧伙伴墙·「内置」行标在首位', /wall-break/.test(wallOrder.first), JSON.stringify(wallOrder));
+  chk('⑧伙伴墙·新宠(data-i=0)排在最后（内置在前）', wallOrder.order.length >= 3 && wallOrder.order[wallOrder.order.length - 1] === 0, JSON.stringify(wallOrder));
   await ctx.close();
 
   await b.close();
