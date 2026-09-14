@@ -39,7 +39,7 @@ const SITE = {
           ...(window.DESKBUD_PANDA_SPAWNING || []),
         ];
         const s = document.createElement('script');
-        s.src = this.base + 'webmeji.js?v=24';
+        s.src = this.base + 'webmeji.js?v=25';
         s.onload = () => {
           // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
           window.dispatchEvent(new Event('DOMContentLoaded'));

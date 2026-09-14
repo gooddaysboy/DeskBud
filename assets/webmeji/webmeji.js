@@ -117,10 +117,18 @@ window.addEventListener('DOMContentLoaded', () => {
     if (missingCfg && attempt < 25) setTimeout(() => spawnAll(attempt + 1), 400);
   };
 
-  // 0) 全量预载立即后台启动（逐动作标记：walk 帧拉完立刻标 walk，不等整批）
-  //    CORE_ACTIONS 常量保留供语义参考，渐进路径已由"全量预载+逐动作就绪"覆盖
-  Promise.all(configs.map(cfg => preloadActions(cfg, allActions(cfg))))
-    .then(() => console.log('[webmeji] 全部帧就绪'));
+  // 0) 首屏只预载出生必需动作(walk/stand)，其余动作宠物出生后再后台补预载，
+  //    避免全量预载占满同域并发导致首屏 walk 帧被挤、跨境冷缓存要等 10~22s 才出宠物
+  //    （2026-09-14 老曹报：首屏 10~22s 才见宠物；改首屏限动作后冷缓存降到 3~5s）
+  const BIRTH_ACTIONS = ['walk', 'stand'];
+  const birthActions = (cfg) => allActions(cfg).filter(a => BIRTH_ACTIONS.includes(a));
+  const restActions = (cfg) => allActions(cfg).filter(a => !BIRTH_ACTIONS.includes(a));
+  Promise.all(configs.map(cfg => preloadActions(cfg, birthActions(cfg))))
+    .then(() => {
+      console.log('[webmeji] 出生帧就绪');
+      // 宠物出生后再补预载其余动作（sit/spin/dance…），不打首屏带宽
+      configs.forEach(cfg => preloadActions(cfg, restActions(cfg)));
+    });
 
   // 1) walk 或 stand 任一就绪 → 宠物即出（最快路径）；
   //    弱网下 8s 兜底强制出——此时若帧仍未就绪，Creature 进入"静帧站立"等待模式，绝不滑行
