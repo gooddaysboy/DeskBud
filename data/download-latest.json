@@ -1,20 +1,20 @@
 {
   "win": {
-    "version": "0.1.24",
-    "url": "https://gitee.com/deskbud/version/releases/download/v0.1.24/DeskBud_Win_v0124.exe",
-    "sha256": "5e62e4a73cacc57ca661ca38e7fae58a0253f9db13b5de92bcbe88b0e141b852",
-    "size": 86017712
+    "version": "0.1.25",
+    "url": "https://gitee.com/deskbud/version/releases/download/v0.1.25/DeskBud_Win_v0125.exe",
+    "sha256": "9e052aeb6d106899eeee06eb1cb8e653b357420d3045ea326bd7a5f7582c8368",
+    "size": 86148690
   },
   "mac": {
-    "version": "0.1.24",
-    "url": "https://gitee.com/deskbud/version/releases/download/v0.1.24/DeskBud_Mac_v0124.dmg",
-    "sha256": "c784082dba175f3c55bcbaa898b0a9a5f82ef0a3dbb1b61e39c8189ebc35bc6d",
-    "size": 61352739
+    "version": "0.1.25",
+    "url": "https://gitee.com/deskbud/version/releases/download/v0.1.25/DeskBud_Mac_v0125.dmg",
+    "sha256": "bd38be901a3a974b94ad3408e11655b5b740452efd6eb23a069eafbefebe2f6a",
+    "size": 61543938
   },
   "android": {
-    "version": "0.1.8",
-    "url": "https://gitee.com/deskbud/version/releases/download/android-v0.1.8/DeskBud_Android_v018.apk",
-    "versionCode": 9
+    "version": "0.1.14",
+    "url": "https://gitee.com/deskbud/version/releases/download/android-v0.1.14/DeskBud_Android_v0114.apk",
+    "versionCode": 15
   },
   "_note": "官网同源副本：官网(deskbud.xyz) 与 gitee 跨源，gitee raw 不回 ACAO，浏览器 fetch 会被 CORS 拦，故在官网存一份同源清单给站点读。真源 = gitee 升级仓 version-download.json + version-android.json；发版后跑 python scripts/sync_download_manifest.py 刷新本文件。"
 }
