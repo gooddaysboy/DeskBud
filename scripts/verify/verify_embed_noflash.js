@@ -37,6 +37,15 @@ const probeChrome = () => {
     hdGetLabel: (document.getElementById('hdGetLabel') || {}).textContent || '',
   };
 };
+// 首屏内联根治探针（09-14）：abort site.js 后，HTML 自身应已渲染出伙伴墙/姿态小窗/名字/领养入口
+const probeFirstPaint = () => ({
+  wallTiles: document.querySelectorAll('#buddyWall .buddy-tile').length,
+  wallSeeds: document.querySelectorAll('#buddyWall .buddy-tile[data-seed]').length,
+  animSrc: (document.getElementById('buddyAnimImg') || {}).getAttribute('src') || '',
+  name: (document.getElementById('buddyName') || {}).textContent || '',
+  buyHasLink: !!(document.querySelector('#buddyBuy a')),
+  buyText: (document.querySelector('#buddyBuy') || {}).textContent || '',
+});
 
 (async () => {
   const b = await chromium.launch({ executablePath: chromeExe, headless: true, args: ARGS });
@@ -66,6 +75,12 @@ const probeChrome = () => {
   chk('②App·顶栏不显示', s.topbar === false, 'topbar=' + s.topbar);
   chk('②App·页脚不显示', s.footer === false, 'footer=' + s.footer);
   chk('②App·「下载」按钮不显示', s.navDl === false, 'navDl=' + s.navDl + ' text=' + s.navDlText);
+  // —— 首屏内联根治断言（09-14）：JS 未到也必须有内容，慢网不白屏 ——
+  let fp = await p.evaluate(probeFirstPaint);
+  chk('②首屏·宠物墙已内联 ≥3 只 tile', fp.wallSeeds >= 3, JSON.stringify(fp));
+  chk('②首屏·姿态小窗预置 lite 图（*-lite/*.webp）', /-lite\/.+\.webp/.test(fp.animSrc), fp.animSrc);
+  chk('②首屏·当前宠物名已填（不空白）', fp.name.trim().length > 0, fp.name);
+  chk('②首屏·领养引导入口已就位', fp.buyHasLink && fp.buyText.length > 0, fp.buyText.slice(0, 120));
   await p.screenshot({ path: path.join(ROOT, 'outputs', 'embed_noflash_app.png'), fullPage: true });
   await ctx.close();
 

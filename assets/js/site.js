@@ -828,6 +828,29 @@ SITE.pages = {
     let cur = 0, animTimer = null, frameIdx = 0, frames = [];
 
     const wall = document.getElementById('buddyWall');
+    // 选择墙事件委托：首屏内联 tile 与 JS 重建 tile 通用，只绑一次（避免软导航/多次重绘重复绑）
+    if (wall && !wall.dataset.wired) {
+      wall.dataset.wired = '1';
+      wall.addEventListener('click', (e) => {
+        const tile = e.target.closest('.buddy-tile');
+        if (!tile || tile.dataset.i === undefined) return;
+        const i = +tile.dataset.i;
+        if (!(i >= 0 && i < works.length)) return;
+        const cb = e.target.closest('.buddy-check');
+        if (cb) {                       // 勾选框：不切换展示，只 toggle 购物车
+          e.stopPropagation();
+          const wid = works[i].id;
+          if (owned.has(wid) || works[i].builtin) return;   // 已拥有 / 内置不可选
+          picked = SITE.togglePicked(wid);                  // 持久化（跨页保持）
+          paintWall(); renderBuy(works[cur]);
+          return;
+        }
+        if (i === cur) return;
+        cur = i;
+        paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]);
+        if (nameEl) nameEl.textContent = window.pick(works[cur].title);
+      });
+    }
     const animImg = document.getElementById('buddyAnimImg');
     const nameEl = document.getElementById('buddyName');
     const buyEl = document.getElementById('buddyBuy');
@@ -960,6 +983,26 @@ SITE.pages = {
 
     function paintWall() {
       if (!wall) return;
+      // 首屏内联根治（09-14 kotlin 报慢网白屏）：HTML 已预置 3 只在线宠物的静态 tile（data-seed）。
+      // 数量一致 → 只补强 owned/选中角标（不重建 DOM，避免慢网白屏后整段闪烁）；
+      // 数量不符（后端新增宠物）或已无内联 → 走下方重建分支渲染全量，保证正确。
+      const seeds = wall.querySelectorAll('.buddy-tile[data-seed]');
+      if (seeds.length && works.length === seeds.length) {
+        seeds.forEach(b => {
+          const i = +b.dataset.i, w = works[i];
+          if (!w) return;
+          const isOwned = owned.has(w.id), isPicked = picked.has(w.id), isBuiltin = !!w.builtin;
+          b.classList.toggle('on', i === cur);
+          b.classList.toggle('owned', isOwned);
+          b.setAttribute('aria-selected', i === cur);
+          const chip = (isBuiltin || !buySkin)
+            ? (isOwned ? `<span class="buddy-owned">${window.pick({ zh: '已拥有', en: 'Owned' })}</span>` : '')
+            : `<span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起领养', en: 'Select to adopt together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>`;
+          const old = b.querySelector('.buddy-owned, .buddy-check');
+          if (old) old.outerHTML = chip; else if (chip) b.insertAdjacentHTML('beforeend', chip);
+        });
+        return;
+      }
       // 内置宠物（织熊猫/织兔子）单独一排；含义由下方 .wall-break 一行小字承担，方块保持纯图
       const tile = (w, i) => {
         const a = ANIM[w.id];
@@ -975,30 +1018,14 @@ SITE.pages = {
           : `<span class="buddy-check${isPicked ? ' on' : ''}" role="checkbox" aria-checked="${isPicked}" aria-label="${window.pick({ zh: '选中一起领养', en: 'Select to adopt together' })}">${isOwned ? window.pick({ zh: '已拥有', en: 'Owned' }) : '✓'}</span>`;
         const tip = isBuiltin ? `${window.pick(w.title)} · ${window.pick({ zh: '已内置，开箱即用', en: 'built-in, ready to use' })}` : window.pick(w.title);
         return `<button type="button" class="buddy-tile${i === cur ? ' on' : ''}${isOwned ? ' owned' : ''}" role="tab" aria-selected="${i === cur}" data-i="${i}" title="${tip}">
-          <img src="${src}" alt="${window.pick(w.title)}" draggable="false" loading="lazy">
+          <img src="${src}" alt="${window.pick(w.title)}" draggable="false">
           ${chip}
         </button>`;
       };
       const main = [], builtin = [];
       works.forEach((w, i) => (w.builtin ? builtin : main).push(tile(w, i)));
       wall.innerHTML = main.join('') + (builtin.length ? `<div class="wall-break">${window.pick({ zh: '内置 · 开箱即用', en: 'Built-in · ready to use' })}</div>` + builtin.join('') : '');
-      wall.querySelectorAll('.buddy-tile').forEach(b => {
-        const i = +b.dataset.i, wid = works[i].id;
-        b.addEventListener('click', () => {
-          if (i === cur) return;
-          cur = i;
-          paintWall(); startAnim(works[cur]); renderVideo(works[cur]); renderBuy(works[cur]);
-          if (nameEl) nameEl.textContent = window.pick(works[cur].title);
-        });
-        // 勾选框（stopPropagation：不触发切换展示）—— 只有购买皮肤会渲染出 .buddy-check
-        const cb = b.querySelector('.buddy-check');
-        if (cb) cb.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (owned.has(wid) || works[i].builtin) return;   // 已拥有 / 内置不可选
-          picked = SITE.togglePicked(wid);                  // 持久化（跨页保持）
-          paintWall(); renderBuy(works[cur]);
-        });
-      });
+      // 事件改由 #buddyWall 容器委托统一处理（见上方 buddies 初始化处），此处不再逐 tile 绑定
     }
 
     paintWall();
