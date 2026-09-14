@@ -12,6 +12,15 @@
   <meta name="description" content="DeskBud 伙伴：挑一只喜欢的针织桌宠伙伴，看它的一举一动与宣传视频。">
   <link rel="stylesheet" href="assets/css/base.css?v=112">
   <!-- 伙伴页（2026-09-10 手机优先极简页）：页内样式已进 base.css v80（软导航只换 #view，页内 style 不生效） -->
+  <!-- 网页宠物首屏预载（09-14 老曹定：buddies 也压到秒级）：引擎/配置脚本 + stand 出生帧（每只仅 2 帧）。
+       出生条件是 walk|stand 任一动作全部帧就绪，stand 帧少 → 预载它即可最快见到宠物，不再被 90+ 卡片图抢连接拖慢。 -->
+  <link rel="preload" href="assets/webmeji/webmeji.js?v=25" as="script">
+  <link rel="preload" href="assets/webmeji/rabbit.config.js?v=7" as="script">
+  <link rel="preload" href="assets/webmeji/panda.config.js?v=2" as="script">
+  <link rel="preload" href="assets/webmeji/rabbit/stand/f000.webp" as="image">
+  <link rel="preload" href="assets/webmeji/rabbit/stand/f001.webp" as="image">
+  <link rel="preload" href="assets/webmeji/panda/stand/f000.webp" as="image">
+  <link rel="preload" href="assets/webmeji/panda/stand/f001.webp" as="image">
 </head>
 <body>
   <header class="topbar">
