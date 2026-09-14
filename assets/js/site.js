@@ -17,7 +17,7 @@ const SITE = {
     //   直接打开或刷新子页（list/detail/download…）没有；而宠物容器挂在 body、软导航只换 #view，
     //   挂上后就全站跟随 ⇒ 老曹实测「站内随便切页宠物都在跑」。改成排除式补齐「直接开子页」这个边界。
     //   排除项 = App 内嵌伙伴页（避免与 App 自身宠物打架）+ 后台/预览/引导页（自带独立脚本，不挂公共 chrome）。
-    disabledPaths: ['buddies.html', 'editor.html', 'bubble.html', 'bubble_preview.html', 'get.html', 'beian-pending.html'],
+    disabledPaths: ['buddies.html', 'editor.html', 'bubble.html', 'bubble_preview.html', 'get.html', 'beian-pending.html', 'pets.html', 'list.html', 'detail.html', 'usage.html'],
     init() {
       // 仅桌面端启用（2026-09-14 老曹定）：手机屏幕小，宠物易挡按钮/干扰阅读
       if (SITE.isMobileUA()) return;
@@ -1742,10 +1742,6 @@ SITE.route = async function () {
   if (path === '' || path === 'index.html') fn = p.home;
   else if (path === 'buddies.html') fn = p.buddies;
   else if (path === 'download.html') fn = p.download;
-  else if (path === 'pets.html') fn = p.pets;
-  else if (path === 'list.html') fn = p.list;
-  else if (path === 'detail.html') fn = () => p.detail(params);
-  else if (path === 'usage.html') fn = p.usage;
   else if (path === 'privacy.html') fn = p.privacy;
   else if (path === 'contact.html') fn = p.contact;
   if (!fn) return; // 未知内容页（如 editor/bubble）不软导航处理
@@ -1754,7 +1750,7 @@ SITE.route = async function () {
 };
 
 /* ---------- 软导航：拦截站内链接，只换 #view，音频常驻不中断 ---------- */
-const SOFTNAV_EXCLUDE = new Set(['editor.html', 'bubble.html', 'get.html']); // 后台/泡泡墙/下载引导页保持整页加载（get.html 自带独立脚本与 UA 分流）
+const SOFTNAV_EXCLUDE = new Set(['editor.html', 'bubble.html', 'get.html', 'pets.html', 'list.html', 'detail.html', 'usage.html']); // 后台/泡泡墙/下载引导页保持整页加载（get.html 自带独立脚本与 UA 分流）
 SITE.loadView = async function (url, push) {
   try {
     const res = await fetch(url, { cache: 'no-cache' });

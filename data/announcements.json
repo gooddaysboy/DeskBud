@@ -6,7 +6,7 @@
       "zh": "🐼 熊猫桌宠正式上线啦，快来带它回桌面陪你办公～",
       "en": "🐼 The panda pet is now live! Bring it to your desktop and keep you company while you work~"
     },
-    "link": "detail.html?id=panda",
+    "link": "buddies.html",
     "start": "2026-08-25",
     "end": "2026-10-01"
   },
@@ -17,7 +17,7 @@
       "zh": "🐰 织兔子桌宠新上线，针织萌物陪你桌面～",
       "en": "🐰 The knitted rabbit pet is now live — a cozy companion for your desktop~"
     },
-    "link": "detail.html?id=rabbit",
+    "link": "buddies.html",
     "start": "2026-09-01",
     "end": "2026-10-15"
   },
