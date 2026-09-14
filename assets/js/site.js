@@ -17,10 +17,12 @@ const SITE = {
     //   直接打开或刷新子页（list/detail/download…）没有；而宠物容器挂在 body、软导航只换 #view，
     //   挂上后就全站跟随 ⇒ 老曹实测「站内随便切页宠物都在跑」。改成排除式补齐「直接开子页」这个边界。
     //   排除项 = App 内嵌伙伴页（避免与 App 自身宠物打架）+ 后台/预览/引导页（自带独立脚本，不挂公共 chrome）。
-    disabledPaths: ['buddies.html', 'editor.html', 'bubble.html', 'bubble_preview.html', 'get.html', 'beian-pending.html', 'pets.html', 'list.html', 'detail.html', 'usage.html'],
+    disabledPaths: ['editor.html', 'bubble.html', 'bubble_preview.html', 'get.html', 'beian-pending.html', 'pets.html', 'list.html', 'detail.html', 'usage.html'],
     init() {
       // 仅桌面端启用（2026-09-14 老曹定）：手机屏幕小，宠物易挡按钮/干扰阅读
       if (SITE.isMobileUA()) return;
+      // App 内嵌模式（?embed=1）：客户端自带宠物，网页不再挂（2026-09-14 老曹定：网站应该有，客户端不必）
+      if (new URLSearchParams(location.search).get('embed') === '1') return;
       const path = location.pathname;
       const base = path.split('/').pop() || 'index.html';   // 精确匹配文件名，避免 endsWith 误伤
       if (this.disabledPaths.indexOf(base) >= 0) return;
