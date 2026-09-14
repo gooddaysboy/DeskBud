@@ -288,21 +288,21 @@ const SITE = {
   },
 
   // 是否走「购买皮肤」（2026-09-13 22:45 老曹定，**一层保险**）：
-  //   条件 = 有 device_id ∧（本次载入就嵌在别处（?embed=1）∨ 首次载入的 URL 直接带了 device_id）
+  //   条件 = 有 device_id ∧（本次载入就嵌在别处（?embed=1）∨ 当前 URL 直接带了 device_id）
   // 🔴 老曹原话：「网站用户不管有没有设备号都不进入购买页面」—— did 会写进 localStorage，
   //    只用 getDeviceId() 判会让"在 App 里开过一次"的浏览器访客也看到购买 UI ⇒ 这里**额外要求**
   //    本次是 App 带进来的（embed=1 或 URL 带 did），纯 localStorage 残留**不足以**触发购买皮肤。
   //    两个条件都留着是因为：万一 kotlin storeUrl() 没带 embed=1，靠 URL 带 did 也能进购买皮肤（不锁死 App）。
-  _urlDidAtLoad: null,
+  // 🔴 2026-09-14 修（老曹公网实测看到「🐾 领养」）：原实现把「URL 带 did」**记忆化**（_urlDidAtLoad
+  //    只算一次）⇒ 曾带 did 载入后，站内软导航把 query 丢了、缓存值却留着 → 地址栏无参、按钮仍购买皮肤。
+  //    改法：① 这里**去记忆化**，按**当前** URL 实时判；② softNav 不继承 device_id（见 _inheritModeQuery）。
+  //    于是公网访客点一下导航即复位下载皮肤；App 内嵌靠常驻 .embed-mode 不受影响。
   isBuySkin() {
     if (!this.getDeviceId()) return false;
     if (document.documentElement.classList.contains('embed-mode')) return true;
-    if (this._urlDidAtLoad === null) {
-      let q = '';
-      try { q = new URLSearchParams(location.search).get('device_id') || ''; } catch (e) { /* ignore */ }
-      this._urlDidAtLoad = this._DID_RE.test(q);
-    }
-    return this._urlDidAtLoad;
+    let q = '';
+    try { q = new URLSearchParams(location.search).get('device_id') || ''; } catch (e) { /* ignore */ }
+    return this._DID_RE.test(q);
   },
 
   // 收银台链接；device_id 为空返回 ''（调用方据此退回下载引导）
@@ -1774,7 +1774,19 @@ SITE.loadView = async function (url, push) {
     window.location.href = url; // 兜底：目标页异常时整页加载（BGM 会重启，仅兜底场景）
   }
 };
-SITE.softNav = function (url) { return SITE.loadView(url, true); };
+// 站内软导航的 URL 继承（2026-09-14 配套修「公网看到 🐾 领养」）：
+//   只继承**模式类** query —— 当前是 ?embed=1（App 内嵌态权威信号，须跨页保持）。
+//   🔴 故意**不继承 device_id**：did 已落 localStorage（App 内靠常驻 .embed-mode 判购买皮肤、
+//      收银台仍从 localStorage 取 did）；若继承则「曾带 did 载入 → 点导航」会残留购买 UI（老曹实测现象）。
+SITE._inheritModeQuery = function (url) {
+  try {
+    if (new URLSearchParams(location.search).get('embed') !== '1') return url;
+    const t = new URL(url, location.href);
+    if (!t.searchParams.has('embed')) t.searchParams.set('embed', '1');
+    return t.pathname + t.search + t.hash;
+  } catch (e) { return url; }
+};
+SITE.softNav = function (url) { return SITE.loadView(SITE._inheritModeQuery(url), true); };
 
 function wireSoftNav() {
   document.addEventListener('click', (e) => {

@@ -8,6 +8,7 @@
 //   ③ JS 未到 + 无 embed（官网访客）：顶栏仍正常显示（不误伤）
 //   ④ 首页购买区静态文案已清空（JS 未到时不再闪访客版文案）
 //   ⑤ 正常加载（JS 到齐）回归：embed 隐藏 + 访客/App 双皮肤未受影响
+//   ⑥ 公网访客「曾带 did 载入 → 站内软导航」皮肤须复位（09-14 修 isBuySkin 记忆化 + softNav 丢 query）
 const path = require('path');
 const fs = require('fs');
 const { chromeExe } = require('./_env.js');
@@ -169,6 +170,24 @@ const probeFirstPaint = () => {
   // JS 到齐后种子补强不得打乱排布（09-14 排版回归）
   const wall2 = await p.evaluate(probeFirstPaint);
   chk('⑤b 访客·JS 到齐后行标仍在（补强不打乱排布）', wall2.breakIdx >= 0 && wall2.tilesAfterBreak >= 2, 'breakIdx=' + wall2.breakIdx + ' tilesAfterBreak=' + wall2.tilesAfterBreak);
+  await ctx.close();
+
+  /* ---------- ⑥ 公网访客「曾带 did 载入 → 站内软导航」皮肤须复位（2026-09-14 老曹公网实测 bug） ---------- */
+  //   原 bug：isBuySkin 把「URL 带 did」记忆化 + 软导航丢 query ⇒ 地址栏无参、按钮仍是「🐾 领养」。
+  //   修：site.js ① isBuySkin 去记忆化（按当前 URL 实时判）② softNav 只继承 embed、不继承 device_id。
+  ctx = await b.newContext({ viewport: { width: 1280, height: 900 }, userAgent: UA_DESKTOP });
+  p = await ctx.newPage();
+  await p.goto(BASE + '/index.html?device_id=dsk0123456789abcdef', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await sleep(1500);
+  await p.evaluate(() => { const a = [...document.querySelectorAll('a')].find(x => /buddies\.html/.test(x.getAttribute('href') || '')); if (a) a.click(); });
+  await sleep(1800);
+  const sNav = await p.evaluate(() => ({
+    href: location.href,
+    paw: /🐾/.test(document.body.innerText || ''),
+    leadDl: !!document.querySelector('#buddyBuy a.lead-dl'),
+  }));
+  chk('⑥访客·曾带did载入→软导航伙伴：皮肤复位（无🐾 购买按钮）', !sNav.paw && sNav.leadDl, JSON.stringify(sNav));
+  chk('⑥访客·软导航后 URL 不带 device_id', !/device_id=/.test(sNav.href), sNav.href);
   await ctx.close();
 
   await b.close();
