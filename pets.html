@@ -7,6 +7,8 @@
   <title>伙伴之家 · DeskBud</title>
   <meta name="description" content="DeskBud 伙伴之家：领养一只常驻桌面的针织宠物伙伴，织熊猫、织兔子已上线，更多伙伴陆续织制中。">
   <link rel="stylesheet" href="assets/css/base.css?v=110">
+  <link rel="preload" as="image" href="works/panda-lite/idle.webp?v=28">
+  <link rel="preload" as="image" href="works/rabbit-lite/idle.webp?v=28">
   <!-- 伙伴之家卡片样式已迁入 base.css v69（软导航只换 #view，页内 style 不生效） -->
 </head>
 <body>
@@ -31,7 +33,25 @@
   </section>
 
   <section class="section wrap">
-    <div class="pets-grid" id="petsGrid"></div>
+    <!-- 首屏直出（方案 A 全站推广 · 2026-09-14）：在线宠(panda/rabbit)静态内联，JS 到后 PetsView.paint() 整体重建 -->
+    <div class="pets-grid" id="petsGrid">
+      <article class="pet-card">
+        <div class="pet-cover"><img src="works/panda-lite/idle.webp?v=28" alt="织熊猫" loading="lazy" draggable="false"><span class="pet-badge">已上线</span></div>
+        <div class="pet-body">
+          <h3 class="pet-name">织熊猫</h3>
+          <p class="pet-tagline">会降落伞式飘落、点击起跳、屏幕绕圈、眨眼卖萌的透明桌宠，常驻桌面不打扰。</p>
+          <div class="pet-actions"><a class="btn btn-primary" href="detail.html?id=panda">了解详情</a></div>
+        </div>
+      </article>
+      <article class="pet-card">
+        <div class="pet-cover"><img src="works/rabbit-lite/idle.webp?v=28" alt="织兔子" loading="lazy" draggable="false"><span class="pet-badge">已上线</span></div>
+        <div class="pet-body">
+          <h3 class="pet-name">织兔子</h3>
+          <p class="pet-tagline">软乎乎的透明桌宠兔子，会蹦跳、打盹、挠痒、挥手卖萌，常驻桌面不占地。</p>
+          <div class="pet-actions"><a class="btn btn-primary" href="detail.html?id=rabbit">了解详情</a></div>
+        </div>
+      </article>
+    </div>
     <p class="pets-channels" id="petsChannels" hidden></p>
     <p class="pets-note" data-i18n="pets.note">下载后双击即可运行，无需安装；已上线伙伴均为透明悬浮窗，右键可切换宠物。更多伙伴陆续织制中。</p>
   </section>

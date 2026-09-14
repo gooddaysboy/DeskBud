@@ -38,13 +38,15 @@
         <button type="button" class="buddy-tile on" role="tab" aria-selected="true" data-i="0" data-seed title="线咪">
           <img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪" draggable="false">
         </button>
+        <!-- ⚠ 顺序必须与 site.js 重建分支一致：可领养宠 → .wall-break 行标 → 内置宠。
+             行标放在内置宠之前（flex-basis:100% 会强制换行），否则内置宠会与新宠混在同一排、行标掉到最后。 -->
+        <div class="wall-break">内置 · 开箱即用</div>
         <button type="button" class="buddy-tile" role="tab" aria-selected="false" data-i="1" data-seed title="织熊猫 · 已内置，开箱即用">
           <img src="works/panda-lite/idle.webp?v=28" alt="织熊猫" draggable="false">
         </button>
         <button type="button" class="buddy-tile" role="tab" aria-selected="false" data-i="2" data-seed title="织兔子 · 已内置，开箱即用">
           <img src="works/rabbit-lite/idle.webp?v=28" alt="织兔子" draggable="false">
         </button>
-        <div class="wall-break">内置 · 开箱即用</div>
       </div>
 
       <!-- ② 姿态动画小窗：首屏预置 linekit 轻量待机（=works[0]，与 JS cur=0 一致→零闪烁）；

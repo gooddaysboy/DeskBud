@@ -41,12 +41,44 @@
         <h1 class="hero-big" id="heroBig">方寸屏间有伙伴，漫游窗口觅清欢。时而攀沿窗栏看，消解心头百般烦。</h1>
         <p class="hero-lead" id="heroLead">屏幕角落趴着一只专属小宠物，安静陪你度过每一段时光。</p>
         <div class="picker-head"><b id="pickerTitle">选择伙伴</b></div>
-        <div class="pet-picker" id="petPicker"></div>
+        <!-- 首屏直出（方案 A 全站推广 · 2026-09-14）：3 只在线宠静态内联，JS 到后 paintPicker 整体重建覆盖；行标顺序=可领养→内置 -->
+        <div class="pet-picker" id="petPicker">
+          <button type="button" class="pick-card active" data-i="0" title="线咪">
+            <img class="pick-thumb" src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪" draggable="false">
+            <span class="pick-txt"><b>线咪</b><small>一只线条风格的小猫，会在屏幕上攀爬、倒挂、眨眼卖萌的透明桌宠，常驻桌面不打扰。</small></span>
+            <span class="pick-arrow">›</span>
+          </button>
+          <div class="picker-break">内置 · 开箱即用</div>
+          <button type="button" class="pick-card" data-i="1" title="织熊猫 · 已内置，开箱即用">
+            <img class="pick-thumb" src="works/panda-lite/idle.webp?v=28" alt="织熊猫" draggable="false">
+            <span class="pick-txt"><b>织熊猫</b><small>会降落伞式飘落、点击起跳、屏幕绕圈、眨眼卖萌的透明桌宠，常驻桌面不打扰。</small></span>
+            <span class="pick-arrow">›</span>
+          </button>
+          <button type="button" class="pick-card" data-i="2" title="织兔子 · 已内置，开箱即用">
+            <img class="pick-thumb" src="works/rabbit-lite/idle.webp?v=28" alt="织兔子" draggable="false">
+            <span class="pick-txt"><b>织兔子</b><small>软乎乎的透明桌宠兔子，会蹦跳、打盹、挠痒、挥手卖萌，常驻桌面不占地。</small></span>
+            <span class="pick-arrow">›</span>
+          </button>
+        </div>
       </div>
       <div class="hero-right">
         <div class="showcase-card" id="showcaseCard">
           <div class="showcase-badge"><i class="live-dot"></i><span id="showcaseBadge">首页展示</span></div>
-          <div class="showcase-track-wrap"><div class="showcase-track" id="showcaseTrack"></div></div>
+          <!-- 展示走马灯：linekit 前 6 态 lite 图，复制一份做无缝循环（与 paintShowcase 一致） -->
+          <div class="showcase-track-wrap"><div class="showcase-track" id="showcaseTrack">
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪 · 待机" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_blink.webp?v=28" alt="线咪 · 眨眼" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit.webp?v=28" alt="线咪 · 端坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_look_up.webp?v=28" alt="线咪 · 抬头望" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_dangle.webp?v=28" alt="线咪 · 垂腿坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sleep.webp?v=28" alt="线咪 · 睡觉" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪 · 待机" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_blink.webp?v=28" alt="线咪 · 眨眼" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit.webp?v=28" alt="线咪 · 端坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_look_up.webp?v=28" alt="线咪 · 抬头望" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_dangle.webp?v=28" alt="线咪 · 垂腿坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+            <figure class="spose-item"><div class="spose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sleep.webp?v=28" alt="线咪 · 睡觉" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+          </div></div>
         </div>
       </div>
     </div>
@@ -58,20 +90,46 @@
         <div class="showcase-badge"><i class="live-dot"></i><span id="posesBadge">姿态速览</span></div>
         <h2 class="poses-title" id="posesTitle">它的全部姿态</h2>
       </div>
-      <div class="poses-grid" id="posesGrid"></div>
+      <!-- 姿态宫格：linekit 24 张 128px 轻量图，下方折叠区 loading=lazy；JS 到后 paintPoses 整体重建 -->
+      <div class="poses-grid" id="posesGrid">
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_idle-a.webp?v=28" alt="待机" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_run-a.webp?v=28" alt="奔跑" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_climb-a.webp?v=28" alt="爬墙" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_hang-a.webp?v=28" alt="倒挂" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_fall-a.webp?v=28" alt="坠落" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sit-a.webp?v=28" alt="端坐" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_wave-a.webp?v=28" alt="打招呼" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_jumphappy-a.webp?v=28" alt="开心跳" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_blink-a.webp?v=28" alt="眨眼" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_yawn-a.webp?v=28" alt="打哈欠" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_stretch-a.webp?v=28" alt="伸懒腰" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_scratch-a.webp?v=28" alt="挠痒" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_eat-a.webp?v=28" alt="吃东西" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sleep-a.webp?v=28" alt="睡觉" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_type-a.webp?v=28" alt="站着打字" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_type2-a.webp?v=28" alt="坐着打字" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_drink-a.webp?v=28" alt="捧杯喝水" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_eye_exercise-a.webp?v=28" alt="眼保健操" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate1-a.webp?v=28" alt="庆祝①" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate2-a.webp?v=28" alt="庆祝②" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate3-a.webp?v=28" alt="庆祝③" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate4-a.webp?v=28" alt="庆祝④" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sit_dangle-a.webp?v=28" alt="晃腿坐" loading="lazy" draggable="false"></div></figure>
+        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sit_look_up-a.webp?v=28" alt="抬头坐" loading="lazy" draggable="false"></div></figure>
+      </div>
     </div>
   </section>
 
   <section class="home-detail-band">
     <div class="wrap home-detail">
       <div class="hd-left">
-        <div class="showcase-badge hd-badge"><i class="live-dot"></i><span id="hdBadge">织熊猫</span></div>
-        <h2 id="hdTitle">织熊猫</h2>
-        <p class="hd-tagline" id="hdSummary"></p>
-        <p class="hd-desc" id="hdDesc"></p>
-        <!-- 购买区文案由 JS 填（2026-09-14：静态写死会在 JS 未到时把访客版文案闪给 App 用户） -->
-        <div class="block-label" id="hdGetLabel"></div>
-        <div class="hd-buy" id="hdBuy"></div>
+        <!-- 伙伴档案首屏直出（默认 works[0]=linekit）；访客态下载引导占位，App 内态由 paintDetail 升级 -->
+        <div class="showcase-badge hd-badge"><i class="live-dot"></i><span id="hdBadge">伙伴档案</span></div>
+        <h2 id="hdTitle">线咪</h2>
+        <p class="hd-tagline" id="hdSummary">一只线条风格的小猫，会在屏幕上攀爬、倒挂、眨眼卖萌的透明桌宠，常驻桌面不打扰。</p>
+        <p class="hd-desc" id="hdDesc">线咪是一只住在你屏幕上的线条小猫。它会自己走来走去、攀爬、倒挂，无聊了眨眨眼、伸个懒腰、喝口水；你点一下它就开心地挥手跳起来。它不抢注意力，只是安静地陪着你。</p>
+        <div class="block-label" id="hdGetLabel">把伙伴领回家</div>
+        <div class="hd-buy" id="hdBuy"><div class="buy-row"><a class="btn btn-primary lead-dl" href="download.html">⬇ 下载客户端 · 领养宠物</a><span class="lead-hint">宠物都在客户端里 · 装好一键领养，全自动</span></div></div>
       </div>
       <div class="hd-right">
         <div class="showcase-card hd-video-card">

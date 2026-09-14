@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-14T05:41:50.603065+00:00",
+  "hash": "3b3fc58f2b279999eb38d5ab0abb8b521f6845f8cca3005932a2fe1b2f0f3a27",
+  "meta": {
+    "title": {
+      "zh": "DeskBud",
+      "en": "DeskBud"
+    },
+    "slogan": {
+      "zh": "陪伴你的桌面宠物伙伴",
+      "en": "Your desktop pet companion"
+    },
+    "home": "https://deskbud.xyz/buddies.html"
+  },
+  "pets": [
+    {
+      "id": "linekit",
+      "status": "online",
+      "builtin": false,
+      "title": {
+        "zh": "线咪",
+        "en": "LineKit"
+      },
+      "category": "cat",
+      "author": "gooddaysboy",
+      "summary": {
+        "zh": "一只线条风格的小猫，会在屏幕上攀爬、倒挂、眨眼卖萌的透明桌宠，常驻桌面不打扰。",
+        "en": "A line-art kitten — a transparent desktop pet that climbs, hangs and blinks, always there, never in the way."
+      },
+      "thumb": "works/linekit-lite/linekit_idle.webp",
+      "poses": [
+        {
+          "src": "works/linekit-poses/linekit_blink-a.webp",
+          "caption": {
+            "zh": "linekit_blink-a",
+            "en": "linekit_blink-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate1-a.webp",
+          "caption": {
+            "zh": "linekit_celebrate1-a",
+            "en": "linekit_celebrate1-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate2-a.webp",
+          "caption": {
+            "zh": "linekit_celebrate2-a",
+            "en": "linekit_celebrate2-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate3-a.webp",
+          "caption": {
+            "zh": "linekit_celebrate3-a",
+            "en": "linekit_celebrate3-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_celebrate4-a.webp",
+          "caption": {
+            "zh": "linekit_celebrate4-a",
+            "en": "linekit_celebrate4-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_climb-a.webp",
+          "caption": {
+            "zh": "linekit_climb-a",
+            "en": "linekit_climb-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_drink-a.webp",
+          "caption": {
+            "zh": "linekit_drink-a",
+            "en": "linekit_drink-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eat-a.webp",
+          "caption": {
+            "zh": "linekit_eat-a",
+            "en": "linekit_eat-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eye_exercise-a.webp",
+          "caption": {
+            "zh": "linekit_eye_exercise-a",
+            "en": "linekit_eye_exercise-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_fall-a.webp",
+          "caption": {
+            "zh": "linekit_fall-a",
+            "en": "linekit_fall-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_hang-a.webp",
+          "caption": {
+            "zh": "linekit_hang-a",
+            "en": "linekit_hang-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_idle-a.webp",
+          "caption": {
+            "zh": "linekit_idle-a",
+            "en": "linekit_idle-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_jumphappy-a.webp",
+          "caption": {
+            "zh": "linekit_jumphappy-a",
+            "en": "linekit_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_run-a.webp",
+          "caption": {
+            "zh": "linekit_run-a",
+            "en": "linekit_run-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_scratch-a.webp",
+          "caption": {
+            "zh": "linekit_scratch-a",
+            "en": "linekit_scratch-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sit-a.webp",
+          "caption": {
+            "zh": "linekit_sit-a",
+            "en": "linekit_sit-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sit_dangle-a.webp",
+          "caption": {
+            "zh": "linekit_sit_dangle-a",
+            "en": "linekit_sit_dangle-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sit_look_up-a.webp",
+          "caption": {
+            "zh": "linekit_sit_look_up-a",
+            "en": "linekit_sit_look_up-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_sleep-a.webp",
+          "caption": {
+            "zh": "linekit_sleep-a",
+            "en": "linekit_sleep-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_stretch-a.webp",
+          "caption": {
+            "zh": "linekit_stretch-a",
+            "en": "linekit_stretch-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_type-a.webp",
+          "caption": {
+            "zh": "linekit_type-a",
+            "en": "linekit_type-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_type2-a.webp",
+          "caption": {
+            "zh": "linekit_type2-a",
+            "en": "linekit_type2-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_wave-a.webp",
+          "caption": {
+            "zh": "linekit_wave-a",
+            "en": "linekit_wave-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_yawn-a.webp",
+          "caption": {
+            "zh": "linekit_yawn-a",
+            "en": "linekit_yawn-a"
+          }
+        }
+      ],
+      "adoption": {
+        "type": "paid",
+        "checkout": "pay.deskbud.xyz/checkout.html?device_id={device_id}&pet_ids=linekit&embed=1"
+      },
+      "platforms": {
+        "win": true,
+        "mac": true,
+        "android": true
+      }
+    },
+    {
+      "id": "panda",
+      "status": "online",
+      "builtin": true,
+      "title": {
+        "zh": "织熊猫",
+        "en": "Knitted Panda"
+      },
+      "category": "panda",
+      "author": "gooddaysboy",
+      "summary": {
+        "zh": "会降落伞式飘落、点击起跳、屏幕绕圈、眨眼卖萌的透明桌宠，常驻桌面不打扰。",
+        "en": "A transparent desktop pet that floats down like a parachute, jumps on tap, orbits your screen and blinks at you — always there, never in the way."
+      },
+      "thumb": "works/panda-lite/idle.webp",
+      "poses": [
+        {
+          "src": "works/panda-poses/panda_blink-a.webp",
+          "caption": {
+            "zh": "panda_blink-a",
+            "en": "panda_blink-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_climb-a.webp",
+          "caption": {
+            "zh": "panda_climb-a",
+            "en": "panda_climb-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_eat-a.webp",
+          "caption": {
+            "zh": "panda_eat-a",
+            "en": "panda_eat-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_fall-a.webp",
+          "caption": {
+            "zh": "panda_fall-a",
+            "en": "panda_fall-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_hang-a.webp",
+          "caption": {
+            "zh": "panda_hang-a",
+            "en": "panda_hang-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_idle-a.webp",
+          "caption": {
+            "zh": "panda_idle-a",
+            "en": "panda_idle-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_jumphappy-a.webp",
+          "caption": {
+            "zh": "panda_jumphappy-a",
+            "en": "panda_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_run-a.webp",
+          "caption": {
+            "zh": "panda_run-a",
+            "en": "panda_run-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_scratch-a.webp",
+          "caption": {
+            "zh": "panda_scratch-a",
+            "en": "panda_scratch-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_sit-a.webp",
+          "caption": {
+            "zh": "panda_sit-a",
+            "en": "panda_sit-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_sit_dangle-a.webp",
+          "caption": {
+            "zh": "panda_sit_dangle-a",
+            "en": "panda_sit_dangle-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_sit_look_up-a.webp",
+          "caption": {
+            "zh": "panda_sit_look_up-a",
+            "en": "panda_sit_look_up-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_sleep-a.webp",
+          "caption": {
+            "zh": "panda_sleep-a",
+            "en": "panda_sleep-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_stretch-a.webp",
+          "caption": {
+            "zh": "panda_stretch-a",
+            "en": "panda_stretch-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_wave-a.webp",
+          "caption": {
+            "zh": "panda_wave-a",
+            "en": "panda_wave-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_yawn-a.webp",
+          "caption": {
+            "zh": "panda_yawn-a",
+            "en": "panda_yawn-a"
+          }
+        }
+      ],
+      "adoption": {
+        "type": "builtin"
+      },
+      "platforms": {
+        "win": true,
+        "mac": true,
+        "android": true
+      }
+    },
+    {
+      "id": "rabbit",
+      "status": "online",
+      "builtin": true,
+      "title": {
+        "zh": "织兔子",
+        "en": "Knitted Rabbit"
+      },
+      "category": "rabbit",
+      "author": "gooddaysboy",
+      "summary": {
+        "zh": "软乎乎的透明桌宠兔子，会蹦跳、打盹、挠痒、挥手卖萌，常驻桌面不占地。",
+        "en": "A soft transparent desktop rabbit that hops, naps, scratches and waves at you — always on your screen, never in the way."
+      },
+      "thumb": "works/rabbit-lite/idle.webp",
+      "poses": [
+        {
+          "src": "works/rabbit-poses/rabbit_blink-a.webp",
+          "caption": {
+            "zh": "rabbit_blink-a",
+            "en": "rabbit_blink-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_climb-a.webp",
+          "caption": {
+            "zh": "rabbit_climb-a",
+            "en": "rabbit_climb-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_eat-a.webp",
+          "caption": {
+            "zh": "rabbit_eat-a",
+            "en": "rabbit_eat-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_fall-a.webp",
+          "caption": {
+            "zh": "rabbit_fall-a",
+            "en": "rabbit_fall-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_hang-a.webp",
+          "caption": {
+            "zh": "rabbit_hang-a",
+            "en": "rabbit_hang-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_idle-a.webp",
+          "caption": {
+            "zh": "rabbit_idle-a",
+            "en": "rabbit_idle-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_jumphappy-a.webp",
+          "caption": {
+            "zh": "rabbit_jumphappy-a",
+            "en": "rabbit_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_run-a.webp",
+          "caption": {
+            "zh": "rabbit_run-a",
+            "en": "rabbit_run-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_scratch-a.webp",
+          "caption": {
+            "zh": "rabbit_scratch-a",
+            "en": "rabbit_scratch-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_sit-a.webp",
+          "caption": {
+            "zh": "rabbit_sit-a",
+            "en": "rabbit_sit-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_sit_dangle-a.webp",
+          "caption": {
+            "zh": "rabbit_sit_dangle-a",
+            "en": "rabbit_sit_dangle-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_sit_look_up-a.webp",
+          "caption": {
+            "zh": "rabbit_sit_look_up-a",
+            "en": "rabbit_sit_look_up-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_sleep-a.webp",
+          "caption": {
+            "zh": "rabbit_sleep-a",
+            "en": "rabbit_sleep-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_stretch-a.webp",
+          "caption": {
+            "zh": "rabbit_stretch-a",
+            "en": "rabbit_stretch-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_wave-a.webp",
+          "caption": {
+            "zh": "rabbit_wave-a",
+            "en": "rabbit_wave-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_yawn-a.webp",
+          "caption": {
+            "zh": "rabbit_yawn-a",
+            "en": "rabbit_yawn-a"
+          }
+        }
+      ],
+      "adoption": {
+        "type": "builtin"
+      },
+      "platforms": {
+        "win": true,
+        "mac": true,
+        "android": true
+      }
+    }
+  ],
+  "resources": [
+    "works/linekit-lite/linekit_idle.webp",
+    "works/linekit-poses/linekit_blink-a.webp",
+    "works/linekit-poses/linekit_celebrate1-a.webp",
+    "works/linekit-poses/linekit_celebrate2-a.webp",
+    "works/linekit-poses/linekit_celebrate3-a.webp",
+    "works/linekit-poses/linekit_celebrate4-a.webp",
+    "works/linekit-poses/linekit_climb-a.webp",
+    "works/linekit-poses/linekit_drink-a.webp",
+    "works/linekit-poses/linekit_eat-a.webp",
+    "works/linekit-poses/linekit_eye_exercise-a.webp",
+    "works/linekit-poses/linekit_fall-a.webp",
+    "works/linekit-poses/linekit_hang-a.webp",
+    "works/linekit-poses/linekit_idle-a.webp",
+    "works/linekit-poses/linekit_jumphappy-a.webp",
+    "works/linekit-poses/linekit_run-a.webp",
+    "works/linekit-poses/linekit_scratch-a.webp",
+    "works/linekit-poses/linekit_sit-a.webp",
+    "works/linekit-poses/linekit_sit_dangle-a.webp",
+    "works/linekit-poses/linekit_sit_look_up-a.webp",
+    "works/linekit-poses/linekit_sleep-a.webp",
+    "works/linekit-poses/linekit_stretch-a.webp",
+    "works/linekit-poses/linekit_type-a.webp",
+    "works/linekit-poses/linekit_type2-a.webp",
+    "works/linekit-poses/linekit_wave-a.webp",
+    "works/linekit-poses/linekit_yawn-a.webp",
+    "works/panda-lite/idle.webp",
+    "works/panda-poses/panda_blink-a.webp",
+    "works/panda-poses/panda_climb-a.webp",
+    "works/panda-poses/panda_eat-a.webp",
+    "works/panda-poses/panda_fall-a.webp",
+    "works/panda-poses/panda_hang-a.webp",
+    "works/panda-poses/panda_idle-a.webp",
+    "works/panda-poses/panda_jumphappy-a.webp",
+    "works/panda-poses/panda_run-a.webp",
+    "works/panda-poses/panda_scratch-a.webp",
+    "works/panda-poses/panda_sit-a.webp",
+    "works/panda-poses/panda_sit_dangle-a.webp",
+    "works/panda-poses/panda_sit_look_up-a.webp",
+    "works/panda-poses/panda_sleep-a.webp",
+    "works/panda-poses/panda_stretch-a.webp",
+    "works/panda-poses/panda_wave-a.webp",
+    "works/panda-poses/panda_yawn-a.webp",
+    "works/rabbit-lite/idle.webp",
+    "works/rabbit-poses/rabbit_blink-a.webp",
+    "works/rabbit-poses/rabbit_climb-a.webp",
+    "works/rabbit-poses/rabbit_eat-a.webp",
+    "works/rabbit-poses/rabbit_fall-a.webp",
+    "works/rabbit-poses/rabbit_hang-a.webp",
+    "works/rabbit-poses/rabbit_idle-a.webp",
+    "works/rabbit-poses/rabbit_jumphappy-a.webp",
+    "works/rabbit-poses/rabbit_run-a.webp",
+    "works/rabbit-poses/rabbit_scratch-a.webp",
+    "works/rabbit-poses/rabbit_sit-a.webp",
+    "works/rabbit-poses/rabbit_sit_dangle-a.webp",
+    "works/rabbit-poses/rabbit_sit_look_up-a.webp",
+    "works/rabbit-poses/rabbit_sleep-a.webp",
+    "works/rabbit-poses/rabbit_stretch-a.webp",
+    "works/rabbit-poses/rabbit_wave-a.webp",
+    "works/rabbit-poses/rabbit_yawn-a.webp"
+  ]
+}

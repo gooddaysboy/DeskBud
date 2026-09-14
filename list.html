@@ -7,6 +7,9 @@
   <title>作品列表 · DeskBud</title>
   <meta name="description" content="DeskBud 全部桌面宠物作品，支持分类筛选与排序（最新、下载量、热门）。">
   <link rel="stylesheet" href="assets/css/base.css?v=110">
+  <link rel="preload" as="image" href="works/linekit-lite/linekit_idle.webp?v=28">
+  <link rel="preload" as="image" href="works/panda-lite/idle.webp?v=28">
+  <link rel="preload" as="image" href="works/rabbit-lite/idle.webp?v=28">
 </head>
 <body>
   <header class="topbar">
@@ -52,8 +55,34 @@
       </div>
     </div>
 
-    <div class="filters" id="filters"></div>
-    <div class="grid" id="grid"></div>
+    <!-- 首屏直出（方案 A 全站推广 · 2026-09-14）：3 只在线宠静态内联，JS 到后 render() 整体重建 -->
+    <div class="filters" id="filters"><button class="chip active" data-cat="all">全部</button></div>
+    <div class="grid" id="grid">
+      <a class="card" href="detail.html?id=linekit">
+        <div class="thumb">
+          <img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪" loading="lazy" draggable="false">
+          <div class="card-bubbles" data-pet="cat"></div>
+          <div class="overlay"><div class="cat">🐱 猫咪</div><h3>线咪</h3></div>
+        </div>
+        <div class="meta"><span>gooddaysboy</span></div>
+      </a>
+      <a class="card" href="detail.html?id=panda">
+        <div class="thumb">
+          <img src="works/panda-lite/idle.webp?v=28" alt="织熊猫" loading="lazy" draggable="false">
+          <div class="card-bubbles" data-pet="animal"></div>
+          <div class="overlay"><div class="cat">🐼 动物</div><h3>织熊猫</h3></div>
+        </div>
+        <div class="meta"><span>gooddaysboy</span></div>
+      </a>
+      <a class="card" href="detail.html?id=rabbit">
+        <div class="thumb">
+          <img src="works/rabbit-lite/idle.webp?v=28" alt="织兔子" loading="lazy" draggable="false">
+          <div class="card-bubbles" data-pet="animal"></div>
+          <div class="overlay"><div class="cat">🐰 动物</div><h3>织兔子</h3></div>
+        </div>
+        <div class="meta"><span>gooddaysboy</span></div>
+      </a>
+    </div>
     <div class="empty" id="empty" data-i18n="list.empty" style="display:none">该分类下暂无作品</div>
   </section>
   </main>

@@ -28,7 +28,27 @@
     <h1 class="dl-title" data-i18n="download.title" data-page-node-id="duYtL56ciAsSsPVY1lCYiY">DeskBud 桌宠伙伴</h1>
     <p class="dl-sub" data-i18n="download.sub" data-page-node-id="BU6ROV6nCxZuamO2qgODiI">客户端本体完全免费 · 三平台直链下载</p>
 
-    <div class="dl-grid" id="dlGrid" data-page-node-id="6kDAJpyXU9sLePzNfOEOLy"></div>
+    <!-- 首屏直出（方案 A 全站推广 · 2026-09-14）：三平台下载卡静态内联（兜底直链），JS 到后 render() 按 UA/清单覆盖 -->
+    <div class="dl-grid" id="dlGrid" data-page-node-id="6kDAJpyXU9sLePzNfOEOLy">
+      <div class="dl-card">
+        <div class="dl-icon">🖥️</div>
+        <b class="dl-name">Windows 版</b>
+        <span class="dl-desc">绿色单文件 · Win10 及以上</span>
+        <div class="dl-action"><a class="btn" href="https://gitee.com/deskbud/version/releases/download/v0.1.24/DeskBud_Win_v0124.exe" rel="noopener">⬇ 免费下载</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-icon">🤖</div>
+        <b class="dl-name">Android 版</b>
+        <span class="dl-desc">APK · Android 8.0 及以上</span>
+        <div class="dl-action"><a class="btn" href="https://gitee.com/deskbud/version/releases/download/android-v0.1.8/DeskBud_Android_v018.apk" rel="noopener">⬇ 免费下载</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-icon">🍎</div>
+        <b class="dl-name">macOS 版</b>
+        <span class="dl-desc">DMG · 支持 Apple 芯片</span>
+        <div class="dl-action"><a class="btn" href="https://gitee.com/deskbud/version/releases/download/v0.1.24/DeskBud_Mac_v0124.dmg" rel="noopener">⬇ 免费下载</a></div>
+      </div>
+    </div>
 
     <p class="dl-tip" id="dlTip"></p>
 

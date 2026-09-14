@@ -38,14 +38,22 @@ const probeChrome = () => {
   };
 };
 // 首屏内联根治探针（09-14）：abort site.js 后，HTML 自身应已渲染出伙伴墙/姿态小窗/名字/领养入口
-const probeFirstPaint = () => ({
-  wallTiles: document.querySelectorAll('#buddyWall .buddy-tile').length,
-  wallSeeds: document.querySelectorAll('#buddyWall .buddy-tile[data-seed]').length,
-  animSrc: (document.getElementById('buddyAnimImg') || {}).getAttribute('src') || '',
-  name: (document.getElementById('buddyName') || {}).textContent || '',
-  buyHasLink: !!(document.querySelector('#buddyBuy a')),
-  buyText: (document.querySelector('#buddyBuy') || {}).textContent || '',
-});
+const probeFirstPaint = () => {
+  const wall = document.getElementById('buddyWall');
+  const kids = wall ? Array.from(wall.children) : [];
+  const breakIdx = kids.findIndex(el => el.classList.contains('wall-break'));
+  return {
+    wallTiles: document.querySelectorAll('#buddyWall .buddy-tile').length,
+    wallSeeds: document.querySelectorAll('#buddyWall .buddy-tile[data-seed]').length,
+    // 行标位置（09-14 排版回归修复）：必须在内置宠之前 → 其后仍有 tile，且不在末尾
+    breakIdx,
+    tilesAfterBreak: breakIdx < 0 ? -1 : kids.slice(breakIdx + 1).filter(el => el.classList.contains('buddy-tile')).length,
+    animSrc: (document.getElementById('buddyAnimImg') || {}).getAttribute('src') || '',
+    name: (document.getElementById('buddyName') || {}).textContent || '',
+    buyHasLink: !!(document.querySelector('#buddyBuy a')),
+    buyText: (document.querySelector('#buddyBuy') || {}).textContent || '',
+  };
+};
 
 (async () => {
   const b = await chromium.launch({ executablePath: chromeExe, headless: true, args: ARGS });
@@ -81,6 +89,7 @@ const probeFirstPaint = () => ({
   chk('②首屏·姿态小窗预置 lite 图（*-lite/*.webp）', /-lite\/.+\.webp/.test(fp.animSrc), fp.animSrc);
   chk('②首屏·当前宠物名已填（不空白）', fp.name.trim().length > 0, fp.name);
   chk('②首屏·领养引导入口已就位', fp.buyHasLink && fp.buyText.length > 0, fp.buyText.slice(0, 120));
+  chk('②首屏·「内置」行标在内置宠之前', fp.breakIdx >= 0 && fp.tilesAfterBreak >= 2, 'breakIdx=' + fp.breakIdx + ' tilesAfterBreak=' + fp.tilesAfterBreak);
   await p.screenshot({ path: path.join(ROOT, 'outputs', 'embed_noflash_app.png'), fullPage: true });
   await ctx.close();
 
@@ -157,6 +166,9 @@ const probeFirstPaint = () => ({
     return a ? { href: a.getAttribute('href'), txt: a.textContent.trim() } : null;
   });
   chk('⑤b 访客·下载引导在', !!buy && buy.href === 'download.html', JSON.stringify(buy));
+  // JS 到齐后种子补强不得打乱排布（09-14 排版回归）
+  const wall2 = await p.evaluate(probeFirstPaint);
+  chk('⑤b 访客·JS 到齐后行标仍在（补强不打乱排布）', wall2.breakIdx >= 0 && wall2.tilesAfterBreak >= 2, 'breakIdx=' + wall2.breakIdx + ' tilesAfterBreak=' + wall2.tilesAfterBreak);
   await ctx.close();
 
   await b.close();

@@ -7,6 +7,8 @@
   <title>作品详情 · DeskBud</title>
   <meta name="description" content="桌面宠物作品详情：动作姿态、各平台版本与下载。">
   <link rel="stylesheet" href="assets/css/base.css?v=110">
+  <link rel="preload" as="image" href="works/linekit-lite/linekit_idle.webp?v=28">
+  <link rel="preload" as="image" href="works/linekit-lite/linekit_blink.webp?v=28">
   <style>
     /* 详情页购买区（仅本页，不动 base.css） */
     .buy-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -45,7 +47,56 @@
   </section>
 
   <section class="section wrap detail-hero">
-    <div id="detail"></div>
+    <!-- 首屏直出（方案 A 全站推广 · 2026-09-14）：默认线咪详情静态内联，JS 到后 renderDetail(按 ?id) 整体重建 -->
+    <div id="detail">
+      <h1 class="detail-title">线咪</h1>
+      <p class="detail-tagline">一只线条风格的小猫，会在屏幕上攀爬、倒挂、眨眼卖萌的透明桌宠，常驻桌面不打扰。</p>
+      <div class="detail-chips"><span class="detail-chip">🐱 猫咪</span></div>
+      <div class="block-label">动作姿态<span class="hint">桌宠的每一种状态 · 悬停可暂停</span></div>
+      <div class="pose-marquee" oncontextmenu="return false"><div class="pose-track">
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪 · 待机" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_blink.webp?v=28" alt="线咪 · 眨眼" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit.webp?v=28" alt="线咪 · 端坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_look_up.webp?v=28" alt="线咪 · 抬头望" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_dangle.webp?v=28" alt="线咪 · 垂腿坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sleep.webp?v=28" alt="线咪 · 睡觉" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_eat.webp?v=28" alt="线咪 · 吃东西" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_drink.webp?v=28" alt="线咪 · 喝水" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_idle.webp?v=28" alt="线咪 · 待机" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_blink.webp?v=28" alt="线咪 · 眨眼" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit.webp?v=28" alt="线咪 · 端坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_look_up.webp?v=28" alt="线咪 · 抬头望" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sit_dangle.webp?v=28" alt="线咪 · 垂腿坐" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_sleep.webp?v=28" alt="线咪 · 睡觉" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_eat.webp?v=28" alt="线咪 · 吃东西" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+        <figure class="pose-item"><div class="pose-guard" oncontextmenu="return false"></div><img src="works/linekit-lite/linekit_drink.webp?v=28" alt="线咪 · 喝水" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;"></figure>
+      </div></div>
+      <div class="block-label">各平台版本<span class="hint">动作一样，下载与安装不同</span></div>
+      <div class="ver-grid">
+        <div class="ver-card is-soon">
+          <div class="ver-head"><span class="ver-badge">Windows</span><span class="ver-soon-tag">敬请期待</span></div>
+          <div class="ver-video no-video"><div class="ver-ph"><span class="vplay">▶</span><span class="vhint">演示视频即将上线</span></div></div>
+          <div class="ver-install">下载 exe 后双击即可运行，无需安装环境；若系统提示风险，选择「仍要运行」即可。</div>
+          <div class="ver-actions"><span class="ver-soon">下载即将上线</span></div>
+        </div>
+        <div class="ver-card is-soon">
+          <div class="ver-head"><span class="ver-badge">macOS</span><span class="ver-soon-tag">敬请期待</span></div>
+          <div class="ver-video no-video"><div class="ver-ph"><span class="vplay">▶</span><span class="vhint">演示视频即将上线</span></div></div>
+          <div class="ver-install">即将上线</div>
+          <div class="ver-actions"><span class="ver-soon">下载即将上线</span></div>
+        </div>
+        <div class="ver-card v-android is-soon">
+          <div class="ver-head"><span class="ver-badge">Android</span><span class="ver-soon-tag">敬请期待</span></div>
+          <div class="ver-video no-video"><div class="ver-ph"><span class="vplay">▶</span><span class="vhint">演示视频即将上线</span></div></div>
+          <div class="ver-install">下载 apk 后，在「设置 - 安全」中允许本次安装，按提示完成即可。</div>
+          <div class="ver-actions"><span class="ver-soon">下载即将上线</span></div>
+        </div>
+      </div>
+      <div class="buy-block">
+        <div class="block-label">把它带回家<span class="hint">宠物都在客户端里 · 装好一键领养，全自动</span></div>
+        <div class="buy-row"><a class="btn btn-primary lead-dl" href="download.html">⬇ 下载客户端 · 领养宠物</a></div>
+      </div>
+    </div>
   </section>
   </main>
 
