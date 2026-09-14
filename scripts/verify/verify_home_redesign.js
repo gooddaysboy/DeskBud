@@ -113,15 +113,21 @@ const { chromeExe } = require('./_env.js');
   check('首页隐藏搜索栏', chromeState.searchHidden);
   check('首页无走马灯', chromeState.announce === 0 && chromeState.quote === 0, `ann=${chromeState.announce} q=${chromeState.quote}`);
 
-  // 12. 软导航进出：list.html 搜索栏恢复+走马灯补建；回首页再移除
-  await page.goto(base + '/list.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForTimeout(800);
-  const listState = await page.evaluate(() => ({
-    searchShown: !!document.querySelector('.top-search') && document.querySelector('.top-search').style.display !== 'none',
-    announce: document.querySelectorAll('.announce-bar').length
-  }));
-  check('list 搜索栏恢复', listState.searchShown);
-  check('list 公告走马灯补建', listState.announce === 1, `实际 ${listState.announce}`);
+  // 12. 2026-09-14 整理后重写：
+  //     原断言「list.html 搜索栏恢复 + 公告走马灯补建」已失效 —— list.html 已移入 _spare/，
+  //     且现役内容页（index/buddies/download/privacy）全是极简页，公告走马灯全站已无承载页
+  //     （唯一的非极简页 contact.html 只是跳转页；bubble_preview/get/beian 不加载 site.js）。
+  //     改为校验整理后更有价值的护栏：活跃页不得残留指向 _spare 旧页（detail/list/pets/usage）的死链。
+  const deadLinks = [];
+  for (const pg of ['index', 'buddies', 'download', 'privacy']) {
+    await page.goto(base + '/' + pg + '.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForTimeout(500);
+    const hits = await page.evaluate(() => [...document.querySelectorAll('a[href]')]
+      .map(a => a.getAttribute('href') || '')
+      .filter(h => /^(detail|list|pets|usage)\.html/.test(h)));
+    if (hits.length) deadLinks.push(pg + ' -> ' + [...new Set(hits)].join(','));
+  }
+  check('活跃页无指向 _spare 旧页的死链', deadLinks.length === 0, deadLinks.join(' | '));
   await page.goto(base + '/index.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(800);
   const backHome = await page.evaluate(() => document.querySelectorAll('.announce-bar, .quote-bar').length);
@@ -140,8 +146,9 @@ const { chromeExe } = require('./_env.js');
   check('英文 kicker 重绘', /JOY/i.test(kickerEn || ''), kickerEn);
   const leadEnHtml = await page.innerHTML('#heroLead');
   check('英文 heroLead 含 moment hl', /moment/i.test(leadEnHtml) && /<span class="hl">/.test(leadEnHtml), leadEnHtml.slice(0, 80));
-  const posesTitleEn = await page.textContent('#posesTitle');
-  check('英文态姿态宫格重绘', /all poses/i.test(posesTitleEn || ''), posesTitleEn);
+  // 2026-09-14：首页去掉「线咪 · 全部姿态」标题行，改断言同区块的「姿态速览」小标签
+  const posesBadgeEn = await page.textContent('#posesBadge');
+  check('英文态姿态宫格重绘', /poses/i.test(posesBadgeEn || ''), posesBadgeEn);
 
   // 14. 切回中文
   await page.click('#langSwitch');
@@ -204,8 +211,9 @@ const { chromeExe } = require('./_env.js');
     return keys.includes('footer.download') && keys.includes('footer.manual');
   }));
 
-  // 20. 6 页 nav 文案统一（list/detail/usage/privacy 抽检）
-  for (const p of ['list', 'detail', 'usage', 'privacy']) {
+  // 20. nav 文案统一（privacy 抽检）
+  // 2026-09-14：list/detail/usage 三页已移入 _spare/（日常不更新），不再抽检，否则 404 无 .nav 直接超时
+  for (const p of ['privacy']) {
     await page.goto(base + '/' + p + '.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(400);
     const t = await page.textContent('.nav');

@@ -686,7 +686,13 @@ function fitManualFrame(f) {
     const doc = f.contentDocument;
     if (!doc || !doc.body) return;
     const h = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight);
-    if (h) f.style.height = h + 'px';
+    if (!h) return;
+    // 全局 *{box-sizing:border-box} + iframe 自带 1px 边框 ⇒ 直接把 height 设成文档高时，
+    // 内容盒只有 (h-2)px，内部文档正好溢出 2px，Chrome 就画出整条滚动条
+    // （2026-09-14 老曹实测：win/mac 手册都有滑动条、android 无 —— 即此 2px）。
+    // 补上「元素外框高 - 内容盒高」的竖向差值，让内容盒 ≥ 文档高，彻底消除内部滚动条。
+    const chromePx = f.offsetHeight - f.clientHeight; // 边框/内边距占的竖向空间（通常 2px）
+    f.style.height = (h + chromePx) + 'px';
   } catch (e) { /* 非 http 环境或跨域时静默 */ }
 }
 function fitAllManualFrames() {
@@ -1071,7 +1077,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           hdGetLabel = $('hdGetLabel'),
           hdBuy = $('hdBuy'),
           vdBadge = $('vdBadge'), vdStage = $('vdStage'), vdTabs = $('vdTabs'),
-          posesBadge = $('posesBadge'), posesTitle = $('posesTitle'),
+          posesBadge = $('posesBadge'),
           posesGrid = $('posesGrid');
     // 视频轮播：固定顺序 Windows → Android → macOS（老曹拍板），三标签常驻可切换；
     // 手册卡与视频窗口平台双向同步（点任一侧标签，另一侧跟着切）
@@ -1215,7 +1221,6 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       const w = works[cur];
       const list = (w.poses && w.poses.length) ? w.poses : [];
       if (posesBadge) posesBadge.textContent = window.pick({ zh: '姿态速览', en: 'Poses' });
-      if (posesTitle) posesTitle.textContent = window.pick(w.title) + ' · ' + window.pick({ zh: '全部姿态', en: 'all poses' });
       // 「共 N 个姿态」计数行已删（2026-09-12 老曹：宫格自己会说话，不用报数）
       posesGrid.innerHTML = list.map(p =>
         `<figure class="pose-card"><div class="pose-img"><img src="${SITE.assetUrl(p.src)}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`).join('');
