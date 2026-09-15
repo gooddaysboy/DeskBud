@@ -261,10 +261,17 @@ class Creature {
     return array;
   }
 
-  // flip sprite horizontally depending on facing (+ vertical when inverted on top)
+  // flip/rotate/scale sprite: facing + inverted + tilt + focus 缩放，全部作用在 img 上
+  // 容器 layout 位置不变，避免 focus 缩放导致视觉位置偏移（2026-09-15）
   updateImageDirection() {
-    const base = this.facing === 'left' ? 'scaleX(1)' : 'scaleX(-1)';
-    this.img.style.transform = this.inverted ? `${base} scaleY(-1)` : base;
+    const parts = [];
+    parts.push(this.facing === 'left' ? 'scaleX(1)' : 'scaleX(-1)');
+    if (this.inverted) parts.push('scaleY(-1)');
+    if (this._tilt) parts.push(`rotate(${this._tilt}deg)`);
+    if (this.focusMode) parts.push('scale(0.6)');
+    this.img.style.transformOrigin = '50% 100%';
+    this.img.style.transition = 'transform .3s ease';
+    this.img.style.transform = parts.join(' ');
   }
 
   // update facing from horizontal delta (dx)
@@ -1057,14 +1064,13 @@ class Creature {
     });
   }
 
-  // 容器 transform 统一出口：专注缩放(0.6) + 歪头 rotate（锚点贴地）
+  // 容器 transform 统一出口：缩放/旋转统一作用在 img 上，容器 layout 位置保持不变
+  // 避免 focus 缩放时视觉位置偏移（2026-09-15）
   applyContainerTransform() {
-    const parts = [];
-    if (this.focusMode) parts.push('scale(0.6)');
-    if (this._tilt) parts.push(`rotate(${this._tilt}deg)`);
-    this.container.style.transformOrigin = '50% 100%';
-    this.container.style.transition = 'transform .3s ease';
-    this.container.style.transform = parts.length ? parts.join(' ') : 'none';
+    this.container.style.transform = 'none';
+    this.container.style.transformOrigin = '';
+    this.container.style.transition = '';
+    this.updateImageDirection();
   }
 
   // 避让轮询：仅保留②输入框避让（光标驱赶 2026-09-12 已取消，避免影响悬停暂停/右键菜单）

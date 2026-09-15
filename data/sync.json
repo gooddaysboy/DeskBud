@@ -1,12 +1,12 @@
 {
-  "generated": "2026-09-14T07:32:42+08:00",
+  "generated": "2026-09-15T08:56:34+08:00",
   "base": "https://deskbud.xyz/",
   "items": {
     "bubbles": {
-      "ver": 2,
+      "ver": 3,
       "url": "https://deskbud.xyz/data/bubble.json",
-      "sha256": "67efab408f6e7db2b7e7f24fa26a5692c25819b073f3e5b71da61b336edea7e2",
-      "bytes": 34371
+      "sha256": "ee5879374daeb3e55f2f3b5123c3e0614774af8b3347bab0b293a6e80bbf7d43",
+      "bytes": 33988
     },
     "privacy_zh": {
       "ver": 5,

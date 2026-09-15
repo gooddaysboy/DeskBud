@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "public": [
     {"zh": "今天天气怎么样呢", "en": "Wonder what the weather's like today"},
     {"zh": "主人吃饭了没有", "en": "Has my human eaten yet?"},
@@ -588,9 +588,6 @@
   "personas": {
     "rabbit":  {"name": "织兔子", "zh": "长耳耷拉脸蛋圆，门牙两颗露一点", "en": "Long ears, round face — two front teeth peeking out", "emoji": "🐰"},
     "panda":   {"name": "织熊猫", "zh": "国宝主打一个躺平", "en": "A national treasure whose motto is lying flat", "emoji": "🐼"},
-    "cat":     {"name": "小猫", "zh": "猫的事情，你少管哦", "en": "Mind your own business, human", "emoji": "🐱"},
-    "dog":     {"name": "小狗", "zh": "我的眼里只有主人", "en": "My eyes are only on my human", "emoji": "🐶"},
-    "plant":   {"name": "小绿植", "zh": "安静发呆也是成长", "en": "Quietly zoning out is growth too", "emoji": "🌱"},
     "linekit": {"name": "线咪", "zh": "我只有几根线条，但够陪你啦", "en": "Just a few lines, but enough to keep you company", "emoji": "✏️"}
   }
 }
