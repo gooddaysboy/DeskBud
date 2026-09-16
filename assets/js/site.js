@@ -333,6 +333,47 @@ const SITE = {
     return `${this.PAY_CHECKOUT}?device_id=${encodeURIComponent(did)}&${param}&embed=1`;
   },
 
+  // 🔴 2026-09-16 老曹定：商业路径未通（petpay KV 未获批，下单 500）→ 付费领养**暂不开放**。
+  // payOpen=false 时：付费新宠入口降级「🐾 领养·即将开放」+ 点击拦截（不跳收银台）。
+  // KV 一旦绑好 → 把这里改为 true 即零改代码恢复（自动发版无需动逻辑）；embed/原生端同理各自翻转。
+  payOpen: false,
+
+  // 付费领养按钮文案（受 payOpen 控制）
+  payLabel() {
+    return window.pick({ zh: this.payOpen ? '领养' : '领养·即将开放', en: this.payOpen ? 'Adopt' : 'Adopt · soon' });
+  },
+  // 付费按钮点击：payOpen 关 → 拦截跳转 + 弹「敬请期待」；开 → 放行
+  payClick(e) {
+    if (this.payOpen) return true;
+    if (e && e.preventDefault) { e.preventDefault(); e.stopPropagation(); }
+    this.toast(window.pick({ zh: '领养功能即将开放，敬请期待 🐾', en: 'Adoption opening soon — stay tuned 🐾' }));
+    return false;
+  },
+  // 付费领养锚点：payOpen 开 → 真跳收银台；关 → 不指向收银台（防 JS 未绑误跳 500）+ 点击拦截
+  payAnchor(url) {
+    const label = '🐾 ' + this.payLabel();
+    if (this.payOpen) {
+      return `<a class="btn btn-primary" href="${url}" target="_blank" rel="noopener" onclick="return SITE.payClick(event)">${label}</a>`;
+    }
+    return `<a class="btn btn-primary" href="javascript:void(0)" onclick="return SITE.payClick(event)">${label}</a>`;
+  },
+  // 轻量提示（内联样式，不碰 base.css，避免离线快照 docs/privacy_*.html 漂移）
+  toast(msg) {
+    try {
+      let t = document.getElementById('db-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'db-toast';
+        t.setAttribute('style', 'position:fixed;left:50%;bottom:12%;transform:translateX(-50%);max-width:82vw;z-index:99999;background:rgba(0,0,0,.82);color:#fff;font:14px/1.5 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:10px 16px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.25);text-align:center;pointer-events:none;opacity:0;transition:opacity .2s;white-space:pre-line');
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(this._toastTimer);
+      this._toastTimer = setTimeout(() => { if (t) t.style.opacity = '0'; }, 2400);
+    } catch (e) { /* 极端环境静默 */ }
+  },
+
   // 选购集合（2026-09-11 老曹：选择要跨页面保持——软导航切走再回、刷新后都在）。
   // 伙伴页与首页共用同一份购物车（localStorage deskbud_picked）；**只在「购买皮肤」下被读写**。
   getPicked() {
@@ -980,8 +1021,8 @@ SITE.pages = {
         buyEl.innerHTML = `<a class="btn btn-primary lead-dl" href="download.html">⬇ ${window.pick({ zh: '下载客户端 · 领养宠物', en: 'Download the app · adopt pets' })}</a>`;
         return;
       }
-      // 老曹 2026-09-13 22:44 定：结算按钮**统一**「🐾 领养」（数量已由「已选 N 只」承担）
-      buyEl.innerHTML = `${tip}<a class="btn btn-primary" href="${url}" target="_blank" rel="noopener">🐾 ${window.pick({ zh: '领养', en: 'Adopt' })}</a>`;
+      // 老曹 2026-09-13 22:44 定：结算按钮**统一**「🐾 领养」；2026-09-16 加 payOpen 开关（关→「领养·即将开放」+拦截跳转）
+      buyEl.innerHTML = `${tip}${SITE.payAnchor(url)}`;
     }
 
     async function loadOwned(force) {
@@ -1261,7 +1302,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           } else {
             const payUrl = SITE.checkoutUrl(pickedIds());
             main = payUrl
-              ? `${tip}<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🐾 ${window.pick({ zh: '领养', en: 'Adopt' })}</a>`
+              ? `${tip}${SITE.payAnchor(payUrl)}`
               : `${tip}<a class="btn btn-primary lead-dl" href="download.html">⬇ ${window.pick({ zh: '下载客户端 · 领养宠物', en: 'Download the app · adopt pets' })}</a>`;
           }
           hdBuy.innerHTML = `<div class="buy-row">${main}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
@@ -1420,13 +1461,15 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
         const payUrl = (!isBi && buySkin) ? SITE.checkoutUrl(id) : '';
         const main = (!payUrl)
           ? `<a class="btn btn-primary lead-dl" href="download.html">⬇ ${window.pick({ zh: '下载客户端 · 领养宠物', en: 'Download the app · adopt pets' })}</a>`
-          : `<a class="btn btn-primary" href="${payUrl}" target="_blank" rel="noopener">🐾 ${window.pick({ zh: '领养', en: 'Adopt' })}</a>`;
+          : SITE.payAnchor(payUrl);
         const tail = items
           ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` })
           : '';
         const headLabel = window.pick({ zh: '把它带回家', en: 'Take it home' });
         const headHint = payUrl
-          ? window.pick({ zh: '在客户端内一键领养，全自动上桌', en: 'Adopt in the app — it hops on your desk automatically' })
+          ? (SITE.payOpen
+              ? window.pick({ zh: '在客户端内一键领养，全自动上桌', en: 'Adopt in the app — it hops on your desk automatically' })
+              : window.pick({ zh: '领养即将开放，敬请期待 🐾', en: 'Adoption opening soon — stay tuned 🐾' }))
           : (isBi ? window.pick({ zh: '内置免费，下载客户端即可使用', en: 'Free & built in — just download the app' }) : window.pick({ zh: '宠物都在客户端里 · 装好一键领养，全自动', en: 'All pets live in the app — one tap after install' }));
         buyHost.innerHTML = `
           <div class="block-label">${headLabel}<span class="hint">${headHint}</span></div>

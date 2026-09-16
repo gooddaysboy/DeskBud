@@ -118,12 +118,13 @@ const probe = sel => `(() => {
   chk('⑤保险·did 残留时不请求收银台', pay5.filter(u => /checkout/.test(u)).length === 0, pay5.join(' | '));
   await ctx.close();
 
-  /* ---------- ⑥ App 内皮肤：?device_id=<did>&embed=1 → 勾选 +「已选 N 只」+「🐾 领养」→ 收银台 ---------- */
+  /* ---------- ⑥ App 内皮肤（payOpen 默认关 · 2026-09-16 老曹定：商业路径未通→降级）：embed+device_id → 勾选框 +「🐾 领养·即将开放」+ 点击拦截（不跳收银台） ---------- */
   const DID = 'dsk0123456789abcdef';
   ctx = await b.newContext({ viewport: { width: 1280, height: 900 }, userAgent: UA_DESKTOP });
   const pay6 = [];
   await ctx.route('**://pay.deskbud.xyz/**', r => { pay6.push(r.request().url()); r.fulfill({ status: 200, contentType: 'application/json', body: '{"pets":[]}' }); });
   p = await ctx.newPage();
+  await p.addInitScript(() => { try { localStorage.setItem('deskbud_lang', 'zh'); } catch (e) {} });
   await p.goto(BASE + '/buddies.html?device_id=' + DID + '&embed=1', { waitUntil: 'load', timeout: 30000 });
   await sleep(2200);
   let buy = await p.evaluate(() => {
@@ -134,14 +135,19 @@ const probe = sel => `(() => {
       tiles: document.querySelectorAll('#buddyWall .buddy-tile').length,
       btnHref: a ? a.getAttribute('href') : null,
       btnText: a ? a.textContent.trim() : '',
+      payOpen: (window.SITE && SITE.payOpen),
       tip: (box && box.querySelector('.buy-tip') || {}).textContent || '',
     };
   });
   chk('⑥App内·出现勾选框', buy.checks >= 1, JSON.stringify(buy));
-  chk('⑥App内·按钮文案=🐾 领养', /领养/.test(buy.btnText), buy.btnText);
-  chk('⑥App内·收银台带 device_id', /checkout\.html\?device_id=/.test(buy.btnHref || ''), buy.btnHref);
-  chk('⑥App内·收银台带 embed=1（老曹定：一律带）', /[?&]embed=1/.test(buy.btnHref || ''), buy.btnHref);
-  // 勾一只（非内置、未拥有）→ 出现「已选 N 只」+ 选中态
+  chk('⑥App内·payOpen 默认关闭', buy.payOpen === false, buy.payOpen);
+  chk('⑥App内·按钮文案=🐾 领养·即将开放', /领养·即将开放/.test(buy.btnText), buy.btnText);
+  chk('⑥App内·未开放时不跳收银台（href 非 checkout）', !/checkout\.html/.test(buy.btnHref || ''), buy.btnHref);
+  // 点击付费按钮 → 应被拦截、不发起结算请求
+  await p.evaluate(() => { const a = document.querySelector('#buddyBuy a.btn'); if (a) a.click(); });
+  await sleep(500);
+  chk('⑥App内·点击被拦截、未发起结算', pay6.filter(u => /checkout/.test(u)).length === 0, pay6.join(' | '));
+  // 勾一只（非内置、未拥有）→ 出现「已选 N 只」+ 选中态（付费皮肤 UI 仍在，仅最终动作降级）
   await p.evaluate(() => {
     const t = [...document.querySelectorAll('#buddyWall .buddy-tile')]
       .find(x => x.querySelector('.buddy-check') && !x.classList.contains('owned'));
@@ -153,17 +159,23 @@ const probe = sel => `(() => {
     const a = box && box.querySelector('a.btn');
     return {
       tip: (box && box.querySelector('.buy-tip') || {}).textContent || '',
-      btnHref: a ? a.getAttribute('href') : null,
       btnText: a ? a.textContent.trim() : '',
       on: document.querySelectorAll('#buddyWall .buddy-check.on').length,
     };
   });
   chk('⑥App内·勾选后出现「已选 N 只」', /已选\s*\d+\s*只/.test(buy.tip), JSON.stringify(buy));
-  chk('⑥App内·勾选后按钮仍是「🐾 领养」（老曹定：统一文案）', /领养/.test(buy.btnText), buy.btnText);
-  chk('⑥App内·勾选后收银台链接生效', /checkout\.html\?device_id=/.test(buy.btnHref || ''), buy.btnHref);
+  chk('⑥App内·勾选后按钮仍是「🐾 领养·即将开放」', /领养·即将开放/.test(buy.btnText), buy.btnText);
+  // 单元校验：payOpen 开时文案回到「领养」、checkoutUrl 仍正确生成（开关真实有效，未来零改代码恢复）
+  const unit = await p.evaluate(() => {
+    SITE.payOpen = true;  const open = SITE.payLabel();
+    SITE.payOpen = false; const closed = SITE.payLabel();
+    return { open, closed, url: SITE.checkoutUrl(['linekit'], 'dsk0123456789abcdef') };
+  });
+  chk('⑥单元·payOpen 开→文案=🐾 领养', /领养/.test(unit.open) && !/即将开放/.test(unit.open), unit.open);
+  chk('⑥单元·payOpen 关→文案=🐾 领养·即将开放', /即将开放/.test(unit.closed), unit.closed);
+  chk('⑥单元·checkoutUrl 仍正确生成', /checkout\.html\?device_id=dsk0123456789abcdef&pet_id=linekit&embed=1/.test(unit.url), unit.url);
   chk('⑥App内·会请求授权接口（预期，非收银台）', pay6.some(u => /entitlement/.test(u)), pay6.join(' | '));
-  chk('⑥App内·页面本身不等于发起结算', pay6.filter(u => /checkout/.test(u)).length === 0, pay6.join(' | '));
-  await p.screenshot({ path: path.join(__dirname, '..', '..', 'outputs', 'buy_skin_buddies.png'), fullPage: true });
+  await p.screenshot({ path: path.join(__dirname, '..', '..', 'outputs', 'buy_pending_buddies.png'), fullPage: true });
   await ctx.close();
 
   /* ---------- ⑦ 页脚「用户手册」软导航后要停在手册段（2026-09-13 老曹反馈：只到页顶很困惑） ---------- */
