@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- DeskBud offline snapshot | lang=zh | source=privacy.html | generated=2026-09-14 | 生效日期：2026-09-11 | 本文件由 website/scripts/gen_offline_docs.py 生成，请勿手改 -->
+<!-- DeskBud offline snapshot | lang=zh | source=privacy.html | generated=2026-09-16 | 生效日期：2026-09-11 | 本文件由 website/scripts/gen_offline_docs.py 生成，请勿手改 -->
 <html lang="zh-CN" data-page-node-id="V4kmd0igcelo9fAYTJjyFM">
 <head data-page-node-id="6LLqZdsr3fSSxoxodOwbZd">
   <meta charset="UTF-8" data-page-node-id="gd7ED4OsIFkN9Ph7lO9b63">
@@ -520,24 +520,30 @@ img { -webkit-user-drag: none; user-drag: none; }
    ============================================================ */
 /* 背景分层（2026-09-09 七轮拍板：整页只分上下两段——上部暖米独特色、下部与 footer 一体色；许可与隐私页=上部独特色） */
 .home-hero-band { background: linear-gradient(180deg, #f1e9d4 0%, #ede2c9 100%); }
-/* 姿态速览宫格（2026-09-12 老曹：hero 与详情之间插入"全部姿态"缩略图，纯静态轻量图） */
+/* 姿态速览（2026-09-16 老曹 v3：只占一排高度、定时整排自动滚动替换） */
 .home-poses-band { background: linear-gradient(180deg, #ede2c9 0%, #efe5d0 100%); }
-.home-poses { padding: 8px 0 44px; }
-.poses-head { text-align: center; margin-bottom: 24px; }
+.home-poses { padding: 12px 0 26px; }
+.poses-head { text-align: center; margin-bottom: 14px; }
 .poses-title { font-size: 25px; margin: 12px 0 6px; color: var(--ink); font-weight: 700; }
 /* .poses-sub 已删除（2026-09-12 老曹：首页去掉「共 24 个姿态」计数行） */
-.poses-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
-.pose-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; transition: transform .18s ease, box-shadow .18s ease; }
-.pose-card:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(232, 114, 43, .14); }
+/* 姿态速览·自动滚排 v3.1（2026-09-16 老曹）：只占一排高度，定时整排替换——柔和交叉淡入淡出（缓入缓出，无大幅位移） */
+.poses-stage { position: relative; height: 114px; overflow: hidden; }
+.poses-grid { position: relative; height: 100%; }
+.pose-row { position: absolute; left: 0; right: 0; top: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px;
+  opacity: 0; transform: translateY(12px) scale(.985); transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; }
+.pose-row.is-cur { opacity: 1; transform: translateY(0) scale(1); }
+.pose-row.is-prev { opacity: 0; transform: translateY(-12px) scale(.985); }
+.pose-row.is-next { opacity: 0; transform: translateY(12px) scale(.985); }
+.pose-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; }
 .pose-img { height: 92px; display: flex; align-items: center; justify-content: center; }
 .pose-img img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-drag: none; }
-.pose-card figcaption { font-size: 12px; color: var(--ink-soft); margin-top: 7px; }
-@media (max-width: 980px) { .poses-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 980px) { .pose-row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 680px) {
-  .home-poses { padding: 4px 0 32px; }
+  .home-poses { padding: 4px 0 20px; }
   .poses-title { font-size: 20px; }
-  .poses-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .pose-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
   .pose-img { height: 72px; }
+  .poses-stage { height: 94px; }
 }
 /* 下部区域与 footer 同色 #efe5d0（消除手册卡与页脚色差，老曹 2026-09-09 拍板） */
 .home-detail-band { background: #efe5d0; }
@@ -1337,6 +1343,8 @@ a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.
 /* ① 宠物选择墙：纯图方块（idle 动图），横排自动换行——宠物多就多排几行，不铺长标签 */
 .buddy-wall { display: flex; flex-wrap: wrap; gap: 10px; }
 /* .wall-break 样式见上文「内置宠物单独一排」（与 .picker-break 共用一条规则） */
+/* 内置组 / 新宠组分排（2026-09-14 老曹：内置在上、新宠在下）—— 仅强制换行；零高、无圆点/无文字 */
+.buddy-wall .wall-gap { grid-column: 1 / -1; flex-basis: 100%; height: 0; margin: 0; }
 .buddy-tile {
   width: 64px; height: 64px; padding: 6px; cursor: pointer; font: inherit;
   display: flex; align-items: center; justify-content: center;
@@ -1366,7 +1374,12 @@ a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.
   /* 2026-09-10 四轮：选择墙 3 列网格（宠物多了成排铺），姿态卡收窄贴合内容不拉伸 */
   .buddy-top { flex-direction: row; align-items: flex-start; }
   .buddy-wall { display: grid; grid-template-columns: repeat(3, 64px); gap: 10px; flex: 0 0 auto; }
-  .buddy-anim-card { flex: 0 0 auto; }
+  /* 卡片宽度归一（2026-09-14 老曹：新宠物的「播放窗」比内置大）：
+     .buddy-buy 里 .lead-hint 是 flex-basis:100%，其 max-content 会撑大整卡 —— 不同宠物
+     引导文案长短不一（线咪 444 / 内置 384）⇒ 卡片宽度跟着变（线咪 492 / 内置 432），
+     线咪那张还溢出 .buddies-wrap 被裁右边框。定宽 384px：= 3×64 墙(212) + 16 间距 + 384 = 612
+     = .buddy-top 内容宽 ⇒ 三只宠物卡片等宽、且整行正好贴合 wrap 不再溢出（原内置 432 也溢出 34px）。 */
+  .buddy-anim-card { flex: 0 0 384px; width: 384px; max-width: 100%; }
 }
 
 

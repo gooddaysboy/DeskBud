@@ -511,29 +511,30 @@ img { -webkit-user-drag: none; user-drag: none; }
    ============================================================ */
 /* 背景分层（2026-09-09 七轮拍板：整页只分上下两段——上部暖米独特色、下部与 footer 一体色；许可与隐私页=上部独特色） */
 .home-hero-band { background: linear-gradient(180deg, #f1e9d4 0%, #ede2c9 100%); }
-/* 姿态速览宫格（2026-09-12 老曹：hero 与详情之间插入"全部姿态"缩略图，纯静态轻量图） */
+/* 姿态速览（2026-09-16 老曹 v3：只占一排高度、定时整排自动滚动替换） */
 .home-poses-band { background: linear-gradient(180deg, #ede2c9 0%, #efe5d0 100%); }
-.home-poses { padding: 8px 0 44px; }
-.poses-head { text-align: center; margin-bottom: 24px; }
+.home-poses { padding: 12px 0 26px; }
+.poses-head { text-align: center; margin-bottom: 14px; }
 .poses-title { font-size: 25px; margin: 12px 0 6px; color: var(--ink); font-weight: 700; }
 /* .poses-sub 已删除（2026-09-12 老曹：首页去掉「共 24 个姿态」计数行） */
-/* A 方案（2026-09-16）：竖向滚排懒加载—.poses-grid 为纵向容器，每行 .pose-row 6 列；新排从下往上滑入 */
-.poses-grid { display: flex; flex-direction: column; gap: 14px; }
-.pose-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
-.pose-row--in { animation: poseRowIn .5s cubic-bezier(.22,.61,.36,1) both; }
-@keyframes poseRowIn { from { opacity: 0; transform: translateY(42px); } to { opacity: 1; transform: translateY(0); } }
-.pose-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; transition: transform .18s ease, box-shadow .18s ease; }
-.pose-card:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(232, 114, 43, .14); }
+/* 姿态速览·自动滚排 v3.1（2026-09-16 老曹）：只占一排高度，定时整排替换——柔和交叉淡入淡出（缓入缓出，无大幅位移） */
+.poses-stage { position: relative; height: 114px; overflow: hidden; }
+.poses-grid { position: relative; height: 100%; }
+.pose-row { position: absolute; left: 0; right: 0; top: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px;
+  opacity: 0; transform: translateY(12px) scale(.985); transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; }
+.pose-row.is-cur { opacity: 1; transform: translateY(0) scale(1); }
+.pose-row.is-prev { opacity: 0; transform: translateY(-12px) scale(.985); }
+.pose-row.is-next { opacity: 0; transform: translateY(12px) scale(.985); }
+.pose-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; }
 .pose-img { height: 92px; display: flex; align-items: center; justify-content: center; }
 .pose-img img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-drag: none; }
-.pose-card figcaption { font-size: 12px; color: var(--ink-soft); margin-top: 7px; }
-.pose-sentinel { height: 1px; }
 @media (max-width: 980px) { .pose-row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 680px) {
-  .home-poses { padding: 4px 0 32px; }
+  .home-poses { padding: 4px 0 20px; }
   .poses-title { font-size: 20px; }
   .pose-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
   .pose-img { height: 72px; }
+  .poses-stage { height: 94px; }
 }
 /* 下部区域与 footer 同色 #efe5d0（消除手册卡与页脚色差，老曹 2026-09-09 拍板） */
 .home-detail-band { background: #efe5d0; }

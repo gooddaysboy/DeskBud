@@ -1246,41 +1246,40 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       }
     }
 
-    // 姿态速览宫格（2026-09-12 老曹）：展示当前伙伴的"全部姿态"，用轻量动图
+    // 姿态速览·自动滚排 v3.1（2026-09-16 老曹）：只占一排高度，每 5s 柔和交叉淡入淡出替换（缓入缓出，无大幅位移）
     // （数据源 works.json 的 poses；图片为 make_lite_anim.py 产出的 128px 轻量动图，带角标水印）
+    let posesTimer = null;
     function paintPoses() {
       if (!posesGrid) return;
       const w = works[cur];
       const list = (w.poses && w.poses.length) ? w.poses : [];
       if (posesBadge) posesBadge.textContent = window.pick({ zh: '姿态速览', en: 'Poses' });
-      // A 方案（2026-09-16）：竖向滚排懒加载——首排立渲染，后续排经 IntersectionObserver 懒加载，新排从下往上滑入
-      posesGrid.innerHTML = '';
-      if (!list.length) return;
       const PER_ROW = 6;
-      const totalRows = Math.ceil(list.length / PER_ROW);
-      let nextRow = 0;
-      const sentinel = document.createElement('div');
-      sentinel.className = 'pose-sentinel';
-      const renderRow = (i) => {
-        const row = document.createElement('div');
-        row.className = 'pose-row pose-row--in';
-        const start = i * PER_ROW, end = Math.min(start + PER_ROW, list.length);
-        let html = '';
-        for (let k = start; k < end; k++) {
+      const totalRows = Math.max(1, Math.ceil(list.length / PER_ROW));
+      let html = '';
+      for (let i = 0; i < totalRows; i++) {
+        const s = i * PER_ROW, e = Math.min(s + PER_ROW, list.length);
+        let cells = '';
+        for (let k = s; k < e; k++) {
           const p = list[k];
-          html += `<figure class="pose-card"><div class="pose-img"><img src="${SITE.assetUrl(p.src)}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`;
+          cells += `<figure class="pose-card"><div class="pose-img"><img src="${SITE.assetUrl(p.src)}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`;
         }
-        row.innerHTML = html;
-        posesGrid.insertBefore(row, sentinel);
-      };
-      posesGrid.appendChild(sentinel);
-      renderRow(nextRow++);
-      if (totalRows > 1) {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach(e => { if (e.isIntersecting && nextRow < totalRows) renderRow(nextRow++); });
-        }, { rootMargin: '240px 0px' });
-        io.observe(sentinel);
+        html += `<div class="pose-row${i === 0 ? ' is-cur' : ''}">${cells}</div>`;
       }
+      posesGrid.innerHTML = html;
+      if (posesTimer) { clearInterval(posesTimer); posesTimer = null; }
+      if (totalRows < 2) return;
+      const rows = Array.prototype.slice.call(posesGrid.children);
+      let idx = 0;
+      const apply = function () {
+        rows.forEach(function (r, i) {
+          const off = ((i - idx) % totalRows + totalRows) % totalRows;
+          r.classList.toggle('is-cur', off === 0);
+          r.classList.toggle('is-prev', off === totalRows - 1);
+          r.classList.toggle('is-next', off !== 0 && off !== totalRows - 1);
+        });
+      };
+      posesTimer = setInterval(function () { idx = (idx + 1) % totalRows; apply(); }, 5000);
     }
 
     function paintDetail() {
