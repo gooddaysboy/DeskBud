@@ -176,6 +176,18 @@
 
   function show(id) { document.getElementById(id).hidden = false; }
 
+  // 下载出口统一走自家中转（1B · 2026-09-17）：/api/dl?os=<id>[&u=1]&to=<真链>
+  // 与 assets/js/site.js 同口径（dlSent:<os> 打标 ⇒ 同一浏览器只贡献一次「去重人数」）。
+  // 本页安卓是「自动开始下载」，没有点击动作 ⇒ 生成链接时即打标（这次访问就算贡献了）。
+  var DL_SEEN_PREFIX = 'dlSent:';
+  function dlVia(os, url) {
+    if (!url) return url;
+    var uniq = '';
+    try { if (!localStorage.getItem(DL_SEEN_PREFIX + os)) uniq = '&u=1'; } catch (e) { /* 隐私模式 */ }
+    try { localStorage.setItem(DL_SEEN_PREFIX + os, '1'); } catch (e) { /* 忽略 */ }
+    return '/api/dl?os=' + os + uniq + '&to=' + encodeURIComponent(url);
+  }
+
   // 取最新安卓直链：同源副本优先（gitee 跨源必被 CORS 拦，留作次选只为将来解禁）
   function apkUrl() {
     var sources = ['data/download-latest.json', GITEE + '/raw/master/version-android.json'];
@@ -201,10 +213,11 @@
   if (isAndroid) {
     show('v-android');
     apkUrl().then(function (url) {
+      var via = dlVia('android', url);
       var btn = document.getElementById('dlBtn');
-      btn.setAttribute('href', url);
+      btn.setAttribute('href', via);
       btn.setAttribute('download', '');
-      setTimeout(function () { try { window.location.href = url; } catch (e) { /* 被拦就靠按钮 */ } }, 400);
+      setTimeout(function () { try { window.location.href = via; } catch (e) { /* 被拦就靠按钮 */ } }, 400);
     });
     return;
   }
@@ -220,7 +233,7 @@
         [['win', 'dlWin'], ['mac', 'dlMac']].forEach(function (pair) {
           var el = document.getElementById(pair[1]);
           var u = d && d[pair[0]] && d[pair[0]].url;
-          if (u) { el.setAttribute('href', u); } else { el.hidden = true; }
+          if (u) { el.setAttribute('href', dlVia(pair[0], u)); } else { el.hidden = true; }
         });
       })
       .catch(function () {});

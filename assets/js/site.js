@@ -1609,20 +1609,47 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       { id: 'mac', icon: '🍎', label: () => window.pick({ zh: 'macOS 版', en: 'macOS' }), desc: () => window.pick({ zh: 'DMG · 支持 Apple 芯片', en: 'DMG · Apple Silicon' }) },
     ];
 
+    /* ---------- 下载出口统一走自家中转（1B · 2026-09-17：老曹要「下载人数」） ----------
+       按钮 href 一律指向 /api/dl?os=<id>&to=<真链>[&u=1]：
+         · 服务端记 dl:<os>（累计点击）；首次点击再额外记 dl:u:<os>（去重人数，按浏览器）
+         · 服务端 302 到 to（白名单只放行自家 gitee release 直链，防开放重定向）
+       出参口径见 cloud-functions/api/dl.js 头部；统计是附属品，中转任何失败都必须还能下到包。 */
+    const DL_SEEN_PREFIX = 'dlSent:';       // localStorage 标记：该平台是否已贡献过「去重人数」
+    function dlHref(os, url, isStale) {
+      if (!url) return url;
+      let uniq = '';
+      try { if (!localStorage.getItem(DL_SEEN_PREFIX + os)) uniq = '&u=1'; } catch (e) { /* 隐私模式：只记次数 */ }
+      // isStale（还是内置兜底常量、清单没取到）时**不带 to**，让服务端自己去取最新清单 ——
+      // 否则首屏抢点会把用户送到兜底里的旧版本（兜底常量注定会过期，08-13 就踩过）。
+      const to = isStale ? '' : '&to=' + encodeURIComponent(url);
+      return '/api/dl?os=' + os + uniq + to;
+    }
+    function markDlSeen(os) {
+      try { localStorage.setItem(DL_SEEN_PREFIX + os, '1'); } catch (e) { /* 忽略 */ }
+    }
+    function bindDlMarks() {                // 点击即打标（下次再点就只算次数、不再算新人）
+      grid.querySelectorAll('a[data-dl]').forEach(a => {
+        a.addEventListener('click', () => markDlSeen(a.dataset.dl));
+      });
+    }
+
     function androidAction() {
       if (!isMobile) {
         return `<div class="dl-qr"><img src="${QR_SRC}" alt="${window.pick({ zh: '扫码下载 Android 版', en: 'Scan to get the Android build' })}" width="110" height="110">`
           + `<span>${window.pick({ zh: '手机扫码下载', en: 'Scan with your phone' })}</span>`
           + `<a class="dl-qr-open" href="get.html">${window.pick({ zh: '或在手机上打开本页', en: 'Or open this page on your phone' })}</a></div>`;
       }
-      const href = (isWeChat || isIOS) ? 'get.html' : LINKS.android;
-      return `<div class="dl-action"><a class="btn" href="${href}" rel="noopener">⬇ ${window.pick({ zh: '免费下载', en: 'Download free' })}</a></div>`;
+      // 微信内 / iOS 仍走引导页（微信拦 apk 直链）；其余走中转
+      const viaPage = isWeChat || isIOS;
+      const href = viaPage ? 'get.html' : dlHref('android', LINKS.android, LINKS.android === FALLBACK.android);
+      const mark = viaPage ? '' : ' data-dl="android"';
+      return `<div class="dl-action"><a class="btn" href="${href}"${mark} rel="noopener">⬇ ${window.pick({ zh: '免费下载', en: 'Download free' })}</a></div>`;
     }
 
     function render() {
       grid.innerHTML = PLATS.map(pl => {
         const act = (pl.id === 'android') ? androidAction()
-          : `<div class="dl-action"><a class="btn" href="${LINKS[pl.id]}" rel="noopener">⬇ ${window.pick({ zh: '免费下载', en: 'Download free' })}</a></div>`;
+          : `<div class="dl-action"><a class="btn" href="${dlHref(pl.id, LINKS[pl.id], LINKS[pl.id] === FALLBACK[pl.id])}" data-dl="${pl.id}" rel="noopener">⬇ ${window.pick({ zh: '免费下载', en: 'Download free' })}</a></div>`;
         return `<div class="dl-card">
           <div class="dl-icon">${pl.icon}</div>
           <b class="dl-name">${pl.label()}</b>
@@ -1630,6 +1657,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           ${act}
         </div>`;
       }).join('');
+      bindDlMarks();
     }
 
     // 先按兜底常量渲染（秒开），再尝试清单覆盖：同源副本优先，gitee 源作次选（线上必被 CORS 拦，留着只为本地/将来解禁）
