@@ -526,14 +526,14 @@ img { -webkit-user-drag: none; user-drag: none; }
 .poses-head { text-align: center; margin-bottom: 14px; }
 .poses-title { font-size: 25px; margin: 12px 0 6px; color: var(--ink); font-weight: 700; }
 /* .poses-sub 已删除（2026-09-12 老曹：首页去掉「共 24 个姿态」计数行） */
-/* 姿态速览·自动滚排 v3.1（2026-09-16 老曹）：只占一排高度，定时整排替换——柔和交叉淡入淡出（缓入缓出，无大幅位移） */
+/* 姿态速览·自动滚排 v3.2（2026-09-16 老曹）：只占一排高度，定时整排替换——2s 缓长交叉淡入淡出（两排叠化、无缝衔接，位移仅 8px） */
 .poses-stage { position: relative; height: 114px; overflow: hidden; }
 .poses-grid { position: relative; height: 100%; }
 .pose-row { position: absolute; left: 0; right: 0; top: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px;
-  opacity: 0; transform: translateY(12px) scale(.985); transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; }
-.pose-row.is-cur { opacity: 1; transform: translateY(0) scale(1); }
-.pose-row.is-prev { opacity: 0; transform: translateY(-12px) scale(.985); }
-.pose-row.is-next { opacity: 0; transform: translateY(12px) scale(.985); }
+  opacity: 0; transform: translateY(8px); transition: opacity 2s ease-in-out, transform 2s ease-in-out; }
+.pose-row.is-cur { opacity: 1; transform: translateY(0); }
+.pose-row.is-prev { opacity: 0; transform: translateY(-8px); }
+.pose-row.is-next { opacity: 0; transform: translateY(8px); }
 .pose-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; }
 .pose-img { height: 92px; display: flex; align-items: center; justify-content: center; }
 .pose-img img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-drag: none; }
