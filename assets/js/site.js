@@ -527,28 +527,60 @@ function initOpenKounter() {
   fill(pageTarget, 'busuanzi_value_page_pv');  // 当前页 / 作品 PV
 }
 
-/* ---------- 访客地理分布上报（1A · 匿名聚合，2026-09-16 立） ----------
-   闭环：本函数 → GET /api/geo-hit（EdgeOne Function，同源）
-        → 服务端读 context.geo 折成「省级区码」→ +1 落到 kounter 的 geo:CN-BJ
-   客户端只发一个同源请求，不知道 kounter 的存在、也不碰跨域。
-   五道闸门（缺一不可，别简化）：
-     ① 只在**正式域名**上报（deskbud.xyz / *.deskbud.xyz）——本地预览、预览部署域一律不报；
-     ② embed 内嵌态（App 里打开）不报 —— 那是客户端自己的流量，不该混进访客地理分布；
-     ③ 尊重 DNT —— 用户开了「禁止跟踪」就不报；
-     ④ sessionStorage 会话级去重 —— 一次会话只 +1，不刷量；
-     ⑤ 首屏空闲后才发 —— 绝不抢渲染资源。
+/* ---------- 用户地理分布上报（1A · 匿名聚合，2026-09-16 立；同日 1C 扩为**分桶**） ----------
+   闭环：本函数 → GET /api/geo-hit?src=xxx（EdgeOne Function，同源或跨域绝对 URL）
+        → 服务端读 context.geo 折成「省级区码」→ +1 落到 kounter 的 geo:<src>:<区码>
+   客户端不知道 kounter 的存在。
+
+   🔴 ① 域白名单（**白名单判定，别改成黑名单**）：
+        · 正式域 deskbud.xyz / *.deskbud.xyz —— 浏览器访客
+        · App 虚拟域 appassets.androidplatform.net —— 安卓 WebView 加载**内置**伙伴页用的域
+          （请求由原生 shouldInterceptRequest 供给本地 assets、不走网络；故此域**必须用
+           绝对 URL** 才能打到线上）。桌面端走系统浏览器打开正式域，天然命中第一条。
+        · 其余（localhost / EdgeOne 预览域 / 钓鱼域）一律不报 —— 白名单天然挡掉
+          `deskbud.xyz.evil.com`，也避免本机调试污染线上统计。
+   🔴 ② src 分桶（老曹 09-16 拍板 1C：客户端流量也是真实用户，但必须能拆开）：
+        优先级 = URL ?src=（白名单校验）> host 映射（appassets→android）> web
+   🔴 ③ 尊重 DNT。
+   🔴 ④ 去重粒度：**统一日级**（web 与 App 同粒度，localStorage 存 YYYY-MM-DD）
+        —— 老曹 09-16 23:04 拍板：「我们要的是接近，重复的没意义」。
+        语义 = 「今天有几个不同的人/设备在这个省访问」，而非「来了几趟」。
+        同一天内：刷新、关掉重开、换标签页都不再 +1；跨天各自 +1。
+        （原 web 用 sessionStorage 会话级 —— 一个人开 10 次算 10，是重复量，已废弃）
+   ⑤ 首屏空闲后才发 —— 绝不抢渲染资源。
    隐私：服务端只对省级区码做 +1，不落 IP / 坐标 / 城市 / UA / 设备号。
    静默失败：任何异常都不影响页面，绝不弹错、绝不阻塞。 */
-const GEO_HIT_KEY = 'geoHitV1';
+const GEO_HIT_DAY_KEY = 'geoHitDayV1';                           // 日级去重（存 YYYY-MM-DD）
+const GEO_HIT_KEY = 'geoHitV1';                                  // 仅 localStorage 被禁时的会话级降级
+const GEO_HIT_ABS = 'https://deskbud.xyz/api/geo-hit';           // App 内嵌页必须走绝对 URL
+const GEO_SRC_ALLOW = { web: 1, android: 1, desktop: 1 };        // 桶名白名单（同服务端）
+const GEO_APP_HOSTS = { 'appassets.androidplatform.net': 'android' }; // App 虚拟域 → 默认桶
 function reportGeoOnce() {
   try {
-    if (document.documentElement.classList.contains('embed-mode')) return;      // ②
     if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;      // ③
     const h = location.hostname;
-    if (h !== 'deskbud.xyz' && !h.endsWith('.deskbud.xyz')) return;             // ①
-    if (sessionStorage.getItem(GEO_HIT_KEY)) return;                            // ④
-    sessionStorage.setItem(GEO_HIT_KEY, '1');
-    fetch('/api/geo-hit', { cache: 'no-store' }).catch(() => {});
+    const isSite = (h === 'deskbud.xyz' || h.endsWith('.deskbud.xyz'));         // ①
+    const appSrc = GEO_APP_HOSTS[h];
+    if (!isSite && !appSrc) return;                                             // ①
+
+    let src = 'web';                                                            // ②
+    try {
+      const q = new URLSearchParams(location.search).get('src');
+      if (q && GEO_SRC_ALLOW[q]) src = q;
+      else if (appSrc) src = appSrc;
+    } catch (e) { if (appSrc) src = appSrc; }
+
+    const today = new Date().toISOString().slice(0, 10);                        // ④ 日级（web / App 同粒度）
+    try {
+      if (localStorage.getItem(GEO_HIT_DAY_KEY) === today) return;
+      localStorage.setItem(GEO_HIT_DAY_KEY, today);
+    } catch (e) {                                                               // localStorage 被禁 → 退化会话级
+      if (sessionStorage.getItem(GEO_HIT_KEY)) return;
+      sessionStorage.setItem(GEO_HIT_KEY, '1');
+    }
+
+    const url = isSite ? ('/api/geo-hit?src=' + src) : (GEO_HIT_ABS + '?src=' + src);
+    fetch(url, { cache: 'no-store' }).catch(() => {});
   } catch (e) { /* 隐私模式等异常：静默跳过 */ }
 }
 
