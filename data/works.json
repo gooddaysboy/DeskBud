@@ -90,9 +90,21 @@
       "icon": "🤖"
     }
   ],
+  "channelsVisible": false,
+  "channels": [
+    { "label": { "zh": "小红书", "en": "Xiaohongshu" }, "url": "" },
+    { "label": { "zh": "淘宝", "en": "Taobao" }, "url": "" },
+    { "label": { "zh": "闲鱼", "en": "Xianyu" }, "url": "" },
+    { "label": { "zh": "面包多", "en": "Mianbaoduo" }, "url": "" },
+    { "label": { "zh": "货摊网", "en": "Huotan" }, "url": "" },
+    { "label": { "zh": "爱发电", "en": "Afdian" }, "url": "" },
+    { "label": { "zh": "米画师", "en": "Mihuashi" }, "url": "" },
+    { "label": { "zh": "引力圈", "en": "Yinliquan" }, "url": "" }
+  ],
   "works": [
     {
       "id": "linekit",
+      "emoji": "🐈",
       "status": "online",
       "title": {
         "zh": "线咪",
@@ -482,6 +494,7 @@
     },
     {
       "id": "panda",
+      "emoji": "🐼",
       "status": "online",
       "title": {
         "zh": "织熊猫",
@@ -795,6 +808,7 @@
     },
     {
       "id": "rabbit",
+      "emoji": "🐰",
       "status": "online",
       "title": {
         "zh": "织兔子",

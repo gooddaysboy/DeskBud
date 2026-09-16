@@ -8,7 +8,7 @@
   <meta name="description" content="DeskBud —— 面向桌面宠物爱好者，汇集各类趣味桌面宠物伙伴作品，支持浏览、预览与下载。" data-page-node-id="zw35Zyauou1gbm0xLjH1nI">
   <link rel="icon" href="panda_icon.ico">
   <script>/* 移动设备首选伙伴页（2026-09-10 老曹拍板）：整页首载最早跳转，避免首页闪现。2026-09-14 修：**必须带上 query**（?embed=1 / ?device_id= / ?lang=），否则 App 内落到首页时会把内嵌模式与设备号一起丢掉 → 顶栏露出 + 皮肤退回访客版。*/if(/Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(navigator.userAgent))location.replace('buddies.html' + location.search + location.hash);</script>
-  <link rel="stylesheet" href="assets/css/base.css?v=112" data-page-node-id="iMVnrVqtG1yjO7pLTPl3Vv">
+  <link rel="stylesheet" href="assets/css/base.css?v=113" data-page-node-id="iMVnrVqtG1yjO7pLTPl3Vv">
   <link rel="preload" href="assets/webmeji/webmeji.js?v=26" as="script">
   <link rel="preload" href="assets/webmeji/rabbit.config.js?v=7" as="script">
   <link rel="preload" href="assets/webmeji/panda.config.js?v=2" as="script">
@@ -97,33 +97,8 @@
       <div class="poses-head">
         <div class="showcase-badge"><i class="live-dot"></i><span id="posesBadge">姿态速览</span></div>
       </div>
-      <!-- 姿态宫格：linekit 24 张 128px 轻量图，下方折叠区 loading=lazy；JS 到后 paintPoses 整体重建 -->
-      <div class="poses-grid" id="posesGrid">
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_idle-a.webp?v=28" alt="待机" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_run-a.webp?v=28" alt="奔跑" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_climb-a.webp?v=28" alt="爬墙" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_hang-a.webp?v=28" alt="倒挂" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_fall-a.webp?v=28" alt="坠落" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sit-a.webp?v=28" alt="端坐" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_wave-a.webp?v=28" alt="打招呼" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_jumphappy-a.webp?v=28" alt="开心跳" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_blink-a.webp?v=28" alt="眨眼" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_yawn-a.webp?v=28" alt="打哈欠" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_stretch-a.webp?v=28" alt="伸懒腰" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_scratch-a.webp?v=28" alt="挠痒" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_eat-a.webp?v=28" alt="吃东西" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sleep-a.webp?v=28" alt="睡觉" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_type-a.webp?v=28" alt="站着打字" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_type2-a.webp?v=28" alt="坐着打字" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_drink-a.webp?v=28" alt="捧杯喝水" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_eye_exercise-a.webp?v=28" alt="眼保健操" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate1-a.webp?v=28" alt="庆祝①" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate2-a.webp?v=28" alt="庆祝②" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate3-a.webp?v=28" alt="庆祝③" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_celebrate4-a.webp?v=28" alt="庆祝④" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sit_dangle-a.webp?v=28" alt="晃腿坐" loading="lazy" draggable="false"></div></figure>
-        <figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sit_look_up-a.webp?v=28" alt="抬头坐" loading="lazy" draggable="false"></div></figure>
-      </div>
+      <!-- 姿态速览（A 方案 2026-09-16）：竖向滚排懒加载——一次一排、从下往上滑入；JS paintPoses 按 .pose-row 渲染首排并 IntersectionObserver 懒加载后续排。首排 6 张为 JS 未到时的首屏直出兜底 -->
+      <div class="poses-grid" id="posesGrid"><div class="pose-row"><figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_idle-a.webp?v=28" alt="待机" loading="lazy" draggable="false"></div></figure><figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_run-a.webp?v=28" alt="奔跑" loading="lazy" draggable="false"></div></figure><figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_climb-a.webp?v=28" alt="爬墙" loading="lazy" draggable="false"></div></figure><figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_hang-a.webp?v=28" alt="倒挂" loading="lazy" draggable="false"></div></figure><figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_fall-a.webp?v=28" alt="坠落" loading="lazy" draggable="false"></div></figure><figure class="pose-card"><div class="pose-img"><img src="works/linekit-poses/linekit_sit-a.webp?v=28" alt="端坐" loading="lazy" draggable="false"></div></figure></div></div>
     </div>
   </section>
 
@@ -159,7 +134,7 @@
 
   <script src="assets/vendor/i18n/i18next.min.js"></script>
   <script src="assets/js/i18n.js?v=19"></script>
-  <script src="assets/js/site.js?v=121"></script>
+  <script src="assets/js/site.js?v=122"></script>
   <script src="assets/js/bubble.js?v=21"></script>
   <script>SITE.boot();</script>
 </body>

@@ -273,11 +273,10 @@ const SITE = {
     this.data = await res.json();
     return this.data;
   },
-  // 伙伴之家目录（catalog.json）：详情页购买区用；cv 参数改内容时同步升
+  // 2026-09-16 单源化：catalog.json 已废弃，统一返回 works.json（含顶层 channels/channelsVisible）。
+  // 全站（首页详情渠道行 / 详情页购买区 / PetsView）现在都从 works.json 取，不再额外请求 catalog.json。
   async loadCatalog() {
-    if (this.__cat) return this.__cat;
-    this.__cat = fetch('data/catalog.json?cv=2', { cache: 'no-cache' }).then(r => r.json());
-    return this.__cat;
+    return this.load();
   },
   // ---------- 付费链路（2026-09-13 22:45 老曹拍板：**按 device_id 分流，两套皮肤**）----------
   // 「网站不卖货」≠「App 内也不卖」：同一个 buddies.html 靠 did 有无切皮肤 ——
@@ -780,6 +779,7 @@ const PetsView = {
     if (url) return '<a class="btn ' + cls + '" href="' + this.esc(this.withFrom(url)) + '" target="_blank" rel="noopener">' + text + '</a>';
     return '<span class="btn ' + cls + '" style="opacity:.5;pointer-events:none">' + text + '</span>';
   },
+  // 字段映射（2026-09-16 单源化）：catalog 的 tagline→works.summary、detail→detail.html?id=、download→versions[].download.url；buy 在 works 无对应（原亦为空），省略。
   card(p) {
     const online = p.status === 'online';
     const cover = p.cover
@@ -788,18 +788,15 @@ const PetsView = {
     const badge = online
       ? '<span class="pet-badge">' + this.esc(window.I18N.t('pets.badgeOnline', '已上线')) + '</span>'
       : '<span class="pet-badge soon">' + this.esc(window.I18N.t('pets.badgeSoon', '织制中')) + '</span>';
-    const detail = p.detail
-      ? '<a class="btn" href="' + this.esc(this.withFrom(p.detail)) + '">' + this.esc(window.I18N.t('pets.detail', '了解详情')) + '</a>'
-      : '';
+    // 下载链接：取任一平台版本里第一个非空 download.url（works.json 按 versions 组织）
+    const dlUrl = (p.versions || []).map(v => v && v.download && v.download.url).filter(Boolean)[0] || '';
+    const detailUrl = 'detail.html?id=' + encodeURIComponent(p.id);
+    const detail = '<a class="btn" href="' + this.esc(this.withFrom(detailUrl)) + '">' + this.esc(window.I18N.t('pets.detail', '了解详情')) + '</a>';
     let actions;
     if (online) {
       // 渠道未上线时不输出占位（2026-09-07 老曹要求）；有 url 才显示按钮（fallback 文案避免商业用词，2026-09-09）
-      const buy = p.buy && p.buy.url
-        ? this.action(p.buy.url, (p.buy && p.buy.label) || { zh: '把伙伴领回家', en: 'Bring it home' }, '', '', '')
-        : '';
       actions =
-        this.action(p.download && p.download.url, (p.download && p.download.label) || { zh: '下载', en: 'Download' }, 'btn-primary', 'pets.soonBtn', '下载即将上线') +
-        buy +
+        this.action(dlUrl, { zh: '下载', en: 'Download' }, 'btn-primary', 'pets.soonBtn', '下载即将上线') +
         detail;
     } else {
       actions = '<span class="pet-soon-note">' + this.esc(window.I18N.t('pets.soonNote', '织好之后第一时间上线，敬请期待～')) + '</span>';
@@ -808,7 +805,7 @@ const PetsView = {
       '<div class="pet-cover">' + cover + badge + '</div>' +
       '<div class="pet-body">' +
         '<h3 class="pet-name">' + this.esc(window.pick(p.title)) + '</h3>' +
-        '<p class="pet-tagline">' + this.esc(window.pick(p.tagline)) + '</p>' +
+        '<p class="pet-tagline">' + this.esc(window.pick(p.summary)) + '</p>' +
         '<div class="pet-actions">' + actions + '</div>' +
       '</div></article>';
   },
@@ -829,12 +826,12 @@ const PetsView = {
     const grid = document.getElementById('petsGrid');
     if (!grid || !this.data) return;
     // status:'hidden' = 未上线占位（织制中但暂不展示），与 works.json 的 hidden 语义一致
-    const pets = (this.data.pets || []).filter(p => p.status !== 'hidden');
+    const pets = (this.data.works || []).filter(p => p.status !== 'hidden');
     grid.innerHTML = pets.map(p => this.card(p)).join('');
     this.renderChans(this.data);
   },
   apply(data) {
-    if (!(data && data.pets && data.pets.length)) return false;
+    if (!(data && data.works && data.works.length)) return false;
     this.data = data;
     this.paint();
     return true;
@@ -843,18 +840,12 @@ const PetsView = {
   async load() {
     const grid = document.getElementById('petsGrid');
     if (!grid) return;
-    // 1. 首屏：整页加载时页面上带内联 catalogData（首屏直出，不依赖网络往返 → 线上首访不空白）
-    let hasInlined = false;
-    const inlineEl = document.getElementById('catalogData');
-    if (inlineEl) {
-      try { hasInlined = this.apply(JSON.parse(inlineEl.textContent)); } catch (e) { /* 内联损坏则走 fetch */ }
-    }
-    // 2. 更新通道：catalog.json 改版后静默覆盖（软导航进本页时内联块不在 DOM，靠这条出内容）
+    // 2026-09-16 单源化：统一读 works.json（与全站一致），catalog.json 已废弃
     try {
-      const r = await fetch('data/catalog.json?cv=4', { cache: 'no-cache' });
-      this.apply(await r.json());
+      const d = await SITE.load();
+      this.apply(d);
     } catch (e) {
-      if (!hasInlined) grid.innerHTML = '<p class="pets-note">加载失败，请刷新重试。</p>';
+      grid.innerHTML = '<p class="pets-note">加载失败，请刷新重试。</p>';
     }
   }
 };
@@ -1262,9 +1253,34 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       const w = works[cur];
       const list = (w.poses && w.poses.length) ? w.poses : [];
       if (posesBadge) posesBadge.textContent = window.pick({ zh: '姿态速览', en: 'Poses' });
-      // 「共 N 个姿态」计数行已删（2026-09-12 老曹：宫格自己会说话，不用报数）
-      posesGrid.innerHTML = list.map(p =>
-        `<figure class="pose-card"><div class="pose-img"><img src="${SITE.assetUrl(p.src)}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`).join('');
+      // A 方案（2026-09-16）：竖向滚排懒加载——首排立渲染，后续排经 IntersectionObserver 懒加载，新排从下往上滑入
+      posesGrid.innerHTML = '';
+      if (!list.length) return;
+      const PER_ROW = 6;
+      const totalRows = Math.ceil(list.length / PER_ROW);
+      let nextRow = 0;
+      const sentinel = document.createElement('div');
+      sentinel.className = 'pose-sentinel';
+      const renderRow = (i) => {
+        const row = document.createElement('div');
+        row.className = 'pose-row pose-row--in';
+        const start = i * PER_ROW, end = Math.min(start + PER_ROW, list.length);
+        let html = '';
+        for (let k = start; k < end; k++) {
+          const p = list[k];
+          html += `<figure class="pose-card"><div class="pose-img"><img src="${SITE.assetUrl(p.src)}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`;
+        }
+        row.innerHTML = html;
+        posesGrid.insertBefore(row, sentinel);
+      };
+      posesGrid.appendChild(sentinel);
+      renderRow(nextRow++);
+      if (totalRows > 1) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting && nextRow < totalRows) renderRow(nextRow++); });
+        }, { rootMargin: '240px 0px' });
+        io.observe(sentinel);
+      }
     }
 
     function paintDetail() {
@@ -1442,7 +1458,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
         <div class="pose-marquee" oncontextmenu="return false"><div class="pose-track">${states}</div></div>
         <div class="block-label">${window.pick({ zh: '各平台版本', en: 'Available Platforms' })}<span class="hint">${window.pick({ zh: '动作一样，下载与安装不同', en: 'Same pet, different install' })}</span></div>
         <div class="ver-grid">${vers}</div>`;
-      // 购买角色包区（数据来自 catalog.json，按作品 id 匹配宠物；渠道兜底行 = 全站 channels）
+      // 购买角色包区（数据来自 works.json，渠道兜底行 = 全站 channels）
       const buyHost = document.createElement('div');
       buyHost.className = 'buy-block';
       el.appendChild(buyHost);
