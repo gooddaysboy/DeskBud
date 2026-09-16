@@ -527,6 +527,31 @@ function initOpenKounter() {
   fill(pageTarget, 'busuanzi_value_page_pv');  // 当前页 / 作品 PV
 }
 
+/* ---------- 访客地理分布上报（1A · 匿名聚合，2026-09-16 立） ----------
+   闭环：本函数 → GET /api/geo-hit（EdgeOne Function，同源）
+        → 服务端读 context.geo 折成「省级区码」→ +1 落到 kounter 的 geo:CN-BJ
+   客户端只发一个同源请求，不知道 kounter 的存在、也不碰跨域。
+   五道闸门（缺一不可，别简化）：
+     ① 只在**正式域名**上报（deskbud.xyz / *.deskbud.xyz）——本地预览、预览部署域一律不报；
+     ② embed 内嵌态（App 里打开）不报 —— 那是客户端自己的流量，不该混进访客地理分布；
+     ③ 尊重 DNT —— 用户开了「禁止跟踪」就不报；
+     ④ sessionStorage 会话级去重 —— 一次会话只 +1，不刷量；
+     ⑤ 首屏空闲后才发 —— 绝不抢渲染资源。
+   隐私：服务端只对省级区码做 +1，不落 IP / 坐标 / 城市 / UA / 设备号。
+   静默失败：任何异常都不影响页面，绝不弹错、绝不阻塞。 */
+const GEO_HIT_KEY = 'geoHitV1';
+function reportGeoOnce() {
+  try {
+    if (document.documentElement.classList.contains('embed-mode')) return;      // ②
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;      // ③
+    const h = location.hostname;
+    if (h !== 'deskbud.xyz' && !h.endsWith('.deskbud.xyz')) return;             // ①
+    if (sessionStorage.getItem(GEO_HIT_KEY)) return;                            // ④
+    sessionStorage.setItem(GEO_HIT_KEY, '1');
+    fetch('/api/geo-hit', { cache: 'no-store' }).catch(() => {});
+  } catch (e) { /* 隐私模式等异常：静默跳过 */ }
+}
+
 // 公告栏：全站注入到 .topbar 之下、搜索栏之上，由 data/announcements.json 驱动
 // 改为「走马灯」：取全部在期公告，横向无缝滚动（仿详情页姿态走马灯），滚动作品集公告
 // 幂等：lang:change 与 DOMContentLoaded 都会触发，故先清再插，避免重复
@@ -1915,6 +1940,10 @@ function boot() {
   }
   SITE.route();        // 首屏渲染当前页
   SITE.webmeji.init(); // 全站统一：当前页在启用列表时挂载网页宠物
+  // 访客地理分布上报（1A）：排在首屏之后，空闲时再发（⑤ 不抢首屏资源）
+  const geoLater = () => reportGeoOnce();
+  if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(geoLater, { timeout: 4000 });
+  else setTimeout(geoLater, 2500);
 }
 SITE.boot = boot;
 
