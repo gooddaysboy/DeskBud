@@ -1573,6 +1573,8 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
   //       #7 version-download.json 由 pyside6 建（win/mac/android 各一段 {version,url}），website 负责本页对接。
   // 实测（15:12，已更新 20:05）：COS files/ 的 Win/Mac 已 404、Android 403（私有）；gitee release 现可用——
   //   桌面端（win+mac 同一 release tag `v0.1.24`）、安卓独立 tag `android-v0.1.7`。兜底常量须与 manifest 的 tag 对齐（曾误写成 win-v0.1.24/mac-v0.1.24 导致 404）。
+  //   ↑ 以上 tag 数字是 09-11 当时的取值，会过期。**当前值一律以 data/download-latest.json 为准**
+  //     （2026-09-17 复核：win/mac `v0.1.26`、android `android-v0.1.21` vc22），下面 FALLBACK 已同步。
   // 因此：能取到 manifest 用 manifest；取不到用常量表；两者都没文件时给「正在准备中」提示，避免用户撞裸 404。
   download: async function () {
     const yr = document.getElementById('yr');
@@ -1588,10 +1590,12 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     //   修法：官网自己存一份**同源副本** data/download-latest.json（同源无 CORS 问题），优先读它；
     //   发版后用 scripts/sync_download_manifest.py 刷新（该脚本服务端拉 gitee，不受 CORS 限制）。
     // 兜底常量（最后一道防线，随发版更新；tag 约定见协同板：桌面端 v{版本} 同 release 放 win+mac）
+    // 2026-09-17 与 data/download-latest.json 对齐：win/mac v0.1.26、android android-v0.1.21（vc22）。
+    // 发版后只刷了 manifest 却忘刷这里，极端情况下（同源与 gitee 双失败）会退回到旧包。
     const FALLBACK = {
-      win: GITEE + '/releases/download/v0.1.24/DeskBud_Win_v0124.exe',
-      mac: GITEE + '/releases/download/v0.1.24/DeskBud_Mac_v0124.dmg',
-      android: GITEE + '/releases/download/android-v0.1.8/DeskBud_Android_v018.apk',
+      win: GITEE + '/releases/download/v0.1.26/DeskBud_Win_v0126.exe',
+      mac: GITEE + '/releases/download/v0.1.26/DeskBud_Mac_v0126.dmg',
+      android: GITEE + '/releases/download/android-v0.1.21/DeskBud_Android_v0121.apk',
     };
     // UA 分流（协同板 09-13 19:15 kotlin 方案 B）：桌面访客点安卓直链 = 下到电脑上白下 →
     //   桌面：展示二维码（指向固定引导页 get.html）；移动端：保留按钮；微信内/iOS：走引导页（微信一律拦 apk 直链）。
@@ -2036,6 +2040,37 @@ SITE.boot = boot;
       check();
     });
   });
+})();
+
+/* ---------- 素材加载失败兜底（离线优雅降级）· 2026-09-17 ----------
+   背景：B 方案后「非内置宠」素材不再打进 APK，改为运行时从线上拉（kotlin 三级分发：
+   内置 assets → filesDir 磁盘缓存 → 在线拉 deskbud.xyz）。于是**离线**打开伙伴页时，
+   非内置宠素材必然拉不到 ⇒ 浏览器画「裂图」图标，卡片像坏了。
+   这里统一降级：隐藏破图 + 给容器加 .media-missing（样式在 base.css，画浅底爪印）。
+   ⚠️ 只处理 src 含 /works/ 的宠素材。logo / 二维码 之类失败属于另一回事，
+      不该被悄悄藏掉（宁可让它们露出来被发现）。
+   ⚠️ 不做任何重试：离线时重试没意义，也不该在弱网下放大请求。
+   ⚠️ 三端共用这一份 site.js ⇒ 官网与 App 内嵌伙伴页同时生效，kotlin 侧不重复实现。 */
+(function installMediaFallback() {
+  const isPetMedia = (el) => !!el && el.tagName === 'IMG' &&
+    /(^|\/)works\//.test(el.getAttribute('src') || '');
+  function degrade(img) {
+    if (!img || img.dataset.mediaMissing === '1') return;   // 防重入（改 src 之类会再次触发）
+    img.dataset.mediaMissing = '1';
+    if (img.parentElement) img.parentElement.classList.add('media-missing');
+  }
+  // ① 之后失败的图：error 不冒泡，但 capture 阶段能在 window 收到所有资源错误
+  window.addEventListener('error', (e) => { if (isPetMedia(e.target)) degrade(e.target); }, true);
+  // ② 监听安装前就已失败的图（本脚本执行时机可能晚于首屏 img；软导航插入的新图不受影响）
+  function sweep() {
+    const imgs = document.querySelectorAll('img');
+    for (let i = 0; i < imgs.length; i++) {
+      const img = imgs[i];
+      if (isPetMedia(img) && img.complete && img.naturalWidth === 0) degrade(img);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sweep);
+  else sweep();
 })();
 
 // 暴露到全局：便于控制台调试与自动化验证（气泡三层参数、路由等）

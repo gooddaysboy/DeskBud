@@ -19,6 +19,7 @@
 """
 import json
 import os
+import re
 import sys
 import urllib.request
 
@@ -27,6 +28,9 @@ OUT = os.path.join(ROOT, 'data', 'download-latest.json')
 BASE = 'https://gitee.com/deskbud/version/raw/master/'
 SRC_DL = BASE + 'version-download.json'
 SRC_ANDROID = BASE + 'version-android.json'
+# site.js 里的兜底常量（同源清单与 gitee 双失败时的最后一道防线）—— 必须与 OUT 同版本
+SITE_JS = os.path.join(ROOT, 'assets', 'js', 'site.js')
+FALLBACK_RE = re.compile(r"(\w+):\s*GITEE\s*\+\s*'/releases/download/([^']+)'")
 
 NOTE = ('官网同源副本：官网(deskbud.xyz) 与 gitee 跨源，gitee raw 不回 ACAO，'
         '浏览器 fetch 会被 CORS 拦，故在官网存一份同源清单给站点读。'
@@ -60,6 +64,32 @@ def build():
     return out
 
 
+def read_fallback():
+    """解析 site.js 的兜底常量 -> {plat: 'tag/file'}。
+
+    为什么要查它（2026-09-17 踩过）：发版后只跑了本脚本刷同源清单、忘了同步
+    site.js 的常量，两处差了一版 ⇒ 万一同源与 gitee 都取不到，用户会下到旧包。
+    """
+    if not os.path.exists(SITE_JS):
+        return None
+    return dict(FALLBACK_RE.findall(open(SITE_JS, encoding='utf-8').read()))
+
+
+def fallback_mismatch(manifest_text):
+    """-> (fb, diff)；diff = {plat: (site.js 值, 清单值)}，空字典 = 一致。"""
+    fb = read_fallback()
+    if fb is None:
+        return None, {}
+    try:
+        man = json.loads(manifest_text)
+    except ValueError:
+        return fb, {}
+    want = {p: seg['url'].split('/releases/download/')[-1]
+            for p, seg in man.items()
+            if isinstance(seg, dict) and seg.get('url')}
+    return fb, {p: (fb.get(p), v) for p, v in want.items() if fb.get(p) != v}
+
+
 def dumps(d):
     return json.dumps(d, ensure_ascii=False, indent=2) + '\n'
 
@@ -71,20 +101,38 @@ def main():
     if os.path.exists(OUT):
         with open(OUT, 'r', encoding='utf-8', newline='') as f:
             old = f.read()
+    fb, diff = fallback_mismatch(text)
     if check:
+        bad = False
         if old == text:
             print('[check] OK 同源清单与真源一致')
-            return
-        print('[check] 不一致，需要刷新（跑 python scripts/sync_download_manifest.py）')
-        print('--- 盘上 ---')
-        print(old)
-        print('--- 真源 ---')
-        print(text)
-        sys.exit(1)
+        else:
+            bad = True
+            print('[check] 同源清单不一致，需要刷新（跑 python scripts/sync_download_manifest.py）')
+            print('--- 盘上 ---')
+            print(old)
+            print('--- 真源 ---')
+            print(text)
+        if fb is None:
+            print('[check] warn: 找不到 %s，跳过兜底常量比对' % SITE_JS)
+        elif diff:
+            bad = True
+            print('[check] site.js 兜底常量与清单不一致（发版后**两处都要刷**）：')
+            for p in sorted(diff):
+                print('    %-8s site.js=%-46s 清单=%s' % (p, diff[p][0], diff[p][1]))
+        else:
+            print('[check] OK site.js 兜底常量与同源清单一致')
+        if bad:
+            sys.exit(1)
+        return
     with open(OUT, 'w', encoding='utf-8', newline='') as f:
         f.write(text.replace('\r\n', '\n'))
     print('[ok] written:', OUT)
     print(text)
+    if diff:
+        print('[warn] site.js 的兜底常量还是旧版，请一并更新（否则双失败时退回旧包）：')
+        for p in sorted(diff):
+            print('    %-8s site.js=%-46s 清单=%s' % (p, diff[p][0], diff[p][1]))
 
 
 if __name__ == '__main__':

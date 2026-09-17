@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- DeskBud offline snapshot | lang=en | source=privacy.html | generated=2026-09-16 | Effective: 2026-09-11 | 本文件由 website/scripts/gen_offline_docs.py 生成，请勿手改 -->
+<!-- DeskBud offline snapshot | lang=en | source=privacy.html | generated=2026-09-17 | Effective: 2026-09-11 | 本文件由 website/scripts/gen_offline_docs.py 生成，请勿手改 -->
 <html lang="en" data-page-node-id="V4kmd0igcelo9fAYTJjyFM">
 <head data-page-node-id="6LLqZdsr3fSSxoxodOwbZd">
   <meta charset="UTF-8" data-page-node-id="gd7ED4OsIFkN9Ph7lO9b63">
@@ -1549,6 +1549,36 @@ html.embed-mode #manual { scroll-margin-top: 14px; }   /* App 内嵌没有顶栏
 .slogan-bar:hover .slogan-item { animation-play-state: paused; }
 html.embed-mode .slogan-bar { display: none !important; }
 @media (max-width: 680px) { .slogan-bar { height: 29px; } .slogan-item { font-size: 12px; } }
+
+/* ==========================================================================
+   素材加载失败兜底（离线优雅降级）· 2026-09-17 老曹拍板「建议项」
+   B 方案后「非内置宠」素材是运行时从线上拉的（kotlin 三级分发：内置 assets →
+   磁盘缓存 → 在线拉 deskbud.xyz），离线 / 弱网 / 线上素材被清掉时 <img> 拉不到
+   ⇒ 浏览器默认画「裂图」小图标，整张卡片看起来像坏了。
+   这里把破图换成中性占位（浅底 + 浅色爪印），卡片位次/尺寸都不变。
+   触发逻辑在 site.js 的 installMediaFallback()（只认 src 含 /works/ 的宠素材）。
+   几处容器都有确定尺寸或 aspect-ratio（.card .thumb 4/3、.pose-img 92px、
+   .spose-item/.pose-item 152px 方、.buddy-tile 64px），故隐藏 img 不会塌陷。
+   用 ::before 而非 ::after：让它压在 .card .overlay 的标题层之下。
+   ========================================================================== */
+.media-missing { position: relative; }
+.media-missing img { display: none; }
+.media-missing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: var(--surface-2);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%23c9bfb0'%3E%3Cellipse cx='32' cy='43' rx='15' ry='12'/%3E%3Ccircle cx='14' cy='27' r='7'/%3E%3Ccircle cx='26' cy='18' r='7'/%3E%3Ccircle cx='39' cy='18' r='7'/%3E%3Ccircle cx='51' cy='27' r='7'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30%;
+  opacity: .8;
+}
+/* 伙伴页方块只有 64px，占位跟着收进内边距里，不遮住选中态描边 */
+.buddy-tile.media-missing::before { inset: 6px; border-radius: 12px; background-size: 46%; }
+/* 首页 4/3 大缩略图：爪印按短边算太大，收一点 */
+.card .thumb.media-missing::before { background-size: 20%; }
 
 </style>
 </head>

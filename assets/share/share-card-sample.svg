@@ -14,7 +14,9 @@
     分隔线        x110 -> 970，y1140，粗 2，色 #EFE2CF  (--line)
     品牌字标      x110，基线 y1225，"DeskBud"，字号 46 粗体，色 #E8722B
     官网域名      x110，基线 y1280，"deskbud.xyz"，字号 28，色 #9A8874
-    二维码        x810 y1150，180x180；内容固定 https://deskbud.xyz/get.html（换版本不换码）
+    二维码        x810 y1150，180x180；内容固定 https://deskbud.xyz/buddies.html（换版本不换码）
+                 ↑ 2026-09-17 老曹改判：原为 get.html（下载页），改为伙伴页 —— 收到卡的人先认识宠物再下载。
+                 ⚠️ 下载页的 assets/img/qr-android.svg 仍指向 get.html，两者目标**故意不同**，别一起改。
                  素材 = assets/share/qr.png（二维码必须 PNG：Android Canvas 不引库画不了 SVG）
     安全边距      四边 >= 90
     字体          系统 sans（PingFang SC / Microsoft YaHei / Noto Sans CJK），不内嵌字体文件
@@ -59,6 +61,6 @@
   <text x="110" y="1280" font-family="PingFang SC, Microsoft YaHei, sans-serif"
         font-size="28" fill="#9A8874">deskbud.xyz</text>
 
-  <!-- 二维码（固定目标 https://deskbud.xyz/get.html） -->
+  <!-- 二维码（固定目标 https://deskbud.xyz/buddies.html，2026-09-17 起；此前为 get.html） -->
   <image x="810" y="1150" width="180" height="180" xlink:href="qr.png" href="qr.png"/>
 </svg>
