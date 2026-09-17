@@ -10,12 +10,17 @@
       **幂等**：已存在 → 整块替换；不存在 → 插到 </head> 之前。可以反复跑。
 
 🔴 有意**不注入**的页面（不是漏了）：
-  privacy.html、manual/android-{zh,en}.html
-      它们是离线快照产线的**真源**（见 scripts/gen_offline_docs.py 头部）：改这几个文件必须
-      重跑 gen_offline_docs.py + gen_sync_json.py，会连带改动 docs/ 下 4 份产物 + 升 sync.json
-      版本、让客户端重下隐私/手册快照 —— 为几行 meta 付这个代价不值。
+  privacy.html
+      离线快照产线的**真源**（见 scripts/gen_offline_docs.py 头部）：改它必须重跑
+      gen_offline_docs.py + gen_sync_json.py，连带改 docs/ 2 份隐私快照并升 ver、让客户端
+      重下 —— 隐私页无分享价值，不值。
   contact.html
       跳转页（canonical → privacy.html），无分享价值。
+
+⚙️ manual/android-{zh,en}.html（09-17 补入，老曹拍板）：
+      它俩同属产线真源 ⇒ 注入 og 会让 docs/manual_{zh,en}.html 的 sha256 变、ver v4→v5，
+      客户端会重下手册快照。接受这个代价的理由：win/mac 四版手册都有分享卡片，
+      只有安卓手册没有，对外不一致。**若哪天回退，记得同步重跑产线把 ver 再升一档。**
   docs/*.html
       产线产物，重跑即覆盖，手改无意义。
   bubble_preview.html / beian-pending.html
@@ -60,6 +65,10 @@ PAGES = [
      'Mac 版怎么装、怎么玩、遇到问题怎么办，一页看完。'),
     ('manual/mac-en.html', 'DeskBud Desktop Pet User Manual (Mac)',
      'How to install and use DeskBud on macOS, plus common questions.'),
+    ('manual/android-zh.html', 'DeskBud 桌宠用户手册（安卓）',
+     '安卓版怎么装、怎么领养伙伴、怎么换动作，一页看完。'),
+    ('manual/android-en.html', 'DeskBud Desktop Pet User Manual (Android)',
+     'How to install and use DeskBud on Android, plus common questions.'),
 ]
 
 BEGIN = '<!-- og-share -->'

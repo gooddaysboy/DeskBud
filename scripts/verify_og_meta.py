@@ -19,16 +19,17 @@
 """
 import argparse
 import io
+import os
 import sys
 import urllib.request
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
-# 与 apply_og_meta.py 的 PAGES 对应（只取路径；标题/描述由页面自身决定）
-PAGES = [
-    'index.html', 'buddies.html', 'download.html', 'get.html',
-    'manual/win-zh.html', 'manual/win-en.html', 'manual/mac-zh.html', 'manual/mac-en.html',
-]
+# 🔴 页面清单**单一真源** = apply_og_meta.PAGES（别再抄一份，抄了必漂移）
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from apply_og_meta import PAGES as _SOURCE_PAGES          # noqa: E402
+
+PAGES = [rel for rel, _title, _desc in _SOURCE_PAGES]
 REQUIRED = [
     'og:type', 'og:site_name', 'og:locale', 'og:title', 'og:description',
     'og:url', 'og:image', 'og:image:width', 'og:image:height', 'og:image:alt',

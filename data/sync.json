@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-17T18:22:11+08:00",
+  "generated": "2026-09-17T18:56:20+08:00",
   "base": "https://deskbud.xyz/",
   "items": {
     "bubbles": {
@@ -23,16 +23,16 @@
       "effective": "Effective: 2026-09-11"
     },
     "manual_zh": {
-      "ver": 4,
+      "ver": 5,
       "url": "https://deskbud.xyz/docs/manual_zh.html",
-      "sha256": "2bdf36b753417453ac5aae2f2a9e6c8caad8403f77bb4ec0e0363ff30c3f8f23",
-      "bytes": 12023
+      "sha256": "ebcd7c0c04f0de28178a7bb882d535f915a10e1a9e51b2a3ecefa1b95eca4c89",
+      "bytes": 13110
     },
     "manual_en": {
-      "ver": 4,
+      "ver": 5,
       "url": "https://deskbud.xyz/docs/manual_en.html",
-      "sha256": "a24a0063f6fe6c8273a1e45dd4759881842c6a4b86185f2565eab46db7195aab",
-      "bytes": 12026
+      "sha256": "c992da2995359cb7f367d2a9e1944a329368529edd06ed1ec077f3ac93d5491a",
+      "bytes": 13099
     }
   }
 }
