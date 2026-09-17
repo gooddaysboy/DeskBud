@@ -126,8 +126,10 @@
 <script>
 (function () {
   var GITEE = 'https://gitee.com/deskbud/version';
-  // 兜底（最后一道防线；与 assets/js/site.js 的 FALLBACK.android 保持一致）
-  var FALLBACK = GITEE + '/releases/download/android-v0.1.8/DeskBud_Android_v018.apk';
+  // 兜底（最后一道防线；须与 data/download-latest.json 的 android 段、
+  //  assets/js/site.js 的 FALLBACK.android 保持一致 —— 三处由
+  //  scripts/sync_download_manifest.py --check 自动比对，别只刷一处）
+  var FALLBACK = GITEE + '/releases/download/android-v0.1.22/DeskBud_Android_v0122.apk';
 
   var L = {
     zh: {

@@ -8,7 +8,7 @@
 > - 本地备份/草稿/旧版 = 放 `_local_backup/`（见文末），**永不入库、永不部署**（已在 `.gitignore`）。
 > - 网页（可访问页面）与本地文件严格隔离：任何 `_trash/ _tmp/ _spare/ _local_backup/` 下的内容都不会被 EdgeOne 部署。
 >
-> **最后更新**：2026-09-16
+> **最后更新**：2026-09-17
 
 ---
 
@@ -20,7 +20,7 @@
 | `data/catalog.json` | 旧目录源（已退役） | **三端均已不消费**（2026-09-16 单源化）：网站 site.js 已改读 works.json；pyside6 `CATALOG_URL` 已退役、改 `WORKS_URL`；kotlin 原生层零引用 | **已退役 · 待移 `_local_backup/`** | 与 works.json 角色重叠，已收敛到 works.json |
 | `data/buddies-snapshot.json` | 客户端目录增量真源（带顶层 payload sha256，供客户端增量判定） | pyside6 `SNAPSHOT_URL`（**主源·必须在线**）；**kotlin 原生层 09-16 起 0 引用**（`BuddiesSnapshot.kt` 已删）；网站不消费 | **在用·仅 pyside6 主源** | 由 `scripts/gen_buddies_snapshot.py` 从 `works.json` 派生（🔴 works.json 改宠物条目必重跑） |
 | `data/bubble.json` | 气泡语录真源（v9，3 宠 rabbit/panda/linekit） | 网站 `site.js`；pyside6 `BUBBLE_URL`；kotlin（原生 fetch） | **在用·三端共用** | 手工维护，三端同步源 |
-| `data/download-latest.json` | 各端下载版本清单（同源副本，规避 gitee CORS） | 网站 `get.html:181/217`、`site.js:1513/1516` | **在用** | 由 `scripts/sync_download_manifest.py` 从 gitee `version-android.json` 同步 |
+| `data/download-latest.json` | 各端下载版本清单（同源副本，规避 gitee CORS） | 网站 `get.html:132`（安卓中间页内联兜底）、`site.js:1595`（全站兜底）、`cloud-functions/api/dl.js`（下载中转） | **在用** | 由 `scripts/sync_download_manifest.py` 从 gitee `version-download.json` + `version-android.json` 同步；🔴 版本号散落**三处**（本文件 / `site.js` 的 `FALLBACK` / `get.html` 内联 `FALLBACK`），`--check` 三处自动比对（2026-09-17） |
 | `data/announcements.json` | 全站公告栏内容 | 网站 `site.js:531` 公告栏注入 | **在用** | 手工维护 |
 | `data/sync.json` | 离线快照清单（5 项：privacy/manual/bubbles 等离线包指纹） | 离线 docs 包（`docs/*`）、`gen_sync_json.py --check-remote` 校验 | **在用** | 由 `scripts/gen_sync_json.py` 产出 |
 
@@ -63,4 +63,5 @@
 - 增/删/改任一在线文件 → 同步改本清单对应行 + 升级该文件 URL 的 `?cv=`/版本号（防缓存）。
 - 🔴 **works.json 改「宠物条目本身」（新增/下线宠、改 title/cover/thumb/status）→ 必跑 `scripts/gen_buddies_snapshot.py` 并部署**，否则客户端主源（snapshot）看不到变更；仅改 channels/emoji 等非宠物字段可不跑。
 - 任一端新增数据拉取源 → 在本清单"在线消费方"列补上。
+- 🔴 **发版后刷下载版本 = 三处一起刷**（`data/download-latest.json`、`assets/js/site.js` 的 `FALLBACK`、`get.html` 内联的 `FALLBACK`）；`scripts/sync_download_manifest.py --check` 现在三处自动比对，漏认一处即 exit 1（2026-09-17 起因：`get.html` 那处曾悄悄落后 13 个版本、无人发现）。
 - 本清单本身随仓库提交（团队可见），但**不作为网页页面**对外链接。

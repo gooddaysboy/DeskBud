@@ -1574,7 +1574,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
   // 实测（15:12，已更新 20:05）：COS files/ 的 Win/Mac 已 404、Android 403（私有）；gitee release 现可用——
   //   桌面端（win+mac 同一 release tag `v0.1.24`）、安卓独立 tag `android-v0.1.7`。兜底常量须与 manifest 的 tag 对齐（曾误写成 win-v0.1.24/mac-v0.1.24 导致 404）。
   //   ↑ 以上 tag 数字是 09-11 当时的取值，会过期。**当前值一律以 data/download-latest.json 为准**
-  //     （2026-09-17 复核：win/mac `v0.1.26`、android `android-v0.1.21` vc22），下面 FALLBACK 已同步。
+  //     （2026-09-17 19:40 复核：win/mac `v0.1.26`、android `android-v0.1.22` vc23），下面 FALLBACK 已同步。
   // 因此：能取到 manifest 用 manifest；取不到用常量表；两者都没文件时给「正在准备中」提示，避免用户撞裸 404。
   download: async function () {
     const yr = document.getElementById('yr');
@@ -1590,12 +1590,12 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     //   修法：官网自己存一份**同源副本** data/download-latest.json（同源无 CORS 问题），优先读它；
     //   发版后用 scripts/sync_download_manifest.py 刷新（该脚本服务端拉 gitee，不受 CORS 限制）。
     // 兜底常量（最后一道防线，随发版更新；tag 约定见协同板：桌面端 v{版本} 同 release 放 win+mac）
-    // 2026-09-17 与 data/download-latest.json 对齐：win/mac v0.1.26、android android-v0.1.21（vc22）。
+    // 2026-09-17 与 data/download-latest.json 对齐：win/mac v0.1.26、android android-v0.1.22（vc23）。
     // 发版后只刷了 manifest 却忘刷这里，极端情况下（同源与 gitee 双失败）会退回到旧包。
     const FALLBACK = {
       win: GITEE + '/releases/download/v0.1.26/DeskBud_Win_v0126.exe',
       mac: GITEE + '/releases/download/v0.1.26/DeskBud_Mac_v0126.dmg',
-      android: GITEE + '/releases/download/android-v0.1.21/DeskBud_Android_v0121.apk',
+      android: GITEE + '/releases/download/android-v0.1.22/DeskBud_Android_v0122.apk',
     };
     // UA 分流（协同板 09-13 19:15 kotlin 方案 B）：桌面访客点安卓直链 = 下到电脑上白下 →
     //   桌面：展示二维码（指向固定引导页 get.html）；移动端：保留按钮；微信内/iOS：走引导页（微信一律拦 apk 直链）。

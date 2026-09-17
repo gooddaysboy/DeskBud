@@ -13,6 +13,13 @@
   1) version-download.json <- win / mac / android 三段
   2) version-android.json  <- 安卓发版即更，用它覆盖 1) 里的 android 段（1) 常忘记刷）
 
+版本号散落在**三处**（发版后必须一起刷，2026-09-17 扩成三处自动比对）：
+  ① data/download-latest.json  <- 同源清单（正常路径）
+  ② assets/js/site.js 的 FALLBACK  <- 全站最后一道防线（同源 + gitee raw 双失败时用）
+  ③ get.html 内联的 FALLBACK     <- 安卓中间页（微信/扫码落到这里）自带兜底，只含 android
+  ⚠ ③ 曾长期钉在 `android-v0.1.8`（落后 13 个版本）且注释自称"与 site.js 一致"——
+    因为没有任何自动检查盯着它。本脚本现在把三处都算进 --check。
+
 用法：
   python scripts/sync_download_manifest.py            # 刷新 data/download-latest.json
   python scripts/sync_download_manifest.py --check    # 只校验（有差异 -> 退出码 1，不写盘）
@@ -28,9 +35,14 @@ OUT = os.path.join(ROOT, 'data', 'download-latest.json')
 BASE = 'https://gitee.com/deskbud/version/raw/master/'
 SRC_DL = BASE + 'version-download.json'
 SRC_ANDROID = BASE + 'version-android.json'
-# site.js 里的兜底常量（同源清单与 gitee 双失败时的最后一道防线）—— 必须与 OUT 同版本
+
+# 兜底常量所在的文件（同源清单与 gitee 双失败时的最后防线）—— 必须与 OUT 同版本
 SITE_JS = os.path.join(ROOT, 'assets', 'js', 'site.js')
+GET_HTML = os.path.join(ROOT, 'get.html')
+# site.js 形态：「win: GITEE + '/releases/download/<tag>/<file>'」（带平台键名）
 FALLBACK_RE = re.compile(r"(\w+):\s*GITEE\s*\+\s*'/releases/download/([^']+)'")
+# get.html 形态：单平台一行「GITEE + '/releases/download/<tag>/<file>'」（无键名，固定 android）
+GET_FALLBACK_RE = re.compile(r"GITEE\s*\+\s*'/releases/download/([^']+)'")
 
 NOTE = ('官网同源副本：官网(deskbud.xyz) 与 gitee 跨源，gitee raw 不回 ACAO，'
         '浏览器 fetch 会被 CORS 拦，故在官网存一份同源清单给站点读。'
@@ -64,30 +76,59 @@ def build():
     return out
 
 
-def read_fallback():
-    """解析 site.js 的兜底常量 -> {plat: 'tag/file'}。
+def _read(path):
+    with open(path, encoding='utf-8') as f:
+        return f.read()
 
-    为什么要查它（2026-09-17 踩过）：发版后只跑了本脚本刷同源清单、忘了同步
-    site.js 的常量，两处差了一版 ⇒ 万一同源与 gitee 都取不到，用户会下到旧包。
+
+def read_fallbacks():
+    """-> (srcs, missing)
+
+    srcs = {来源名: {plat: 'tag/file'}}；missing = 文件缺失的来源名列表。
+    为什么要查（2026-09-17 踩过）：发版后只跑了本脚本刷同源清单、忘了同步
+    site.js / get.html 的常量，几处差了几版 ⇒ 万一同源与 gitee 都取不到，用户会下到旧包。
+    get.html 只有安卓一路、无平台键名，统一记作 android。
     """
-    if not os.path.exists(SITE_JS):
-        return None
-    return dict(FALLBACK_RE.findall(open(SITE_JS, encoding='utf-8').read()))
+    srcs, missing = {}, []
+    if os.path.exists(SITE_JS):
+        srcs['site.js'] = dict(FALLBACK_RE.findall(_read(SITE_JS)))
+    else:
+        missing.append('site.js')
+    if os.path.exists(GET_HTML):
+        hits = GET_FALLBACK_RE.findall(_read(GET_HTML))
+        # 命不中也要留一个空壳 -> 下面比对时会报「None != 清单值」，抓到"正则失效/常量被删"
+        srcs['get.html'] = {'android': hits[0]} if hits else {}
+    else:
+        missing.append('get.html')
+    return srcs, missing
 
 
 def fallback_mismatch(manifest_text):
-    """-> (fb, diff)；diff = {plat: (site.js 值, 清单值)}，空字典 = 一致。"""
-    fb = read_fallback()
-    if fb is None:
-        return None, {}
+    """-> (srcs, diffs, missing)；diffs = {来源: {plat: (该处值, 清单值)}}，空字典 = 全一致。"""
+    srcs, missing = read_fallbacks()
     try:
         man = json.loads(manifest_text)
     except ValueError:
-        return fb, {}
+        return srcs, {}, missing
     want = {p: seg['url'].split('/releases/download/')[-1]
             for p, seg in man.items()
             if isinstance(seg, dict) and seg.get('url')}
-    return fb, {p: (fb.get(p), v) for p, v in want.items() if fb.get(p) != v}
+    diffs = {}
+    for name, values in srcs.items():
+        # site.js 覆盖 win/mac/android；get.html 只管 android（它是安卓中间页）
+        scope = want if name == 'site.js' else {'android': want['android']} if 'android' in want else {}
+        d = {p: (values.get(p), v) for p, v in scope.items() if values.get(p) != v}
+        if d:
+            diffs[name] = d
+    return srcs, diffs, missing
+
+
+def report_diffs(diffs, header):
+    for name in sorted(diffs):
+        print(header % name)
+        for p in sorted(diffs[name]):
+            print('    %-8s %s = %s' % (p, name, diffs[name][p][0]))
+            print('    %-8s %s   %s' % ('', '清单', diffs[name][p][1]))
 
 
 def dumps(d):
@@ -101,7 +142,7 @@ def main():
     if os.path.exists(OUT):
         with open(OUT, 'r', encoding='utf-8', newline='') as f:
             old = f.read()
-    fb, diff = fallback_mismatch(text)
+    srcs, diffs, missing = fallback_mismatch(text)
     if check:
         bad = False
         if old == text:
@@ -113,15 +154,13 @@ def main():
             print(old)
             print('--- 真源 ---')
             print(text)
-        if fb is None:
-            print('[check] warn: 找不到 %s，跳过兜底常量比对' % SITE_JS)
-        elif diff:
+        for name in missing:
+            print('[check] warn: 找不到 %s，跳过该处兜底常量比对' % name)
+        if diffs:
             bad = True
-            print('[check] site.js 兜底常量与清单不一致（发版后**两处都要刷**）：')
-            for p in sorted(diff):
-                print('    %-8s site.js=%-46s 清单=%s' % (p, diff[p][0], diff[p][1]))
-        else:
-            print('[check] OK site.js 兜底常量与同源清单一致')
+            report_diffs(diffs, '[check] %s 兜底常量与清单不一致（发版后**三处都要刷**）：')
+        elif not missing:
+            print('[check] OK 三处兜底常量与同源清单一致（site.js / get.html）')
         if bad:
             sys.exit(1)
         return
@@ -129,10 +168,9 @@ def main():
         f.write(text.replace('\r\n', '\n'))
     print('[ok] written:', OUT)
     print(text)
-    if diff:
-        print('[warn] site.js 的兜底常量还是旧版，请一并更新（否则双失败时退回旧包）：')
-        for p in sorted(diff):
-            print('    %-8s site.js=%-46s 清单=%s' % (p, diff[p][0], diff[p][1]))
+    if diffs:
+        print('[warn] 兜底常量还是旧版，请一并更新（否则双失败时退回旧包）：')
+        report_diffs(diffs, '[warn] %s：')
 
 
 if __name__ == '__main__':

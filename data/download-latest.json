@@ -12,9 +12,9 @@
     "size": 62810567
   },
   "android": {
-    "version": "0.1.21",
-    "url": "https://gitee.com/deskbud/version/releases/download/android-v0.1.21/DeskBud_Android_v0121.apk",
-    "versionCode": 22
+    "version": "0.1.22",
+    "url": "https://gitee.com/deskbud/version/releases/download/android-v0.1.22/DeskBud_Android_v0122.apk",
+    "versionCode": 23
   },
   "_note": "官网同源副本：官网(deskbud.xyz) 与 gitee 跨源，gitee raw 不回 ACAO，浏览器 fetch 会被 CORS 拦，故在官网存一份同源清单给站点读。真源 = gitee 升级仓 version-download.json + version-android.json；发版后跑 python scripts/sync_download_manifest.py 刷新本文件。"
 }
