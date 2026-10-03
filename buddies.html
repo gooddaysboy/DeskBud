@@ -5,6 +5,7 @@
   <script data-embed-boot>/* App 内嵌根治（09-14 kotlin 报）：?embed=1 时**立即**给 <html> 打 embed-mode，不等 site.js（99KB）下载执行 —— 否则慢网络下 HTML 先到、JS 未到，顶栏/页脚/「下载」会整段露出（kotlin 实测 1.98KB/s，冷缓存 50s+）。说明写进 JS 注释，便于离线快照产线整块剥离。*/try{if(new URLSearchParams(location.search).get('embed')==='1')document.documentElement.classList.add('embed-mode')}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>伙伴 · DeskBud</title>
+  <link rel="icon" href="deskbud.ico">
   <!-- 首屏内联根治（09-14 kotlin 报慢网白屏）：预载 3 只在线宠物的轻量待机图（44~94KB），HTML 一下来就开始载，不等 site.js(99KB) -->
   <link rel="preload" as="image" href="works/linekit-lite/linekit_idle.webp?v=28">
   <link rel="preload" as="image" href="works/panda-lite/idle.webp?v=28">
