@@ -53,7 +53,8 @@
     "site": "All rights reserved",
     "visits": "Total visits",
     "legal": "License & Privacy",
-    "manual": "User Manual"
+    "manual": "User Manual",
+    "steam": "Coming soon on Steam"
   },
   "detail": {
     "sub": "Desktop pet preview & download",
@@ -190,5 +191,31 @@
     "feat5": "24+ action poses, with new pets and interactions always on the way",
     "manualTitle": "User manual",
     "manualOpen": "Open full manual"
+  },
+  "steam": {
+    "badge": "Coming soon on Steam",
+    "title": "DeskBud Desktop Pets — One-Time Purchase",
+    "sub": "Pay once, own it forever, including every pet we add",
+    "heroTitle": "It actually climbs.",
+    "heroSub": "Most desktop pets just sit there. DeskBud walks along your window edges, climbs up the sides, hangs from the top and flips upside down — because we built a real physics engine instead of a canned animation loop.",
+    "featTitle": "What it does",
+    "feat1": "Climbs walls and window frames — a real engine, not a fake loop",
+    "feat2": "Hangs upside down from window tops",
+    "feat3": "Two-stage drag — grab it and it reacts, hold longer and it dangles",
+    "feat4": "Run multiple pets at once",
+    "feat5": "Dozens of poses and animations you can switch any time",
+    "feat6": "Lives in the tray / menu bar, always one click away",
+    "platTitle": "One pet, everywhere",
+    "platSub": "Windows 10/11 · macOS · Android — same pets, same behaviours on every platform",
+    "privacyTitle": "Private by design",
+    "privacyBody": "DeskBud runs entirely offline. It does not upload your files and does not collect personal data. The optional anonymous counter can be turned off in settings. No account required.",
+    "buyTitle": "One-time purchase",
+    "buyBody": "Buying DeskBud keeps it forever, including every pet we add in the future. No subscription, no in-app purchases, no ads.",
+    "buyNote": "Price is shown on the Steam store page.",
+    "ctaWishlist": "Go to the Steam page",
+    "ctaSoon": "Coming soon — add to your Steam wishlist when it launches",
+    "ctaFree": "Try the free desktop app first",
+    "freeNote": "The app itself is completely free. Two pets are built in — download and run.",
+    "backHome": "Back to home"
   }
 }

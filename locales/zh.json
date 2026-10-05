@@ -53,7 +53,8 @@
     "site": "保留所有权利",
     "visits": "全站访问",
     "legal": "许可与隐私",
-    "manual": "用户手册"
+    "manual": "用户手册",
+    "steam": "Steam 即将上架"
   },
   "detail": {
     "sub": "桌面宠物作品预览与下载",
@@ -190,5 +191,31 @@
     "feat5": "24+ 动作姿态，持续更新全新桌宠与互动玩法",
     "manualTitle": "用户手册",
     "manualOpen": "打开完整手册"
+  },
+  "steam": {
+    "badge": "Steam 即将上架",
+    "title": "DeskBud 桌宠 · 买断制",
+    "sub": "一次付费，永久拥有，含未来所有新伙伴",
+    "heroTitle": "它真的会爬",
+    "heroSub": "多数桌宠只会待在原地。DeskBud 会沿窗口边缘行走、攀爬、悬挂、倒挂——因为我们写了一套真物理引擎，不是预录的循环动画。",
+    "featTitle": "它能做什么",
+    "feat1": "攀爬墙壁与窗框 —— 真引擎，不是假循环",
+    "feat2": "从窗口顶部倒挂悬挂",
+    "feat3": "两段式拖拽 —— 轻拽它会挣扎，按住更久会晃荡",
+    "feat4": "同时运行多只伙伴",
+    "feat5": "数十种姿态与动画，随时切换",
+    "feat6": "托盘 / 菜单栏常驻，随时召回",
+    "platTitle": "一只伙伴，全平台",
+    "platSub": "Windows 10/11 · macOS · Android，同一套伙伴、同样的行为",
+    "privacyTitle": "隐私优先",
+    "privacyBody": "DeskBud 全程离线运行。不上传你的文件、不收集个人数据，附带的匿名计数可在设置里关闭。不需要账号。",
+    "buyTitle": "买断制",
+    "buyBody": "买断 DeskBud 即永久拥有，含未来新增的所有伙伴。无订阅、无内购、无广告。",
+    "buyNote": "价格以 Steam 商店页显示为准。",
+    "ctaWishlist": "前往 Steam 页面",
+    "ctaSoon": "即将上架 · 上线后可在 Steam 添加到愿望单",
+    "ctaFree": "先免费用客户端",
+    "freeNote": "客户端本体完全免费，2 只伙伴已内置，下载即用。",
+    "backHome": "返回首页"
   }
 }

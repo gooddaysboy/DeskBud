@@ -57,6 +57,10 @@ PAGES = [
      'Windows / 安卓 / macOS 三平台免费下载，宠物都在客户端里，装好一键领养。'),
     ('get.html', 'DeskBud 客户端下载',
      '电脑上直接下载，手机扫码装安卓版，装好就能领养伙伴。'),
+    # Steam 落地页（2026-10-05 新增）。🔴 og:title/description 故意不写死价格
+    # （与页面口径一致：价格交 Steam 商店页显示，防两渠道价格打架）
+    ('steam.html', 'DeskBud · Steam 即将上架',
+     '一次付费，永久拥有，含未来所有新伙伴。Windows / macOS / Android。'),
     ('manual/win-zh.html', 'DeskBud 桌宠用户手册（Windows）',
      'Windows 版怎么装、怎么玩、遇到问题怎么办，一页看完。'),
     ('manual/win-en.html', 'DeskBud Desktop Pet User Manual (Windows)',
