@@ -34,11 +34,12 @@ const SITE = {
       // 2. 注入 config（先于 webmeji.js；多宠物 = 多个 config 脚本，**并行**加载，全部到位后拼 SPAWNING）
       //    2026-09-14 老曹报「线上没有宠物在跑」：原为串行（rabbit → panda → 引擎），
       //    线上 rabbit.config.js 实测 2.9s ⇒ 串行白等 2.9s，叠加引擎 8s 兜底 → 10~13s 才见宠物。改并行。
-      const configFiles = ['rabbit.config.js?v=7', 'panda.config.js?v=2'];
+      const configFiles = ['rabbit.config.js?v=7', 'panda.config.js?v=2', 'shiba.config.js?v=1'];
       const startEngine = () => {
         window.SPAWNING = [
           ...(window.DESKBUD_RABBIT_SPAWNING || []),
           ...(window.DESKBUD_PANDA_SPAWNING || []),
+          ...(window.DESKBUD_SHIBA_SPAWNING || []),
         ];
         const s = document.createElement('script');
         s.src = this.base + 'webmeji.js?v=26';
