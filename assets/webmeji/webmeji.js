@@ -18,8 +18,10 @@
 ------------------------------------------------------------------------ */
 const FRAME_BLOBS = new Map();   // 原始 URL -> blob URL
 const FRAME_INFLIGHT = new Map(); // 原始 URL -> 进行中的 fetch Promise（并发去重：逐动作预载时 stand/sit 共享帧源）
-// 核心动作：语义参考（渐进路径已由"全量预载+逐动作就绪"覆盖）
-const CORE_ACTIONS = ['walk', 'stand', 'drag', 'falling', 'fallen', 'climbSide'];
+// 🔴 2026-10-07 删除 CORE_ACTIONS：它是一份写死的动作清单，且**全文件再无引用**（死代码）。
+//    它容易被误读成「引擎支持的动作上限」—— 实际不是：动作集合完全由 config 的键决定，
+//    见下方 allActions(cfg) = Object.keys(cfg).filter(...)，**加多少个动作都行，无上限**。
+//    （老曹 22:51：「每只宠物都有自己的专属动作，都要加上」⇒ 动作数不能有上限）
 
 function actionFrames(config, action) {
   const item = config[action];
