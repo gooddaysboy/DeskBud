@@ -1362,6 +1362,204 @@
         "zh": "织柴犬是一只住在你屏幕上的小狗。它会自己小跑巡逻，兴致来了就爬上屏幕边缘倒挂张望；无聊了眨眨眼、打打哈欠、伸个懒腰，久坐了还会陪你做护眼操。你点一下它就开心地跳起来，拖一拖它就乖乖跟着走。不吵不闹，只是摇着尾巴陪你把一天过完。",
         "en": "Knitted Shiba is a little dog living on your screen. It patrols on its own, climbs up and hangs from the screen edge to look around; blinks, yawns and stretches when bored, and joins you for eye exercises after long sitting. Tap it and it jumps happily, drag it and it follows along. Never noisy — just wagging its tail by your side, all day long."
       },
+      "poses": [
+        {
+          "src": "works/shiba-poses/shiba_idle-a.webp",
+          "name": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_run-a.webp",
+          "name": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_climb-a.webp",
+          "name": {
+            "zh": "攀爬",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_hang-a.webp",
+          "name": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_fall-a.webp",
+          "name": {
+            "zh": "落地",
+            "en": "Land"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sit-a.webp",
+          "name": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sit_dangle-a.webp",
+          "name": {
+            "zh": "垂腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sit_look_up-a.webp",
+          "name": {
+            "zh": "抬头望",
+            "en": "Look up"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_wave-a.webp",
+          "name": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_blink-a.webp",
+          "name": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_yawn-a.webp",
+          "name": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_stretch-a.webp",
+          "name": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_scratch-a.webp",
+          "name": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eat-a.webp",
+          "name": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sleep-a.webp",
+          "name": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_type-a.webp",
+          "name": {
+            "zh": "打字",
+            "en": "Type"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_type2-a.webp",
+          "name": {
+            "zh": "打字二",
+            "en": "Typing 2"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_drink-a.webp",
+          "name": {
+            "zh": "喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eye_exercise-a.webp",
+          "name": {
+            "zh": "护眼操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate1-a.webp",
+          "name": {
+            "zh": "庆祝",
+            "en": "Celebrate"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate2-a.webp",
+          "name": {
+            "zh": "庆祝二",
+            "en": "Celebrate 2"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate3-a.webp",
+          "name": {
+            "zh": "庆祝三",
+            "en": "Celebrate 3"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate4-a.webp",
+          "name": {
+            "zh": "庆祝四",
+            "en": "Celebrate 4"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction1-a.webp",
+          "name": {
+            "zh": "作揖",
+            "en": "Beg"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction2-a.webp",
+          "name": {
+            "zh": "握手",
+            "en": "Shake hands"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction3-a.webp",
+          "name": {
+            "zh": "蹭脸颊",
+            "en": "Nuzzle"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction4-a.webp",
+          "name": {
+            "zh": "打滚",
+            "en": "Roll over"
+          }
+        }
+      ],
       "states": [
         {
           "src": "works/shiba/idle.webp",
@@ -1540,40 +1738,52 @@
           }
         },
         {
+          "src": "works/shiba/celebrate3.webp",
+          "action": "celebrate3",
+          "caption": {
+            "zh": "庆祝三",
+            "en": "Celebrate 3"
+          }
+        },
+        {
+          "src": "works/shiba/celebrate4.webp",
+          "action": "celebrate4",
+          "caption": {
+            "zh": "庆祝四",
+            "en": "Celebrate 4"
+          }
+        },
+        {
           "src": "works/shiba/eaction1.webp",
           "action": "eaction1",
           "caption": {
-            "zh": "招牌动作一",
-            "en": "Signature Move 1"
-          },
-          "premium": true
+            "zh": "作揖",
+            "en": "Beg"
+          }
         },
         {
           "src": "works/shiba/eaction2.webp",
           "action": "eaction2",
           "caption": {
-            "zh": "招牌动作二",
-            "en": "Signature Move 2"
-          },
-          "premium": true
+            "zh": "握手",
+            "en": "Shake hands"
+          }
         },
         {
           "src": "works/shiba/eaction3.webp",
           "action": "eaction3",
           "caption": {
-            "zh": "招牌动作三",
-            "en": "Signature Move 3"
-          },
-          "premium": true
+            "zh": "蹭脸颊",
+            "en": "Nuzzle"
+          }
         },
         {
           "src": "works/shiba/eaction4.webp",
           "action": "eaction4",
           "caption": {
-            "zh": "招牌动作四",
-            "en": "Signature Move 4"
-          },
-          "premium": true
+            "zh": "打滚",
+            "en": "Roll over"
+          }
         }
       ],
       "date": "2026-10-08",
