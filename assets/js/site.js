@@ -238,8 +238,7 @@ const SITE = {
         if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
       });
       container.addEventListener('mouseenter', () => {
-        // 专注模式：抚摸气泡也抑制（webmeji:focus 广播同步状态）
-        if (container._wmFocus) return;
+        // 2026-10-08 口径对齐（总调度裁）：抚摸语录=交互类，专注下照常（与点击/拖拽反应同语义）
         hoverTimer = setTimeout(show, 900);   // 抚摸延迟冒泡
       });
       container.addEventListener('mouseleave', () => {
