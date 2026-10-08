@@ -1,7 +1,8 @@
 // DeskBud Webmeji 柴犬配置（2026-10-07 自 pyside6/shiba_frames 转换；2026-10-08 补 26 动作）
 // 与 rabbit.config.js / panda.config.js 同一套行为语义。
 // 2026-10-08：sit/pet/dance/forcethink/falling/fallen/jump 换真帧；
-//    招牌动作 eaction1-4 素材已产出但【暂不接网页】——等免费锁定（premium）逻辑定案后另派。
+//    老曹拍板【动作一律免费尽情展示】（收费=宠物买断+配饰/装备槽），
+//    招牌动作 eaction1-4（作揖/握手/蹭脸颊/打滚）正式接入网页，低权重偶尔惊喜。
 //    spin/trip/drag 无专属素材，仍用 stand 帧兜底（缺帧不崩、优雅退化为站桩）。
 
 window.DESKBUD_SHIBA_CONFIG = {
@@ -40,6 +41,22 @@ window.DESKBUD_SHIBA_CONFIG = {
                      "assets/webmeji/shiba/forcethink/f" + String(i).padStart(3, '0') + ".webp"),
             interval: 220, loops: 2 },
 
+  // ---- 招牌动作（2026-10-08 老曹拍板全开放，免费尽情展示）----
+  // eaction1-4：作揖/握手/蹭脸颊/打滚，各 25 帧，不在 webmeji 词表映射里，
+  // 直接用原名注册——引擎按 Object.keys 过滤 Array frames 自动发现。
+  eaction1: { frames: Array.from({length: 25}, (_, i) =>
+                     "assets/webmeji/shiba/eaction1/f" + String(i).padStart(3, '0') + ".webp"),
+            interval: 100 },
+  eaction2: { frames: Array.from({length: 25}, (_, i) =>
+                     "assets/webmeji/shiba/eaction2/f" + String(i).padStart(3, '0') + ".webp"),
+            interval: 100 },
+  eaction3: { frames: Array.from({length: 25}, (_, i) =>
+                     "assets/webmeji/shiba/eaction3/f" + String(i).padStart(3, '0') + ".webp"),
+            interval: 100 },
+  eaction4: { frames: Array.from({length: 25}, (_, i) =>
+                     "assets/webmeji/shiba/eaction4/f" + String(i).padStart(3, '0') + ".webp"),
+            interval: 100 },
+
   // ---- 无专属素材占位：显式给 stand，缺帧时不会崩 ----
   spin:        { frames: ["assets/webmeji/shiba/stand/f000.webp"], interval: 200, loops: 2 },
   trip:        { frames: ["assets/webmeji/shiba/stand/f000.webp"], interval: 200, loops: 1 },
@@ -74,17 +91,20 @@ window.DESKBUD_SHIBA_CONFIG = {
 
   // ---- 引擎必读三项（缺任一 → Creature 构造抛 TypeError，宠物静默不生成）----
   // ORIGINAL_ACTIONS：随机表演池。sit/dance 已有真帧可入池；
-  //   spin/trip 仍是站桩占位，权重压低。
+  //   spin/trip 仍是站桩占位，权重压低；eaction1-4 招牌低频惊喜。
   ORIGINAL_ACTIONS: [
     'walk','walk','walk','walk','walk','walk',
     'walk','walk','walk','walk',
     'stand','stand','stand',
     'sit','sit',
     'dance','dance',
-    'trip'
+    'trip',
+    'eaction1','eaction2','eaction3','eaction4'
   ],
-  // 性格权重（引擎 pickWeighted 用）——柴犬活泼：爱走爱坐，偶尔跳舞
-  actionWeights: { walk: 7, stand: 3, sit: 3, dance: 2, trip: 1 },
+  // 性格权重（引擎 pickWeighted 用）——柴犬活泼：爱走爱坐，偶尔跳舞，
+  // 招牌动作（作揖/握手/蹭脸颊/打滚）低于常规动作，偶尔惊喜
+  actionWeights: { walk: 7, stand: 3, sit: 3, dance: 2, trip: 1,
+                   eaction1: 1, eaction2: 1, eaction3: 1, eaction4: 1 },
 
   // 屏顶到达后的随机选择：挂住 / 顶部爬 / 从顶部落下
   EDGE_ACTIONS: ['hang', 'hang', 'climb', 'fall'],
