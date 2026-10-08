@@ -128,6 +128,7 @@
       "states": [
         {
           "src": "works/linekit-anim/linekit_idle.webp",
+          "action": "idle",
           "caption": {
             "zh": "待机",
             "en": "Idle"
@@ -135,6 +136,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_blink.webp",
+          "action": "blink",
           "caption": {
             "zh": "眨眼",
             "en": "Blink"
@@ -142,6 +144,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_sit.webp",
+          "action": "sit",
           "caption": {
             "zh": "端坐",
             "en": "Sit"
@@ -149,6 +152,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_sit_look_up.webp",
+          "action": "sit_look_up",
           "caption": {
             "zh": "抬头望",
             "en": "Look up"
@@ -156,6 +160,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_sit_dangle.webp",
+          "action": "sit_dangle",
           "caption": {
             "zh": "垂腿坐",
             "en": "Dangle sit"
@@ -163,6 +168,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_sleep.webp",
+          "action": "sleep",
           "caption": {
             "zh": "睡觉",
             "en": "Sleep"
@@ -170,6 +176,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_eat.webp",
+          "action": "eat",
           "caption": {
             "zh": "吃东西",
             "en": "Eat"
@@ -177,6 +184,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_drink.webp",
+          "action": "drink",
           "caption": {
             "zh": "喝水",
             "en": "Drink"
@@ -184,6 +192,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_stretch.webp",
+          "action": "stretch",
           "caption": {
             "zh": "伸懒腰",
             "en": "Stretch"
@@ -191,6 +200,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_yawn.webp",
+          "action": "yawn",
           "caption": {
             "zh": "打哈欠",
             "en": "Yawn"
@@ -198,6 +208,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_scratch.webp",
+          "action": "scratch",
           "caption": {
             "zh": "挠痒",
             "en": "Scratch"
@@ -205,6 +216,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_wave.webp",
+          "action": "wave",
           "caption": {
             "zh": "挥手",
             "en": "Wave"
@@ -212,6 +224,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_jumphappy.webp",
+          "action": "jumphappy",
           "caption": {
             "zh": "开心跳",
             "en": "Happy jump"
@@ -219,6 +232,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_run.webp",
+          "action": "run",
           "caption": {
             "zh": "跑动",
             "en": "Run"
@@ -226,6 +240,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_climb.webp",
+          "action": "climb",
           "caption": {
             "zh": "攀爬",
             "en": "Climb"
@@ -233,6 +248,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_hang.webp",
+          "action": "hang",
           "caption": {
             "zh": "倒挂",
             "en": "Hang"
@@ -240,6 +256,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_fall.webp",
+          "action": "fall",
           "caption": {
             "zh": "落地",
             "en": "Land"
@@ -247,6 +264,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_eye_exercise.webp",
+          "action": "eye_exercise",
           "caption": {
             "zh": "护眼操",
             "en": "Eye exercise"
@@ -254,6 +272,7 @@
         },
         {
           "src": "works/linekit-anim/linekit_celebrate1.webp",
+          "action": "celebrate1",
           "caption": {
             "zh": "庆祝",
             "en": "Celebrate"
@@ -518,6 +537,7 @@
             "states": [
         {
           "src": "works/panda/idle.webp",
+          "action": "idle",
           "caption": {
             "zh": "待机",
             "en": "Idle"
@@ -525,6 +545,7 @@
         },
         {
           "src": "works/panda/run.webp",
+          "action": "run",
           "caption": {
             "zh": "奔跑",
             "en": "Run"
@@ -532,6 +553,7 @@
         },
         {
           "src": "works/panda/climb.webp",
+          "action": "climb",
           "caption": {
             "zh": "爬墙",
             "en": "Climb"
@@ -539,6 +561,7 @@
         },
         {
           "src": "works/panda/hang.webp",
+          "action": "hang",
           "caption": {
             "zh": "倒挂",
             "en": "Hang"
@@ -546,6 +569,7 @@
         },
         {
           "src": "works/panda/fall.webp",
+          "action": "fall",
           "caption": {
             "zh": "坠落",
             "en": "Fall"
@@ -553,6 +577,7 @@
         },
         {
           "src": "works/panda/sit.webp",
+          "action": "sit",
           "caption": {
             "zh": "端坐",
             "en": "Sit"
@@ -560,6 +585,7 @@
         },
         {
           "src": "works/panda/wave.webp",
+          "action": "wave",
           "caption": {
             "zh": "打招呼",
             "en": "Wave"
@@ -567,6 +593,7 @@
         },
         {
           "src": "works/panda/jumphappy.webp",
+          "action": "jumphappy",
           "caption": {
             "zh": "开心跳",
             "en": "Happy jump"
@@ -574,6 +601,7 @@
         },
         {
           "src": "works/panda/blink.webp",
+          "action": "blink",
           "caption": {
             "zh": "眨眼",
             "en": "Blink"
@@ -581,6 +609,7 @@
         },
         {
           "src": "works/panda/yawn.webp",
+          "action": "yawn",
           "caption": {
             "zh": "打哈欠",
             "en": "Yawn"
@@ -588,6 +617,7 @@
         },
         {
           "src": "works/panda/stretch.webp",
+          "action": "stretch",
           "caption": {
             "zh": "伸懒腰",
             "en": "Stretch"
@@ -595,6 +625,7 @@
         },
         {
           "src": "works/panda/scratch.webp",
+          "action": "scratch",
           "caption": {
             "zh": "挠痒",
             "en": "Scratch"
@@ -602,6 +633,7 @@
         },
         {
           "src": "works/panda/eat.webp",
+          "action": "eat",
           "caption": {
             "zh": "吃东西",
             "en": "Eat"
@@ -609,6 +641,7 @@
         },
         {
           "src": "works/panda/sleep.webp",
+          "action": "sleep",
           "caption": {
             "zh": "睡觉",
             "en": "Sleep"
@@ -616,6 +649,7 @@
         },
         {
           "src": "works/panda/sit_dangle.webp",
+          "action": "sit_dangle",
           "caption": {
             "zh": "晃腿坐",
             "en": "Dangle sit"
@@ -623,6 +657,7 @@
         },
         {
           "src": "works/panda/sit_look_up.webp",
+          "action": "sit_look_up",
           "caption": {
             "zh": "抬头坐",
             "en": "Look up"
@@ -832,6 +867,7 @@
             "states": [
         {
           "src": "works/rabbit/idle.webp",
+          "action": "idle",
           "caption": {
             "zh": "待机",
             "en": "Idle"
@@ -839,6 +875,7 @@
         },
         {
           "src": "works/rabbit/run.webp",
+          "action": "run",
           "caption": {
             "zh": "奔跑",
             "en": "Run"
@@ -846,6 +883,7 @@
         },
         {
           "src": "works/rabbit/climb.webp",
+          "action": "climb",
           "caption": {
             "zh": "爬墙",
             "en": "Climb"
@@ -853,6 +891,7 @@
         },
         {
           "src": "works/rabbit/hang.webp",
+          "action": "hang",
           "caption": {
             "zh": "倒挂",
             "en": "Hang"
@@ -860,6 +899,7 @@
         },
         {
           "src": "works/rabbit/fall.webp",
+          "action": "fall",
           "caption": {
             "zh": "坠落",
             "en": "Fall"
@@ -867,6 +907,7 @@
         },
         {
           "src": "works/rabbit/sit.webp",
+          "action": "sit",
           "caption": {
             "zh": "端坐",
             "en": "Sit"
@@ -874,6 +915,7 @@
         },
         {
           "src": "works/rabbit/wave.webp",
+          "action": "wave",
           "caption": {
             "zh": "打招呼",
             "en": "Wave"
@@ -881,6 +923,7 @@
         },
         {
           "src": "works/rabbit/jumphappy.webp",
+          "action": "jumphappy",
           "caption": {
             "zh": "开心跳",
             "en": "Happy jump"
@@ -888,6 +931,7 @@
         },
         {
           "src": "works/rabbit/blink.webp",
+          "action": "blink",
           "caption": {
             "zh": "眨眼",
             "en": "Blink"
@@ -895,6 +939,7 @@
         },
         {
           "src": "works/rabbit/yawn.webp",
+          "action": "yawn",
           "caption": {
             "zh": "打哈欠",
             "en": "Yawn"
@@ -902,6 +947,7 @@
         },
         {
           "src": "works/rabbit/stretch.webp",
+          "action": "stretch",
           "caption": {
             "zh": "伸懒腰",
             "en": "Stretch"
@@ -909,6 +955,7 @@
         },
         {
           "src": "works/rabbit/scratch.webp",
+          "action": "scratch",
           "caption": {
             "zh": "挠痒",
             "en": "Scratch"
@@ -916,6 +963,7 @@
         },
         {
           "src": "works/rabbit/eat.webp",
+          "action": "eat",
           "caption": {
             "zh": "吃东西",
             "en": "Eat"
@@ -923,6 +971,7 @@
         },
         {
           "src": "works/rabbit/sleep.webp",
+          "action": "sleep",
           "caption": {
             "zh": "睡觉",
             "en": "Sleep"
@@ -930,6 +979,7 @@
         },
         {
           "src": "works/rabbit/sit_dangle.webp",
+          "action": "sit_dangle",
           "caption": {
             "zh": "晃腿坐",
             "en": "Dangle sit"
@@ -937,6 +987,7 @@
         },
         {
           "src": "works/rabbit/sit_look_up.webp",
+          "action": "sit_look_up",
           "caption": {
             "zh": "抬头坐",
             "en": "Look up"
