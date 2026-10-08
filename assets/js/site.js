@@ -42,7 +42,7 @@ const SITE = {
           ...(window.DESKBUD_SHIBA_SPAWNING || []),
         ];
         const s = document.createElement('script');
-        s.src = this.base + 'webmeji.js?v=28';
+        s.src = this.base + 'webmeji.js?v=29';
         s.onload = () => {
           // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
           window.dispatchEvent(new Event('DOMContentLoaded'));
@@ -199,12 +199,19 @@ const SITE = {
         this._wmContainers.forEach(c => { c._wmFocus = on; });
       });
       document.addEventListener('webmeji:action', (e) => {
-        if (e.detail && e.detail.focus) return; // 专注模式：自动气泡全抑制（2026-09-10）
+        // 2026-10-08 三端口径：专注模式自动气泡不再全抑制——随机语录类（状态气泡）降频至 1/3
+        if (e.detail && e.detail.focus && Math.random() >= 1 / 3) return;
         const key = this._WM_STATE_MAP[(e.detail && e.detail.action) || ''];
         if (!key) return;
         // 事件不带 id（外部测试派发/旧逻辑）时退化为第一只
         this._wmTryState(key, this._wmById(e.detail && e.detail.id) || this._wmContainers[0]);
       });
+    },
+
+    // 专注模式是否开启（引擎权威源 = localStorage deskbud_focus，每次现读避免事件时序问题；
+    // Creature.setFocusMode 切换时会广播 webmeji:focus，两条路径读同一 key，恒一致）
+    _wmFocusActive() {
+      try { return localStorage.getItem('deskbud_focus') === '1'; } catch (e) { return false; }
     },
 
     // 给单只宠物容器绑定点击/抚摸冒泡
@@ -218,6 +225,9 @@ const SITE = {
       const img = container.querySelector('img');
       container._wmId = (img && img.id) || '';
       container._wmSpecies = container._wmId.replace('deskbud-', '') || this._BUBBLE_CFG.pet;
+      // 2026-10-08: 初始同步专注状态（此前只靠 webmeji:focus 切换广播，
+      // 刷新页面时专注已开但 _wmFocus 未置位 → 悬停语录漏出）
+      container._wmFocus = this._wmFocusActive();
 
       // L1：随机语录（自动 / 抚摸）——按各自物种的语录池
       const show = () => this._wmBubbleShow(container, this._pickQuote(container), 3000);
@@ -248,7 +258,9 @@ const SITE = {
         scheduleAuto();
       };
       const scheduleAuto = () => {
-        container._wmAutoTimer = setTimeout(showAuto, 8000 + Math.random() * 12000);
+        // 2026-10-08 三端口径：专注模式随机语录降频至 1/3（8~20s → 24~60s），气泡仍出现
+        const gap = this._wmFocusActive() ? 24000 + Math.random() * 36000 : 8000 + Math.random() * 12000;
+        container._wmAutoTimer = setTimeout(showAuto, gap);
       };
       scheduleAuto();
     },

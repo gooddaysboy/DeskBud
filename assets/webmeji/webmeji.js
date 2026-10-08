@@ -801,10 +801,47 @@ class Creature {
           this.frameTimer = null;
           this.positionY = endY;
           this.container.style.top = `${endY}px`;
-          this.playTripAfterFall();
+          // DeskBud 2026-10-08: 落地衰减反弹（对齐安卓 spawn-fall→bounce 手感），
+          // 弹完再接 fallen/trip。distance<=0（本来就在底部，无下落能量）不加。
+          this.playLandingBounce();
       }
     };
     requestAnimationFrame(step);
+  }
+
+  // DeskBud 2026-10-08: 落地衰减反弹——y 位移弹跳 1~2 次，幅度逐次衰减，最后接落地动画。
+  // 纯位移实现：不动帧动画（保持下落末帧姿态）、不碰 img transform（facing/inverted/tilt/focus 归属不变）、
+  // 不改 fallspeed 数值语义；专注模式跳过（"落地就直接上墙"语义，立即恢复调度）。
+  playLandingBounce() {
+    if (this.focusMode) return this.playTripAfterFall();
+    const endY = window.innerHeight - this.containerHeight;
+    const h1 = Math.min(56, this.containerHeight * 0.5);   // 首弹高度：约半个身位，封顶 56px
+    const bounces = [
+      { h: h1, dur: 190 },                                 // bounce #1
+      { h: h1 * 0.42, dur: 140 }                           // bounce #2（衰减 ~40%）
+    ];
+    const endFall = () => {
+      this.positionY = endY;
+      this.container.style.top = `${endY}px`;
+      this.playTripAfterFall();
+    };
+    let bi = 0;
+    const nextBounce = () => {
+      if (this.isDragging) return;          // 弹跳中途被抓走 → 交给拖拽流程，落地动画由下次 fall 接管
+      if (bi >= bounces.length) return endFall();
+      const b = bounces[bi++];
+      const start = performance.now();
+      const step = (time) => {
+        if (this.isDragging) return;
+        const t = Math.min((time - start) / b.dur, 1);
+        this.positionY = endY - Math.sin(Math.PI * t) * b.h;   // 平滑起落（抛物线手感）
+        this.container.style.top = `${this.positionY}px`;
+        if (t < 1) requestAnimationFrame(step);
+        else nextBounce();
+      };
+      requestAnimationFrame(step);
+    };
+    nextBounce();
   }
 
   // play fallen/trip animation after landing
@@ -1009,9 +1046,8 @@ class Creature {
   }
 
   // DeskBud: 交互气泡触发源（click 单击 / drag 拖拽松手），100% 触发、最高优先级
-  // 专注模式（2026-09-10）：不冒泡——点击/拖拽/自动气泡全抑制
+  // 2026-10-08 三端口径：交互反应气泡（点击/拖拽）专注模式照常，不再抑制
   emitReact(kind) {
-    if (this.focusMode) return;
     try {
       document.dispatchEvent(new CustomEvent('webmeji:react', { detail: { kind: kind, id: this.img.id } }));
     } catch (e) {}
