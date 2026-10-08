@@ -641,6 +641,8 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .buy-builtin { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--brand-ink); background: rgba(232,114,43,.1); border: 1px solid rgba(232,114,43,.3); border-radius: 999px; padding: 9px 18px; font-weight: 600; }
 a.buy-builtin { text-decoration: none; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
 a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.16); box-shadow: 0 6px 16px rgba(232,114,43,.18); }
+/* 2026-10-08 对齐 kotlin 1c8d3c4：embed 态「已内置」禁用态（span 非链接，视觉与 kotlin 注入层一致） */
+.buy-builtin[aria-disabled="true"] { opacity: .55; filter: grayscale(1); cursor: default; }
 .hd-soon { font-size: 13px; color: var(--ink-faint); border: 1px dashed var(--ink-faint); border-radius: 999px; padding: 7px 14px; transition: color .18s, border-color .18s; }
 .hd-soon:hover { color: var(--brand); border-color: var(--brand); }
 .hd-buy .buy-chans { font-size: 13px; color: var(--ink-soft); }

@@ -1206,8 +1206,10 @@ SITE.pages = {
       const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
       const url = SITE.checkoutUrl(pickedIds());
       // 内置宠物（织熊猫/织兔子）开箱即用、免费 → 绝不能挂收银台
+      // 2026-10-08 对齐 kotlin 1c8d3c4：App 内(embed)点「已内置」跳下载判多余 → 输出禁用 span（非链接）；
+      // kotlin 注入层 .embed-mode a.buy-builtin 留作双保险（本分支只在购买皮肤=embed 态渲染，公网不出现）
       if (isBuiltin && n === 0) {
-        buyEl.innerHTML = `${tip}<a class="buy-builtin" href="download.html">🎁 ${window.pick({ zh: '已内置 · 开箱即用', en: 'Built-in · ready to use' })}</a>`;
+        buyEl.innerHTML = `${tip}<span class="buy-builtin" aria-disabled="true">🎁 ${window.pick({ zh: '已内置 · 开箱即用', en: 'Built-in · ready to use' })}</span>`;
         return;
       }
       if (!url) {   // 极端兜底：拿不到 did/清单时别留空按钮
@@ -1515,7 +1517,8 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           const tip = n >= 1 ? `<span class="buy-tip">${window.pick({ zh: `已选 ${n} 只`, en: `${n} selected` })}</span>` : '';
           let main = '';
           if (isBuiltin && n === 0) {
-            main = `${tip}<a class="buy-builtin" href="download.html">🎁 ${window.pick({ zh: '已内置 · 开箱即用', en: 'Built-in · ready to use' })}</a>`;
+            // 2026-10-08 对齐 kotlin 1c8d3c4：embed 态「已内置」禁用（span 非链接，见 buddies renderBuy 同款注释）
+            main = `${tip}<span class="buy-builtin" aria-disabled="true">🎁 ${window.pick({ zh: '已内置 · 开箱即用', en: 'Built-in · ready to use' })}</span>`;
           } else {
             const payUrl = SITE.checkoutUrl(pickedIds());
             main = payUrl
