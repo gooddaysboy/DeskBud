@@ -34,7 +34,7 @@ const SITE = {
       // 2. 注入 config（先于 webmeji.js；多宠物 = 多个 config 脚本，**并行**加载，全部到位后拼 SPAWNING）
       //    2026-09-14 老曹报「线上没有宠物在跑」：原为串行（rabbit → panda → 引擎），
       //    线上 rabbit.config.js 实测 2.9s ⇒ 串行白等 2.9s，叠加引擎 8s 兜底 → 10~13s 才见宠物。改并行。
-      const configFiles = ['rabbit.config.js?v=7', 'panda.config.js?v=2', 'shiba.config.js?v=1'];
+      const configFiles = ['rabbit.config.js?v=7', 'panda.config.js?v=2', 'shiba.config.js?v=2'];
       const startEngine = () => {
         window.SPAWNING = [
           ...(window.DESKBUD_RABBIT_SPAWNING || []),
@@ -971,8 +971,11 @@ SITE.pages = {
       panda: { idle: 'works/panda-anim/panda_idle.webp', lite: 'works/panda-lite/idle.webp', all: 'works/panda-anim/panda_all.webp' },
       rabbit: { idle: 'works/rabbit-anim/rabbit_idle.webp', lite: 'works/rabbit-lite/idle.webp', all: 'works/rabbit-anim/rabbit_all.webp' },
       linekit: { idle: 'works/linekit-anim/linekit_idle.webp', lite: 'works/linekit-lite/linekit_idle.webp', all: 'works/linekit-anim/linekit_all.webp' },
+      shiba: { idle: 'works/shiba-anim/shiba_idle.webp', lite: 'works/shiba-lite/idle.webp', all: 'works/shiba-anim/shiba_all.webp' },
     };
-    const poseList = w => (w.states && w.states.length ? w.states : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]);
+    // premium states（招牌动作）入数据但暂不展示（2026-10-08：免费锁定逻辑定案前先过滤）
+    const showStates = w => (w.states || []).filter(s => !s.premium);
+    const poseList = w => (showStates(w).length ? showStates(w) : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]);
 
     function stopAnim() { if (animTimer) { clearInterval(animTimer); animTimer = null; } }
 
@@ -1174,7 +1177,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     const PLAT_ORDER = ['win', 'android', 'mac'];
     let curPlat = 'win', lastPetId = null;
 
-    const poses = w => (w.states && w.states.length ? w.states : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]);
+    const poses = w => { const list = (w.states || []).filter(s => !s.premium); return list.length ? list : [{ src: w.cover || w.thumb, caption: { zh: '待机', en: 'Idle' } }]; };
     const poseName = s => window.pick(s.caption || { zh: '', en: '' }) || '';
     // 走马灯走【轻量动画套】works/<pet>-lite/（2026-09-12 老曹 A 方案）：
     // 原动画 240~384px、单张 280~700KB → 首页 25s 下载 5.6MB（比视频还大）；轻量套 160px+抽帧 ≈ 原 1/5
@@ -1478,7 +1481,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       const catName = SITE.catName(w.category);
       // 姿态走马灯走轻量套（2026-09-13 老曹）：三只宠物 basename 均与 -lite/ 内文件名一致；
       // 原来吃原图 → 线咪一页 19 张 ≈4.5MB，改后约 1/6
-      const onePose = (w.states || []).map(s => `
+      const onePose = (w.states || []).filter(s => !s.premium).map(s => `
         <figure class="pose-item">
           <div class="pose-guard" oncontextmenu="return false"></div>
           <img src="${SITE.liteSrc(w, s.src)}" alt="" draggable="false" loading="lazy" style="-webkit-user-drag:none;user-select:none;pointer-events:none;">

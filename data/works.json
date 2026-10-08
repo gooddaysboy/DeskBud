@@ -1338,6 +1338,246 @@
       },
       "date": "2026-08-10",
       "featured": true
+    },
+    {
+      "id": "shiba",
+      "emoji": "🐕",
+      "status": "online",
+      "title": {
+        "zh": "织柴犬",
+        "en": "Knitted Shiba"
+      },
+      "category": "dog",
+      "author": {
+        "zh": "gooddaysboy",
+        "en": "gooddaysboy"
+      },
+      "cover": "works/shiba/idle.webp",
+      "thumb": "works/shiba/idle.webp",
+      "summary": {
+        "zh": "会自己遛弯、爬墙倒挂、打哈欠伸懒腰的针织柴犬，点一下开心地跳，安静陪你工作。",
+        "en": "A knitted Shiba that wanders, climbs and hangs around, yawns and stretches — tap it for a happy jump. Quiet company for your workday."
+      },
+      "description": {
+        "zh": "织柴犬是一只住在你屏幕上的小狗。它会自己小跑巡逻，兴致来了就爬上屏幕边缘倒挂张望；无聊了眨眨眼、打打哈欠、伸个懒腰，久坐了还会陪你做护眼操。你点一下它就开心地跳起来，拖一拖它就乖乖跟着走。不吵不闹，只是摇着尾巴陪你把一天过完。",
+        "en": "Knitted Shiba is a little dog living on your screen. It patrols on its own, climbs up and hangs from the screen edge to look around; blinks, yawns and stretches when bored, and joins you for eye exercises after long sitting. Tap it and it jumps happily, drag it and it follows along. Never noisy — just wagging its tail by your side, all day long."
+      },
+      "states": [
+        {
+          "src": "works/shiba/idle.webp",
+          "action": "idle",
+          "caption": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/shiba/run.webp",
+          "action": "run",
+          "caption": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/shiba/climb.webp",
+          "action": "climb",
+          "caption": {
+            "zh": "攀爬",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/shiba/hang.webp",
+          "action": "hang",
+          "caption": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/shiba/fall.webp",
+          "action": "fall",
+          "caption": {
+            "zh": "落地",
+            "en": "Land"
+          }
+        },
+        {
+          "src": "works/shiba/sit.webp",
+          "action": "sit",
+          "caption": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/shiba/sit_dangle.webp",
+          "action": "sit_dangle",
+          "caption": {
+            "zh": "垂腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/shiba/sit_look_up.webp",
+          "action": "sit_look_up",
+          "caption": {
+            "zh": "抬头望",
+            "en": "Look up"
+          }
+        },
+        {
+          "src": "works/shiba/wave.webp",
+          "action": "wave",
+          "caption": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/shiba/jumphappy.webp",
+          "action": "jumphappy",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/shiba/blink.webp",
+          "action": "blink",
+          "caption": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/shiba/yawn.webp",
+          "action": "yawn",
+          "caption": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/shiba/stretch.webp",
+          "action": "stretch",
+          "caption": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/shiba/scratch.webp",
+          "action": "scratch",
+          "caption": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/shiba/eat.webp",
+          "action": "eat",
+          "caption": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/shiba/sleep.webp",
+          "action": "sleep",
+          "caption": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/shiba/type.webp",
+          "action": "type",
+          "caption": {
+            "zh": "打字",
+            "en": "Type"
+          }
+        },
+        {
+          "src": "works/shiba/type2.webp",
+          "action": "type2",
+          "caption": {
+            "zh": "打字二",
+            "en": "Typing 2"
+          }
+        },
+        {
+          "src": "works/shiba/drink.webp",
+          "action": "drink",
+          "caption": {
+            "zh": "喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/shiba/eye_exercise.webp",
+          "action": "eye_exercise",
+          "caption": {
+            "zh": "护眼操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/shiba/celebrate1.webp",
+          "action": "celebrate1",
+          "caption": {
+            "zh": "庆祝",
+            "en": "Celebrate"
+          }
+        },
+        {
+          "src": "works/shiba/celebrate2.webp",
+          "action": "celebrate2",
+          "caption": {
+            "zh": "庆祝二",
+            "en": "Celebrate 2"
+          }
+        },
+        {
+          "src": "works/shiba/eaction1.webp",
+          "action": "eaction1",
+          "caption": {
+            "zh": "招牌动作一",
+            "en": "Signature Move 1"
+          },
+          "premium": true
+        },
+        {
+          "src": "works/shiba/eaction2.webp",
+          "action": "eaction2",
+          "caption": {
+            "zh": "招牌动作二",
+            "en": "Signature Move 2"
+          },
+          "premium": true
+        },
+        {
+          "src": "works/shiba/eaction3.webp",
+          "action": "eaction3",
+          "caption": {
+            "zh": "招牌动作三",
+            "en": "Signature Move 3"
+          },
+          "premium": true
+        },
+        {
+          "src": "works/shiba/eaction4.webp",
+          "action": "eaction4",
+          "caption": {
+            "zh": "招牌动作四",
+            "en": "Signature Move 4"
+          },
+          "premium": true
+        }
+      ],
+      "date": "2026-10-08",
+      "featured": true
     }
   ]
 }
