@@ -111,6 +111,8 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
       try {
+        // DeskBud: 晚到的 config（补生路径）也补 kick falling 部分预载（首批在下方出生预载处已 kick）
+        if (!cfg.__fallKick) { cfg.__fallKick = true; preloadFramesPartial(cfg, 'falling', FALL_PARTIAL); }
         window.__WM_CREATURES.push(new Creature(id, cfg));
         console.log('[webmeji] 生成宠物:', id);
       } catch (e) { console.error('[webmeji] 生成失败：', e); }
@@ -132,6 +134,10 @@ window.addEventListener('DOMContentLoaded', () => {
       configs.forEach(cfg => preloadActions(cfg, restActions(cfg)));
     });
 
+  // DeskBud 2026-10-08: 出生下落需要 falling 帧——与出生预载并行补前 FALL_PARTIAL 帧。
+  // 不并入 BIRTH_ACTIONS（那会拉全量 34 帧），部分预载只取 8 帧 ≈ 每宠 +100KB 出生长。
+  configs.forEach(cfg => preloadFramesPartial(cfg, 'falling', FALL_PARTIAL));
+
   // 1) walk 或 stand 任一就绪 → 宠物即出（最快路径）；
   //    弱网下 8s 兜底强制出——此时若帧仍未就绪，Creature 进入"静帧站立"等待模式，绝不滑行
   const readyEither = (cfg) => new Promise(resolve => {
@@ -142,7 +148,23 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }, 100);
   });
-  Promise.all(configs.map(cfg => withTimeout(readyEither(cfg), CORE_TIMEOUT)))
+  // DeskBud 2026-10-08: 出生下落帧就绪轮询——walk/stand 与 falling 前 8 帧都就绪才生成，
+  // 共用 CORE_TIMEOUT 兜底（到期 falling 未就绪 → canSpawnFall 判 false，退回底部出生）
+  const fallPartialReady = (cfg) => {
+    const item = cfg.falling;
+    if (!item || !Array.isArray(item.frames) || !item.frames.length) return true; // 无 falling → 底部出生
+    return item.frames.slice(0, FALL_PARTIAL).every(f => typeof f === 'string' && f.startsWith('blob:'));
+  };
+  const readyForSpawn = (cfg) => Promise.all([
+    readyEither(cfg),
+    new Promise(resolve => {
+      if (fallPartialReady(cfg)) return resolve();
+      const poll = setInterval(() => {
+        if (fallPartialReady(cfg)) { clearInterval(poll); resolve(); }
+      }, 100);
+    })
+  ]);
+  Promise.all(configs.map(cfg => withTimeout(readyForSpawn(cfg), CORE_TIMEOUT)))
     .catch(e => console.error('[webmeji] 核心帧加载异常：', e))
     .then(spawnAll);
 
@@ -156,6 +178,30 @@ window.addEventListener('DOMContentLoaded', () => {
 // creature class -------------------------------------------------------
 // 复合动作 → 其帧来源动作（这些动作自身无 frames 配置，就绪性跟着源动作走）
 const ACTION_FRAME_ALIAS = { topwalk: 'walk', 'forced-walk': 'walk', 'force-think': 'forcethink' };
+
+// DeskBud 2026-10-08: 出生下落(spawn-fall)——falling 帧部分预载帧数。
+// 折中理由：完整 34 帧/宠 ≈300~500KB，全量并入出生预载会挤占 walk/stand 拖慢首屏
+// （c1f826a 只预载 walk/stand 的教训）；而 fallToBottom 下落只播一轮(8帧×115ms≈920ms)
+// 后停在末帧保持下落姿态，8 帧足够覆盖整段下落的视觉，其余帧由出生后的 restActions 后台补齐。
+// 弱网 CORE_TIMEOUT 兜底到期 falling 仍未就绪 → 该次出生退回原「底部直接生成」，绝不坏帧、不卡首屏。
+const FALL_PARTIAL = 8;
+
+// 部分预载：只把某动作前 count 帧 fetch 成 blob 并原地重写（其余帧留给后台全量预载，
+// 全量预载的 map(FRAME_BLOBS.get(f) || f) 对已 blob 化的帧天然幂等，两路无竞态）
+async function preloadFramesPartial(config, action, count) {
+  const item = config[action];
+  if (!item || !Array.isArray(item.frames) || !item.frames.length) return;
+  const head = item.frames.slice(0, Math.min(count, item.frames.length))
+    .filter(f => f && !f.startsWith('blob:'));
+  const CONC = 8;
+  for (let i = 0; i < head.length; i += CONC) {
+    await Promise.all(head.slice(i, i + CONC).map(materializeFrame));
+  }
+  for (let i = 0; i < Math.min(count, item.frames.length); i++) {
+    const f = item.frames[i];
+    if (f && !f.startsWith('blob:')) item.frames[i] = FRAME_BLOBS.get(f) || f;
+  }
+}
 
 class Creature {
   constructor(containerId, spriteConfig) {
@@ -211,7 +257,10 @@ class Creature {
 
     // spawn at random bottom position
     this.positionX = Math.random() * (window.innerWidth - this.containerWidth);
-    this.positionY = window.innerHeight - this.containerHeight;
+    // DeskBud 2026-10-08: 出生下落(spawn-fall)对齐安卓——随机出生 x 保留，起点在视口上方(-100)，
+    // 落到地面后接 playLandingBounce；falling 帧未就绪/视口过矮时维持原「底部直接生成」
+    this.spawnFallArmed = this.canSpawnFall();
+    this.positionY = this.spawnFallArmed ? -100 : window.innerHeight - this.containerHeight;
 
     this.container.style.left = `${this.positionX}px`;
     this.container.style.top = `${this.positionY}px`;
@@ -222,14 +271,22 @@ class Creature {
     this.inverted = false;   // DeskBud: 顶部倒立行走时垂直翻转(头朝下脚朝上)
 
     this.container.style.left = `${this.positionX}px`;
-    this.container.style.top = 'auto'; // reset top for CSS positioning
+    if (this.spawnFallArmed) {
+      this.container.style.bottom = 'auto';               // 脱离 CSS 默认 bottom:0，改由 top 驱动下落
+      this.container.style.top = `${this.positionY}px`;   // 视口上方
+    } else {
+      this.container.style.top = 'auto'; // reset top for CSS positioning
+    }
     this.baseBottom = 0; // reference for bottom alignment
 
     this.updateImageDirection(); // set initial facing
 
     // start first action（DeskBud: 帧未就绪时进入静帧站立等待，绝不带病上岗滑行）
     this.currentAction = null;
-    this.bootIfReady();
+    // DeskBud 2026-10-08: 出生下落——fallToBottom 播 falling 帧落到地面 → playLandingBounce
+    // → 落地动画 → resumeAfterFallen 把调度交回 setNextAction（帧未就绪时其内部回退 bootIfReady）
+    if (this.spawnFallArmed) this.fallToBottom();
+    else this.bootIfReady();
 
     // bind animate to this object
     this.animate = this.animate.bind(this);
@@ -747,6 +804,16 @@ class Creature {
   }
 
   // falling and recovery -------------------------------------------------
+  // DeskBud 2026-10-08: 出生下落可行性——falling 部分帧已 blob 化 + 视口放得下一个身位。
+  // 视口高度取生成时刻的 window.innerHeight（resize/横竖屏后生成也能取准当前值，
+  // 后台标签下 rAF 暂停会挂在上空、切回前台继续落，观感无害）。
+  canSpawnFall() {
+    const cfg = this.spriteConfig.falling;
+    if (!cfg || !Array.isArray(cfg.frames) || !cfg.frames.length) return false;
+    if (!((window.innerHeight - this.containerHeight) > 0)) return false;
+    return cfg.frames.slice(0, FALL_PARTIAL).every(f => typeof f === 'string' && f.startsWith('blob:'));
+  }
+
   // animate falling to bottom
   fallToBottom(fallSpeed=this.spriteConfig.fallspeed){
     if(this.isFalling) return;

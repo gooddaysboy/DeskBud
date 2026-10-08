@@ -42,7 +42,7 @@ const SITE = {
           ...(window.DESKBUD_SHIBA_SPAWNING || []),
         ];
         const s = document.createElement('script');
-        s.src = this.base + 'webmeji.js?v=29';
+        s.src = this.base + 'webmeji.js?v=30';
         s.onload = () => {
           // 4. webmeji.js 在 DOMContentLoaded 注册 listener；动态注入时该事件已触发，重发一次唤醒
           window.dispatchEvent(new Event('DOMContentLoaded'));
@@ -225,6 +225,8 @@ const SITE = {
       const img = container.querySelector('img');
       container._wmId = (img && img.id) || '';
       container._wmSpecies = container._wmId.replace('deskbud-', '') || this._BUBBLE_CFG.pet;
+      // 首只宠物容器就位 → 启动节日/通知气泡调度（2026-10-08 web 端补齐）
+      if (this._wmContainers.length === 1) this.startFestNotif();
       // 2026-10-08: 初始同步专注状态（此前只靠 webmeji:focus 切换广播，
       // 刷新页面时专注已开但 _wmFocus 未置位 → 悬停语录漏出）
       container._wmFocus = this._wmFocusActive();
@@ -277,6 +279,134 @@ const SITE = {
         mutations.forEach((m) => m.addedNodes.forEach(bind));
       });
       this._wmObserver.observe(document.body, { childList: true });
+    },
+
+    // ====== 节日/通知气泡（2026-10-08 web 端补齐，对齐安卓/pyside6） ======
+    // 数据源：data/bubble.json（三端共享真源）。⚠️ 结构现状：festivals.by_name 只有「节日名→文案」，
+    // **没有日期字段**（农历/节气节日无法从数据推算公历日期）——日期映射在 web 端本地最小补充
+    //（_FEST_FIXED/_FEST_LUNAR，不动共享结构；未覆盖的年份/日期自动不冒泡，不硬凑）。
+    // 文案全部取自 bubble.json 现有字段（by_name / terms.special / terms.common 的 {name} 模板 / reminders.public）。
+    // 频率约束：节日当天 ≤3 条（间隔 ≥1h）、通知类每天 ≤2 条（间隔 ≥40min），不抢当前气泡，专注模式不推送。
+    _WM_EXTRA: null,          // bubble.json 的 festivals/reminders（bubble.js 只保留 public/pets/reactions/states）
+    _WM_EXTRA_LOADED: false,
+    _festTimer: null,
+    _festCounters: null,
+    _FEST_FIXED: {            // 固定公历节日 'MM-DD' → bubble.json festivals.by_name 的节日名
+      '01-01': '元旦', '02-14': '情人节', '04-01': '愚人节', '05-01': '劳动节',
+      '06-01': '儿童节', '09-10': '教师节', '10-01': '国庆节', '10-24': '程序员节',
+      '11-11': '双十一', '12-24': '平安夜', '12-25': '圣诞节'
+    },
+    _FEST_LUNAR: {            // 农历节日/节气 → 公历（2026-2027，来源：紫金山天文台编算年历；过期年份自动失效=不冒泡）
+      '2026': { '01-26': '腊八节', '02-04': '立春', '02-16': '除夕', '02-17': '春节', '03-03': '元宵节',
+                '06-19': '端午节', '08-19': '七夕', '09-25': '中秋节', '10-18': '重阳节', '12-22': '冬至' },
+      '2027': { '01-15': '腊八节', '02-04': '立春', '02-05': '除夕', '02-06': '春节', '02-20': '元宵节',
+                '06-09': '端午节', '08-08': '七夕', '09-15': '中秋节', '10-08': '重阳节', '12-21': '冬至' }
+    },
+
+    // bubble.json 的 festivals/reminders 单独取一份（bubble.js 的 load() 不保留这两字段；
+    // 失败静默降级为不冒泡，不影响主流程）
+    _ensureExtra() {
+      if (this._WM_EXTRA_LOADED) return Promise.resolve(this._WM_EXTRA);
+      this._WM_EXTRA_LOADED = true;
+      return fetch('data/bubble.json', { cache: 'no-cache' })
+        .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+        .then(json => {
+          this._WM_EXTRA = {
+            festivals: (json.festivals && typeof json.festivals === 'object') ? json.festivals : null,
+            reminders: (json.reminders && typeof json.reminders === 'object') ? json.reminders : null
+          };
+          return this._WM_EXTRA;
+        })
+        .catch(() => { this._WM_EXTRA = null; return null; });
+    },
+
+    // 当天命中的节日：{ day: 'YYYY-MM-DD', name: 节日名|null }
+    // QA mock：?festmock=MM-DD（按公历/农历表查名）或 festmock=节日名（直给，如 festmock=春节）
+    _festMatch() {
+      let mock = null;
+      try { mock = new URLSearchParams(location.search).get('festmock'); } catch (e) {}
+      const d = new Date();
+      const y = d.getFullYear();
+      const md = String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const day = y + '-' + md;
+      if (mock) {
+        if (this._FEST_FIXED[mock] || (this._FEST_LUNAR[y] && this._FEST_LUNAR[y][mock])) {
+          return { day: day, name: this._FEST_FIXED[mock] || this._FEST_LUNAR[y][mock] };
+        }
+        return { day: day, name: mock };
+      }
+      const name = (this._FEST_LUNAR[y] && this._FEST_LUNAR[y][md]) || this._FEST_FIXED[md] || null;
+      return { day: day, name: name };
+    },
+
+    // 节日文案：by_name → terms.special → terms.common({name} 模板)，全取 bubble.json 现有字段
+    _festText(name) {
+      const f = this._WM_EXTRA && this._WM_EXTRA.festivals;
+      if (!f) return '';
+      const pool = (f.by_name && f.by_name[name])
+        || ((f.terms && f.terms.special && f.terms.special[name]) || null);
+      if (pool && pool.length) {
+        const entry = (window.BUBBLE && window.BUBBLE.pickBag)
+          ? window.BUBBLE.pickBag('fest:' + name, pool) : pool[Math.floor(Math.random() * pool.length)];
+        return (window.BUBBLE && window.BUBBLE.text) ? window.BUBBLE.text(entry) : (entry && (entry.zh || entry.en)) || '';
+      }
+      const common = f.terms && f.terms.common;
+      if (common && common.length) {
+        const entry = common[Math.floor(Math.random() * common.length)];
+        const t = (window.BUBBLE && window.BUBBLE.text) ? window.BUBBLE.text(entry) : (entry && (entry.zh || entry.en)) || '';
+        return t.replace(/\{name\}/g, name);
+      }
+      return '';
+    },
+
+    // 通知类文案：reminders.public（久坐/喝水/护眼提醒）
+    _notifText() {
+      const r = this._WM_EXTRA && this._WM_EXTRA.reminders;
+      const pool = (r && Array.isArray(r.public) && r.public) || [];
+      if (!pool.length) return '';
+      const entry = (window.BUBBLE && window.BUBBLE.pickBag)
+        ? window.BUBBLE.pickBag('notif', pool) : pool[Math.floor(Math.random() * pool.length)];
+      return (window.BUBBLE && window.BUBBLE.text) ? window.BUBBLE.text(entry) : (entry && (entry.zh || entry.en)) || '';
+    },
+
+    // 调度入口：首只宠物容器绑定后启动（保证有宿主可冒泡）
+    startFestNotif() {
+      if (this._festTimer) return;
+      this._festCounters = { day: '', fest: 0, notif: 0, festLast: 0, notifLast: 0 };
+      this._ensureExtra();   // 异步取 bubble.json 的 festivals/reminders（未就绪前 tick 自动空转）
+      let fast = null;
+      try { const q = new URLSearchParams(location.search); fast = q.get('festmock') || q.get('notifmock'); } catch (e) {}
+      this._festTick();
+      this._festTimer = setInterval(() => this._festTick(), fast ? 2500 : 90000); // mock 模式加速轮询便于 QA
+    },
+
+    _festTick() {
+      if (!this._wmContainers.length || this._wmAnyShowing()) return;   // 不抢当前气泡
+      if (this._wmFocusActive()) return;                                // 专注模式不推送（对齐桌宠）
+      let fast = false;
+      try { const q = new URLSearchParams(location.search); fast = !!(q.get('festmock') || q.get('notifmock')); } catch (e) {}
+      const c = this._festCounters || (this._festCounters = { day: '', fest: 0, notif: 0, festLast: 0, notifLast: 0 });
+      const now = Date.now();
+      const hit = this._festMatch();
+      if (c.day !== hit.day) { c.day = hit.day; c.fest = 0; c.notif = 0; c.festLast = 0; c.notifLast = 0; }
+      // 节日：当天最多 3 条、两条间隔 ≥1h（mock 模式缩到 5s 便于验证上限）
+      const gapFest = fast ? 5000 : 3600000;
+      if (hit.name && c.fest < 3 && now - c.festLast >= gapFest && (fast || Math.random() < 0.45)) {
+        const text = this._festText(hit.name);
+        if (text) {
+          const container = this._wmContainers[Math.floor(Math.random() * this._wmContainers.length)];
+          if (container) { this._wmBubbleShow(container, text, 4000); c.fest++; c.festLast = now; return; }
+        }
+      }
+      // 通知类：每天最多 2 条、间隔 ≥40min（mock 模式缩到 5s）
+      const gapNotif = fast ? 5000 : 2400000;
+      if (c.notif < 2 && now - c.notifLast >= gapNotif && (fast || Math.random() < 0.25)) {
+        const text = this._notifText();
+        if (text) {
+          const container = this._wmContainers[Math.floor(Math.random() * this._wmContainers.length)];
+          if (container) { this._wmBubbleShow(container, text, 4000); c.notif++; c.notifLast = now; }
+        }
+      }
     }
   },
   async load() {
