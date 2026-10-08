@@ -271,7 +271,12 @@ class Creature {
     if (this.inverted) parts.push('scaleY(-1)');
     if (this._tilt) parts.push(`rotate(${this._tilt}deg)`);
     if (this.focusMode) parts.push('scale(0.6)');
-    this.img.style.transformOrigin = '50% 100%';
+    // 🔴 2026-10-08 老曹报「爬到顶消失 10-20s 后以挂顶动作重现」根修：
+    // origin 曾固定 '50% 100%'（底部）—— scaleY(-1) 绕底部翻转会把图翻到容器下方
+    // y∈[100,200]，被 overflow:hidden 裁掉 = topwalk 倒走整段不可见（每段 3~6.5s、
+    // 62% 续段 ⇒ 消失 10~20s，与老曹观察吻合）。倒立必须绕中心翻转；歪头/_tilt 的
+    // 视觉锚点用底部（原 origin 语义保留给非倒立情形）。
+    this.img.style.transformOrigin = this.inverted ? '50% 50%' : '50% 100%';
     this.img.style.transition = 'transform .3s ease';
     this.img.style.transform = parts.join(' ');
   }
