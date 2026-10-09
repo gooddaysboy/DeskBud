@@ -517,7 +517,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* 隐私页整页独特色（与首页底部同色，老曹 2026-09-09 拍板统一上下色块） */
 body.privacy-warm { background: #efe5d0 fixed; }
 /* 2026-09-10 老曹四轮视觉：导航下留白加大（52→76）、上下两段间距收紧（64→36） */
-.hero-split { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: 48px; align-items: start; padding: 76px 0 36px; }
+.hero-split { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: 48px; align-items: start; padding: 48px 0 20px; }
 .hero-kicker { display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 2px; color: var(--ink-soft); margin-bottom: 18px; }
 .hero-kicker i { width: 26px; height: 2px; background: var(--brand); border-radius: 2px; }
 .hero-big { font-family: Georgia, "Songti SC", "STSong", "SimSun", serif; font-size: clamp(25px, 2.4vw, 32px); line-height: 1.65; margin: 0 0 16px; color: var(--ink); font-weight: 700; letter-spacing: .5px; }
@@ -599,7 +599,7 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .sdot.on { width: 26px; background: linear-gradient(90deg, #e8722b, #cf5f1c); box-shadow: 0 2px 8px rgba(232, 114, 43, .45); }
 /* 下部详情区：左文字立体大卡（上文字·下领回家链接） ｜ 右视频大卡（轮播+三平台标签），结构与上部一致 */
 /* 下部详情区：左右两卡底边对齐（老曹 2026-09-09 拍板）+ 立体大卡风格 */
-.home-detail { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 44px; padding: 40px 0 56px; align-items: stretch; }
+.home-detail { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 44px; padding: 20px 0 28px; align-items: stretch; }
 .hd-left, .hd-right { display: flex; flex-direction: column; }
 .hd-left {
   position: relative;
@@ -625,7 +625,7 @@ a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.
 .hd-buy .buy-chans a { color: var(--brand); font-weight: 600; text-decoration: none; padding: 2px 4px; border-radius: 8px; transition: box-shadow .18s, background .18s; }
 .hd-buy .buy-chans a:hover { text-decoration: none; background: #fff; box-shadow: 0 4px 14px rgba(232, 114, 43, .28); }
 /* Steam 入口行（2026-10-05 新增）：购买区下方的弱曝光一行，不进顶栏 nav */
-.hd-steam { margin: 14px 0 0; font-size: 13px; line-height: 1.7; }
+.hd-steam { margin: 0; font-size: 13px; line-height: 1.7; white-space: nowrap; }
 .hd-steam a { color: var(--brand); font-weight: 600; text-decoration: none; border-bottom: 1px dashed rgba(232, 114, 43, .5); padding-bottom: 1px; transition: color .18s, border-color .18s, box-shadow .18s; }
 .hd-steam a:hover { text-decoration: none; color: var(--brand-ink); border-bottom-color: var(--brand-ink); box-shadow: 0 3px 12px rgba(232, 114, 43, .22); }
 /* 链接焦点态（老曹 2026-09-09：有链接处 hover 一律浮起+阴影） */
@@ -674,7 +674,7 @@ a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.
      （手机端列宽被撑到 1800px、兔子卡挤出视口）——铁律①同款，必须 minmax(0, 1fr) */
   .hero-split, .home-detail { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .showcase-imgwrap { height: 320px; }
-  .home-detail { padding-top: 48px; }
+  .home-detail { padding-top: 24px; }
 }
 
 /* ---------- 首页三步上手（奶油色卡片带，借鉴竞品的轻量引导） ---------- */

@@ -1469,10 +1469,11 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           const tail = items ? window.pick({ zh: `也可在 ${items} 搜索 DeskBud`, en: `Also find DeskBud on ${items}` }) : '';
           if (!buySkin) {
             const dl = `<a class="btn btn-primary lead-dl" href="download.html">⬇ ${window.pick({ zh: '下载客户端 · 领养宠物', en: 'Download the app · adopt pets' })}</a>`;
+            const steam = `<a class="hd-steam" href="steam.html" data-i18n="steam.badge">${window.pick({ zh: 'Steam 即将上架', en: 'Steam — coming soon' })}</a>`;
             const hint = isOwned
               ? window.pick({ zh: '已拥有 · 在客户端内查看', en: 'Owned · open it in the app' })
               : (isBuiltin ? window.pick({ zh: '内置免费，下载客户端即可使用', en: 'Free & built in — just download the app' }) : window.pick({ zh: '宠物都在客户端里 · 装好一键领养，全自动', en: 'All pets live in the app — one tap after install' }));
-            hdBuy.innerHTML = `<div class="buy-row">${dl}<span class="lead-hint">${hint}</span>${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
+            hdBuy.innerHTML = `<div class="buy-row">${dl}${steam}<span class="lead-hint">${hint}</span>${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
             renderVideo(w); return;
           }
           const n = picked.size;
@@ -1487,7 +1488,8 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
               ? `${tip}${SITE.payAnchor(payUrl)}`
               : `${tip}<a class="btn btn-primary lead-dl" href="download.html">⬇ ${window.pick({ zh: '下载客户端 · 领养宠物', en: 'Download the app · adopt pets' })}</a>`;
           }
-          hdBuy.innerHTML = `<div class="buy-row">${main}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
+          const steam = `<a class="hd-steam" href="steam.html" data-i18n="steam.badge">${window.pick({ zh: 'Steam 即将上架', en: 'Steam — coming soon' })}</a>`;
+          hdBuy.innerHTML = `<div class="buy-row">${main}${steam}${tail ? `<span class="buy-chans">${tail}</span>` : ''}</div>`;
         }).catch(() => {});
       }
       renderVideo(w);
