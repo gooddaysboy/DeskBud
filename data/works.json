@@ -386,10 +386,10 @@
           }
         },
         {
-          "src": "works/linekit-poses/linekit_type2-a.webp",
+          "src": "works/linekit-poses/linekit_roll-a.webp",
           "name": {
-            "zh": "坐着打字",
-            "en": "Typing (sit)"
+            "zh": "翻跟头",
+            "en": "Somersault"
           }
         },
         {
@@ -1483,10 +1483,10 @@
           }
         },
         {
-          "src": "works/shiba-poses/shiba_type2-a.webp",
+          "src": "works/shiba-poses/shiba_roll-a.webp",
           "name": {
-            "zh": "打字二",
-            "en": "Typing 2"
+            "zh": "翻跟头",
+            "en": "Somersault"
           }
         },
         {
@@ -1698,11 +1698,11 @@
           }
         },
         {
-          "src": "works/shiba/type2.webp",
-          "action": "type2",
+          "src": "works/shiba/roll.webp",
+          "action": "roll",
           "caption": {
-            "zh": "打字二",
-            "en": "Typing 2"
+            "zh": "翻跟头",
+            "en": "Somersault"
           }
         },
         {

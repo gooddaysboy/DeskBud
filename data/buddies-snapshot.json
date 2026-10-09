@@ -178,10 +178,10 @@
           }
         },
         {
-          "src": "works/linekit-poses/linekit_type2-a.webp",
+          "src": "works/linekit-poses/linekit_roll-a.webp",
           "caption": {
-            "zh": "linekit_type2-a",
-            "en": "linekit_type2-a"
+            "zh": "linekit_roll-a",
+            "en": "linekit_roll-a"
           }
         },
         {
@@ -509,7 +509,7 @@
     "works/linekit-poses/linekit_sleep-a.webp",
     "works/linekit-poses/linekit_stretch-a.webp",
     "works/linekit-poses/linekit_type-a.webp",
-    "works/linekit-poses/linekit_type2-a.webp",
+    "works/linekit-poses/linekit_roll-a.webp",
     "works/linekit-poses/linekit_wave-a.webp",
     "works/linekit-poses/linekit_yawn-a.webp",
     "works/panda-lite/idle.webp",
