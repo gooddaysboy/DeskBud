@@ -1312,9 +1312,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
           hdTitle = $('hdTitle'), hdSummary = $('hdSummary'), hdDesc = $('hdDesc'),
           hdGetLabel = $('hdGetLabel'),
           hdBuy = $('hdBuy'),
-          vdBadge = $('vdBadge'), vdStage = $('vdStage'), vdTabs = $('vdTabs'),
-          posesBadge = $('posesBadge'),
-          posesGrid = $('posesGrid');
+          vdBadge = $('vdBadge'), vdStage = $('vdStage'), vdTabs = $('vdTabs');
     // 视频轮播：固定顺序 Windows → Android → macOS（老曹拍板），三标签常驻可切换；
     // 手册卡与视频窗口平台双向同步（点任一侧标签，另一侧跟着切）
     const PLAT_ORDER = ['win', 'android', 'mac'];
@@ -1387,7 +1385,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
         btn.addEventListener('click', () => {
           if (i === cur) return;
           cur = i; curPose = 0;
-          paintPicker(); paintDots(); paintShowcase(); paintDetail(); paintPoses(); restart();
+          paintPicker(); paintDots(); paintShowcase(); paintDetail(); restart();
         });
         const cb = btn.querySelector('.buddy-check');
         if (cb) cb.addEventListener('click', (e) => {
@@ -1450,42 +1448,6 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       }
     }
 
-    // 姿态速览·自动滚排 v3.1（2026-09-16 老曹）：只占一排高度，每 5s 柔和交叉淡入淡出替换（缓入缓出，无大幅位移）
-    // （数据源 works.json 的 poses；图片为 make_lite_anim.py 产出的 128px 轻量动图，带角标水印）
-    let posesTimer = null;
-    function paintPoses() {
-      if (!posesGrid) return;
-      const w = works[cur];
-      const list = (w.poses && w.poses.length) ? w.poses : [];
-      if (posesBadge) posesBadge.textContent = window.pick({ zh: '姿态速览', en: 'Poses' });
-      const PER_ROW = 6;
-      const totalRows = Math.max(1, Math.ceil(list.length / PER_ROW));
-      let html = '';
-      for (let i = 0; i < totalRows; i++) {
-        const s = i * PER_ROW, e = Math.min(s + PER_ROW, list.length);
-        let cells = '';
-        for (let k = s; k < e; k++) {
-          const p = list[k];
-          cells += `<figure class="pose-card"><div class="pose-img"><img src="${SITE.assetUrl(p.src)}" alt="${window.pick(p.name)}" loading="lazy" draggable="false"></div></figure>`;
-        }
-        html += `<div class="pose-row${i === 0 ? ' is-cur' : ''}">${cells}</div>`;
-      }
-      posesGrid.innerHTML = html;
-      if (posesTimer) { clearInterval(posesTimer); posesTimer = null; }
-      if (totalRows < 2) return;
-      const rows = Array.prototype.slice.call(posesGrid.children);
-      let idx = 0;
-      const apply = function () {
-        rows.forEach(function (r, i) {
-          const off = ((i - idx) % totalRows + totalRows) % totalRows;
-          r.classList.toggle('is-cur', off === 0);
-          r.classList.toggle('is-prev', off === totalRows - 1);
-          r.classList.toggle('is-next', off !== 0 && off !== totalRows - 1);
-        });
-      };
-      posesTimer = setInterval(function () { idx = (idx + 1) % totalRows; apply(); }, 5000);
-    }
-
     function paintDetail() {
       const w = works[cur];
       if (lastPetId !== w.id) { curPlat = 'win'; lastPetId = w.id; }
@@ -1540,7 +1502,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
       }, 3200);
     }
 
-    paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); paintPoses(); restart();
+    paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); restart();
     // 悬停大卡暂停轮播，移开恢复
     if (card) {
       card.addEventListener('mouseenter', () => { if (timer) { clearInterval(timer); timer = null; } });
@@ -1548,7 +1510,7 @@ const picker = $('petPicker'), badge = $('showcaseBadge'), track = $('showcaseTr
     }
     // 软导航离开首页时停掉轮播定时器
     SITE._cleanups.push(() => { if (timer) { clearInterval(timer); timer = null; } });
-    window.__rerender = () => { if (buySkin) picked = SITE.sanitizePicked(); paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); paintPoses(); };
+    window.__rerender = () => { if (buySkin) picked = SITE.sanitizePicked(); paintHero(); paintPicker(); paintDots(); paintShowcase(); paintDetail(); };
     loadOwned();   // 已拥有徽章（只读；网站不再下单）
     initOpenKounter();
   },

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- DeskBud offline snapshot | lang=zh | source=privacy.html | generated=2026-10-05 | 生效日期：2026-09-11 | 本文件由 website/scripts/gen_offline_docs.py 生成，请勿手改 -->
+<!-- DeskBud offline snapshot | lang=zh | source=privacy.html | generated=2026-10-09 | 生效日期：2026-09-11 | 本文件由 website/scripts/gen_offline_docs.py 生成，请勿手改 -->
 <html lang="zh-CN" data-page-node-id="V4kmd0igcelo9fAYTJjyFM">
 <head data-page-node-id="6LLqZdsr3fSSxoxodOwbZd">
   <meta charset="UTF-8" data-page-node-id="gd7ED4OsIFkN9Ph7lO9b63">
@@ -521,31 +521,7 @@ img { -webkit-user-drag: none; user-drag: none; }
    ============================================================ */
 /* 背景分层（2026-09-09 七轮拍板：整页只分上下两段——上部暖米独特色、下部与 footer 一体色；许可与隐私页=上部独特色） */
 .home-hero-band { background: linear-gradient(180deg, #f1e9d4 0%, #ede2c9 100%); }
-/* 姿态速览（2026-09-16 老曹 v3：只占一排高度、定时整排自动滚动替换） */
-.home-poses-band { background: linear-gradient(180deg, #ede2c9 0%, #efe5d0 100%); }
-.home-poses { padding: 12px 0 26px; }
-.poses-head { text-align: center; margin-bottom: 14px; }
-.poses-title { font-size: 25px; margin: 12px 0 6px; color: var(--ink); font-weight: 700; }
-/* .poses-sub 已删除（2026-09-12 老曹：首页去掉「共 24 个姿态」计数行） */
-/* 姿态速览·自动滚排 v3.2（2026-09-16 老曹）：只占一排高度，定时整排替换——2s 缓长交叉淡入淡出（两排叠化、无缝衔接，位移仅 8px） */
-.poses-stage { position: relative; height: 114px; overflow: hidden; }
-.poses-grid { position: relative; height: 100%; }
-.pose-row { position: absolute; left: 0; right: 0; top: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px;
-  opacity: 0; transform: translateY(8px); transition: opacity 2s ease-in-out, transform 2s ease-in-out; }
-.pose-row.is-cur { opacity: 1; transform: translateY(0); }
-.pose-row.is-prev { opacity: 0; transform: translateY(-8px); }
-.pose-row.is-next { opacity: 0; transform: translateY(8px); }
-.pose-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; }
-.pose-img { height: 92px; display: flex; align-items: center; justify-content: center; }
-.pose-img img { max-width: 100%; max-height: 100%; object-fit: contain; -webkit-user-drag: none; }
-@media (max-width: 980px) { .pose-row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 680px) {
-  .home-poses { padding: 4px 0 20px; }
-  .poses-title { font-size: 20px; }
-  .pose-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-  .pose-img { height: 72px; }
-  .poses-stage { height: 94px; }
-}
+/* 🔴 姿态速览整段样式已删（2026-10-09 老曹：与展示卡姿态轮播重复，下线整个 band */
 /* 下部区域与 footer 同色 #efe5d0（消除手册卡与页脚色差，老曹 2026-09-09 拍板） */
 .home-detail-band { background: #efe5d0; }
 /* 隐私页整页独特色（与首页底部同色，老曹 2026-09-09 拍板统一上下色块） */
@@ -651,6 +627,8 @@ body.privacy-warm { background: #efe5d0 fixed; }
 .buy-builtin { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--brand-ink); background: rgba(232,114,43,.1); border: 1px solid rgba(232,114,43,.3); border-radius: 999px; padding: 9px 18px; font-weight: 600; }
 a.buy-builtin { text-decoration: none; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
 a.buy-builtin:hover { transform: translateY(-1px); background: rgba(232,114,43,.16); box-shadow: 0 6px 16px rgba(232,114,43,.18); }
+/* 2026-10-08 对齐 kotlin 1c8d3c4：embed 态「已内置」禁用态（span 非链接，视觉与 kotlin 注入层一致） */
+.buy-builtin[aria-disabled="true"] { opacity: .55; filter: grayscale(1); cursor: default; }
 .hd-soon { font-size: 13px; color: var(--ink-faint); border: 1px dashed var(--ink-faint); border-radius: 999px; padding: 7px 14px; transition: color .18s, border-color .18s; }
 .hd-soon:hover { color: var(--brand); border-color: var(--brand); }
 .hd-buy .buy-chans { font-size: 13px; color: var(--ink-soft); }
