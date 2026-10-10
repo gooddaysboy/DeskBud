@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T05:41:50.603065+00:00",
-  "hash": "3b3fc58f2b279999eb38d5ab0abb8b521f6845f8cca3005932a2fe1b2f0f3a27",
+  "generatedAt": "2026-10-10T15:17:11.568829+00:00",
+  "hash": "6453101eadf2ca8ebfbf84d5b26ae822dcc59e935df6b07dae760661720a5856",
   "meta": {
     "title": {
       "zh": "DeskBud",
@@ -73,10 +73,45 @@
           }
         },
         {
+          "src": "works/linekit-poses/linekit_climbSide-a.webp",
+          "caption": {
+            "zh": "linekit_climbSide-a",
+            "en": "linekit_climbSide-a"
+          }
+        },
+        {
           "src": "works/linekit-poses/linekit_drink-a.webp",
           "caption": {
             "zh": "linekit_drink-a",
             "en": "linekit_drink-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eaction1-a.webp",
+          "caption": {
+            "zh": "linekit_eaction1-a",
+            "en": "linekit_eaction1-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eaction2-a.webp",
+          "caption": {
+            "zh": "linekit_eaction2-a",
+            "en": "linekit_eaction2-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eaction3-a.webp",
+          "caption": {
+            "zh": "linekit_eaction3-a",
+            "en": "linekit_eaction3-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_eaction4-a.webp",
+          "caption": {
+            "zh": "linekit_eaction4-a",
+            "en": "linekit_eaction4-a"
           }
         },
         {
@@ -119,6 +154,13 @@
           "caption": {
             "zh": "linekit_jumphappy-a",
             "en": "linekit_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/linekit-poses/linekit_roll-a.webp",
+          "caption": {
+            "zh": "linekit_roll-a",
+            "en": "linekit_roll-a"
           }
         },
         {
@@ -178,13 +220,6 @@
           }
         },
         {
-          "src": "works/linekit-poses/linekit_roll-a.webp",
-          "caption": {
-            "zh": "linekit_roll-a",
-            "en": "linekit_roll-a"
-          }
-        },
-        {
           "src": "works/linekit-poses/linekit_wave-a.webp",
           "caption": {
             "zh": "linekit_wave-a",
@@ -233,6 +268,34 @@
           }
         },
         {
+          "src": "works/panda-poses/panda_celebrate1-a.webp",
+          "caption": {
+            "zh": "panda_celebrate1-a",
+            "en": "panda_celebrate1-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_celebrate2-a.webp",
+          "caption": {
+            "zh": "panda_celebrate2-a",
+            "en": "panda_celebrate2-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_celebrate3-a.webp",
+          "caption": {
+            "zh": "panda_celebrate3-a",
+            "en": "panda_celebrate3-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_celebrate4-a.webp",
+          "caption": {
+            "zh": "panda_celebrate4-a",
+            "en": "panda_celebrate4-a"
+          }
+        },
+        {
           "src": "works/panda-poses/panda_climb-a.webp",
           "caption": {
             "zh": "panda_climb-a",
@@ -240,10 +303,52 @@
           }
         },
         {
+          "src": "works/panda-poses/panda_drink-a.webp",
+          "caption": {
+            "zh": "panda_drink-a",
+            "en": "panda_drink-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_eaction1-a.webp",
+          "caption": {
+            "zh": "panda_eaction1-a",
+            "en": "panda_eaction1-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_eaction2-a.webp",
+          "caption": {
+            "zh": "panda_eaction2-a",
+            "en": "panda_eaction2-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_eaction3-a.webp",
+          "caption": {
+            "zh": "panda_eaction3-a",
+            "en": "panda_eaction3-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_eaction4-a.webp",
+          "caption": {
+            "zh": "panda_eaction4-a",
+            "en": "panda_eaction4-a"
+          }
+        },
+        {
           "src": "works/panda-poses/panda_eat-a.webp",
           "caption": {
             "zh": "panda_eat-a",
             "en": "panda_eat-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_eye_exercise-a.webp",
+          "caption": {
+            "zh": "panda_eye_exercise-a",
+            "en": "panda_eye_exercise-a"
           }
         },
         {
@@ -272,6 +377,13 @@
           "caption": {
             "zh": "panda_jumphappy-a",
             "en": "panda_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/panda-poses/panda_roll-a.webp",
+          "caption": {
+            "zh": "panda_roll-a",
+            "en": "panda_roll-a"
           }
         },
         {
@@ -324,6 +436,13 @@
           }
         },
         {
+          "src": "works/panda-poses/panda_type-a.webp",
+          "caption": {
+            "zh": "panda_type-a",
+            "en": "panda_type-a"
+          }
+        },
+        {
           "src": "works/panda-poses/panda_wave-a.webp",
           "caption": {
             "zh": "panda_wave-a",
@@ -371,6 +490,34 @@
           }
         },
         {
+          "src": "works/rabbit-poses/rabbit_celebrate1-a.webp",
+          "caption": {
+            "zh": "rabbit_celebrate1-a",
+            "en": "rabbit_celebrate1-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_celebrate2-a.webp",
+          "caption": {
+            "zh": "rabbit_celebrate2-a",
+            "en": "rabbit_celebrate2-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_celebrate3-a.webp",
+          "caption": {
+            "zh": "rabbit_celebrate3-a",
+            "en": "rabbit_celebrate3-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_celebrate4-a.webp",
+          "caption": {
+            "zh": "rabbit_celebrate4-a",
+            "en": "rabbit_celebrate4-a"
+          }
+        },
+        {
           "src": "works/rabbit-poses/rabbit_climb-a.webp",
           "caption": {
             "zh": "rabbit_climb-a",
@@ -378,10 +525,52 @@
           }
         },
         {
+          "src": "works/rabbit-poses/rabbit_drink-a.webp",
+          "caption": {
+            "zh": "rabbit_drink-a",
+            "en": "rabbit_drink-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_eaction1-a.webp",
+          "caption": {
+            "zh": "rabbit_eaction1-a",
+            "en": "rabbit_eaction1-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_eaction2-a.webp",
+          "caption": {
+            "zh": "rabbit_eaction2-a",
+            "en": "rabbit_eaction2-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_eaction3-a.webp",
+          "caption": {
+            "zh": "rabbit_eaction3-a",
+            "en": "rabbit_eaction3-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_eaction4-a.webp",
+          "caption": {
+            "zh": "rabbit_eaction4-a",
+            "en": "rabbit_eaction4-a"
+          }
+        },
+        {
           "src": "works/rabbit-poses/rabbit_eat-a.webp",
           "caption": {
             "zh": "rabbit_eat-a",
             "en": "rabbit_eat-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_eye_exercise-a.webp",
+          "caption": {
+            "zh": "rabbit_eye_exercise-a",
+            "en": "rabbit_eye_exercise-a"
           }
         },
         {
@@ -410,6 +599,13 @@
           "caption": {
             "zh": "rabbit_jumphappy-a",
             "en": "rabbit_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/rabbit-poses/rabbit_roll-a.webp",
+          "caption": {
+            "zh": "rabbit_roll-a",
+            "en": "rabbit_roll-a"
           }
         },
         {
@@ -462,6 +658,13 @@
           }
         },
         {
+          "src": "works/rabbit-poses/rabbit_type-a.webp",
+          "caption": {
+            "zh": "rabbit_type-a",
+            "en": "rabbit_type-a"
+          }
+        },
+        {
           "src": "works/rabbit-poses/rabbit_wave-a.webp",
           "caption": {
             "zh": "rabbit_wave-a",
@@ -484,9 +687,744 @@
         "mac": true,
         "android": true
       }
+    },
+    {
+      "id": "shiba",
+      "status": "online",
+      "builtin": false,
+      "title": {
+        "zh": "织柴犬",
+        "en": "Knitted Shiba"
+      },
+      "category": "dog",
+      "author": "gooddaysboy",
+      "summary": {
+        "zh": "会自己遛弯、爬墙倒挂、打哈欠伸懒腰的针织柴犬，点一下开心地跳，安静陪你工作。",
+        "en": "A knitted Shiba that wanders, climbs and hangs around, yawns and stretches — tap it for a happy jump. Quiet company for your workday."
+      },
+      "thumb": "works/shiba-lite/idle.webp",
+      "poses": [
+        {
+          "src": "works/shiba-poses/shiba_blink-a.webp",
+          "caption": {
+            "zh": "shiba_blink-a",
+            "en": "shiba_blink-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate1-a.webp",
+          "caption": {
+            "zh": "shiba_celebrate1-a",
+            "en": "shiba_celebrate1-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate2-a.webp",
+          "caption": {
+            "zh": "shiba_celebrate2-a",
+            "en": "shiba_celebrate2-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate3-a.webp",
+          "caption": {
+            "zh": "shiba_celebrate3-a",
+            "en": "shiba_celebrate3-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_celebrate4-a.webp",
+          "caption": {
+            "zh": "shiba_celebrate4-a",
+            "en": "shiba_celebrate4-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_climb-a.webp",
+          "caption": {
+            "zh": "shiba_climb-a",
+            "en": "shiba_climb-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_drink-a.webp",
+          "caption": {
+            "zh": "shiba_drink-a",
+            "en": "shiba_drink-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction1-a.webp",
+          "caption": {
+            "zh": "shiba_eaction1-a",
+            "en": "shiba_eaction1-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction2-a.webp",
+          "caption": {
+            "zh": "shiba_eaction2-a",
+            "en": "shiba_eaction2-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction3-a.webp",
+          "caption": {
+            "zh": "shiba_eaction3-a",
+            "en": "shiba_eaction3-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eaction4-a.webp",
+          "caption": {
+            "zh": "shiba_eaction4-a",
+            "en": "shiba_eaction4-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eat-a.webp",
+          "caption": {
+            "zh": "shiba_eat-a",
+            "en": "shiba_eat-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_eye_exercise-a.webp",
+          "caption": {
+            "zh": "shiba_eye_exercise-a",
+            "en": "shiba_eye_exercise-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_fall-a.webp",
+          "caption": {
+            "zh": "shiba_fall-a",
+            "en": "shiba_fall-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_hang-a.webp",
+          "caption": {
+            "zh": "shiba_hang-a",
+            "en": "shiba_hang-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_idle-a.webp",
+          "caption": {
+            "zh": "shiba_idle-a",
+            "en": "shiba_idle-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_jumphappy-a.webp",
+          "caption": {
+            "zh": "shiba_jumphappy-a",
+            "en": "shiba_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_roll-a.webp",
+          "caption": {
+            "zh": "shiba_roll-a",
+            "en": "shiba_roll-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_run-a.webp",
+          "caption": {
+            "zh": "shiba_run-a",
+            "en": "shiba_run-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_scratch-a.webp",
+          "caption": {
+            "zh": "shiba_scratch-a",
+            "en": "shiba_scratch-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sit-a.webp",
+          "caption": {
+            "zh": "shiba_sit-a",
+            "en": "shiba_sit-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sit_dangle-a.webp",
+          "caption": {
+            "zh": "shiba_sit_dangle-a",
+            "en": "shiba_sit_dangle-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sit_look_up-a.webp",
+          "caption": {
+            "zh": "shiba_sit_look_up-a",
+            "en": "shiba_sit_look_up-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_sleep-a.webp",
+          "caption": {
+            "zh": "shiba_sleep-a",
+            "en": "shiba_sleep-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_stretch-a.webp",
+          "caption": {
+            "zh": "shiba_stretch-a",
+            "en": "shiba_stretch-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_type-a.webp",
+          "caption": {
+            "zh": "shiba_type-a",
+            "en": "shiba_type-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_wave-a.webp",
+          "caption": {
+            "zh": "shiba_wave-a",
+            "en": "shiba_wave-a"
+          }
+        },
+        {
+          "src": "works/shiba-poses/shiba_yawn-a.webp",
+          "caption": {
+            "zh": "shiba_yawn-a",
+            "en": "shiba_yawn-a"
+          }
+        }
+      ],
+      "adoption": {
+        "type": "paid",
+        "checkout": "pay.deskbud.xyz/checkout.html?device_id={device_id}&pet_ids=shiba&embed=1"
+      },
+      "platforms": {
+        "win": true,
+        "mac": true,
+        "android": true
+      }
+    },
+    {
+      "id": "capybara",
+      "status": "online",
+      "builtin": false,
+      "title": {
+        "zh": "织水豚",
+        "en": "Knitted Capybara"
+      },
+      "category": "capybara",
+      "author": "gooddaysboy",
+      "summary": {
+        "zh": "圆滚滚的针织水豚，爱趴着发呆、贴地翻滚、低头喝水，点一下开心地滚一圈，是最有松弛感的桌面伙伴。",
+        "en": "A round knitted capybara that loafs, rolls and sips water — tap it for a happy tumble. The most easy-going companion on your desk."
+      },
+      "thumb": "works/capybara-lite/idle.webp",
+      "poses": [
+        {
+          "src": "works/capybara-poses/capybara_blink-a.webp",
+          "caption": {
+            "zh": "capybara_blink-a",
+            "en": "capybara_blink-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate1-a.webp",
+          "caption": {
+            "zh": "capybara_celebrate1-a",
+            "en": "capybara_celebrate1-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate2-a.webp",
+          "caption": {
+            "zh": "capybara_celebrate2-a",
+            "en": "capybara_celebrate2-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate3-a.webp",
+          "caption": {
+            "zh": "capybara_celebrate3-a",
+            "en": "capybara_celebrate3-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate4-a.webp",
+          "caption": {
+            "zh": "capybara_celebrate4-a",
+            "en": "capybara_celebrate4-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_climb-a.webp",
+          "caption": {
+            "zh": "capybara_climb-a",
+            "en": "capybara_climb-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_drink-a.webp",
+          "caption": {
+            "zh": "capybara_drink-a",
+            "en": "capybara_drink-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction1-a.webp",
+          "caption": {
+            "zh": "capybara_eaction1-a",
+            "en": "capybara_eaction1-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction2-a.webp",
+          "caption": {
+            "zh": "capybara_eaction2-a",
+            "en": "capybara_eaction2-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction3-a.webp",
+          "caption": {
+            "zh": "capybara_eaction3-a",
+            "en": "capybara_eaction3-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction4-a.webp",
+          "caption": {
+            "zh": "capybara_eaction4-a",
+            "en": "capybara_eaction4-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eat-a.webp",
+          "caption": {
+            "zh": "capybara_eat-a",
+            "en": "capybara_eat-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eye_exercise-a.webp",
+          "caption": {
+            "zh": "capybara_eye_exercise-a",
+            "en": "capybara_eye_exercise-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_fall-a.webp",
+          "caption": {
+            "zh": "capybara_fall-a",
+            "en": "capybara_fall-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_hang-a.webp",
+          "caption": {
+            "zh": "capybara_hang-a",
+            "en": "capybara_hang-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_idle-a.webp",
+          "caption": {
+            "zh": "capybara_idle-a",
+            "en": "capybara_idle-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_jumphappy-a.webp",
+          "caption": {
+            "zh": "capybara_jumphappy-a",
+            "en": "capybara_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_roll-a.webp",
+          "caption": {
+            "zh": "capybara_roll-a",
+            "en": "capybara_roll-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_run-a.webp",
+          "caption": {
+            "zh": "capybara_run-a",
+            "en": "capybara_run-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_scratch-a.webp",
+          "caption": {
+            "zh": "capybara_scratch-a",
+            "en": "capybara_scratch-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sit-a.webp",
+          "caption": {
+            "zh": "capybara_sit-a",
+            "en": "capybara_sit-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sit_dangle-a.webp",
+          "caption": {
+            "zh": "capybara_sit_dangle-a",
+            "en": "capybara_sit_dangle-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sit_look_up-a.webp",
+          "caption": {
+            "zh": "capybara_sit_look_up-a",
+            "en": "capybara_sit_look_up-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sleep-a.webp",
+          "caption": {
+            "zh": "capybara_sleep-a",
+            "en": "capybara_sleep-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_stretch-a.webp",
+          "caption": {
+            "zh": "capybara_stretch-a",
+            "en": "capybara_stretch-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_type-a.webp",
+          "caption": {
+            "zh": "capybara_type-a",
+            "en": "capybara_type-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_wave-a.webp",
+          "caption": {
+            "zh": "capybara_wave-a",
+            "en": "capybara_wave-a"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_yawn-a.webp",
+          "caption": {
+            "zh": "capybara_yawn-a",
+            "en": "capybara_yawn-a"
+          }
+        }
+      ],
+      "adoption": {
+        "type": "paid",
+        "checkout": "pay.deskbud.xyz/checkout.html?device_id={device_id}&pet_ids=capybara&embed=1"
+      },
+      "platforms": {
+        "win": true,
+        "mac": true,
+        "android": true
+      }
+    },
+    {
+      "id": "hamster",
+      "status": "online",
+      "builtin": false,
+      "title": {
+        "zh": "织仓鼠",
+        "en": "Knitted Hamster"
+      },
+      "category": "hamster",
+      "author": "gooddaysboy",
+      "summary": {
+        "zh": "圆胖绒球仓鼠，爱小跑巡逻、抱东西猛啃、爬边倒挂，点一下开心地打起滚来。",
+        "en": "A plump little hamster that patrols, nibbles and climbs — tap it for a happy roll. Tiny, busy and delightful."
+      },
+      "thumb": "works/hamster-lite/idle.webp",
+      "poses": [
+        {
+          "src": "works/hamster-poses/hamster_blink-a.webp",
+          "caption": {
+            "zh": "hamster_blink-a",
+            "en": "hamster_blink-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate1-a.webp",
+          "caption": {
+            "zh": "hamster_celebrate1-a",
+            "en": "hamster_celebrate1-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate2-a.webp",
+          "caption": {
+            "zh": "hamster_celebrate2-a",
+            "en": "hamster_celebrate2-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate3-a.webp",
+          "caption": {
+            "zh": "hamster_celebrate3-a",
+            "en": "hamster_celebrate3-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate4-a.webp",
+          "caption": {
+            "zh": "hamster_celebrate4-a",
+            "en": "hamster_celebrate4-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_climb-a.webp",
+          "caption": {
+            "zh": "hamster_climb-a",
+            "en": "hamster_climb-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_climbSide-a.webp",
+          "caption": {
+            "zh": "hamster_climbSide-a",
+            "en": "hamster_climbSide-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_drink-a.webp",
+          "caption": {
+            "zh": "hamster_drink-a",
+            "en": "hamster_drink-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction1-a.webp",
+          "caption": {
+            "zh": "hamster_eaction1-a",
+            "en": "hamster_eaction1-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction2-a.webp",
+          "caption": {
+            "zh": "hamster_eaction2-a",
+            "en": "hamster_eaction2-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction3-a.webp",
+          "caption": {
+            "zh": "hamster_eaction3-a",
+            "en": "hamster_eaction3-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction4-a.webp",
+          "caption": {
+            "zh": "hamster_eaction4-a",
+            "en": "hamster_eaction4-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eat-a.webp",
+          "caption": {
+            "zh": "hamster_eat-a",
+            "en": "hamster_eat-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eye_exercise-a.webp",
+          "caption": {
+            "zh": "hamster_eye_exercise-a",
+            "en": "hamster_eye_exercise-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_fall-a.webp",
+          "caption": {
+            "zh": "hamster_fall-a",
+            "en": "hamster_fall-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_hang-a.webp",
+          "caption": {
+            "zh": "hamster_hang-a",
+            "en": "hamster_hang-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_idle-a.webp",
+          "caption": {
+            "zh": "hamster_idle-a",
+            "en": "hamster_idle-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_jumphappy-a.webp",
+          "caption": {
+            "zh": "hamster_jumphappy-a",
+            "en": "hamster_jumphappy-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_roll-a.webp",
+          "caption": {
+            "zh": "hamster_roll-a",
+            "en": "hamster_roll-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_run-a.webp",
+          "caption": {
+            "zh": "hamster_run-a",
+            "en": "hamster_run-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_scratch-a.webp",
+          "caption": {
+            "zh": "hamster_scratch-a",
+            "en": "hamster_scratch-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sit-a.webp",
+          "caption": {
+            "zh": "hamster_sit-a",
+            "en": "hamster_sit-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sit_dangle-a.webp",
+          "caption": {
+            "zh": "hamster_sit_dangle-a",
+            "en": "hamster_sit_dangle-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sit_look_up-a.webp",
+          "caption": {
+            "zh": "hamster_sit_look_up-a",
+            "en": "hamster_sit_look_up-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sleep-a.webp",
+          "caption": {
+            "zh": "hamster_sleep-a",
+            "en": "hamster_sleep-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_stretch-a.webp",
+          "caption": {
+            "zh": "hamster_stretch-a",
+            "en": "hamster_stretch-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_type-a.webp",
+          "caption": {
+            "zh": "hamster_type-a",
+            "en": "hamster_type-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_wave-a.webp",
+          "caption": {
+            "zh": "hamster_wave-a",
+            "en": "hamster_wave-a"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_yawn-a.webp",
+          "caption": {
+            "zh": "hamster_yawn-a",
+            "en": "hamster_yawn-a"
+          }
+        }
+      ],
+      "adoption": {
+        "type": "paid",
+        "checkout": "pay.deskbud.xyz/checkout.html?device_id={device_id}&pet_ids=hamster&embed=1"
+      },
+      "platforms": {
+        "win": true,
+        "mac": true,
+        "android": true
+      }
     }
   ],
   "resources": [
+    "works/capybara-lite/idle.webp",
+    "works/capybara-poses/capybara_blink-a.webp",
+    "works/capybara-poses/capybara_celebrate1-a.webp",
+    "works/capybara-poses/capybara_celebrate2-a.webp",
+    "works/capybara-poses/capybara_celebrate3-a.webp",
+    "works/capybara-poses/capybara_celebrate4-a.webp",
+    "works/capybara-poses/capybara_climb-a.webp",
+    "works/capybara-poses/capybara_drink-a.webp",
+    "works/capybara-poses/capybara_eaction1-a.webp",
+    "works/capybara-poses/capybara_eaction2-a.webp",
+    "works/capybara-poses/capybara_eaction3-a.webp",
+    "works/capybara-poses/capybara_eaction4-a.webp",
+    "works/capybara-poses/capybara_eat-a.webp",
+    "works/capybara-poses/capybara_eye_exercise-a.webp",
+    "works/capybara-poses/capybara_fall-a.webp",
+    "works/capybara-poses/capybara_hang-a.webp",
+    "works/capybara-poses/capybara_idle-a.webp",
+    "works/capybara-poses/capybara_jumphappy-a.webp",
+    "works/capybara-poses/capybara_roll-a.webp",
+    "works/capybara-poses/capybara_run-a.webp",
+    "works/capybara-poses/capybara_scratch-a.webp",
+    "works/capybara-poses/capybara_sit-a.webp",
+    "works/capybara-poses/capybara_sit_dangle-a.webp",
+    "works/capybara-poses/capybara_sit_look_up-a.webp",
+    "works/capybara-poses/capybara_sleep-a.webp",
+    "works/capybara-poses/capybara_stretch-a.webp",
+    "works/capybara-poses/capybara_type-a.webp",
+    "works/capybara-poses/capybara_wave-a.webp",
+    "works/capybara-poses/capybara_yawn-a.webp",
+    "works/hamster-lite/idle.webp",
+    "works/hamster-poses/hamster_blink-a.webp",
+    "works/hamster-poses/hamster_celebrate1-a.webp",
+    "works/hamster-poses/hamster_celebrate2-a.webp",
+    "works/hamster-poses/hamster_celebrate3-a.webp",
+    "works/hamster-poses/hamster_celebrate4-a.webp",
+    "works/hamster-poses/hamster_climb-a.webp",
+    "works/hamster-poses/hamster_climbSide-a.webp",
+    "works/hamster-poses/hamster_drink-a.webp",
+    "works/hamster-poses/hamster_eaction1-a.webp",
+    "works/hamster-poses/hamster_eaction2-a.webp",
+    "works/hamster-poses/hamster_eaction3-a.webp",
+    "works/hamster-poses/hamster_eaction4-a.webp",
+    "works/hamster-poses/hamster_eat-a.webp",
+    "works/hamster-poses/hamster_eye_exercise-a.webp",
+    "works/hamster-poses/hamster_fall-a.webp",
+    "works/hamster-poses/hamster_hang-a.webp",
+    "works/hamster-poses/hamster_idle-a.webp",
+    "works/hamster-poses/hamster_jumphappy-a.webp",
+    "works/hamster-poses/hamster_roll-a.webp",
+    "works/hamster-poses/hamster_run-a.webp",
+    "works/hamster-poses/hamster_scratch-a.webp",
+    "works/hamster-poses/hamster_sit-a.webp",
+    "works/hamster-poses/hamster_sit_dangle-a.webp",
+    "works/hamster-poses/hamster_sit_look_up-a.webp",
+    "works/hamster-poses/hamster_sleep-a.webp",
+    "works/hamster-poses/hamster_stretch-a.webp",
+    "works/hamster-poses/hamster_type-a.webp",
+    "works/hamster-poses/hamster_wave-a.webp",
+    "works/hamster-poses/hamster_yawn-a.webp",
     "works/linekit-lite/linekit_idle.webp",
     "works/linekit-poses/linekit_blink-a.webp",
     "works/linekit-poses/linekit_celebrate1-a.webp",
@@ -494,13 +1432,19 @@
     "works/linekit-poses/linekit_celebrate3-a.webp",
     "works/linekit-poses/linekit_celebrate4-a.webp",
     "works/linekit-poses/linekit_climb-a.webp",
+    "works/linekit-poses/linekit_climbSide-a.webp",
     "works/linekit-poses/linekit_drink-a.webp",
+    "works/linekit-poses/linekit_eaction1-a.webp",
+    "works/linekit-poses/linekit_eaction2-a.webp",
+    "works/linekit-poses/linekit_eaction3-a.webp",
+    "works/linekit-poses/linekit_eaction4-a.webp",
     "works/linekit-poses/linekit_eat-a.webp",
     "works/linekit-poses/linekit_eye_exercise-a.webp",
     "works/linekit-poses/linekit_fall-a.webp",
     "works/linekit-poses/linekit_hang-a.webp",
     "works/linekit-poses/linekit_idle-a.webp",
     "works/linekit-poses/linekit_jumphappy-a.webp",
+    "works/linekit-poses/linekit_roll-a.webp",
     "works/linekit-poses/linekit_run-a.webp",
     "works/linekit-poses/linekit_scratch-a.webp",
     "works/linekit-poses/linekit_sit-a.webp",
@@ -509,17 +1453,27 @@
     "works/linekit-poses/linekit_sleep-a.webp",
     "works/linekit-poses/linekit_stretch-a.webp",
     "works/linekit-poses/linekit_type-a.webp",
-    "works/linekit-poses/linekit_roll-a.webp",
     "works/linekit-poses/linekit_wave-a.webp",
     "works/linekit-poses/linekit_yawn-a.webp",
     "works/panda-lite/idle.webp",
     "works/panda-poses/panda_blink-a.webp",
+    "works/panda-poses/panda_celebrate1-a.webp",
+    "works/panda-poses/panda_celebrate2-a.webp",
+    "works/panda-poses/panda_celebrate3-a.webp",
+    "works/panda-poses/panda_celebrate4-a.webp",
     "works/panda-poses/panda_climb-a.webp",
+    "works/panda-poses/panda_drink-a.webp",
+    "works/panda-poses/panda_eaction1-a.webp",
+    "works/panda-poses/panda_eaction2-a.webp",
+    "works/panda-poses/panda_eaction3-a.webp",
+    "works/panda-poses/panda_eaction4-a.webp",
     "works/panda-poses/panda_eat-a.webp",
+    "works/panda-poses/panda_eye_exercise-a.webp",
     "works/panda-poses/panda_fall-a.webp",
     "works/panda-poses/panda_hang-a.webp",
     "works/panda-poses/panda_idle-a.webp",
     "works/panda-poses/panda_jumphappy-a.webp",
+    "works/panda-poses/panda_roll-a.webp",
     "works/panda-poses/panda_run-a.webp",
     "works/panda-poses/panda_scratch-a.webp",
     "works/panda-poses/panda_sit-a.webp",
@@ -527,16 +1481,28 @@
     "works/panda-poses/panda_sit_look_up-a.webp",
     "works/panda-poses/panda_sleep-a.webp",
     "works/panda-poses/panda_stretch-a.webp",
+    "works/panda-poses/panda_type-a.webp",
     "works/panda-poses/panda_wave-a.webp",
     "works/panda-poses/panda_yawn-a.webp",
     "works/rabbit-lite/idle.webp",
     "works/rabbit-poses/rabbit_blink-a.webp",
+    "works/rabbit-poses/rabbit_celebrate1-a.webp",
+    "works/rabbit-poses/rabbit_celebrate2-a.webp",
+    "works/rabbit-poses/rabbit_celebrate3-a.webp",
+    "works/rabbit-poses/rabbit_celebrate4-a.webp",
     "works/rabbit-poses/rabbit_climb-a.webp",
+    "works/rabbit-poses/rabbit_drink-a.webp",
+    "works/rabbit-poses/rabbit_eaction1-a.webp",
+    "works/rabbit-poses/rabbit_eaction2-a.webp",
+    "works/rabbit-poses/rabbit_eaction3-a.webp",
+    "works/rabbit-poses/rabbit_eaction4-a.webp",
     "works/rabbit-poses/rabbit_eat-a.webp",
+    "works/rabbit-poses/rabbit_eye_exercise-a.webp",
     "works/rabbit-poses/rabbit_fall-a.webp",
     "works/rabbit-poses/rabbit_hang-a.webp",
     "works/rabbit-poses/rabbit_idle-a.webp",
     "works/rabbit-poses/rabbit_jumphappy-a.webp",
+    "works/rabbit-poses/rabbit_roll-a.webp",
     "works/rabbit-poses/rabbit_run-a.webp",
     "works/rabbit-poses/rabbit_scratch-a.webp",
     "works/rabbit-poses/rabbit_sit-a.webp",
@@ -544,7 +1510,37 @@
     "works/rabbit-poses/rabbit_sit_look_up-a.webp",
     "works/rabbit-poses/rabbit_sleep-a.webp",
     "works/rabbit-poses/rabbit_stretch-a.webp",
+    "works/rabbit-poses/rabbit_type-a.webp",
     "works/rabbit-poses/rabbit_wave-a.webp",
-    "works/rabbit-poses/rabbit_yawn-a.webp"
+    "works/rabbit-poses/rabbit_yawn-a.webp",
+    "works/shiba-lite/idle.webp",
+    "works/shiba-poses/shiba_blink-a.webp",
+    "works/shiba-poses/shiba_celebrate1-a.webp",
+    "works/shiba-poses/shiba_celebrate2-a.webp",
+    "works/shiba-poses/shiba_celebrate3-a.webp",
+    "works/shiba-poses/shiba_celebrate4-a.webp",
+    "works/shiba-poses/shiba_climb-a.webp",
+    "works/shiba-poses/shiba_drink-a.webp",
+    "works/shiba-poses/shiba_eaction1-a.webp",
+    "works/shiba-poses/shiba_eaction2-a.webp",
+    "works/shiba-poses/shiba_eaction3-a.webp",
+    "works/shiba-poses/shiba_eaction4-a.webp",
+    "works/shiba-poses/shiba_eat-a.webp",
+    "works/shiba-poses/shiba_eye_exercise-a.webp",
+    "works/shiba-poses/shiba_fall-a.webp",
+    "works/shiba-poses/shiba_hang-a.webp",
+    "works/shiba-poses/shiba_idle-a.webp",
+    "works/shiba-poses/shiba_jumphappy-a.webp",
+    "works/shiba-poses/shiba_roll-a.webp",
+    "works/shiba-poses/shiba_run-a.webp",
+    "works/shiba-poses/shiba_scratch-a.webp",
+    "works/shiba-poses/shiba_sit-a.webp",
+    "works/shiba-poses/shiba_sit_dangle-a.webp",
+    "works/shiba-poses/shiba_sit_look_up-a.webp",
+    "works/shiba-poses/shiba_sleep-a.webp",
+    "works/shiba-poses/shiba_stretch-a.webp",
+    "works/shiba-poses/shiba_type-a.webp",
+    "works/shiba-poses/shiba_wave-a.webp",
+    "works/shiba-poses/shiba_yawn-a.webp"
   ]
 }

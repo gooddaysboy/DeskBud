@@ -62,6 +62,22 @@
             "en": "Dog"
           },
           "icon": "🐶"
+        },
+        {
+          "id": "capybara",
+          "name": {
+            "zh": "水豚",
+            "en": "Capybara"
+          },
+          "icon": "🦫"
+        },
+        {
+          "id": "hamster",
+          "name": {
+            "zh": "仓鼠",
+            "en": "Hamster"
+          },
+          "icon": "🐹"
         }
       ]
     },
@@ -92,14 +108,62 @@
   ],
   "channelsVisible": false,
   "channels": [
-    { "label": { "zh": "小红书", "en": "Xiaohongshu" }, "url": "" },
-    { "label": { "zh": "淘宝", "en": "Taobao" }, "url": "" },
-    { "label": { "zh": "闲鱼", "en": "Xianyu" }, "url": "" },
-    { "label": { "zh": "面包多", "en": "Mianbaoduo" }, "url": "" },
-    { "label": { "zh": "货摊网", "en": "Huotan" }, "url": "" },
-    { "label": { "zh": "爱发电", "en": "Afdian" }, "url": "" },
-    { "label": { "zh": "米画师", "en": "Mihuashi" }, "url": "" },
-    { "label": { "zh": "引力圈", "en": "Yinliquan" }, "url": "" }
+    {
+      "label": {
+        "zh": "小红书",
+        "en": "Xiaohongshu"
+      },
+      "url": ""
+    },
+    {
+      "label": {
+        "zh": "淘宝",
+        "en": "Taobao"
+      },
+      "url": ""
+    },
+    {
+      "label": {
+        "zh": "闲鱼",
+        "en": "Xianyu"
+      },
+      "url": ""
+    },
+    {
+      "label": {
+        "zh": "面包多",
+        "en": "Mianbaoduo"
+      },
+      "url": ""
+    },
+    {
+      "label": {
+        "zh": "货摊网",
+        "en": "Huotan"
+      },
+      "url": ""
+    },
+    {
+      "label": {
+        "zh": "爱发电",
+        "en": "Afdian"
+      },
+      "url": ""
+    },
+    {
+      "label": {
+        "zh": "米画师",
+        "en": "Mihuashi"
+      },
+      "url": ""
+    },
+    {
+      "label": {
+        "zh": "引力圈",
+        "en": "Yinliquan"
+      },
+      "url": ""
+    }
   ],
   "works": [
     {
@@ -534,7 +598,7 @@
         "zh": "织熊猫是一只住在你屏幕上的小宠物。它会自己走来走去，无聊了眨眨眼、打打哈欠、伸个懒腰；你点一下它就开心地跳起来，拖一拖它就跟着你跑。它不抢注意力，只是安静地陪着你——工作累了抬头看一眼，就被治愈了。",
         "en": "Knitted Panda is a little pet living on your screen. It wanders on its own, blinks and yawns when bored, stretches now and then; tap it and it jumps happily, drag it and it follows you. It never steals your attention — just keeps you company quietly, a small comfort whenever you look up from work."
       },
-            "states": [
+      "states": [
         {
           "src": "works/panda/idle.webp",
           "action": "idle",
@@ -664,7 +728,7 @@
           }
         }
       ],
-            "poses": [
+      "poses": [
         {
           "src": "works/panda-poses/panda_idle-a.webp",
           "name": {
@@ -864,7 +928,7 @@
         "zh": "织兔子是一只住在你屏幕上的小毛球。它自己蹦蹦跳跳，无聊了眨眨眼、打打哈欠、伸个懒腰；你点一下它就开心地蹦起来，拖一拖它就跟着你跑。它不抢注意力，只是安静地陪着你——工作累了抬头看一眼，就被治愈了。",
         "en": "Knitted Rabbit is a little furball living on your screen. It hops on its own, blinks and yawns when bored, stretches now and then; tap it and it jumps happily, drag it and it follows you. It never steals your attention — just keeps you company quietly, a small comfort whenever you look up from work."
       },
-            "states": [
+      "states": [
         {
           "src": "works/rabbit/idle.webp",
           "action": "idle",
@@ -994,7 +1058,7 @@
           }
         }
       ],
-            "poses": [
+      "poses": [
         {
           "src": "works/rabbit-poses/rabbit_idle-a.webp",
           "name": {
@@ -1787,6 +1851,906 @@
         }
       ],
       "date": "2026-10-08",
+      "featured": true
+    },
+    {
+      "id": "capybara",
+      "emoji": "🦫",
+      "status": "online",
+      "title": {
+        "zh": "织水豚",
+        "en": "Knitted Capybara"
+      },
+      "category": "capybara",
+      "author": {
+        "zh": "gooddaysboy",
+        "en": "gooddaysboy"
+      },
+      "cover": "works/capybara/idle.webp",
+      "thumb": "works/capybara/idle.webp",
+      "summary": {
+        "zh": "圆滚滚的针织水豚，爱趴着发呆、贴地翻滚、低头喝水，点一下开心地滚一圈，是最有松弛感的桌面伙伴。",
+        "en": "A round knitted capybara that loafs, rolls and sips water — tap it for a happy tumble. The most easy-going companion on your desk."
+      },
+      "description": {
+        "zh": "水豚是一只住在你屏幕上的圆滚滚小家伙。它大多数时候安静地趴着发呆，偶尔爬起来小跑一圈、贴着地面翻滚一周，或者凑到水边低头舔两口；久坐提醒时它会打打哈欠、陪你做护眼操。你点一下它就开心地翻个身，拖一拖它就慢悠悠跟着走。永远不慌不忙，是屏幕角落里最治愈的存在。",
+        "en": "Capybara is a round little fellow living on your screen. Most of the time it just loafs around quietly; now and then it gets up for a lap, rolls flat on the ground, or leans down for a sip of water. When you sit too long it yawns and joins your eye exercises. Tap it and it happily tumbles over, drag it and it follows along slowly. Never in a hurry — the most soothing thing in the corner of your screen."
+      },
+      "poses": [
+        {
+          "src": "works/capybara-poses/capybara_idle-a.webp",
+          "name": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_run-a.webp",
+          "name": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_climb-a.webp",
+          "name": {
+            "zh": "攀爬",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_hang-a.webp",
+          "name": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_fall-a.webp",
+          "name": {
+            "zh": "落地",
+            "en": "Land"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sit-a.webp",
+          "name": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sit_dangle-a.webp",
+          "name": {
+            "zh": "垂腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sit_look_up-a.webp",
+          "name": {
+            "zh": "抬头望",
+            "en": "Look up"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_wave-a.webp",
+          "name": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_blink-a.webp",
+          "name": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_yawn-a.webp",
+          "name": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_stretch-a.webp",
+          "name": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_scratch-a.webp",
+          "name": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eat-a.webp",
+          "name": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_sleep-a.webp",
+          "name": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_type-a.webp",
+          "name": {
+            "zh": "打字",
+            "en": "Type"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_roll-a.webp",
+          "name": {
+            "zh": "翻跟头",
+            "en": "Somersault"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_drink-a.webp",
+          "name": {
+            "zh": "喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eye_exercise-a.webp",
+          "name": {
+            "zh": "护眼操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate1-a.webp",
+          "name": {
+            "zh": "庆祝",
+            "en": "Celebrate"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate2-a.webp",
+          "name": {
+            "zh": "庆祝二",
+            "en": "Celebrate 2"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate3-a.webp",
+          "name": {
+            "zh": "庆祝三",
+            "en": "Celebrate 3"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_celebrate4-a.webp",
+          "name": {
+            "zh": "庆祝四",
+            "en": "Celebrate 4"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction1-a.webp",
+          "name": {
+            "zh": "作揖",
+            "en": "Beg"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction2-a.webp",
+          "name": {
+            "zh": "握手",
+            "en": "Shake hands"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction3-a.webp",
+          "name": {
+            "zh": "蹭脸颊",
+            "en": "Nuzzle"
+          }
+        },
+        {
+          "src": "works/capybara-poses/capybara_eaction4-a.webp",
+          "name": {
+            "zh": "打滚",
+            "en": "Roll over"
+          }
+        }
+      ],
+      "states": [
+        {
+          "src": "works/capybara/idle.webp",
+          "action": "idle",
+          "caption": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/capybara/run.webp",
+          "action": "run",
+          "caption": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/capybara/climb.webp",
+          "action": "climb",
+          "caption": {
+            "zh": "攀爬",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/capybara/hang.webp",
+          "action": "hang",
+          "caption": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/capybara/fall.webp",
+          "action": "fall",
+          "caption": {
+            "zh": "落地",
+            "en": "Land"
+          }
+        },
+        {
+          "src": "works/capybara/sit.webp",
+          "action": "sit",
+          "caption": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/capybara/sit_dangle.webp",
+          "action": "sit_dangle",
+          "caption": {
+            "zh": "垂腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/capybara/sit_look_up.webp",
+          "action": "sit_look_up",
+          "caption": {
+            "zh": "抬头望",
+            "en": "Look up"
+          }
+        },
+        {
+          "src": "works/capybara/wave.webp",
+          "action": "wave",
+          "caption": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/capybara/jumphappy.webp",
+          "action": "jumphappy",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/capybara/blink.webp",
+          "action": "blink",
+          "caption": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/capybara/yawn.webp",
+          "action": "yawn",
+          "caption": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/capybara/stretch.webp",
+          "action": "stretch",
+          "caption": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/capybara/scratch.webp",
+          "action": "scratch",
+          "caption": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/capybara/eat.webp",
+          "action": "eat",
+          "caption": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/capybara/sleep.webp",
+          "action": "sleep",
+          "caption": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/capybara/type.webp",
+          "action": "type",
+          "caption": {
+            "zh": "打字",
+            "en": "Type"
+          }
+        },
+        {
+          "src": "works/capybara/roll.webp",
+          "action": "roll",
+          "caption": {
+            "zh": "翻跟头",
+            "en": "Somersault"
+          }
+        },
+        {
+          "src": "works/capybara/drink.webp",
+          "action": "drink",
+          "caption": {
+            "zh": "喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/capybara/eye_exercise.webp",
+          "action": "eye_exercise",
+          "caption": {
+            "zh": "护眼操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/capybara/celebrate1.webp",
+          "action": "celebrate1",
+          "caption": {
+            "zh": "庆祝",
+            "en": "Celebrate"
+          }
+        },
+        {
+          "src": "works/capybara/celebrate2.webp",
+          "action": "celebrate2",
+          "caption": {
+            "zh": "庆祝二",
+            "en": "Celebrate 2"
+          }
+        },
+        {
+          "src": "works/capybara/celebrate3.webp",
+          "action": "celebrate3",
+          "caption": {
+            "zh": "庆祝三",
+            "en": "Celebrate 3"
+          }
+        },
+        {
+          "src": "works/capybara/celebrate4.webp",
+          "action": "celebrate4",
+          "caption": {
+            "zh": "庆祝四",
+            "en": "Celebrate 4"
+          }
+        },
+        {
+          "src": "works/capybara/eaction1.webp",
+          "action": "eaction1",
+          "caption": {
+            "zh": "作揖",
+            "en": "Beg"
+          }
+        },
+        {
+          "src": "works/capybara/eaction2.webp",
+          "action": "eaction2",
+          "caption": {
+            "zh": "握手",
+            "en": "Shake hands"
+          }
+        },
+        {
+          "src": "works/capybara/eaction3.webp",
+          "action": "eaction3",
+          "caption": {
+            "zh": "蹭脸颊",
+            "en": "Nuzzle"
+          }
+        },
+        {
+          "src": "works/capybara/eaction4.webp",
+          "action": "eaction4",
+          "caption": {
+            "zh": "打滚",
+            "en": "Roll over"
+          }
+        }
+      ],
+      "date": "2026-10-10",
+      "featured": true
+    },
+    {
+      "id": "hamster",
+      "emoji": "🐹",
+      "status": "online",
+      "title": {
+        "zh": "织仓鼠",
+        "en": "Knitted Hamster"
+      },
+      "category": "hamster",
+      "author": {
+        "zh": "gooddaysboy",
+        "en": "gooddaysboy"
+      },
+      "cover": "works/hamster/idle.webp",
+      "thumb": "works/hamster/idle.webp",
+      "summary": {
+        "zh": "圆胖绒球仓鼠，爱小跑巡逻、抱东西猛啃、爬边倒挂，点一下开心地打起滚来。",
+        "en": "A plump little hamster that patrols, nibbles and climbs — tap it for a happy roll. Tiny, busy and delightful."
+      },
+      "description": {
+        "zh": "仓鼠是一只住在你屏幕上的圆胖绒球。它会自己小跑巡逻，兴致来了就爬上屏幕边缘张望、倒挂一会儿；无聊了眨眨眼、伸个懒腰、抱着东西猛啃，久坐提醒时还会陪你做护眼操。你点一下它就开心地打起滚来，拖一拖它就乖乖跟着走。个头不大，忙忙碌碌，陪你把一天过得热热闹闹。",
+        "en": "Hamster is a plump little ball of fluff living on your screen. It patrols on its own, climbs the screen edge to look around and hangs there a while; when bored it blinks, stretches and nibbles away at things, and joins your eye exercises after long sitting. Tap it and it happily rolls over, drag it and it follows along. Small, busy, and it keeps your day lively."
+      },
+      "poses": [
+        {
+          "src": "works/hamster-poses/hamster_idle-a.webp",
+          "name": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_run-a.webp",
+          "name": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_climb-a.webp",
+          "name": {
+            "zh": "攀爬",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_hang-a.webp",
+          "name": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_fall-a.webp",
+          "name": {
+            "zh": "落地",
+            "en": "Land"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sit-a.webp",
+          "name": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sit_dangle-a.webp",
+          "name": {
+            "zh": "垂腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sit_look_up-a.webp",
+          "name": {
+            "zh": "抬头望",
+            "en": "Look up"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_wave-a.webp",
+          "name": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_jumphappy-a.webp",
+          "name": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_blink-a.webp",
+          "name": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_yawn-a.webp",
+          "name": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_stretch-a.webp",
+          "name": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_scratch-a.webp",
+          "name": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eat-a.webp",
+          "name": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_sleep-a.webp",
+          "name": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_type-a.webp",
+          "name": {
+            "zh": "打字",
+            "en": "Type"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_roll-a.webp",
+          "name": {
+            "zh": "翻跟头",
+            "en": "Somersault"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_drink-a.webp",
+          "name": {
+            "zh": "喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eye_exercise-a.webp",
+          "name": {
+            "zh": "护眼操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate1-a.webp",
+          "name": {
+            "zh": "庆祝",
+            "en": "Celebrate"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate2-a.webp",
+          "name": {
+            "zh": "庆祝二",
+            "en": "Celebrate 2"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate3-a.webp",
+          "name": {
+            "zh": "庆祝三",
+            "en": "Celebrate 3"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_celebrate4-a.webp",
+          "name": {
+            "zh": "庆祝四",
+            "en": "Celebrate 4"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction1-a.webp",
+          "name": {
+            "zh": "作揖",
+            "en": "Beg"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction2-a.webp",
+          "name": {
+            "zh": "握手",
+            "en": "Shake hands"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction3-a.webp",
+          "name": {
+            "zh": "蹭脸颊",
+            "en": "Nuzzle"
+          }
+        },
+        {
+          "src": "works/hamster-poses/hamster_eaction4-a.webp",
+          "name": {
+            "zh": "打滚",
+            "en": "Roll over"
+          }
+        }
+      ],
+      "states": [
+        {
+          "src": "works/hamster/idle.webp",
+          "action": "idle",
+          "caption": {
+            "zh": "待机",
+            "en": "Idle"
+          }
+        },
+        {
+          "src": "works/hamster/run.webp",
+          "action": "run",
+          "caption": {
+            "zh": "跑动",
+            "en": "Run"
+          }
+        },
+        {
+          "src": "works/hamster/climb.webp",
+          "action": "climb",
+          "caption": {
+            "zh": "攀爬",
+            "en": "Climb"
+          }
+        },
+        {
+          "src": "works/hamster/hang.webp",
+          "action": "hang",
+          "caption": {
+            "zh": "倒挂",
+            "en": "Hang"
+          }
+        },
+        {
+          "src": "works/hamster/fall.webp",
+          "action": "fall",
+          "caption": {
+            "zh": "落地",
+            "en": "Land"
+          }
+        },
+        {
+          "src": "works/hamster/sit.webp",
+          "action": "sit",
+          "caption": {
+            "zh": "端坐",
+            "en": "Sit"
+          }
+        },
+        {
+          "src": "works/hamster/sit_dangle.webp",
+          "action": "sit_dangle",
+          "caption": {
+            "zh": "垂腿坐",
+            "en": "Dangle sit"
+          }
+        },
+        {
+          "src": "works/hamster/sit_look_up.webp",
+          "action": "sit_look_up",
+          "caption": {
+            "zh": "抬头望",
+            "en": "Look up"
+          }
+        },
+        {
+          "src": "works/hamster/wave.webp",
+          "action": "wave",
+          "caption": {
+            "zh": "挥手",
+            "en": "Wave"
+          }
+        },
+        {
+          "src": "works/hamster/jumphappy.webp",
+          "action": "jumphappy",
+          "caption": {
+            "zh": "开心跳",
+            "en": "Happy jump"
+          }
+        },
+        {
+          "src": "works/hamster/blink.webp",
+          "action": "blink",
+          "caption": {
+            "zh": "眨眼",
+            "en": "Blink"
+          }
+        },
+        {
+          "src": "works/hamster/yawn.webp",
+          "action": "yawn",
+          "caption": {
+            "zh": "打哈欠",
+            "en": "Yawn"
+          }
+        },
+        {
+          "src": "works/hamster/stretch.webp",
+          "action": "stretch",
+          "caption": {
+            "zh": "伸懒腰",
+            "en": "Stretch"
+          }
+        },
+        {
+          "src": "works/hamster/scratch.webp",
+          "action": "scratch",
+          "caption": {
+            "zh": "挠痒",
+            "en": "Scratch"
+          }
+        },
+        {
+          "src": "works/hamster/eat.webp",
+          "action": "eat",
+          "caption": {
+            "zh": "吃东西",
+            "en": "Eat"
+          }
+        },
+        {
+          "src": "works/hamster/sleep.webp",
+          "action": "sleep",
+          "caption": {
+            "zh": "睡觉",
+            "en": "Sleep"
+          }
+        },
+        {
+          "src": "works/hamster/type.webp",
+          "action": "type",
+          "caption": {
+            "zh": "打字",
+            "en": "Type"
+          }
+        },
+        {
+          "src": "works/hamster/roll.webp",
+          "action": "roll",
+          "caption": {
+            "zh": "翻跟头",
+            "en": "Somersault"
+          }
+        },
+        {
+          "src": "works/hamster/drink.webp",
+          "action": "drink",
+          "caption": {
+            "zh": "喝水",
+            "en": "Drink"
+          }
+        },
+        {
+          "src": "works/hamster/eye_exercise.webp",
+          "action": "eye_exercise",
+          "caption": {
+            "zh": "护眼操",
+            "en": "Eye exercise"
+          }
+        },
+        {
+          "src": "works/hamster/celebrate1.webp",
+          "action": "celebrate1",
+          "caption": {
+            "zh": "庆祝",
+            "en": "Celebrate"
+          }
+        },
+        {
+          "src": "works/hamster/celebrate2.webp",
+          "action": "celebrate2",
+          "caption": {
+            "zh": "庆祝二",
+            "en": "Celebrate 2"
+          }
+        },
+        {
+          "src": "works/hamster/celebrate3.webp",
+          "action": "celebrate3",
+          "caption": {
+            "zh": "庆祝三",
+            "en": "Celebrate 3"
+          }
+        },
+        {
+          "src": "works/hamster/celebrate4.webp",
+          "action": "celebrate4",
+          "caption": {
+            "zh": "庆祝四",
+            "en": "Celebrate 4"
+          }
+        },
+        {
+          "src": "works/hamster/eaction1.webp",
+          "action": "eaction1",
+          "caption": {
+            "zh": "作揖",
+            "en": "Beg"
+          }
+        },
+        {
+          "src": "works/hamster/eaction2.webp",
+          "action": "eaction2",
+          "caption": {
+            "zh": "握手",
+            "en": "Shake hands"
+          }
+        },
+        {
+          "src": "works/hamster/eaction3.webp",
+          "action": "eaction3",
+          "caption": {
+            "zh": "蹭脸颊",
+            "en": "Nuzzle"
+          }
+        },
+        {
+          "src": "works/hamster/eaction4.webp",
+          "action": "eaction4",
+          "caption": {
+            "zh": "打滚",
+            "en": "Roll over"
+          }
+        }
+      ],
+      "date": "2026-10-10",
       "featured": true
     }
   ]

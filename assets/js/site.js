@@ -1,7 +1,7 @@
 // DeskBud 站点公共逻辑：数据加载、渲染辅助、分类/排序、不蒜子统计、webmeji 加载器
 const SITE = {
   data: null,
-  _assetVer: 28, // 图片缓存破除用（EdgeOne 缓存键含 query：换图后升这个号即可，不必换文件名）
+  _assetVer: 29, // 图片缓存破除用（EdgeOne 缓存键含 query：换图后升这个号即可，不必换文件名）
 
   // 图片 URL 统一加版本号：09-13 取证 ?v=26 命中 Age:0、同路径无参 Age:33590 → query 参与缓存键
   assetUrl(s) { return s + (s.includes('?') ? '&' : '?') + 'v=' + this._assetVer; },
@@ -34,12 +34,16 @@ const SITE = {
       // 2. 注入 config（先于 webmeji.js；多宠物 = 多个 config 脚本，**并行**加载，全部到位后拼 SPAWNING）
       //    2026-09-14 老曹报「线上没有宠物在跑」：原为串行（rabbit → panda → 引擎），
       //    线上 rabbit.config.js 实测 2.9s ⇒ 串行白等 2.9s，叠加引擎 8s 兜底 → 10~13s 才见宠物。改并行。
+      // 同屏只放 3 只精选（老曹 2026-10-10：5 只同屏太闹）。六只的 config 文件都已就位，
+      // 想换宠/加回来只改这一行（下面 SPAWNING 已预留全部拼接，未加载的 config 得到 undefined → || [] 为空，无害）。
       const configFiles = ['rabbit.config.js?v=7', 'panda.config.js?v=2', 'shiba.config.js?v=3'];
       const startEngine = () => {
         window.SPAWNING = [
           ...(window.DESKBUD_RABBIT_SPAWNING || []),
           ...(window.DESKBUD_PANDA_SPAWNING || []),
           ...(window.DESKBUD_SHIBA_SPAWNING || []),
+          ...(window.DESKBUD_CAPYBARA_SPAWNING || []),   // 未加载则为空数组
+          ...(window.DESKBUD_HAMSTER_SPAWNING || []),    // 未加载则为空数组
         ];
         const s = document.createElement('script');
         s.src = this.base + 'webmeji.js?v=30';
@@ -1113,6 +1117,8 @@ SITE.pages = {
       rabbit: { idle: 'works/rabbit-anim/rabbit_idle.webp', lite: 'works/rabbit-lite/idle.webp', all: 'works/rabbit-anim/rabbit_all.webp' },
       linekit: { idle: 'works/linekit-anim/linekit_idle.webp', lite: 'works/linekit-lite/linekit_idle.webp', all: 'works/linekit-anim/linekit_all.webp' },
       shiba: { idle: 'works/shiba-anim/shiba_idle.webp', lite: 'works/shiba-lite/idle.webp', all: 'works/shiba-anim/shiba_all.webp' },
+      capybara: { idle: 'works/capybara-anim/capybara_idle.webp', lite: 'works/capybara-lite/idle.webp', all: 'works/capybara-anim/capybara_all.webp' },
+      hamster: { idle: 'works/hamster-anim/hamster_idle.webp', lite: 'works/hamster-lite/idle.webp', all: 'works/hamster-anim/hamster_all.webp' },
     };
     // premium states（招牌动作）入数据但暂不展示（2026-10-08：免费锁定逻辑定案前先过滤）
     const showStates = w => (w.states || []).filter(s => !s.premium);
